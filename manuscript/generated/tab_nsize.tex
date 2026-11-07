@@ -1,0 +1,23 @@
+\begin{table}[t]
+\centering
+\caption{Calibration sizes that make certification possible (exact one-sided Clopper--Pearson, $\delta{=}\alpha/(10K)$), per stratum; keying bounds by the four
+observable fault classes multiplies every entry by four. Product (A2): effects so that two families, each with true wrong-verdict rate $p$, multiply to
+$\alpha_{\mathrm{test}}{=}\alpha/2$; \emph{med.}: observed at the expected count $\lceil pn\rceil$ (about half of such sets fail), \emph{0}: zero wrong verdicts (minimum for any $p$).
+Joint: whole effects for a jointly calibrated region to certify $\alpha_{\mathrm{test}}$ with zero events (\emph{0}), at a true region rate $\alpha_{\mathrm{test}}/4$ (\emph{med.}), and with zero events for one
+step of a 3-effect workflow. Lag: logged times for one wait at $0.2\alpha$ with zero exceedances.}
+\label{tab:nsize}
+\footnotesize
+\setlength{\tabcolsep}{2.2pt}
+\begin{tabular}{@{}cc cc ccc c@{}}
+\toprule
+ & & \multicolumn{2}{c}{product} & \multicolumn{3}{c}{joint} & lag \\
+\cmidrule(lr){3-4}\cmidrule(lr){5-7}
+$\alpha$ & $p$ & med. & 0 & 0 & med. & 0, $k{=}3$ & 0 \\
+\midrule
+$10^{-2}$ & 0.5\% & 163 & 127 & 1{,}700 & 3{,}723 & 5{,}107 & 4{,}649 \\
+$10^{-2}$ & 1.0\% & 221 & 127 & 1{,}700 & 3{,}723 & 5{,}107 & 4{,}649 \\
+$10^{-3}$ & 0.5\% & 1{,}086 & 514 & 21{,}635 & 50{,}363 & 64{,}914 & 58{,}036 \\
+$10^{-3}$ & 1.0\% & 2{,}268 & 514 & 21{,}635 & 50{,}363 & 64{,}914 & 58{,}036 \\
+\bottomrule
+\end{tabular}
+\end{table}

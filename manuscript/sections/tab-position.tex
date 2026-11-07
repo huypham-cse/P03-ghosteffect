@@ -1,0 +1,29 @@
+\begin{table}[!htbp]
+\centering
+\caption{Recent recovery work. Key: relies on an idempotency key (opt.\ = studied with and without). Read: read-back model (D = exact, EC = exact but eventually
+consistent, set = states compatible with exact partial evidence, N = noisy, -- = none). Ask: asks a human about an unknown outcome (appr.\ = human approval gate only;
+part.\ = exposes ambiguity, with approval queues). Crash: durable across death of the agent process.
+GUI: GUI effects. $^c$ concurrent with this work.}
+\label{tab:position}
+\footnotesize
+\setlength{\tabcolsep}{1.7pt}
+\begin{tabular}{@{}l ccccc l@{}}
+\toprule
+Work & Key & Read & Ask & Crash & GUI & Guarantee / output \\
+\midrule
+Li / LIMBO$^c$~\cite{li2026exactlyonce} & opt. & D/EC & no & no & no & impossibility, measurement \\
+RetryBench$^c$~\cite{liu2026retrybench} & opt. & D & no & no & no & retry-permission scoring \\
+UndoBench$^c$~\cite{sah2026undobench} & opt. & D & no & no & no & recovery benchmark \\
+Evidence-guided$^c$~\cite{zhu2026evidence} & opt. & set & yes & no & no & completion certificate \\
+Atomix~\cite{mohammadi2026atomix} & -- & D & no & partial & no & transactions \\
+Agent libOS~\cite{zhang2026agentlibos} & -- & D & part. & yes & no & no blind replay \\
+Cordon~\cite{chen2026cordon} & -- & D & appr. & yes & no & staged effects \\
+Resume Contract~\cite{khan2026resume} & -- & -- & no & yes & no & TLA+ contract \\
+ACRFence~\cite{zheng2026acrfence} & -- & -- & no & yes & no & replay-or-fork \\
+VeriGUI~\cite{zhang2026verigui} & no & N & no & no & yes & learned verifier \\
+TaskVM~\cite{yang2026taskvm} & no & N & yes & -- & yes & task-state contract \\
+AgentProg~\cite{tian2025agentprog} & no & -- & no & no & yes & redo \\
+\textbf{\sys} & \textbf{no} & \textbf{N} & \textbf{yes} & \textbf{yes} & \textbf{yes} & $(\alpha,\beta)$; sim.\ + emulator \\
+\bottomrule
+\end{tabular}
+\end{table}

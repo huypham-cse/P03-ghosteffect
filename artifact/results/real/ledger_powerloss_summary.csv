@@ -1,0 +1,4 @@
+synchronous,n,integrity_ok,write_ahead_violations,acked_minus_persisted,median_boot_s
+FULL,3,3,0,0|0|0,20.3
+NORMAL,3,3,0,0|0|0,18.2
+OFF,3,3,3,61|15|158,18.4

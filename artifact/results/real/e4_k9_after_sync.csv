@@ -1,0 +1,8 @@
+app,fault,timing,n,copies_at_window_end_to_after_sync,smtp_DATA_attempts,still_in_outbox_after_sync,failure_notification
+k9,bg_kill,acked,5,1->1: 5,1|1|1|1|1,0,5
+k9,bg_kill,net_pre,5,0->1: 4; 1->1: 1,1|1|1|1|1,0,5
+k9,bg_kill,respdrop,5,1->1: 5,1|1|1|1|1,0,5
+k9,force_stop,net_pre,5,0->1: 4; 1->1: 1,1|1|1|1|1,0,1
+k9,force_stop,respdrop,5,1->1: 5,1|1|1|1|1,0,0
+k9,none,net_pre,5,0->1: 5,1|1|1|1|1,0,5
+k9,none,respdrop,5,1->1: 5,1|1|1|1|1,0,5

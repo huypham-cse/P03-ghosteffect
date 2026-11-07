@@ -1,0 +1,16 @@
+app,fault,timing,n,exactly_once,duplicate,lost,requests_ge2,retries_same_idempotency_key,failed_state_shown,pending_at_end,eventual_exactly_once,eventual_duplicate,eventual_lost
+element,bg_kill,acked,4,4,0,0,0,0,0,0,4,0,0
+element,bg_kill,net_pre,4,4,0,0,0,0,0,0,4,0,0
+element,bg_kill,respdrop,5,5,0,0,5,5,0,0,5,0,0
+element,fg_kill9,inflight_fg_kill9,5,5,0,0,0,0,0,0,5,0,0
+element,force_stop,net_pre,6,5,0,1,0,0,0,0,6,0,0
+element,force_stop,respdrop,4,4,0,0,4,4,0,0,4,0,0
+element,none,net_pre,4,4,0,0,0,0,0,0,4,0,0
+element,none,respdrop,5,5,0,0,5,5,0,0,5,0,0
+k9,bg_kill,acked,5,5,0,0,0,0,0,0,5,0,0
+k9,bg_kill,net_pre,5,1,0,4,0,0,0,4,5,0,0
+k9,bg_kill,respdrop,5,5,0,0,0,0,0,5,5,0,0
+k9,force_stop,net_pre,5,1,0,4,0,0,0,4,5,0,0
+k9,force_stop,respdrop,5,5,0,0,0,0,0,5,5,0,0
+k9,none,net_pre,5,0,0,5,0,0,0,5,5,0,0
+k9,none,respdrop,5,5,0,0,0,0,0,5,5,0,0

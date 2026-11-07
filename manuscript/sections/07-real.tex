@@ -1,0 +1,46 @@
+% Emulator measurements (input through generated/real_section.tex only when artifact/results/real/SUMMARY.md exists).
+% Every number is a macro written by artifact/scripts/render_real.py from artifact/results/real/ (campaign2/ for the body).
+\subsection{RQ7: Emulator measurements}
+\label{sec:eval-real}
+\para{Setup.} Campaign~2 on the testbed of \S\ref{sec:impl} ran \RealElemN{} Element~1.6.62~\cite{element_android} trials against Synapse~1.164.2~\cite{synapse}
+(\RealElemNofaultN{} without fault, \RealElemRL{} with a lost reply, \RealElemAckedN{} acknowledged then killed) plus \RealTimeoutN{} with a withheld reply; K-9~Mail~24.0~\cite{k9mail}
+against GreenMail~2.1.2~\cite{greenmail} without and with an IMAP Sent folder; Etar, DAVx5 and Radicale (CalDAV); and a Synapse transaction-id sequence (Table~\ref{tab:real}).
+Campaign~1 (\RealOneN{} trials, no screen check) agrees on every G2 classification (Table~\ref{tab:realcone}, appendix). Seven Element trials were lost before writing a row (six to a system ANR dialog); four campaign-1 trials were discarded because Android had re-spawned
+Element (in two, a queued message stayed unsent for 45\,s). Outside Element $n$ is small (2--4 per K-9 cell), so these are characterizations; lags are upper bounds (one read is a $\approx$2\,s dump).
+
+\input{generated/tab_real}
+
+\para{G2 per app, and measured redo duplicates.} Element resolved every lost reply exactly once (\RealElemRL/\RealElemRL). In the \RealElemStd{} standard cells its own same-txnId retry, sent 20--100\,ms after the reset,
+was acknowledged before the fault (``retry, then fault''); in the \RealElemSticky{} sticky cells the fault came first, and Element re-sent the same txnId (\RealElemStickyResend)
+or, without re-sending, reconciled its local echo with the event \texttt{/sync} returned (\RealElemStickySync). With a withheld reply it showed \emph{Sent} via that echo, re-sent
+after a 70\,s timeout, and stayed exactly once (\RealTimeoutOnce/\RealTimeoutN). Synapse deduplicated a retry from the same device, also after a re-login with the same device id
+or a restart, but not from another device, nor after we aged the row past 24\,h (by shifting its timestamp): G2 holds within $D{=}24$\,h on one device. DAVx5 re-sent to the same URL with \texttt{If-None-Match}, Radicale answered 412, and every event existed
+once (\RealCalOnce/\RealCalN, \RealCalKill{} after \texttt{kill -9} or force-stop): G2 by a client-chosen name. K-9 is non-G2 by design: once the final ``.'' is written, a failure is recorded as permanent and every later send pass (``Sync account'', ``Send messages'') skips the
+message, which stays in the Outbox (campaign~1's ``gone after sync'' came from a field never recorded). A Sent folder does not help: K-9 appends there only after a successful
+send (\RealKAppendLo--\RealKAppendHi\,s after \emph{Send}), so a committed mail whose reply was lost never appears (\RealKSentWrong/\RealKSentN). A scripted GUI redo duplicated every K-9 send it
+was run on (\RealKRecDup/\RealKRecN, distinct Message-IDs, so no receiver dedup applies) and \RealCalRecDup/\RealCalRecN{} CalDAV events: the ghost-effect duplicate of
+Figure~\ref{fig:teaser}a, measured with a scripted rather than an LLM agent.
+
+\para{Evidence families and lag.} Element's first read was $\bot$ in \RealFirstBot/\RealElemN{} trials, mostly because a force-stop relaunch lands off the room (\RealFsFirstBot/\RealFsN); first observed reads
+were wrong in \RealFirstWrong/\RealFirstObs, all lag-blind. Late reads were never wrong, never two families together (0/\RealCoN, CI 0--\RealLateHi\%). Campaign~1's five ``co-failures'' rendered
+no contradicting state (\RealOneCoContra/\RealOneCoN), the digest showed the nonce in \RealOneCoDigest/\RealOneCoN, and screen identity was not logged, so we re-score them as
+no-observation: they are not evidence against A2, which now rests on the model and VP-CONTROL~\cite{zheng2026vpcontrol}. Element's send-state indicator appeared with its row in every trial and read \emph{Sent} in all \RealElemSentPolls{} sightings: not a lag-free hop-1 view. Lag depends on the fault class
+(Table~\ref{tab:real}b): a network cut adds nothing over the \RealLagNofaultMed\,s reader floor, \texttt{kill -9} gives p90 \RealLagKillNinety\,s, and force-stop \RealLagFsMed\,s,
+mostly navigation. No trial was censored (\RealCensored/\RealElemN{} beyond the $\ge$120\,s window), which bounds an unseen tail only by 2.9\% (95\%).
+\texttt{am kill} after HOME was a no-op for Element (\RealAmkillNoopElem/\RealAmkillNoopElem) but killed K-9 (\RealAmkillKnine/\RealAmkillKnine). Under a SIGKILL of the
+emulator's qemu process (the guest loses its page cache) the WAL ledger lost no acknowledged row with \texttt{synchronous=FULL} (\RealLedgerFullN{} trials), \texttt{OFF} lost
+\RealLedgerOffLostMin--\RealLedgerOffLostMax{} in \RealLedgerOffViol/\RealLedgerOffN, and \texttt{NORMAL} lost none only because each test transaction ran in its own process.
+
+\input{generated/tab_realsim}
+
+\para{Measured-parameter simulation.} Table~\ref{tab:realsim} reruns every mode on profiles built from these measurements (\texttt{params.csv} records each value's source), with per-class lags
+and $\bot$ as no observation. On \emph{Element} every certified mode stays within budget (CP upper \RsimElemJointPvHi\%): the certified wait reaches the measured maximum. The product mode escalates \RsimElemProdAsk\%; joint certification, which needs no cross-family
+independence, \RsimElemJointAsk\% with 2{,}000 labels per class and \RsimFiveJointAsk\% with 5{,}000. Keying by class matters little here: with a net-heavy lab mix the pooled wait still reaches the maximum. Simpler mechanisms also hold: Theorem~\ref{thm:twohop} alone (\RsimElemGtwoAsk\%
+escalations) and rules with a 10 or 30\,s wait (\RsimElemRulesAsk\% and \RsimElemRulesThirtyAsk\%), whereas trusting the app's status right after relaunch retries
+\RsimElemAppPv\% (the lag-blind reads). Two departures break the budget. Passive labels, whose lag logs come from uninterrupted sends, give product \RsimPassProdPv\% and joint
+\RsimPassJointPv\%; a tail of \RsimTail\% beyond 14\,s that the logs miss gives product and rules \RsimTailProdPv\% (joint holds only because it asks \RsimTailJointAsk\%), and if the logs contain it, every mode asks on every
+interrupted Element send. On \emph{K-9} no family can certify, so every mode, like Theorem~\ref{thm:twohop}, asks on every interrupted send; trusting K-9's status retries
+\RsimKnineAppPv\% of committed mail (and loses \RsimKnineAppLoss\% of workflows), rules \RsimKnineRulesPv\%. With a \emph{Sent folder} fault-injected labels
+show committed mail that never becomes visible, so no wait certifies and \sys asks, while rules, which trust the Sent folder, retry \RsimKsentRulesPv\%, and passive labels
+lead joint certification to retry \RsimKsentPassJointPv\% (\RsimKsentPassFiveProdPv\% for the product mode with 5{,}000 labels). On real apps the decisive pieces are G2 classification, fault-injected labels, and asking when the GUI cannot reveal the outcome; calibration adds a guarantee that follows
+the labels.

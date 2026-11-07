@@ -1,0 +1,10 @@
+cell,trials,polls,bot_wrong_screen,bot_row_not_found,verified_absent,present,first_read_bot
+none/nofault,12,130,0,0,0,130,0
+bg_kill9/respdrop,20,218,3,1,3,211,2
+force_stop/respdrop,20,214,21,0,0,193,20
+netcut/respdrop,20,204,0,0,0,204,0
+bg_kill9_sticky/respdrop,10,105,0,0,0,105,0
+force_stop_sticky/respdrop,10,114,10,0,0,104,10
+bg_kill9_sticky_v1/respdrop,2,21,0,0,0,21,0
+force_stop_sticky_v1/respdrop,1,12,1,0,0,11,1
+bg_kill9/acked,6,58,1,0,0,57,0

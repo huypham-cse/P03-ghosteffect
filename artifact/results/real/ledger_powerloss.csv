@@ -1,0 +1,10 @@
+trial,synchronous,kill_after_s,acked_last_seq,persisted_max_seq,persisted_count,integrity,wal_bytes_after_boot,write_ahead_violation,boot_s
+0,FULL,4.0,60,60,60,ok,0,0,16.4
+1,NORMAL,5.5,98,98,98,ok,0,0,17.9
+2,OFF,7.0,134,73,73,ok,0,1,21.8
+3,FULL,8.5,114,114,114,ok,0,0,20.4
+4,NORMAL,10.0,226,226,226,ok,0,0,22.7
+5,OFF,4.0,147,132,132,ok,0,1,17.9
+6,FULL,5.5,168,168,168,ok,0,0,20.3
+7,NORMAL,7.0,128,128,128,ok,0,0,18.2
+8,OFF,8.5,184,26,26,ok,0,1,18.4

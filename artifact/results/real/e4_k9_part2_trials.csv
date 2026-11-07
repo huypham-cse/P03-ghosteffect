@@ -1,0 +1,15 @@
+app,trial,fault,timing,nonce,kill_method,proc_dead,server_copies,outcome,n_smtp_data,server_copies_at_early_read,t_server_arrival_after_restart_s,early_t,early_outbox_copies,early_fail_text,late_outbox_copies,server_copies_after_sync,outbox_after_sync,late_fail_text,shade_text,early_indicator,late_indicator
+k9,0,bg_kill,respdrop,mx912090k00,am_kill,True,1,exactly_once,1,1,19.0,19.0,2,,2,1,,,Failed to send some messages / Unable to send message,pending,pending
+k9,1,none,respdrop,mx912206k01,,,1,exactly_once,1,1,14.3,14.3,2,,2,1,,,Failed to send some messages / Unable to send message,pending,pending
+k9,2,force_stop,respdrop,mx912315k02,force_stop,True,1,exactly_once,1,1,15.0,15.0,2,,2,1,,,,pending,pending
+k9,3,bg_kill,respdrop,mx912425k03,am_kill,True,1,exactly_once,1,1,15.2,15.2,2,,2,1,,,Failed to send some messages / Unable to send message,pending,pending
+k9,4,force_stop,net_pre,mx912536k04,force_stop,True,0,lost,1,0,,14.9,2,,2,1,,,,pending,pending
+k9,5,bg_kill,acked,mx912654k05,am_kill,True,1,exactly_once,1,1,14.7,14.7,0,,0,1,,,Failed to send some messages / Unable to send message,committed,committed
+k9,6,force_stop,respdrop,mx912765k06,force_stop,True,1,exactly_once,1,1,17.0,17.0,2,,2,1,,,,pending,pending
+k9,7,force_stop,net_pre,mx912876k07,force_stop,True,0,lost,1,0,,15.6,2,,2,1,,,,pending,pending
+k9,8,bg_kill,acked,mx912995k08,am_kill,True,1,exactly_once,1,1,15.8,15.8,0,,0,1,,,Failed to send some messages / Unable to send message,committed,committed
+k9,9,bg_kill,net_pre,mx913107k09,am_kill,True,1,exactly_once,1,0,39.2,16.0,2,,0,1,,,Failed to send some messages / Unable to send message,pending,committed
+k9,10,none,net_pre,mx913226k10,,,0,lost,1,0,,14.1,2,,2,1,,,Failed to send some messages / Unable to send message,pending,pending
+k9,11,bg_kill,net_pre,mx913356k11,am_kill,True,0,lost,1,0,,14.5,2,,2,1,,,Failed to send some messages / Unable to send message,pending,pending
+k9,12,none,respdrop,mx913477k12,,,1,exactly_once,1,1,14.3,14.3,2,,2,1,,,Failed to send some messages / Unable to send message,pending,pending
+k9,13,none,net_pre,mx913587k13,,,0,lost,1,0,,14.0,2,,2,1,,,Failed to send some messages / Unable to send message,pending,pending

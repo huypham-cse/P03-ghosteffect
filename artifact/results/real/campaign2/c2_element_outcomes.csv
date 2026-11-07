@@ -1,0 +1,11 @@
+cell,n,committed,exactly_once,duplicate,lost,put_ge2,put_ge2_single_txn,put_eq1,trials_with_put_after_t0,responses_dropped_total,mech_retry_acked_before_fault,mech_resend_after_relaunch,mech_reconciled_via_sync,restarted,nav_recovery_trials
+none/nofault,12,12,12,0,0,0,0,12,12,0,0,0,0,n/a,0
+bg_kill9/respdrop,20,20,20,0,0,20,20,0,0,20,20,0,0,20,3
+force_stop/respdrop,20,20,20,0,0,20,20,0,6,20,20,0,0,20,20
+netcut/respdrop,20,20,20,0,0,20,20,0,3,20,20,0,0,n/a,0
+bg_kill9_sticky/respdrop,10,10,10,0,0,10,10,0,0,34,0,0,10,7,0
+force_stop_sticky/respdrop,10,10,10,0,0,10,10,0,2,41,0,2,8,10,10
+bg_kill9_sticky_v1/respdrop,2,2,2,0,0,2,2,0,0,2,2,0,0,2,0
+force_stop_sticky_v1/respdrop,1,1,1,0,0,1,1,0,1,2,0,1,0,1,1
+bg_kill9/acked,6,6,6,0,0,0,0,6,0,0,0,0,0,6,1
+ALL_interrupted(respdrop),83,83,83,0,0,83,83,0,12,139,62,3,18,n/a,34

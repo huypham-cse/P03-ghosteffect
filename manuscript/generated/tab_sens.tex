@@ -1,0 +1,21 @@
+\begin{table}[!htbp]
+\centering
+\caption{Sensitivity to the simulator's free app-profile parameters (4{,}800 paired workflows per row). Cells: dup+loss (\% of workflows) /
+escalations (\%); last column: GhostEffect's $P_{\mathrm{v}}$ (\%, budget 1\%) with its 95\% CP upper bound.}
+\label{tab:sens}
+\footnotesize
+\setlength{\tabcolsep}{2.2pt}
+\begin{tabular}{@{}l cccc c@{}}
+\toprule
+Variant & key & nonce+ask & always ask & GhostEffect & $P_{\mathrm{v}}$ (hi) \\
+\midrule
+default & 9.1 / 0 & 6.2 / 14 & 6.7 / 100 & 1.7 / 24 & 0.09 (0.26) \\
+look-alikes x0.5 & 8.8 / 0 & 6.1 / 14 & 6.2 / 100 & 1.3 / 23 & 0.09 (0.26) \\
+look-alikes x2 & 10.8 / 0 & 6.1 / 14 & 7.8 / 100 & 2.1 / 26 & 0.06 (0.22) \\
+no nonce fields & 27.0 / 0 & 7.1 / 100 & 6.9 / 100 & 2.4 / 34 & 0.00 (0.11) \\
+visible nonce opt-in & 9.1 / 0 & 6.2 / 14 & 7.0 / 100 & 1.5 / 18 & 0.06 (0.22) \\
+no G2 apps & 4.8 / 0 & 1.6 / 15 & 7.6 / 100 & 2.0 / 27 & 0.03 (0.18) \\
+G2 wherever hop-1 & 14.2 / 0 & 12.1 / 13 & 7.2 / 100 & 1.4 / 21 & 0.00 (0.11) \\
+\bottomrule
+\end{tabular}
+\end{table}

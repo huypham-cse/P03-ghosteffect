@@ -1,0 +1,64 @@
+\documentclass[sigconf,review,anonymous]{acmart}
+% MobiSys 2027 submission (double-blind). 12-page body limit; references and appendices excluded.
+
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc,shapes.geometric,backgrounds,fit}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.17} % use 1.18 on TL>=2021
+\usepackage{xspace}
+\xspaceaddexceptions{\%\,}
+\usepackage{enumitem}
+\usepackage{multirow}
+\usepackage{xcolor}
+
+
+\newcommand{\sys}{GhostEffect\xspace}
+\newcommand{\alg}{\textsc{GhostRecover}\xspace}
+\newcommand{\KL}{\mathrm{KL}}
+\newcommand{\dup}{\mathrm{dup}}
+\newcommand{\loss}{\mathrm{loss}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\para}[1]{\smallskip\noindent\textbf{#1}\hspace{0.4em}}
+
+\input{generated/macros.tex}
+\emergencystretch=1.5em
+
+\settopmatter{printacmref=false}
+\setcopyright{none}
+\renewcommand\footnotetextcopyrightpermission[1]{}
+\acmConference[MobiSys '27]{The 25th Annual International Conference on Mobile Systems, Applications and Services}{June 2027}{}
+\acmYear{2027}
+
+\begin{document}
+
+\title{GhostEffect: Budgeted Exactly-Once Recovery\\ of GUI-Only Effects for Mobile Agents}
+
+\author{Anonymous Author(s)}
+\affiliation{\institution{Submission \#XXX}\country{}}
+
+\input{sections/00-abstract}
+\maketitle
+
+\input{sections/01-introduction}
+\input{sections/02-background-motivation}
+\input{sections/03-model}
+\input{sections/04-theory}
+\input{sections/05-design}
+\input{sections/06-implementation}
+\input{sections/07-evaluation}
+\input{sections/08-discussion}
+\input{sections/09-related-work}
+\input{sections/10-conclusion}
+
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{references}
+
+\appendix
+\input{sections/appendix-proofs}
+
+\end{document}

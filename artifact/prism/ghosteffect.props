@@ -1,0 +1,5 @@
+// P(dup | X=1) and P(loss | X=0): run with -const pi=1 and pi=0 respectively.
+P=? [ F "dup" ]
+P=? [ F "loss" ]
+P=? [ F "ask" ]
+R{"obs"}=? [ F "done" ]
