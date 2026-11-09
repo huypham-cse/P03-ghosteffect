@@ -98,7 +98,7 @@
 | C-09 | Intro (mở bằng câu chuyện K-9, tách câu gộp ba kết quả trong một citation), §8 Discussion (giới hạn mới), §10 Conclusion (ba câu bài học, không số). | 19/11 |
 | C-10 | **Công cụ kiểm cho cả nhóm:** `team/scrub_check.sh` (quét chuỗi lộ danh tính như tên, tài khoản GitHub, email của nhóm, đường dẫn máy như `/Users/`, `C:\Users`, `D:\`, và chuỗi giống khóa API; thoát khác 0 khi gặp) và `team/readability_count.py` (stdlib; đếm câu quá 45 từ, dấu chấm phẩy mỗi đoạn, `\para{`, `\emph{` theo từng file). Cả nhóm dùng cho YC-09 và YC-12. | 13/11 |
 | C-11 | **Lượt đọc cho dễ hiểu** theo checklist 15 điểm ở `review.md` §5 trên các file của C. | 19/11 |
-| C-12 | **Chuẩn bị artifact ẩn danh:** README tiếng Anh (lệnh tái lập một dòng, phiên bản Python, thời gian chạy, đầu ra nào phụ thuộc host); `team/make_bundle.sh` đóng gói `artifact/` và `testbed/`, loại `tmp/`, `codex/`, `team/`, `review.md`, `resolve.md`, `report.md`, `runtime/`, `.git`; chạy thử gói qua scrub check. | 19/11 |
+| C-12 | **Chuẩn bị artifact ẩn danh:** README tiếng Anh (lệnh tái lập một dòng, phiên bản Python, thời gian chạy, đầu ra nào phụ thuộc host); `team/make_bundle.sh` đóng gói `artifact/` và `testbed/`, loại `tmp/`, `codex/`, `team/`, `review.md`, `resolve.md`, `runtime/`, `.git`; chạy thử gói qua scrub check. | 19/11 |
 | C-13 | **Điều phối chốt chung** (không tính vào hạn 19/11 của vai trò): chạy freeze 21/11 sau khi cả ba vai trò được nghiệm thu; ngày 22/11 đóng gói, tải artifact, chèn link vào §8, kiểm cổng cuối và nộp HotCRP (§7.6). | 21/11 đến 22/11 |
 
 ## 3. Phụ thuộc giữa các phần
@@ -238,7 +238,7 @@
 | YC-C9 | **Intro, Discussion, Conclusion.** Intro mở bằng câu chuyện K-9 và có câu mô tả một câu trước khi đặt tên khái niệm; câu gộp ba kết quả trong một citation đã tách. Câu "We ran no LLM agent" được cập nhật theo kết quả của B ở mọi chỗ. Conclusion có ba câu bài học, không chữ số và không macro kết quả. Discussion nêu giới hạn khớp phạm vi của B. | `grep -n 'no LLM agent' manuscript/sections/*.tex`; `sed 's/K-9//g' manuscript/sections/10-conclusion.tex \| grep -cE '[0-9]\|\\(Sim\|Rsim\|Real\|Agent\|Cert)'` bằng 0 |
 | YC-C10 | **Related work và citation.** Mỗi hệ LIMBO, Agent libOS, VeriGUI có một câu so sánh. Mọi bib key mới có trong danh sách kiểm nguồn `others/citation-audit.md` kèm DOI hoặc URL đã mở được. | Đọc §9; so `git diff origin/main...HEAD -- manuscript/references.bib` với danh sách kiểm |
 | YC-C11 | **Công cụ kiểm của nhóm.** `team/scrub_check.sh` và `team/readability_count.py` có trên `main` chậm nhất 13/11. `scrub_check.sh` thoát khác 0 trên một file tạm chứa `/Users/abc` và thoát 0 trên file sạch. `readability_count.py` chạy trên toàn bộ thân bài cho tổng `\para{` tối đa 15, `\emph{` tối đa 30 và 0 câu quá 45 từ; bảng tổng trước và sau dán trong PR. | `git log --diff-filter=A --format=%cI origin/main -- team/scrub_check.sh team/readability_count.py`; chạy hai script |
-| YC-C12 | **Chuẩn bị artifact.** README tiếng Anh nêu lệnh tái lập một dòng, phiên bản Python, thời gian chạy, đầu ra nào phụ thuộc host. `team/make_bundle.sh` tạo gói không có `tmp/`, `codex/`, `team/`, `review.md`, `resolve.md`, `report.md`, `runtime/`, `.git`; gói chạy thử qua scrub check. | Chạy `sh team/make_bundle.sh <thư mục thử>`; liệt kê file trong gói; `sh team/scrub_check.sh <thư mục thử>` thoát 0 |
+| YC-C12 | **Chuẩn bị artifact.** README tiếng Anh nêu lệnh tái lập một dòng, phiên bản Python, thời gian chạy, đầu ra nào phụ thuộc host. `team/make_bundle.sh` tạo gói không có `tmp/`, `codex/`, `team/`, `review.md`, `resolve.md`, `runtime/`, `.git`; gói chạy thử qua scrub check. | Chạy `sh team/make_bundle.sh <thư mục thử>`; liệt kê file trong gói; `sh team/scrub_check.sh <thư mục thử>` thoát 0 |
 
 ### 7.6 Nghiệm thu cuối (cả nhóm, chậm nhất 22/11)
 
@@ -254,6 +254,6 @@ C điều phối (C-13), trưởng nhóm nghiệm thu. Ngày 22/11 cả ba vai t
 ## 8. Cần trưởng nhóm quyết
 
 1. Giao người cho A, B, C và chỉ định người nghiệm thu cho từng phần (cách chia đã duyệt ngày 09/11/2026).
-2. Xác nhận nhóm **được sửa paper**: `resolve.md` và `report.md` còn ghi quyết định cũ "không chỉnh paper, paper để sau".
+2. Xác nhận nhóm **được sửa paper**: `resolve.md` còn ghi quyết định cũ "không chỉnh paper, paper để sau".
 3. Đường model cho B: máy GPU Linux hay API (kèm ngân sách).
 4. Mode khuyến nghị cuối cùng (mặc định theo `resolve.md` R06).

@@ -1,44 +1,34 @@
-# Archive of `P03-ghosteffect`
+# GhostEffect (MobiSys 2027)
 
-- Created: 2026-11-07T16:28:44+07:00
-- Source folder: `/Users/xuanbachle/Workstation/MobiSys2027/papers/P03-ghosteffect`
-- Kept locally (not archived): nothing
-- Format: zip (deflate), archives larger than 4.8 GB split into byte parts
-- Every archive was tested with `unzip -t`; SHA-256 values below were taken before upload.
+Repo làm việc của bài *GhostEffect: Budgeted Exactly-Once Recovery of GUI-Only Effects for Mobile Agents*: bản thảo, artifact mô phỏng, dữ liệu đo trên emulator và testbed.
 
-## Notes
+Bài nộp theo kiểu double-blind: không thêm tên người, email hay đường dẫn máy vào bất kỳ file nào sẽ vào bài hoặc vào gói artifact.
 
-MobiSys 2027 paper P03-ghosteffect: manuscript, artifact with real measurements, STATUS.md and review.md. Git repo pushed to github.com/lexuanbach/MobiSys-2027-P03-* before archiving. Archived 2026-11-07 after the review packet was written.
+## Bắt đầu từ đâu
 
-## Archives
+| File | Dùng để |
+|---|---|
+| `team/PHAN_CHIA_CONG_VIEC.md` | Ai làm phần nào, lịch, phụ thuộc và yêu cầu nghiệm thu |
+| `team/SETUP.md` | Cài máy và các lệnh chạy |
+| `review.md` | Bản phản biện nội bộ; checklist cuối file là nguồn việc |
+| `resolve.md` | Quyết định cách sửa cho từng điểm review (R01 đến R32) |
+| `STATUS.md` | Trạng thái hiện tại của bài |
 
-| # | Archive file(s) | Original paths | Files | Original size | Archive size |
-|---|---|---|---|---|---|
-| 01 | `01_root__small-items.zip` | `.git`<br>`.gitignore`<br>`STATUS.md`<br>`artifact`<br>`manuscript`<br>`others`<br>`review.md` | 450 | 4.0 MB | 2.6 MB |
+## Cấu trúc
 
-## Checksums (SHA-256)
+| Thư mục | Nội dung |
+|---|---|
+| `manuscript/` | Bản thảo LaTeX. `generated/` do script sinh ra, không sửa tay |
+| `artifact/` | Script mô phỏng, CSV kết quả (`results/`), dữ liệu đo trên emulator (`results/real/`, chỉ được thêm), test và `run_all.py` |
+| `testbed/` | Rig emulator: fault proxy, driver, grader, harness cho LLM agent |
+| `others/notes.md` | Sổ tra macro nào lấy từ CSV nào |
+| `codex/` | Tài liệu tham khảo cho phần B: commit pin của model, giao thức chạy agent, cách cài máy, nhật ký các lần đã chạy |
+| `team/` | Kế hoạch làm việc của nhóm |
 
+## Lệnh nhanh
+
+```bash
+cd manuscript && sh build.sh                        # build PDF
+python3 -m unittest discover -s artifact/tests      # test artifact
+python3 artifact/run_all.py --output-dir ../ge-run --jobs 4   # chạy lại toàn bộ mô phỏng (Linux hoặc WSL)
 ```
-9bbc4018eab8cdf7ab33d4e8ced360cf24b464e720883e8573fbcdfc4af3c390  01_root__small-items.zip
-```
-
-## Restore
-
-Single archive: `unzip <label>.zip -d <restore-dir>` (paths are relative to the source folder).
-
-Split archive: join the parts in order, check the hash, then unzip:
-
-```sh
-cat <label>.zip.part* > <label>.zip
-shasum -a 256 <label>.zip   # compare with the value above
-unzip <label>.zip -d <restore-dir>
-```
-
-To rebuild the original folder, unzip every archive into the same directory and put the kept paths back.
-`MANIFEST.tsv.gz` lists every archived file (archive label, relative path, size in bytes).
-
-## Git repositories in the archive
-
-| Repository | Branch | HEAD | Remotes | Uncommitted entries |
-|---|---|---|---|---|
-| `.` | main | `c332358` | https://github.com/lexuanbach/MobiSys-2027-P03-GhostEffect.git | 0 |
