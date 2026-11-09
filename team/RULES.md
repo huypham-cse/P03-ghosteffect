@@ -62,10 +62,10 @@
 4. Hai ngày liền không có mục nhật ký mới thì trưởng nhóm coi phần đó đang bị chặn và sẽ hỏi lại.
 5. Bị chặn (thiếu số của người khác, thiếu máy, lỗi không tự gỡ được) thì nhắn ngay trên nhóm chat, đồng thời ghi vào nhật ký.
 6. Gặp một trong các mốc báo động sau thì báo trưởng nhóm ngay trong ngày:
-   - emulator chưa chạy ổn vào 12/11;
-   - chưa có model vào 13/11;
-   - A-dev thành công dưới 6/10 vào 15/11;
-   - chưa đủ 10 episode hợp lệ vào 17/11;
+   - emulator chưa chạy ổn vào 10/11;
+   - chưa có model vào 10/11;
+   - A-dev thành công dưới 6/10 vào 11/11;
+   - chưa đủ 10 episode hợp lệ vào 12/11;
    - thấy phần của mình không kịp xong vào 19/11 (báo trước 17/11);
    - build trên `main` đỏ quá một ngày.
 
