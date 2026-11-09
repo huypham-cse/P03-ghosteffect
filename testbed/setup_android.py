@@ -16,7 +16,9 @@ import urllib.request
 import xml.etree.ElementTree as ET
 import zipfile
 
-PINS={'emulator':'37.2.13','platform-tools':'37.0.2','cmdline-tools;19.0':'19.0.0'}
+# platform-tools 37.0.2 is still listed by Google but its archive returns 404 (checked 09/11/2026);
+# 37.0.1 is the nearest exact release with a publisher checksum.
+PINS={'emulator':'37.2.13','platform-tools':'37.0.1','cmdline-tools;19.0':'19.0.0'}
 
 
 def hash_file(path,algorithm='sha256'):

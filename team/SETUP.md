@@ -60,12 +60,14 @@ Sau đó làm theo mục cài Android và backend trong `testbed/README.md`. Tó
 | Bước | Lệnh (chạy từ thư mục gốc repo) | Kiểm |
 |---|---|---|
 | Android SDK, emulator, image API 33 r17 | `python testbed/setup_android.py --bootstrap` | Có `BOOTSTRAP.json`, `emulator -accel-check` thoát 0 |
-| AVD | `python testbed/setup_avd.py --java <đường dẫn java17> --install --create --verify-apks --output testbed/runs/avd-01` | Có AVD `ghosteffect_api33_x86_local` |
+| AVD | `python testbed/setup_avd.py --java <đường dẫn java 17 trở lên> --install --create --verify-apks --output testbed/runs/avd-01` | Có AVD `ghosteffect_api33_x86_local` |
 | APK K-9 và GreenMail | `python testbed/setup_assets.py --only com.fsck.k9_39046.apk greenmail.jar` | SHA khớp file lock |
 | Forwarder của AndroidWorld | `python testbed/setup_assets.py --lock testbed/agent-assets.lock.json --only 2024.05.13-accessibility_forwarder.apk` | SHA khớp |
-| Mã nguồn agent và venv Python 3.11.8 | Chạy `testbed/setup_agents.py` (task B-02): clone 4 repo vào `runtime/vendor/` đúng commit pin trong `codex/models.md`, tạo `runtime/agent-venv` | `python -c "import android_world.agents.m3a"` chạy được trong venv |
-| Smoke GreenMail | `python testbed/smoke_greenmail.py --output testbed/runs/mail-smoke-01` | PASS |
+| Mã nguồn agent và venv Python 3.11.8 | `python testbed/setup_agents.py --output testbed/runs/agents-01` (task B-02, cần `uv`): clone AndroidWorld vào `runtime/vendor/` đúng commit pin, tạo `runtime/agent-venv` | Script in `READY`; `runtime/agents/SETUP.json` có commit đúng pin |
+| Smoke GreenMail | `python testbed/smoke_greenmail.py --java <đường dẫn java> --output testbed/runs/mail-smoke-01` | PASS |
 | Quan sát native của AndroidWorld | `python testbed/smoke_android.py --verification <RESULT.json kiểm APK> --only <apk K-9> --native-env-capture --output testbed/runs/native-01` | Có screenshot và cây accessibility, định danh cửa sổ khớp |
+
+Các bước cụ thể với server H100 80GB của nhóm nằm ở `testbed/RUNBOOK_B.md`.
 
 **Model:** Qwen2.5-VL-7B BF16 chạy trên vLLM 0.11.0 cần GPU từ 24 GB trên Linux. Máy GPU có thể là máy thuê theo giờ, nối về máy chạy emulator qua SSH tunnel, vì `testbed/local_model.py` và `testbed/native_episode.py` chỉ nhận endpoint loopback hoặc SSH forward. Khóa và token chỉ để trong `.env` (đã git-ignore); mẫu biến môi trường ở `codex/.env.example`.
 
