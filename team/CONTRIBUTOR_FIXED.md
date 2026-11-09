@@ -62,14 +62,14 @@
 | ID | Việc | Hạn |
 |---|---|---|
 | B-01 | **Dựng lại rig.** `runtime/` không có trong git. Chọn một host (Windows + WHPX hoặc Linux + KVM), cài SDK, AVD API 33, APK đúng hash, GreenMail, fault proxy, forwarder của AndroidWorld. Chỉ `--gpu host` từng chạy được; mặc định swiftshader gặp ANR. Ghi nhật ký vào `team/b-log.md`. | 12/11 |
-| B-02 | `testbed/setup_agents.py`: clone 4 repo ở commit pin (`codex/models.md`), venv Python 3.11.8, kiểm `import android_world.agents.m3a`. | 12/11 |
-| B-03 | Profile K-9 (không Sent, có Sent) và cách reset trạng thái (campaign 2 dọn Outbox bằng root). | 13/11 |
-| B-04 | Tái hiện lỗi K-9 bằng `run_case.py` (commit, bỏ phản hồi, force-stop, mở lại). | 13/11 |
-| B-05 | **Cổng model.** Ưu tiên Qwen2.5-VL-7B BF16 trên vLLM 0.11.0, máy Linux GPU từ 24 GB, nối với AVD qua SSH tunnel. Phương án API: `local_model.py` chỉ nhận endpoint loopback và `codex/` cấm API trả phí, nên phải viết binding mới và trưởng nhóm duyệt cả ngân sách lẫn thay đổi chính sách. Khóa API chỉ để trong `.env` (đã git-ignore). | 13/11 |
-| B-06 | **Harness episode**: mở rộng `testbed/native_episode.py` có sẵn. Reset, chạy M3A, bắt lúc Send, để commit rồi bỏ phản hồi, kill agent và force-stop K-9, mở lại, chạy lại M3A cùng task, quan sát `H_eval = 300 s`, chấm bằng backend, ghi receipt JSON. | 14/11 |
-| B-07 | A-dev: 10 episode không lỗi (5 mỗi cấu hình), chỉ để gỡ lỗi, không báo cáo làm kết quả. Thành công dưới 6/10 thì báo trưởng nhóm. | 15/11 |
-| B-08 | Freeze: `testbed/agent_study.freeze.json` (model, decoding, hash prompt, task, hash APK/AVD, horizon, luật kết quả, seed, thứ tự episode), merge trước lượt chính thức đầu tiên. | 15/11 |
-| B-09 | A-native: 20 episode chính thức (10 không Sent, 10 có Sent, xen kẽ), chạy từ 16/11; mỗi episode tối đa một lần chạy lại vì lỗi đo; giữ mọi lần chạy. "Hợp lệ" nghĩa là backend xác nhận thư gốc đã commit và có biên nhận lỗi. Dưới 10 hợp lệ thì chạy thêm tối đa 10 episode với cùng freeze, xong 18/11. **Chạy xong ngày nào thì báo C số đếm thô (hợp lệ, gửi lại, trùng) ngay ngày đó.** | 17/11 (18/11 nếu chạy thêm) |
+| B-02 | `testbed/setup_agents.py`: clone AndroidWorld ở commit pin vào `runtime/vendor/android_world_full`, venv Python 3.11.8 (qua `uv`), kiểm `import android_world.agents.m3a`. | 12/11 |
+| B-03 | Profile K-9 (không Sent, có Sent) và cách reset trạng thái (campaign 2 dọn Outbox bằng root). | 10/11 |
+| B-04 | Tái hiện lỗi K-9 bằng `run_case.py` (commit, bỏ phản hồi, force-stop, mở lại). | 10/11 |
+| B-05 | **Cổng model.** Ưu tiên Qwen2.5-VL-7B BF16 trên vLLM 0.11.0, máy Linux GPU từ 24 GB, nối với AVD qua SSH tunnel. Phương án API: `local_model.py` chỉ nhận endpoint loopback và `codex/` cấm API trả phí, nên phải viết binding mới và trưởng nhóm duyệt cả ngân sách lẫn thay đổi chính sách. Khóa API chỉ để trong `.env` (đã git-ignore). Server H100 80GB của nhóm chỉ dùng được từ 10/11 đến 13/11 (đợt sau từ 26/11), nên mọi lượt chạy cần model (B-05 đến B-09) phải xong trong khoảng này; các bước ở `testbed/RUNBOOK_B.md`. | 10/11 |
+| B-06 | **Harness episode**: mở rộng `testbed/native_episode.py` có sẵn. Reset, chạy M3A, bắt lúc Send, để commit rồi bỏ phản hồi, kill agent và force-stop K-9, mở lại, chạy lại M3A cùng task, quan sát `H_eval = 300 s`, chấm bằng backend, ghi receipt JSON. | 11/11 |
+| B-07 | A-dev: 10 episode không lỗi (5 mỗi cấu hình), chỉ để gỡ lỗi, không báo cáo làm kết quả. Thành công dưới 6/10 thì báo trưởng nhóm. | 11/11 |
+| B-08 | Freeze: `testbed/agent_study.freeze.json` (model, decoding, hash prompt, task, hash APK/AVD, horizon, luật kết quả, seed, thứ tự episode), merge trước lượt chính thức đầu tiên. | 11/11 |
+| B-09 | A-native: 20 episode chính thức (10 không Sent, 10 có Sent, xen kẽ), chạy ngày 12/11; mỗi episode tối đa một lần chạy lại vì lỗi đo; giữ mọi lần chạy. "Hợp lệ" nghĩa là backend xác nhận thư gốc đã commit và có biên nhận lỗi. Dưới 10 hợp lệ thì chạy thêm tối đa 10 episode với cùng freeze, xong 13/11. **Chạy xong ngày nào thì báo C số đếm thô (hợp lệ, gửi lại, trùng) ngay ngày đó.** | 12/11 (13/11 nếu chạy thêm) |
 | B-10 | **Giao dữ liệu và tự viết phần agent.** `artifact/results/real/agent/` gồm `episodes.csv` (schema §4), `label_cost.csv` (schema §4), `freeze.json`, `receipts/<episode_id>.json`, `SUMMARY.md`. `render_agent.py` sinh `tab_agent.tex` và `\Agent*` (Wilson CI 95%). Viết `07-agent.tex` (khoảng 0,3 trang) và khung lại §2.3 theo kết quả, kể cả khi agent không gửi lại lần nào. | 18/11 (số), 19/11 (văn bản) |
 | B-11 | **Chi phí nhãn đo thật**: thời gian một lượt tiêm lỗi chia theo reset, soạn, lỗi, mở lại, quan sát, chấm; min, median, max vào `label_cost.csv` và macro `\LabelTrial*`. | 18/11 |
 | B-12 | **Audit thao tác K-9** (R19). `SUMMARY.md` ghi "Send messages 0/12" cho cấu hình không Sent, nhưng `c2_k9_nosent_trials.csv` có `sendmsgs_tapped=0` ở cả 12 dòng đó (số đúng là 8/20 lượt có bấm Send messages). Tách Sync / Send messages / không thao tác / soạn lại; sửa câu trong §7 cho đúng. Lượt audit chạy sau B-09, không chạy song song trên cùng AVD. | 18/11 |
@@ -77,7 +77,7 @@
 | B-14 | **Nonce, Fig. 1, tab-apps:** K-9 dùng subject (người nhận thấy được) trên tài khoản thử có opt-in; sửa Fig. 1(b) và `tab-apps.tex`; thêm cột measured/planned; nhánh G2 của Fig. 1 ghi theo mode khuyến nghị chung. | 13/11 |
 | B-15 | Chạy lại `bench_ledger.py` trên host POSIX của B; viết lại đoạn "laptop running macOS" ở §6 (trên WSL, `\LedgerFull*` render ra "--"). | 16/11 |
 | B-16 | Làm sạch `testbed/` để đóng gói: không `runtime/`, `runs/`, `*.local.json`, `.env`; `testbed/README.md` bằng tiếng Anh (bản tiếng Việt đổi tên thành `README.vi.md`, không đưa vào gói). | 19/11 |
-| B-17 | (Chỉ khi trưởng nhóm duyệt và B-09 xong trước 17/11) Đo độ trễ Element độc lập; cần thêm kill -9 và netcut vào `run_case.py` và một bộ phân tích ra schema `c2_element_first_visible.csv`. | 19/11 |
+| B-17 | (Chỉ khi trưởng nhóm duyệt và B-09 xong trước 13/11) Đo độ trễ Element độc lập; cần thêm kill -9 và netcut vào `run_case.py` và một bộ phân tích ra schema `c2_element_first_visible.csv`. | 19/11 |
 
 ### Phần C: Đánh giá so sánh và câu chuyện của bài
 
@@ -95,7 +95,7 @@
 | C-05 | **Seed variance**: part mới chạy từng seed (khoảng 40 dòng code) cho các dòng chính của Table 2 và 4. | 18/11 |
 | C-06 | **Sắp lại §7:** đo emulator (B), agent (B), mô phỏng tham số đo, mô phỏng mô hình (cắt còn redo, Thm-4.8-only, always-ask, rules, vetted, product, joint), stress và population một đoạn, cơ chế một đoạn. RQ1 đến RQ2 xuống `appendix-results.tex`. Mục "Planned device study" bỏ hoặc còn một câu future work. Dùng `\StressNover` cạnh "rules over in 3/14". Sửa công thức δ ở dòng 16 của `07-evaluation.tex` theo §4.3 của A. | 17/11 |
 | C-07 | **Related work:** một câu so sánh cho LIMBO, Agent libOS, VeriGUI; cân nhắc Gray & Reuter 1992, Bailis VLDB 2015 (kiểm nguồn thật trước khi thêm). | 18/11 |
-| C-08 | **Abstract** tối đa 200 từ, tối đa 4 con số, viết bằng macro. Khung câu viết trước với `??` và chỉnh theo số đếm thô B báo khi chạy xong (17/11 hoặc 18/11), để câu đúng với mọi kết quả. | 18/11 chốt, 19/11 đăng ký HotCRP |
+| C-08 | **Abstract** tối đa 200 từ, tối đa 4 con số, viết bằng macro. Khung câu viết trước với `??` và chỉnh theo số đếm thô B báo khi chạy xong (12/11 hoặc 13/11), để câu đúng với mọi kết quả. | 18/11 chốt, 19/11 đăng ký HotCRP |
 | C-09 | Intro (mở bằng câu chuyện K-9, tách câu gộp ba kết quả trong một citation), §8 Discussion (giới hạn mới), §10 Conclusion (ba câu bài học, không số). | 19/11 |
 | C-10 | **Công cụ kiểm cho cả nhóm:** `team/scrub_check.sh` (quét chuỗi lộ danh tính như tên, tài khoản GitHub, email của nhóm, đường dẫn máy như `/Users/`, `C:\Users`, `D:\`, và chuỗi giống khóa API; thoát khác 0 khi gặp) và `team/readability_count.py` (stdlib; đếm câu quá 45 từ, dấu chấm phẩy mỗi đoạn, `\para{`, `\emph{` theo từng file). Cả nhóm dùng cho YC-09 và YC-12. | 13/11 |
 | C-11 | **Lượt đọc cho dễ hiểu** theo checklist 15 điểm ở `review.md` §5 trên các file của C. | 19/11 |
@@ -114,7 +114,7 @@
 | 6 | A, B | `scrub_check.sh` và `readability_count.py` để tự kiểm YC-09, YC-12 | C (C-10), 13/11 | Mềm | Viết bình thường |
 | 7 | A | Sửa `k_total` trong `testbed/calibration.py`, chỉ khi A thấy sai | B | Mềm | Viết §4.3 |
 | 8 | C | Macro `\Cert*` (tied 5k, đuôi trễ, cận tổng hợp) cho abstract và `07-realsim.tex` | A (A-09), 17/11 | Mềm | Viết câu với `??` |
-| 9 | C | Số đếm thô của thí nghiệm agent để viết khung abstract và intro | B (B-09), ngày chạy xong (17/11 hoặc 18/11) | Mềm | Viết câu đúng với mọi kết quả |
+| 9 | C | Số đếm thô của thí nghiệm agent để viết khung abstract và intro | B (B-09), ngày chạy xong (12/11 hoặc 13/11) | Mềm | Viết câu đúng với mọi kết quả |
 | 10 | C | Macro `\Agent*` | B (B-10), 18/11 | Mềm | Viết với `??`; abstract chốt 18/11 |
 | 11 | A | `label_cost.csv` để tính device-hours ở §5.3 | B (B-11), 18/11 | Mềm khi viết; **cứng khi nghiệm thu** | Viết công thức với `??` |
 | 12 | C (chốt chung) | Testbed sạch để đóng gói artifact | B (B-16), 19/11 | **Cứng**, dùng ngày 22/11 | Chuẩn bị gói phần `artifact/` |
@@ -154,14 +154,14 @@
 
 | Giai đoạn | A | B | C |
 |---|---|---|---|
-| 9 đến 13/11 | A-05 (13/11), nháp A-06 và A-01; tên macro (A-09, 11/11) | B-01 đến B-05, B-14 | C-01 (12/11), C-02 (11/11), C-10 (13/11) |
-| 14 đến 17/11 | A-06 (15/11), A-02 và A-03 (16/11), A-01 và A-04 (17/11) | B-06 đến B-08, B-09 (chạy agent 16/11 đến 17/11), B-13, B-15 | C-03 (16/11), C-04 và C-06 (17/11) |
+| 9 đến 13/11 | A-05 (13/11), nháp A-06 và A-01; tên macro (A-09, 11/11) | B-01 đến B-05, B-14; từ khi server mở (10/11): B-06 đến B-08 (11/11), B-09 (chạy agent 12/11, chạy thêm 13/11) | C-01 (12/11), C-02 (11/11), C-10 (13/11) |
+| 14 đến 17/11 | A-06 (15/11), A-02 và A-03 (16/11), A-01 và A-04 (17/11) | B-13, B-15 (không cần GPU) | C-03 (16/11), C-04 và C-06 (17/11) |
 | 18 đến 19/11 | A-07, A-08; **xong việc, mở PR nghiệm thu 19/11** | B-10, B-11, B-12, B-16; **xong việc, mở PR nghiệm thu 19/11** | C-05, C-07, C-08 (đăng ký abstract 19/11), C-09, C-11, C-12; **xong việc, mở PR nghiệm thu 19/11** |
 | 20 đến 21/11 | Nghiệm thu A, sửa lỗi nghiệm thu | Nghiệm thu B, sửa lỗi nghiệm thu | Nghiệm thu C, sửa lỗi nghiệm thu; **21/11 chạy freeze, chốt số liệu** |
 | 22/11 | Sẵn sàng sửa lỗi cổng cuối | Sẵn sàng sửa lỗi cổng cuối | C-13: đóng gói artifact, cổng cuối và **nộp HotCRP chậm nhất 22/11** |
 | 23/11 đến 4/12 | Dự phòng | Dự phòng | Dự phòng (hội nghị: đăng ký abstract 27/11, nộp bài 4/12) |
 
-**Báo ngay cho trưởng nhóm nếu:** emulator chưa chạy ổn vào 12/11; chưa có model vào 13/11; A-dev dưới 6/10 vào 15/11; chưa đủ 10 episode hợp lệ vào 17/11; một vai trò thấy không kịp xong vào 19/11 (báo trước 17/11); build đỏ quá một ngày.
+**Báo ngay cho trưởng nhóm nếu:** emulator chưa chạy ổn vào 10/11; chưa có model vào 10/11; A-dev dưới 6/10 vào 11/11; chưa đủ 10 episode hợp lệ vào 12/11; một vai trò thấy không kịp xong vào 19/11 (báo trước 17/11); build đỏ quá một ngày.
 
 ## 7. Yêu cầu nghiệm thu
 
@@ -212,7 +212,7 @@
 | ID | Đạt khi | Cách kiểm |
 |---|---|---|
 | YC-B1 | **Rig.** `team/b-log.md` có nhật ký theo ngày từ đầu đến cuối (đã chạy gì, lỗi gì, đường dẫn receipt) và mô tả host (OS, CPU, RAM, tăng tốc, chế độ GPU). SHA-256 của mọi APK và JAR đã dùng khớp file lock. | Đọc log; kết quả kiểm hash của `setup_assets.py` dán trong PR |
-| YC-B2 | **`setup_agents.py`.** Trên bản clone mới, script tạo `runtime/agents/SETUP.json` với 4 repo đúng commit pin trong `codex/models.md`, cây sạch; import M3A trong venv thành công. | Chạy script; python của `runtime/agent-venv` chạy `-c "import android_world.agents.m3a"` thoát 0 |
+| YC-B2 | **`setup_agents.py`.** Trên bản clone mới, script tạo `runtime/agents/SETUP.json` với AndroidWorld đúng commit pin, cây sạch; import M3A trong venv thành công. | Chạy script; python của `runtime/agent-venv` chạy `-c "import android_world.agents.m3a"` thoát 0 |
 | YC-B3 | **Freeze trước khi chạy.** Thời điểm commit của `testbed/agent_study.freeze.json` sớm hơn `t_issue_utc` nhỏ nhất của các episode `scheduled`. Freeze có model và revision, decoding, hash prompt, task, hash APK/AVD, `H_eval = 300`, luật kết quả, seed, thứ tự episode. `artifact/results/real/agent/freeze.json` giống hệt bản đã commit. | `git log -1 --format=%cI -- testbed/agent_study.freeze.json` so với CSV; `sha256sum` hai file |
 | YC-B4 | **Dữ liệu agent hợp lệ.** `check_agent_data.py` thoát 0. Script kiểm: header đúng schema và thứ tự §4; có mọi lần chạy (dev, scheduled, invalid, chạy lại); từ 20 episode scheduled theo đúng thứ tự trong freeze; **từ 10 episode hợp lệ** (`original_committed=1` và `fault_receipt=1`); mỗi episode tối đa một lần chạy lại và chỉ vì lỗi đo; `outcome` thuộc 6 nhóm và khớp trường backend (ví dụ `RESENT_DUPLICATE` khi và chỉ khi `distinct_message_ids ≥ 2`); dòng nào cũng có receipt; hash prompt trong mọi receipt bằng hash trong freeze. Test của checker có một fixture lỗi và phải bắt được lỗi đó. | `python3 testbed/check_agent_data.py artifact/results/real/agent`; `python3 -m unittest testbed/tests/test_agent_data.py` |
 | YC-B5 | **Agent không bị sửa.** Cuối đợt chạy, 4 repo trong `runtime/vendor/` sạch và đúng commit pin; mọi sửa binding nằm trong `testbed/` và có test. | Kết quả `git -C runtime/vendor/<repo> status --porcelain` và `rev-parse HEAD` dán trong `b-log.md` |

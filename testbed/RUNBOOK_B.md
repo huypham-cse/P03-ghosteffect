@@ -27,10 +27,10 @@ Server 80GB chỉ được dùng **10/11 đến 13/11**, đợt sau là 26/11 (s
 | 10/11 | Mục 2 và 3: kiểm máy, cài vLLM, tải Qwen, chạy model | Mục 4 đến 6: tunnel, smoke AVD có K-9, một episode M3A thử (B-05); K-9 profile và reset (B-03), tái hiện lỗi bằng script (B-04) |
 | 11/11 | Model chạy suốt ngày | Harness tiêm lỗi (B-06), A-dev 10 episode (B-07), commit freeze (B-08) |
 | 12/11 | Model chạy suốt ngày | 20 episode chính thức (B-09) |
-| 13/11 | Model chạy suốt ngày | Chạy thêm nếu dưới 10 episode hợp lệ, audit K-9 (B-12), dữ liệu chi phí nhãn (B-11) |
+| 13/11 | Model chạy suốt ngày | Chạy thêm nếu dưới 10 episode hợp lệ; còn thời gian thì audit K-9 (B-12, không cần GPU) |
 | 14/11 đến 19/11 | Không cần | Xử lý dữ liệu, viết phần agent, làm sạch testbed (B-10, B-13 đến B-16) |
 
-Lịch này sớm hơn các hạn B-06 đến B-09 trong `team/CONTRIBUTOR_FIXED.md`; cần dời các hạn đó cho khớp.
+Các hạn này đã ghi trong `team/CONTRIBUTOR_FIXED.md` (cập nhật 09/11/2026).
 
 ## 2. Mỗi sáng: server đã mở chưa
 
