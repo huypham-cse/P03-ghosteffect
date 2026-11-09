@@ -1,6 +1,6 @@
 # Cài đặt và lệnh chạy
 
-Phân việc, lịch và yêu cầu nghiệm thu nằm ở `team/PHAN_CHIA_CONG_VIEC.md`. File này chỉ ghi cách cài máy và các lệnh chạy.
+Phân việc, lịch và yêu cầu nghiệm thu nằm ở `team/CONTRIBUTOR_FIXED.md`. File này chỉ ghi cách cài máy và các lệnh chạy.
 
 ## 1. Lấy repo
 

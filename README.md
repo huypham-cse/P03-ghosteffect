@@ -8,7 +8,7 @@ Bài nộp theo kiểu double-blind: không thêm tên người, email hay đư�
 
 | File | Dùng để |
 |---|---|
-| `team/PHAN_CHIA_CONG_VIEC.md` | Ai làm phần nào, lịch, phụ thuộc và yêu cầu nghiệm thu |
+| `team/CONTRIBUTOR_FIXED.md` | Ai làm phần nào, lịch, phụ thuộc và yêu cầu nghiệm thu |
 | `team/SETUP.md` | Cài máy và các lệnh chạy |
 | `review.md` | Bản phản biện nội bộ; checklist cuối file là nguồn việc |
 | `resolve.md` | Quyết định cách sửa cho từng điểm review (R01 đến R32) |
