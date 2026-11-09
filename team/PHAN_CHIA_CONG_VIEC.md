@@ -3,7 +3,7 @@
 > **Dự án:** GhostEffect: Budgeted Exactly-Once Recovery of GUI-Only Effects for Mobile Agents (MobiSys 2027)
 > **Mốc của hội nghị:** đăng ký abstract **27/11/2026**, nộp bài **4/12/2026**.
 > **Mốc của nhóm:** mỗi vai trò xong việc **19/11**; cả ba vai trò được nghiệm thu và chốt số liệu **21/11**; xong hết và nộp HotCRP **22/11**. Từ 23/11 đến 4/12 chỉ để dự phòng.
-> **Trạng thái:** bản đề xuất, chờ trưởng nhóm duyệt.
+> **Trạng thái:** đã được trưởng nhóm duyệt ngày 09/11/2026.
 
 ---
 
@@ -32,7 +32,7 @@
 ### Phần A: Lý thuyết, bảo đảm và hiệu chuẩn
 
 **Sở hữu:**
-- Văn bản: `manuscript/sections/03-model.tex`, `04-theory.tex`, `05-design.tex`, `appendix-proofs.tex` (sau C-01 chỉ còn phần chứng minh và bảng của A).
+- Văn bản: `manuscript/sections/03-model.tex`, `04-theory.tex`, `05-design.tex`, `appendix-proofs.tex` (sau C-01 chỉ còn phần chứng minh và bảng của A), `manuscript/figures/fig-arch.tex` (hình kiến trúc ở §5).
 - Code: trong `artifact/scripts/planner_sim.py` các hàm hiệu chuẩn và chứng nhận (`calibration_deltas`, `certified_wait`, `lag_tables`, `lag_tables_measured`, `lag_wait`, `joint_calibration`, `src_calibration`, `cpu`); file mới `artifact/scripts/render_guarantee.py`; test mới `artifact/tests/test_guarantee.py`.
 - Đầu ra: `manuscript/generated/macros_guarantee.tex` và các bảng `generated/tab_cert_*.tex`. Tiền tố macro: `\Cert*`.
 - A **chỉ đọc** các CSV `artifact/results/planner_real4_*.csv` do C chạy (các tag `down5`, `down15`, `t0down5`, `t0down15`, `lag2k`, `lag5k`, `lag10k`, `lag20k`, `boot10k`, `tail5`, `tail5tied` đã có). Cần tag mới thì nhờ C.
@@ -83,7 +83,7 @@
 **Sở hữu:**
 - Code: `artifact/run_all.py`, `run_all.sh`, `artifact/scripts/render.py`, `render_realsim.py` (tách ra ở C-01), các script mô phỏng còn lại (`sim_*.py`, `markov_planner.py`, `sample_size.py`, `ge_core.py`); trong `planner_sim.py` mọi thứ không thuộc A (chính sách, baseline, `vetting`, `run`, `summarize`, định nghĩa part, bảng tag REAL4); `artifact/tests/test_regressions.py`, test mới `artifact/tests/test_eval.py`; công cụ của nhóm `team/scrub_check.sh`, `team/readability_count.py`, `team/make_bundle.sh` (mới).
 - Đầu ra: `manuscript/generated/macros.tex` và mọi bảng, hình còn lại (gồm `tab_realsim.tex`, `tab_real4.tex`). Tiền tố macro: `\Sim*`, `\Rsim*` và các tiền tố cũ khác.
-- Văn bản: `manuscript/main.tex`, `build.sh`, `references.bib`; `manuscript/sections/00-abstract.tex`, `01-introduction.tex`, `07-evaluation.tex`, `07-realsim.tex` (mới), `08-discussion.tex`, `09-related-work.tex`, `10-conclusion.tex`, `appendix-results.tex` (mới); `others/notes.md`.
+- Văn bản: `manuscript/main.tex`, `build.sh`, `references.bib`; `manuscript/sections/00-abstract.tex`, `01-introduction.tex`, `07-evaluation.tex`, `07-realsim.tex` (mới), `08-discussion.tex`, `09-related-work.tex`, `10-conclusion.tex`, `appendix-results.tex` (mới); `others/notes.md`, `STATUS.md`.
 
 | ID | Việc | Hạn |
 |---|---|---|
@@ -253,7 +253,7 @@ C điều phối (C-13), trưởng nhóm nghiệm thu. Ngày 22/11 cả ba vai t
 
 ## 8. Cần trưởng nhóm quyết
 
-1. Duyệt cách chia này, giao người cho A, B, C và chỉ định người nghiệm thu cho từng phần.
+1. Giao người cho A, B, C và chỉ định người nghiệm thu cho từng phần (cách chia đã duyệt ngày 09/11/2026).
 2. Xác nhận nhóm **được sửa paper**: `resolve.md` và `report.md` còn ghi quyết định cũ "không chỉnh paper, paper để sau".
 3. Đường model cho B: máy GPU Linux hay API (kèm ngân sách).
 4. Mode khuyến nghị cuối cùng (mặc định theo `resolve.md` R06).
