@@ -1,0 +1,21 @@
+# campaign 2 versions/hashes (2026-11-06 07:18 +0700)
+## APKs (apks/SHA256SUMS)
+41cf9832d97c31e3fc694e5c66b38990dec3312936cc336141714db07259081b  at.bitfire.davdroid_405210002.apk
+0f9dd57fbd06dddfd8bcf7de6106d27fa0f0297793193828c4eac904518b1e05  com.fsck.k9_39046.apk
+ff73751599211c709c1e691d1a2b7412df0bab979ffbe8ff0d4b7f31c6a444c9  im.vector.app_40106622.apk
+dae01d93c8920aa63845868db2190bcc4aa6ff8410b1289de1ce27b1bb89c599  ws.xsoh.etar_57.apk
+## backends
+0d0676812f656ff84e484ef736d9149d324d2dec0ea8dbfd6dbd0b59283c3004  backends/greenmail/greenmail.jar
+Version: 1.164.2
+Version: 3.9.0
+## emulator
+Android emulator 37.2.13 (build 16740729), system image android-33 google_apis arm64-v8a r17 (see shared-android/README.md)
+## campaign-2 scripts (final, after the run)
+879a4b54ca1727e812e04420c9e9c9e80f3c3df93371936e1dc01378ae291b3a  scripts/c2_element.py
+69ec780229f905bbbef4a6c2798b38fb24d89b0d737dd0211a7636383d500c34  scripts/c2_k9.py
+8615e9f179702ab8c5914d0a8e0f4adbd86b9ef566031ae5e4d04e59bd406c52  scripts/c2_caldav.py
+8c41a116d911b9f2f8b8cf9425e56dab3bd3a6477f8d5a8c7da8e46ee471b7c5  scripts/c2_synapse_txn.py
+6d21be5b93046aad59efd34b6924d2cf8f8a1e7ebbee9d15bf4059129ac30de3  scripts/analyze_c2.py
+b7e3875393289cc69b424b381eacd2389bb36b4c3dfe40dcbdedb459850a11fb  scripts/faultproxy.py
+8f5e0c217df9317da8c6b615a1a24111b035d7e2b685987a21e17ab39ffd5a4b  scripts/ui.py
+## K-9 / Synapse source files: see source_excerpts_synapse_k9.txt

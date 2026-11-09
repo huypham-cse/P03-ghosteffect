@@ -1,0 +1,19 @@
+{
+  "status": "PASS",
+  "baseline_files": 238,
+  "changed": [
+    "artifact/README.md",
+    "artifact/run_all.sh",
+    "artifact/scripts/bench_ledger.py",
+    "artifact/scripts/ledger.py",
+    "artifact/scripts/planner_sim.py",
+    "artifact/scripts/real_params.py",
+    "artifact/scripts/render.py",
+    "artifact/scripts/render_real.py",
+    "artifact/scripts/sample_size.py",
+    "artifact/scripts/sim_nonce.py",
+    "manuscript/build.sh"
+  ],
+  "protected_changed": [],
+  "missing": []
+}

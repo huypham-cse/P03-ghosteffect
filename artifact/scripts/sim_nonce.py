@@ -82,13 +82,35 @@ def mc(k, t, ec, seed, n=40000):
         # committed screen: nonce present (unless hidden)
         shown = others + ([] if rng.random() < ETA else [nonce])
         read = [ocr(rng, s, ec) for s in shown]
-        if not any(ham(r, nonce) <= t for r in read):
+        if not any(within_edit_distance(r, nonce, t) for r in read):
             fn += 1
         # absent screen
         read0 = [ocr(rng, s, ec) for s in others]
-        if any(ham(r, nonce) <= t for r in read0):
+        if any(within_edit_distance(r, nonce, t) for r in read0):
             fp += 1
     return fn, fp, n
+
+
+def within_edit_distance(a, b, t):
+    """Exact threshold predicate; avoid a full DP for the paper's t=0 or t=1.
+
+    This changes no random draws or OCR/nonce law. The unrestricted Levenshtein
+    implementation above remains the reference and handles larger thresholds.
+    """
+    if abs(len(a) - len(b)) > t:
+        return False
+    if t == 0:
+        return a == b
+    if t != 1:
+        return ham(a, b) <= t
+    i = 0
+    while i < min(len(a), len(b)) and a[i] == b[i]:
+        i += 1
+    if len(a) == len(b):
+        return a[i + 1:] == b[i + 1:]
+    if len(a) < len(b):
+        return a[i:] == b[i + 1:]
+    return a[i + 1:] == b[i:]
 
 
 def main():

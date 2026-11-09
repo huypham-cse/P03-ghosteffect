@@ -1,0 +1,48 @@
+{
+  "schema": "ghosteffect-calibration-v1",
+  "mode": "joint",
+  "evidence_kind": "interrupted_measurement",
+  "alpha": 0.01,
+  "beta": 0.01,
+  "strata": [
+    {
+      "id": "UNFROZEN-EXAMPLE-NOT-A-CERTIFICATE",
+      "domain": {
+        "app_package": "im.vector.app",
+        "app_version": "1.6.62",
+        "backend_revision": "UNFROZEN-Synapse-1.164.2-config-hash",
+        "reader_revision": "UNFROZEN-profile-and-code-hash",
+        "verifier_revision": "UNFROZEN-Qwen-model-prompt-processor-hashes",
+        "locale": "en-US",
+        "abi": "arm64-v8a",
+        "load_profile": "UNFROZEN",
+        "policy_revision": "UNFROZEN-code-hash",
+        "origin_kind": "recovery"
+      },
+      "families": {
+        "nonce": ["timeline", "search"],
+        "digest": ["history-list", "history-search"],
+        "vlm": ["list", "detail", "search"]
+      },
+      "classes": ["app-kill"],
+      "capabilities": {
+        "local": false,
+        "G2": false,
+        "hop1_qualified": false,
+        "nonce_analytic_qualified": false,
+        "family_independence_qualified": false,
+        "source_independence_qualified": false,
+        "hop1_lag_independent": false,
+        "backend_visibility_domain_qualified": false
+      },
+      "quota": {
+        "pilot0": 500,
+        "pilot1": 500,
+        "calibration0": 5000,
+        "calibration1": 5000,
+        "lag1": 0
+      },
+      "lag_splits": ["calibration"]
+    }
+  ]
+}

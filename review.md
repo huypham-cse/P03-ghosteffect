@@ -1,324 +1,322 @@
-# MobiSys 2027 Review Packet: GhostEffect: Budgeted Exactly-Once Recovery of GUI-Only Effects for Mobile Agents
+# Hồ sơ phản biện MobiSys 2027: GhostEffect — Khôi phục hiệu ứng chỉ qua GUI theo ngữ nghĩa đúng một lần với ngân sách rủi ro cho tác tử di động
 
-**Paper folder:** `/Users/xuanbachle/Workstation/MobiSys2027/papers/P03-ghosteffect/`
-**Date:** 2026-11-07
-**PDF:** `manuscript/main.pdf`, 20 pages (`main.log`: "Output written on main.pdf (20 pages)").
-**Body length vs. 12-page limit:** within the limit, no slack. From `main.aux`: Section 10 (Conclusion) is on page 12, References start on page 13, Appendix A (Proofs) on page 15, Appendix B (Additional results) on pages 17-20. Body is exactly 12 pages; references (2 pages) and appendix (6 pages) are excluded. Three overfull boxes, largest 7.9 pt.
+**Thư mục bài báo:** `/Users/xuanbachle/Workstation/MobiSys2027/papers/P03-ghosteffect/`  
+**Ngày:** 2026-11-07  
+**PDF:** `manuscript/main.pdf`, 20 trang (`main.log`: "Output written on main.pdf (20 pages)").  
+**Độ dài nội dung chính so với giới hạn 12 trang:** Vừa đúng giới hạn, không còn dư chỗ. Theo `main.aux`, Mục 10 (Kết luận) nằm ở trang 12, Tài liệu tham khảo bắt đầu ở trang 13, Phụ lục A (Chứng minh) ở trang 15 và Phụ lục B (Kết quả bổ sung) ở các trang 17–20. Nội dung chính dài đúng 12 trang; tài liệu tham khảo (2 trang) và phụ lục (6 trang) không tính vào giới hạn. Có ba hộp nội dung tràn lề (*overfull boxes*), lớn nhất 7,9 pt.
 
-**What was read (fully):** `manuscript/main.tex`; every file in `manuscript/sections/` (abstract, introduction, background-motivation, model, theory, design, implementation, evaluation, 07-real, discussion, related work, conclusion, appendix-proofs, tab-apps, tab-position); `manuscript/generated/macros.tex` (459 macros; every macro quoted below is resolved to its value) and all 18 generated tables and figures; `manuscript/figures/` (fig1.tex, fig-arch.tex, icons/); `STATUS.md`; `others/notes.md`; `others/citation-audit.md` (123 entries, all marked verified). `reviews/round1..4` and `reviews/self-review.md` were skimmed for history only; the reviews below are fresh.
+**Tài liệu đã đọc (toàn bộ):** `manuscript/main.tex`; mọi tệp trong `manuscript/sections/` (tóm tắt, giới thiệu, bối cảnh–động lực, mô hình, lý thuyết, thiết kế, triển khai, đánh giá, 07-real, thảo luận, công trình liên quan, kết luận, appendix-proofs, tab-apps, tab-position); `manuscript/generated/macros.tex` (459 macro; mọi macro được trích bên dưới đều đã được thay bằng giá trị thực) cùng toàn bộ 18 bảng và hình được sinh tự động; `manuscript/figures/` (fig1.tex, fig-arch.tex, icons/); `STATUS.md`; `others/notes.md`; `others/citation-audit.md` (123 mục, tất cả đều được đánh dấu đã xác minh). Chỉ đọc lướt `reviews/round1..4` và `reviews/self-review.md` để nắm lịch sử; các nhận xét phản biện dưới đây được viết mới.
 
-**Is 07-real.tex included?** Yes. `07-evaluation.tex` inputs `generated/real_section.tex`, which inputs `sections/07-real`. The inclusion is conditional on `artifact/results/real/SUMMARY.md` existing at render time; it exists, so RQ7 (Section 7.7) is in the PDF.
+**`07-real.tex` có được đưa vào không?** Có. `07-evaluation.tex` nạp `generated/real_section.tex`, rồi tệp này nạp `sections/07-real`. Việc đưa vào phụ thuộc vào sự tồn tại của `artifact/results/real/SUMMARY.md` khi biên dịch; tệp này có tồn tại, nên RQ7 (Mục 7.7) xuất hiện trong PDF.
 
-**State of the manuscript.** `STATUS.md` describes a finished round-3 revision. The artifact has moved further: `artifact/scripts/planner_sim.py` contains later code (clock origin, lag-table size, vetted rules; `REAL4` table at lines 1870-1900) and `artifact/results/planner_real4_*.csv` hold its outputs. `render_real.py` does not read them and no section mentions them. The manuscript is reviewed as it stands; the reviews flag where it is narrower than its own artifact.
+**Trạng thái bản thảo.** `STATUS.md` mô tả một bản sửa vòng 3 đã hoàn tất. Tuy nhiên, artifact đã phát triển xa hơn: `artifact/scripts/planner_sim.py` chứa mã bổ sung về sau (mốc thời gian, kích thước bảng độ trễ, quy tắc đã được thẩm định; bảng `REAL4` tại dòng 1870–1900), và `artifact/results/planner_real4_*.csv` chứa kết quả tương ứng. `render_real.py` không đọc các kết quả đó và không mục nào nhắc đến chúng. Việc phản biện dựa trên bản thảo hiện tại; các nhận xét sẽ chỉ ra những chỗ nội dung bài báo chưa phản ánh đầy đủ artifact của chính mình.
 
-**Artifact spot-checks (by reading CSVs, not rerunning):**
+**Kiểm tra đối chiếu một số kết quả trong artifact (đọc CSV, không chạy lại):**
 
-| # | Claim in paper (macros resolved) | Artifact source | Result |
+| # | Khẳng định trong bài báo (đã thay macro bằng giá trị) | Nguồn trong artifact | Kết quả |
 |---|---|---|---|
-| 1 | Scripted GUI redo duplicated 20/20 K-9 sends | `campaign2/c2_k9_nosent_trials.csv` (12 rows `recompose_server_copies=2`) + `c2_k9_sent_trials.csv` (8 rows) | Match |
-| 2 | CalDAV 8/8 exactly once; redo 3/3 duplicates | `campaign2/c2_caldav_trials.csv`: 9 trials, 8 dropped replies, `server_copies_window=1` in 9/9, `recompose_server_copies=2` in 3/3 | Match |
-| 3 | Element 83/83 exactly once; 65 same txnId, 18 via /sync | `c2_element_outcomes.csv` row `ALL_interrupted(respdrop)` | Match |
-| 4 | Lag p50/p90/max: kill -9 4.0/8.0/13.6; force-stop 11.9/12.3/12.7; net 2.4/2.7/2.9; none 2.5/2.9/3.8; 0 censored | `c2_element_lag.csv` | Match |
-| 5 | Late reads 0/99 wrong; no two families wrong together 0/101 (CI 0-3.7%); first read bottom 33/101; first observed wrong 3/68 | `c2_element_families.csv`, `c2_element_cofailure.csv` | Match |
-| 6 | Table 4 Element: product 3.0% asks, joint 72.9%, Thm-only 37.2%, rules 9.0%/3.1%, joint 12.7% at 5,000 labels, passive product P_v 14.59, tail product 2.77 | `planner_real.csv` | Match |
-| 7 | Table 4 K-9: rules P_v 65.85 (no Sent), 28.91 (Sent); passive joint 9.85; trust-app 27.67 | `planner_real.csv` | Match |
-| 8 | Table 2: product 0.05/24.9, joint 0.05/66.7, rules 0.52/23.9, Thm-only 73.0, redo 63.3 | `planner_sim.csv` | Match |
-| 9 | Synapse: other device duplicates; row aged past 24 h duplicates | `c2_synapse_txn.csv` | Match |
-| 10 | Ledger under qemu SIGKILL: FULL 0 lost (3 trials), OFF lost 15-158 in 3/3 | `ledger_powerloss.csv` via SUMMARY.md | Match |
-| 11 | Table 4 label budget "2,000 / 5,000 per class" | `planner_sim.py` `N_LAG = 20000`; `planner_real4_lag5k.csv` (joint 30.6% asks with 5,000 lags), `lag2k.csv` (100%) | **Omission:** lag tables hold 20,000 bootstrapped lags per class regardless of the quoted label count; not stated |
-| 12 | Section 3 and Algorithm 1 wait from t0 (the tap); Table 3b lags are from relaunch | `real_params.py` line 69; `planner_real4_t0down5.csv` (P_v 18.8% product, 29.9% joint if waiting from the tap with 5 s downtime) | **Model/measurement inconsistency**, not discussed |
-| 13 | "joint holds only because it asks 74.4%" under an unlogged tail (2,000 labels) | `planner_real4_tail5.csv`: at 5,000 labels joint P_v 2.01% (CP 2.32) | True at 2,000, false at the headline 5,000; paper silent |
+| 1 | Thao tác làm lại qua GUI có kịch bản tạo bản sao ở 20/20 lần gửi K-9 | `campaign2/c2_k9_nosent_trials.csv` (12 dòng `recompose_server_copies=2`) + `c2_k9_sent_trials.csv` (8 dòng) | Khớp |
+| 2 | CalDAV: 8/8 đúng một lần; làm lại tạo bản sao ở 3/3 | `campaign2/c2_caldav_trials.csv`: 9 lượt thử, 8 phản hồi bị bỏ, `server_copies_window=1` ở 9/9 và `recompose_server_copies=2` ở 3/3 | Khớp |
+| 3 | Element: 83/83 đúng một lần; 65 dùng cùng `txnId`, 18 qua `/sync` | Dòng `ALL_interrupted(respdrop)` trong `c2_element_outcomes.csv` | Khớp |
+| 4 | Độ trễ p50/p90/max: kill -9 = 4,0/8,0/13,6; force-stop = 11,9/12,3/12,7; mạng = 2,4/2,7/2,9; không lỗi = 2,5/2,9/3,8; không có mẫu bị kiểm duyệt (*censored*) | `c2_element_lag.csv` | Khớp |
+| 5 | Lượt đọc muộn sai 0/99; không có hai nhóm bằng chứng cùng sai 0/101 (CI 0–3,7%); lượt đọc đầu trả `bottom` 33/101; lượt đọc đầu có quan sát nhưng sai 3/68 | `c2_element_families.csv`, `c2_element_cofailure.csv` | Khớp |
+| 6 | Bảng 4, Element: product hỏi 3,0%; joint 72,9%; chỉ định lý 37,2%; rules 9,0%/3,1%; joint hỏi 12,7% với 5.000 nhãn; product dùng nhãn thụ động có `P_v` 14,59; product với đuôi trễ là 2,77 | `planner_real.csv` | Khớp |
+| 7 | Bảng 4, K-9: rules có `P_v` 65,85 (không có Sent), 28,91 (có Sent); passive joint 9,85; trust-app 27,67 | `planner_real.csv` | Khớp |
+| 8 | Bảng 2: product 0,05/24,9; joint 0,05/66,7; rules 0,52/23,9; chỉ định lý 73,0; làm lại 63,3 | `planner_sim.csv` | Khớp |
+| 9 | Synapse: thiết bị khác tạo bản sao; bản ghi quá 24 giờ tạo bản sao | `c2_synapse_txn.csv` | Khớp |
+| 10 | Sổ ghi dưới qemu SIGKILL: FULL mất 0 bản ghi (3 thử nghiệm), OFF mất 15–158 bản ghi trong 3/3 thử nghiệm | `ledger_powerloss.csv` qua SUMMARY.md | Khớp |
+| 11 | Bảng 4 nêu ngân sách nhãn "2.000 / 5.000 cho mỗi lớp" | `planner_sim.py`: `N_LAG = 20000`; `planner_real4_lag5k.csv` (joint hỏi 30,6% với 5.000 mẫu độ trễ), `lag2k.csv` (100%) | **Thông tin bị bỏ sót:** các bảng độ trễ chứa 20.000 mẫu độ trễ bootstrap mỗi lớp, bất kể số nhãn được nêu; bài báo không nói rõ |
+| 12 | Mục 3 và Thuật toán 1 chờ từ `t0` (lúc nhấn); độ trễ ở Bảng 3b tính từ lúc mở lại ứng dụng | `real_params.py` dòng 69; `planner_real4_t0down5.csv` (`P_v` 18,8% product, 29,9% joint nếu chờ tính từ lúc nhấn, với 5 giây ngừng hoạt động) | **Không nhất quán giữa mô hình và phép đo**, chưa được thảo luận |
+| 13 | "Joint vẫn đạt ràng buộc chỉ vì phải hỏi 74,4%" dưới đuôi độ trễ không được ghi nhận (2.000 nhãn) | `planner_real4_tail5.csv`: với 5.000 nhãn, joint có `P_v` 2,01% (CP 2,32) | Đúng ở 2.000 nhãn, sai ở mốc 5.000 nhãn được nhấn mạnh; bài báo chưa đề cập |
 
-Every printed number matches. Items 11-13 are places where the text is narrower than the artifact.
-
----
-
-## Review 1 — Senior mobile-systems PC member (Android apps, accessibility, on-device agents)
-
-**Paper summary.** The paper names a failure mode of mobile GUI agents: an interruption between a commit tap and its confirmation leaves a "ghost effect" whose outcome the agent cannot read back, and a redo through the GUI sends it again. On Android 13 emulators with self-hosted servers, K-9 Mail keeps an accepted mail in its Outbox as a permanent error, and a scripted redo duplicated 20/20 K-9 mails and 3/3 CalDAV events; Element and DAVx5 recovered by themselves through idempotent client retries. GhostEffect is a recovery layer: a write-ahead SQLite ledger in a controller outside the agent, a nonce typed into a free-text field, three accessibility-text evidence families (outbox, nonce, history digest) plus a VLM family, a certified wait for visibility lag, and a planner that retries, declares or asks under a duplicate/loss budget, with bounds calibrated by Clopper-Pearson on fault-injected effects. Evaluation: model-based simulation, a 149-run emulator campaign, and a simulation re-parameterized from the measurements.
-
-**Overall merit:** 3 (Weak accept)
-**Reviewer expertise:** 4 (Expert)
-**Sub-scores (1-5):** Novelty 3, Technical soundness 3, Evaluation 2, Significance/impact 3, Presentation & writing 3
-
-**Strengths**
-- The K-9 finding (Section 7.7, Table 3a, Figure 1) is a concrete, reproducible systems observation: after a lost SMTP reply, K-9 24.0 records `send_state=error`, skips the message on later syncs, keeps it in the Outbox, and never writes it to the IMAP Sent folder (0/8). It is the first measured GUI-agent ghost duplicate I have seen.
-- The two-hop framing (Section 4.4) turns "is retry safe?" into a per-app, testable property (G2) with a measured dedup horizon (Synapse: same device, 24 h; an aged row duplicated).
-- The reader discipline in Section 6 (bottom unless package, room title and timeline are verified; "absent" only on a scrolled, anchored screen) is what an accessibility-tree reader needs and is rarely stated.
-- The ledger is placed correctly (outside the agent, write-ahead, WAL with `synchronous=FULL`) and tested under a qemu SIGKILL.
-- Honest scoping: "We ran no LLM agent and no phone" (Section 1).
-
-**Weaknesses (ordered by severity)**
-1. **No agent was run (Sections 6, 7.7, 7.8).** The duplicate comes from a scripted driver that "recomposes and re-sends the same content, as an agent that trusts the screen would". Whether M3A, UI-TARS or AgentProg do that on K-9's error state decides significance, and the rig exists. One LLM agent on 20 K-9 trials would settle it.
-2. **The on-device topology, the MobiSys case, is design only (Section 5.1).** "We have built the host topology's decision core and ledger; the on-device service is design only." Nothing is measured about a foreground-service controller under LMK, accessibility-service read cost, or ISSUED-before-tap latency on a device. Host timings (0.04 ms append on a macOS laptop) are not phone numbers, as the paper says.
-3. **App coverage is three open-source clients with self-hosted servers (Table 8).** G2 classification needs an observable server. For Gmail, WhatsApp, Signal or a bank, the dedup horizon is unobservable, FLAG_SECURE blocks screenshots and accessibilityDataSensitive hides views (Section 8). State plainly what survives on a closed app: ledger yes, nonce only with a user-only field, G2 unknown, so every interrupted effect is asked about.
-4. **Nonce placement conflicts across the paper.** Section 5.2: "By default GhostEffect uses only fields that the counterparty cannot see." Figure 1(b): "Nonce gx:7K2Q9F typed into the subject". Table 8: K-9 field is "mail body (visible)". The experiment used the subject (artifact SUMMARY.md). A subject tag is counterparty-visible and changes the mail the user asked for. The default or Figure 1 must change.
-5. **The measured lag is not the modeled lag (Section 3 vs. Table 3b).** T runs "from t0 until the effect becomes visible", t0 the ISSUED time before the tap, and Algorithm 1 waits from t0. Table 3b measures "recovery-to-visible lag" from the relaunch intent. On a phone, tap-to-relaunch can be minutes (Doze, user returns later). A planner waiting from t0 against a relaunch-based table under-waits. The paper does not say which clock the planner uses.
-6. **Emulator kill semantics differ from a phone (Sections 6, 7.7).** `am kill` was a no-op for Element (13/13); the force-stop lag (12 s) is "mostly navigation" of the harness, not the app; no LMK under memory pressure, no Doze, no OEM battery manager.
-7. **No VLM was measured** ("the VLM family is removed rather than modelled", `params.csv`). "The VLM is a weak tie-breaker" (Section 7.4) is a simulation statement.
-
-**Detailed comments for authors**
-1. Section 2.1 says the foreground app "is essentially never reaped". The emulator shows `am kill` spared Element because its sync component keeps it perceptible. Say what this means for the fault mix: for G2 apps with a foreground sync service, app death may be rare and agent death common.
-2. Section 5.3: "Hop 1 reads the app's local database." Without root the controller cannot read another app's database; it reads the Outbox screen through the accessibility tree. Make the text match what was built (uiautomator dumps).
-3. Section 5.3: a label costs "about 15 s". Campaign-2 trials ran a 120-300 s window plus relaunch. Reconcile, then redo the arithmetic for 5,000 labels per class and outcome times four classes.
-4. Section 7.7: "Seven Element trials were lost before writing a row (six to a system ANR dialog)". An ANR is itself an interruption an agent faces. If those sends committed, they belong in the lag table as censored, not as discards.
-5. Section 7.7, withheld reply: Element showed Sent via the /sync echo before its 70 s client timeout, so a "committed" reading can precede the app's own acknowledgement. Say whether A1 and the hop-1 qualification cover this path.
-6. Figure 1's G2 branch says "after a certified wait the row reads Sent, committed, no ask". Table 4 says the recommended joint mode asks on 72.9% (2,000 labels) or 12.7% (5,000) of interrupted Element sends. The figure shows the product mode; label it.
-7. Table 8 lists MockBank, Pro Expense, Markor, Joplin, Tasks.org and Simple SMS; only three stacks were measured. Mark each row measured or planned in the table, not only in the caption.
-8. Section 6: uiautomator dumps take about 2 s on a loaded host (load average 16-38 per SUMMARY.md). The 2.5 s no-fault "lag" is the reader's dump time. State the host load; it bounds every lag number.
-
-**Questions for the authors' response**
-1. Run one LLM agent (M3A, T3A or UI-TARS) on 20 interrupted K-9 sends with your rig. How many recompose and resend?
-2. Which clock does the planner's certified wait use, ISSUED or relaunch? If ISSUED, how do you reconcile it with lag tables logged from relaunch?
-3. Where does GhostEffect type the nonce for mail, and is that the default or opt-in?
-4. For a closed app (Gmail) whose server you cannot observe, what does GhostEffect do on an interrupted send?
-5. What is the per-label wall-clock cost on the emulator, and how many device-hours are 5,000 labels per class and outcome for one app version?
-
-**Ethical / anonymity concerns.** None. Self-hosted servers, test accounts, open-source apps; nonce opt-in discussed; user-prompt study noted as needing IRB approval.
-
-**Confidence and what would change my score.** High on the Android side, medium on statistics. A measured LLM-agent redo rate on K-9 (even n = 20) and a resolved lag clock would move me to 4. An on-device controller measured under LMK would make me champion the paper.
+Tất cả số liệu được in ra đều khớp. Các mục 11–13 cho thấy văn bản bài báo trình bày hẹp hơn dữ liệu sẵn có trong artifact.
 
 ---
 
-## Review 2 — Distributed-systems / theory reviewer
+## Phản biện 1 — Thành viên PC cấp cao chuyên hệ thống di động (ứng dụng Android, accessibility, tác tử chạy trên thiết bị)
 
-**Paper summary.** Recovery of a GUI effect after an interruption is modeled as a sequential decision under a hidden binary outcome X, a visibility lag T, and noisy, possibly correlated binary reads. The guarantee is conditional: P(retry | committed) at most alpha, P(declare | absent) at most beta. Theorem 4.1 restates Wald's SPRT bound with a lag share, a lag converse, a KL lower bound on reads and a Bayes-risk floor. Proposition 4.3 certifies family-level verdicts under independence across families (A2); Proposition 4.4 certifies the planner's whole stopping region without A2 by a fixed-sequence Clopper-Pearson test. Lemma 4.5 gives a persistent-error floor; Lemma 4.6 handles conservative calibration and union bounds; Lemma 4.7 bounds nonce false matches; Theorem 4.8 (two-hop) shows a local outbox plus idempotent retransmission within a dedup horizon D yields exactly one copy. A KKT split allocates budget across a saga.
+**Tóm tắt bài báo.** Bài báo đặt tên cho một dạng lỗi của tác tử thao tác GUI di động: khi bị gián đoạn giữa thao tác nhấn để commit và việc nhận xác nhận, hệ thống để lại một "hiệu ứng ma" (*ghost effect*) mà tác tử không thể đọc lại kết quả; thực hiện lại qua GUI sẽ gửi thêm một lần nữa. Trên Android 13 emulator với máy chủ tự lưu trữ, K-9 Mail giữ một email đã được chấp nhận trong Outbox dưới dạng lỗi vĩnh viễn; một kịch bản thao tác lại tạo bản sao ở 20/20 email K-9 và 3/3 sự kiện CalDAV. Element và DAVx5 tự phục hồi nhờ cơ chế retry có tính idempotent của ứng dụng. GhostEffect là một tầng phục hồi gồm: sổ ghi SQLite kiểu write-ahead trong bộ điều khiển nằm ngoài tác tử; một mã nonce được nhập vào trường văn bản tự do; ba nhóm bằng chứng từ văn bản accessibility (outbox, nonce, bản tóm lược lịch sử) cùng một nhóm VLM; khoảng chờ được chứng nhận theo độ trễ hiển thị; và planner quyết định thử lại, tuyên bố hoàn thành hoặc hỏi người dùng theo ngân sách rủi ro trùng/loss. Các giới hạn được hiệu chuẩn bằng Clopper–Pearson trên những thao tác bị tiêm lỗi. Đánh giá bao gồm mô phỏng dựa trên mô hình, một chiến dịch 149 lượt thử emulator và mô phỏng được tham số hóa lại từ số liệu đo.
 
-**Overall merit:** 3 (Weak accept)
-**Reviewer expertise:** 4 (Expert)
-**Sub-scores (1-5):** Novelty 3, Technical soundness 4, Evaluation 3, Significance/impact 3, Presentation & writing 2
+**Điểm tổng thể:** 3 (Nghiêng về chấp nhận / Weak accept)  
+**Mức độ chuyên môn reviewer:** 4 (Chuyên gia)  
+**Điểm thành phần (1–5):** Tính mới 3; tính vững chắc kỹ thuật 3; đánh giá thực nghiệm 2; mức độ quan trọng/tác động 3; trình bày và diễn đạt 3.
 
-**Strengths**
-- The guarantee (Eq. 1) is conditional on X and prior-free; Corollary 4.2 shows alpha = 0 forces beta = 1, so the budget is the honest object.
-- Proposition 4.4 is the right fix for correlated evidence: calibrate the stopping region, not the parts. The fixed-sequence argument (Appendix A.3) is correct and the sample-size consequence is priced (Table 1).
-- Lemma 4.5's two-point extremal law checks out (mean epsilon, variance rho epsilon(1-epsilon)); the exchangeable case is handled separately.
-- Theorem 4.8 is folklore and says so; the horizon D and device scope are new and measured (Section 7.7).
-- The paper separates proved from assumed ("We claim none of these inequalities") and labels every number's kind.
+**Điểm mạnh**
+- Phát hiện về K-9 (Mục 7.7, Bảng 3a, Hình 1) là một quan sát hệ thống cụ thể và có thể tái lập: sau khi mất phản hồi SMTP, K-9 24.0 ghi `send_state=error`, bỏ qua thư ở các lần đồng bộ tiếp theo, giữ thư trong Outbox và không bao giờ ghi nó vào thư mục IMAP Sent (0/8). Đây là lần đầu tôi thấy hiện tượng gửi trùng do "hiệu ứng ma" của GUI agent được đo trực tiếp.
+- Cách nhìn hai chặng (*two-hop*, Mục 4.4) chuyển câu hỏi "retry có an toàn không?" thành một tính chất có thể kiểm tra riêng từng ứng dụng (G2), với thời hạn khử trùng (*dedup horizon*) được đo (Synapse: cùng thiết bị, 24 giờ; bản ghi quá hạn gây trùng lặp).
+- Quy tắc đọc bằng chứng ở Mục 6 (mặc định `bottom` trừ khi đã xác minh package, tên phòng và timeline; chỉ kết luận "không tồn tại" trên màn hình đã cuộn đến đúng vị trí và có mốc neo) là điều một trình đọc cây accessibility cần có nhưng hiếm khi được nêu rõ.
+- Ledger được đặt đúng vị trí (ngoài tác tử, ghi trước thao tác, WAL với `synchronous=FULL`) và đã thử nghiệm bằng qemu SIGKILL.
+- Phạm vi được công bố trung thực: "Chúng tôi chưa chạy tác tử LLM và chưa thử trên điện thoại thật" (Mục 1).
 
-**Weaknesses (ordered by severity)**
-1. **The certified quantity excludes the dominant error source (Eq. 1; Table 4).** P_v is the planner's own retry rate; wrong user answers are "outside (1)". On Element, joint has P_v 0.00% but dup 3.17% and loss 2.04% because it asks 72.9% of the time with a 5%-wrong user; product has P_v 0.00%, dup 0.15%, loss 0.09%. The guarantee ranks modes opposite to their end-to-end error. State the composed bound, e.g. P(dup) at most pi(alpha + P(ask) epsilon_u), and say which quantity a deployer should use.
-2. **The lag clock in the theory does not match the calibrated lag law (Section 3, Eq. 2, Algorithm 1 vs. Table 3b).** T runs from t0; the emulator lags run from relaunch or network restore (`real_params.py`: "t0 = relaunch intent / network restore / Send tap"). With positive downtime, a planner waiting w from t0 has waited less than w on the table's clock, and the lag share is not certified. The artifact quantifies it (`planner_real4_t0down5.csv`: P_v 18.8% product, 29.9% joint at 5 s downtime) but the paper is silent. Redefine T per class from an observable origin r_e and prove Eq. 2 for it, or add downtime to the wait.
-3. **The headline label count hides the lag-table size (Section 7.7, Table 4).** "2,000 / 5,000 labels per class" are verdict labels; lag tables hold 20,000 bootstrapped lags per class (`N_LAG = 20000`). Table 1 says one wait at 0.2 alpha with zero exceedances needs 4,649 lags at alpha = 0.01, times four by class. The 12.7% figure rests on lag samples the quoted budget does not pay for; `planner_real4_lag5k.csv` gives joint 30.6% and product 60.3% asks when lags equal labels, `lag2k.csv` 100%.
-4. **"Joint survives an unlogged tail" is label-count specific (Section 7.7).** At 2,000 labels joint holds "only because it asks 74.4%"; at 5,000, `planner_real4_tail5.csv` gives joint P_v 2.01% (CP 2.32), over budget. The abstract implies joint is immune to the tail. It is not.
-5. **Proposition 4.3's R(tau) is under-specified for the hand-over path.** Algorithm 1 line 9 resets P to 1 after a failed/stuck hop-1 entry and re-enters the cascade. The proof of Eq. 2 covers it under Pi_0, but the proposition should say P is reset exactly once and that R(tau) includes assignments that begin after a hand-over.
-6. **Lemma 4.6(ii) under keyed calibration.** For an unknown-class effect the fallback uses the bounds of all four classes, so the union is over 4K bounds; with delta = min(alpha, beta)/(10K) the marginal slack is 0.4 alpha, exceeding alpha_cal = 0.1 alpha. Either delta is also divided by the class count (say so) or the unknown-class path is over budget by the calibration share.
-7. **Theorem 4.1(c,d) need T independent of reads given X.** Appendix A assumes it at the top; Section 3's A1 does not state it. Add it.
+**Điểm yếu (sắp theo mức độ nghiêm trọng)**
+1. **Chưa chạy một tác tử nào (Mục 6, 7.7, 7.8).** Hiện tượng gửi trùng được tạo bởi driver có kịch bản, "soạn lại và gửi lại cùng nội dung, như một tác tử tin vào màn hình sẽ làm". Việc M3A, UI-TARS hay AgentProg có thực sự làm vậy trước trạng thái lỗi của K-9 hay không quyết định ý nghĩa đóng góp; trong khi bộ thử nghiệm đã có. Chạy một tác tử LLM trên 20 lượt thử K-9 có thể giải quyết câu hỏi.
+2. **Kiến trúc chạy trên thiết bị — khía cạnh quan trọng với MobiSys — mới ở mức thiết kế (Mục 5.1).** "Chúng tôi đã xây dựng lõi ra quyết định và ledger của kiến trúc chạy trên host; dịch vụ trên thiết bị mới là thiết kế." Chưa đo hành vi của bộ điều khiển dạng foreground service dưới LMK, chi phí đọc của accessibility service hay độ trễ từ ghi `ISSUED` đến trước thao tác nhấn trên điện thoại. Như bài báo đã thừa nhận, thời gian trên host (thêm bản ghi 0,04 ms trên laptop macOS) không phải số đo trên điện thoại.
+3. **Độ bao phủ ứng dụng chỉ gồm ba client mã nguồn mở với server tự lưu trữ (Bảng 8).** Phân loại G2 yêu cầu quan sát được server. Với Gmail, WhatsApp, Signal hoặc ngân hàng, không thể quan sát thời hạn dedup; `FLAG_SECURE` chặn ảnh chụp màn hình và `accessibilityDataSensitive` ẩn view (Mục 8). Cần nói thẳng điều gì còn dùng được với ứng dụng đóng: ledger có; nonce chỉ khi có trường dành riêng cho người dùng; G2 không rõ; vậy mọi thao tác bị gián đoạn đều phải hỏi người dùng.
+4. **Vị trí đặt nonce mâu thuẫn giữa các phần.** Mục 5.2: "Theo mặc định GhostEffect chỉ dùng các trường mà phía đối tác không thể nhìn thấy." Hình 1(b): "Nonce gx:7K2Q9F được nhập vào tiêu đề". Bảng 8: trường của K-9 là "nội dung email (hiển thị cho người nhận)". Thí nghiệm thực tế dùng tiêu đề (theo `SUMMARY.md` trong artifact). Nhãn ở tiêu đề hiển thị với người nhận và làm thay đổi email mà người dùng đã yêu cầu. Cần sửa phần mặc định hoặc Hình 1.
+5. **Độ trễ được đo không phải độ trễ được mô hình hóa (Mục 3 so với Bảng 3b).** `T` tính "từ t0 đến khi hiệu ứng trở nên hiển thị"; `t0` là thời điểm `ISSUED` trước khi nhấn, và Thuật toán 1 chờ từ `t0`. Nhưng Bảng 3b đo "độ trễ từ lúc phục hồi tới lúc hiển thị", bắt đầu từ ý định mở lại ứng dụng. Trên điện thoại, thời gian từ nhấn đến mở lại có thể kéo dài hàng phút (Doze, người dùng quay lại muộn). Planner chờ tính từ `t0` nhưng dùng bảng đo từ lúc mở lại sẽ chờ thiếu. Bài báo không nêu planner dùng mốc đồng hồ nào.
+6. **Ngữ nghĩa kết thúc tiến trình trên emulator khác điện thoại thật (Mục 6, 7.7).** `am kill` không có tác dụng với Element (13/13); độ trễ force-stop (12 giây) "chủ yếu là điều hướng" của test harness chứ không phải của ứng dụng; chưa thử LMK dưới áp lực bộ nhớ, Doze hay trình quản lý pin của nhà sản xuất.
+7. **Chưa đo VLM** ("nhóm VLM được loại bỏ chứ không mô hình hóa", `params.csv`). Nhận định "VLM là nguồn phụ yếu để phá thế hòa" (Mục 7.4) là kết luận từ mô phỏng.
 
-**Detailed comments for authors**
-1. Corollary 4.2's "alpha = 0 forces beta = 1" is the right headline and justifies the title; put it in words in Section 1.
-2. Proposition 4.4: the pilot split that fixes the score is never sized. Say it is disjoint from the n fresh effects and how large it was in the simulator.
-3. Theorem 4.8, H3: the "positive window" between creation and first transmission is an app property; for Element it is shorter than one read (20-100 ms vs. a 2 s dump), which is why Element has no hop-1 family. Say so next to H3.
-4. Proposition A.1: KKT is "sometimes worse than uniform" (38% at k = 2) and the body reports uniform "changes nothing significant (p = 0.57)". The saga layer's value is the union-bound safety, not the optimization. Shorten.
-5. Notation: D is both the dedup horizon (Theorem 4.8) and KL divergences D0, D1. Rename the horizon.
-6. "Whatever the dependence across families" (Prop. 4.4) is right, but the guarantee still needs the calibration population to match deployment (Lemma 4.6(ii)). The abstract's "assumes no independence" should not read as assumption-free.
+**Nhận xét chi tiết cho tác giả**
+1. Mục 2.1 viết rằng ứng dụng foreground "về cơ bản hầu như không bao giờ bị thu hồi tiến trình". Emulator cho thấy `am kill` không kết thúc Element vì thành phần đồng bộ khiến ứng dụng luôn ở trạng thái hệ thống có thể nhận biết. Cần nói rõ ý nghĩa với phân bố lỗi: với ứng dụng G2 có foreground sync service, ứng dụng chết có thể hiếm còn tác tử chết lại phổ biến.
+2. Mục 5.3: "Hop 1 đọc cơ sở dữ liệu cục bộ của ứng dụng." Không có quyền root, bộ điều khiển không thể đọc cơ sở dữ liệu của ứng dụng khác; thực tế nó đọc màn hình Outbox qua cây accessibility. Hãy chỉnh văn bản đúng với triển khai (`uiautomator dumps`).
+3. Mục 5.3: một nhãn tốn "khoảng 15 giây". Các thử nghiệm campaign 2 sử dụng cửa sổ 120–300 giây cộng thời gian mở lại. Cần đối chiếu và tính lại chi phí cho 5.000 nhãn trên mỗi lớp và mỗi kết quả, nhân bốn lớp.
+4. Mục 7.7: "Bảy lượt thử Element bị mất trước khi ghi được một dòng (sáu do hộp thoại ANR của hệ thống)." ANR tự nó là một gián đoạn mà tác tử phải đối mặt. Nếu những lần gửi đó đã commit, chúng phải được đưa vào bảng độ trễ dưới dạng quan sát kiểm duyệt (*censored*), chứ không bị loại bỏ.
+5. Mục 7.7, thử nghiệm giữ lại phản hồi: Element hiển thị Sent thông qua echo `/sync` trước khi client timeout sau 70 giây. Vì vậy, một kết quả đọc "đã commit" có thể xuất hiện trước xác nhận của chính ứng dụng. Hãy nói A1 và điều kiện của hop 1 có bao quát đường đi này không.
+6. Nhánh G2 ở Hình 1 viết "sau khi chờ được chứng nhận, bản ghi hiển thị Sent, đã commit, không cần hỏi". Bảng 4 cho thấy joint mode được khuyến nghị phải hỏi ở 72,9% (2.000 nhãn) hoặc 12,7% (5.000 nhãn) các lần gửi Element bị gián đoạn. Hình thực chất mô tả product mode; hãy ghi nhãn tương ứng.
+7. Bảng 8 liệt kê MockBank, Pro Expense, Markor, Joplin, Tasks.org và Simple SMS; nhưng chỉ ba hệ thống đã được đo. Hãy đánh dấu từng dòng là đã đo hay dự kiến, thay vì chỉ viết trong chú thích bảng.
+8. Mục 6: mỗi lần dump `uiautomator` mất khoảng 2 giây trên host tải cao (load average 16–38 theo `SUMMARY.md`). "Độ trễ" 2,5 giây khi không có lỗi chính là thời gian dump của trình đọc. Cần báo cáo tải máy chủ vì nó đặt cận dưới cho mọi phép đo độ trễ.
 
-**Questions for the authors' response**
-1. Define the clock origin of T per fault class and restate Eq. 2 for it. What is P_v when the planner waits from ISSUED and the table is logged from relaunch, with 5 s and 15 s downtime?
-2. How many logged lags per class does Table 4 use, and what are the escalations when the lag table equals the quoted label count?
-3. At 5,000 labels, what is joint P_v under the unlogged 2.9% tail?
-4. Give P(dup) in terms of alpha, P(ask) and epsilon_u, evaluated for the joint and product rows of Table 4.
-5. For an unknown-class effect, is delta divided by the number of classes as well as by K?
+**Câu hỏi dành cho phần phản hồi của tác giả**
+1. Chạy một tác tử LLM (M3A, T3A hoặc UI-TARS) trên 20 lần gửi K-9 bị gián đoạn bằng bộ thử nghiệm hiện có. Có bao nhiêu lần tác tử soạn lại và gửi lại?
+2. Khoảng chờ được chứng nhận của planner sử dụng mốc `ISSUED` hay thời điểm mở lại? Nếu dùng `ISSUED`, làm sao đối chiếu với bảng độ trễ ghi từ lúc mở lại?
+3. GhostEffect nhập nonce vào đâu trong email, và đây là hành vi mặc định hay người dùng phải chủ động đồng ý?
+4. Với ứng dụng đóng (ví dụ Gmail) không thể quan sát server, GhostEffect làm gì khi một lần gửi bị gián đoạn?
+5. Chi phí thời gian thực (*wall-clock*) cho một nhãn trên emulator là bao nhiêu, và cần bao nhiêu giờ-thiết-bị (*device-hours*) để có 5.000 nhãn cho từng lớp và kết quả trên một phiên bản ứng dụng?
 
-**Ethical / anonymity concerns.** None.
+**Vấn đề đạo đức / ẩn danh.** Không có. Dùng server tự lưu trữ, tài khoản thử nghiệm, ứng dụng mã nguồn mở; đã thảo luận việc xin phép dùng nonce; nghiên cứu yêu cầu người dùng trả lời được ghi nhận là cần phê duyệt IRB.
 
-**Confidence and what would change my score.** High; I checked every statement and the Appendix A proofs are correct as far as I can see. My 3 reflects the gap between the proved object (P_v) and the quantity that matters (dup + loss), and the clock-origin and lag-table issues, which are fixable in text plus one rerun. Fixed and with the composed bound stated, 4.
-
----
-
-## Review 3 — Empirical / measurement and reproducibility reviewer
-
-**Paper summary.** GhostEffect targets duplicated or lost GUI effects after interruption. Three evaluation layers: (i) a model-based simulation of 12,000 interrupted workflows over 8 synthetic app profiles, comparing redo, checkpoint-resume, Atomix-style, verify-before-retry, ledger plus key, asking baselines, a same-evidence rule cascade and three certification modes (product, source families, joint), with stress, population and sample-size studies; (ii) a 149-run emulator campaign on Element, K-9 and Etar/DAVx5 measuring hop-2 behaviour after a lost reply, GUI-redo duplicates, lag by fault class and family error rates; (iii) a "measured-parameter simulation" rerunning every mode on profiles built from (ii). Headline: joint certification holds the budget on Element at 12.7% escalations with 5,000 labels per class and asks on every K-9 send, where rules duplicate.
-
-**Overall merit:** 2 (Weak reject)
-**Reviewer expertise:** 4 (Expert)
-**Sub-scores (1-5):** Novelty 3, Technical soundness 3, Evaluation 2, Significance/impact 3, Presentation & writing 2
-
-**Strengths**
-- Paper equals artifact. Every number is a macro generated from CSVs (`others/notes.md` is the ledger). I checked 13 headline figures; all match.
-- The emulator campaign is careful where it counts: server ground truth, a proxy that commits then drops the reply, a screen-validating reader, no censoring (0/101 beyond 120 s), fault-class-conditioned lags.
-- Lost and discarded trials are disclosed (seven ANR losses; four respawn discards).
-- GUI-redo duplicates are shown with distinct Message-IDs (K-9) and a new server resource (CalDAV), ruling out receiver dedup.
-- Negative results are kept: on Element, rules with a 30 s wait match the product mode (3.1% vs 3.0% asks); joint asks 72.9% at 2,000 labels; tuned rules match product at P_v about 0.1% in the default world.
-
-**Weaknesses (ordered by severity)**
-1. **The headline result is a simulation the measurements make nearly trivial (Section 7.7, Table 4).** Element's late family errors were 0/99, so the measured profile sets every committed-side error to zero (`params.csv`: `hop1_view1 = 0`, `nonce_view = 0`, `digest_view = 0`). The lag law that generates test effects is the same bootstrap the planner is calibrated on. "Every certified mode stays within budget" is then expected by construction; it tests the CP machinery, not the apps. Say what Table 4 can and cannot show.
-2. **Sample sizes outside Element are characterizations, yet the strongest comparative claim rests on them (Table 3a, Table 4).** K-9 cells have n = 2-4 (12 and 8 trials); CalDAV n = 8 plus 3 redo. The K-9 lag "U(45 s, 15 min) is an assumption" (Table 4 caption). The rules' 28.91-65.85% P_v on K-9, quoted in abstract, intro and conclusion with two decimals, is a simulation output from an assumed lag law and a 15-trial behavioural observation.
-3. **Lag-table size is unstated and 4-10x the quoted label budget** (`N_LAG = 20000`; Table 1 needs 4,649 lags per wait at alpha = 0.01, times four by class). The artifact's tied-budget runs give 100% (2,000 lags) and 30.6% joint / 60.3% product (5,000). The 12.7% headline is not reproducible from "5,000 labels per class".
-4. **Label cost is understated (Section 5.3).** "About 15 s" per label vs. 120-300 s trials. Four classes times two outcomes times 5,000 is 40,000 effects per app version: 670 device-hours at 60 s, 167 at 15 s. The region-level shift test needed for pooling "we have not built".
-5. **The rule baseline is denied the data GhostEffect gets (Sections 7.1, 7.7).** Rules use a fixed 10 s or 30 s wait and trust the Sent folder; GhostEffect gets 2,000-5,000 fault-injected labels per class. A rule designer with those labels would see K-9's Outbox and Sent folder wrong in 20/20 and 8/8 trials. The artifact already has vetted rules (`planner_real4_vet.csv`: Element 5.3% / 3.1% asks, P_v 0); they are not in the paper.
-6. **"Passive labels break every certified mode" is a precondition violation shown as a result (Section 7.7, abstract).** The method already requires fault-injected labels (Lemma 4.6(ii)). It is a useful warning, not a finding on par with the measurements.
-7. **Fault coverage is narrow (Section 6).** One network fault form (TCP reset after commit) in 83 of 101 Element trials, a withheld reply in 6; agent death not injected on the emulator; no LMK under memory pressure (`am kill` was a no-op); no Doze. Per-class calibration generalizes only to injected classes.
-8. **No artifact link.** "An anonymized copy will be provided to reviewers" (Section 8, `artifact/README.md`). For generated-number claims the artifact is needed at submission.
-
-**Detailed comments for authors**
-1. Table 4 caption: state that calibration and test draw from the same measured law, so there is no shift unless a row injects one (passive, tail).
-2. Table 3b: p90 from n = 20 is the second-largest observation. Report min/median/max or plot the 20 points.
-3. Table 3c, "any two families wrong together 0/101": Element's families read one rendered timeline ("one evidence source", Section 5.3), so this row does not test A2 between sources. Say so.
-4. Section 7.7: "first observed reads were wrong in 3/68, all lag-blind". The wait is certified from the same trials that produced these; a held-out lag campaign (another day, another host load) would make the wait credible.
-5. Section 7.5: count the stress rows in which the product mode exceeds the budget (Table 6: unlogged tail 0.98, undetected Doze 5.83) next to "rules exceed in 3 of 14".
-6. `SUMMARY.md` reports that the AndroidWorld accessibility forwarder "was observed to return a stale tree (a room timeline from minutes earlier while the screen showed the room list)" and that one pilot trial showed "a stale digest, a real wrong reading" on a verified screen. These are the only measured stale-screen events you have and direct evidence for the failure mode of Section 5.3. Put them in the paper with counts.
-7. Reproducibility: state the Python version, that `run_all.sh` takes about 20 minutes, and that the host ledger benchmark is non-deterministic. Scrub host paths (`/Users/...` in `run_all.log`).
-
-**Questions for the authors' response**
-1. How many logged lags per class does Table 4 use? Report Element joint and product escalations with 2,000 and 5,000 lags per class.
-2. Report rules vetted on the same fault-injected labels for Element, K-9 and K-9+Sent.
-3. What is the measured wall-clock cost of one fault-injected label, and the device-hours for the 5,000-per-class headline?
-4. Did any trial produce a wrong family reading on a verified screen after visibility? If only the pilot stale digest did, how does a zero-error profile test the certification machinery?
-5. Can the anonymized artifact, including the emulator rig, be provided during the response period?
-
-**Ethical / anonymity concerns.** None beyond host paths in logs.
-
-**Confidence and what would change my score.** High. The measurements are honest and match the artifact; my concern is what is built on them. A 3 needs (a) lag-table size disclosed with tied-budget rows, (b) a vetted-rules baseline, (c) K-9 simulation numbers out of the abstract or labelled by provenance, (d) an artifact link. A 4 needs an LLM-agent run and a held-out lag campaign.
+**Mức độ tin cậy và điều gì khiến tôi đổi điểm.** Tin cậy cao về Android, trung bình về thống kê. Nếu có tỷ lệ tác tử LLM thực sự gửi lại trên K-9 (ngay cả `n = 20`) và giải quyết được mốc đồng hồ độ trễ, tôi sẽ nâng lên 4. Nếu có đo bộ điều khiển trên thiết bị dưới LMK, tôi sẽ tích cực bảo vệ bài báo.
 
 ---
 
-## Review 4 — Generalist senior PC member (LLM-agent relevance, MobiSys fit, positioning, clarity)
+## Phản biện 2 — Reviewer chuyên hệ thống phân tán / lý thuyết
 
-**Paper summary.** When a mobile GUI agent taps Send and is interrupted before it sees the result, it cannot know whether the message went out, and redoing the step sends it twice. The paper calls this a ghost effect, measures it on an emulator (a scripted redo duplicated every K-9 mail and CalDAV event tried; Element and DAVx5 recovered because their clients retry with an idempotent id), and proposes GhostEffect: log the effect before the tap in a ledger the agent cannot lose, tag it with a nonce, read the app's screens for evidence after restart, wait a calibrated time, retry only when calibrated bounds say a duplicate is improbable, else ask the user. The budget is (alpha, beta). Theory ties this to sequential testing; evaluation is mostly simulation plus one emulator campaign.
+**Tóm tắt bài báo.** Việc phục hồi một hiệu ứng GUI sau gián đoạn được mô hình hóa thành bài toán quyết định tuần tự với kết quả nhị phân ẩn `X`, độ trễ hiển thị `T` và các phép đọc nhị phân có nhiễu, có thể tương quan. Bảo đảm là có điều kiện: `P(retry | committed)` không vượt `alpha` và `P(declare | absent)` không vượt `beta`. Định lý 4.1 trình bày lại cận SPRT của Wald, có phần ngân sách cho độ trễ, cận đảo về độ trễ, cận dưới KL cho số lần đọc và mức sàn của rủi ro Bayes. Mệnh đề 4.3 chứng nhận kết luận ở cấp nhóm bằng chứng với giả định độc lập giữa các nhóm (A2); Mệnh đề 4.4 chứng nhận toàn bộ miền dừng của planner mà không cần A2 bằng kiểm định Clopper–Pearson trên chuỗi cố định. Bổ đề 4.5 đưa ra sàn lỗi dai dẳng; Bổ đề 4.6 xử lý hiệu chuẩn bảo thủ và cận hợp (*union bounds*); Bổ đề 4.7 chặn xác suất khớp nonce sai; Định lý 4.8 (hai chặng) cho thấy Outbox cục bộ cộng với việc truyền lại idempotent trong thời hạn dedup `D` tạo đúng một bản sao. Phân bổ KKT chia ngân sách giữa các bước trong một saga.
 
-**Overall merit:** 3 (Weak accept)
-**Reviewer expertise:** 3 (Knowledgeable)
-**Sub-scores (1-5):** Novelty 3, Technical soundness 3, Evaluation 2, Significance/impact 3, Presentation & writing 2
+**Điểm tổng thể:** 3 (Nghiêng về chấp nhận / Weak accept)  
+**Mức độ chuyên môn reviewer:** 4 (Chuyên gia)  
+**Điểm thành phần (1–5):** Tính mới 3; tính vững chắc kỹ thuật 4; đánh giá thực nghiệm 3; mức độ quan trọng/tác động 3; trình bày và diễn đạt 2.
 
-**Strengths**
-- The problem is real and under-studied. Benchmarks reward state change, frameworks redo or replay on resume, and nobody has measured what happens to the message when the agent dies after Send. The K-9 permanent-error observation is small but memorable, and its 1988 ancestor (RFC 1047) is a nice touch.
-- The two-hop idea is the most transferable contribution: the app's outbox is a key-carrying retry layer the agent did not build, and "is the app G2?" is a question harness builders can answer per app.
-- Positioning is thorough and fair. Table 5 separates key, read-back model, asking, crash durability and GUI across 12 systems; idempotency keys, sagas, at-most-once RPC, Kafka idempotent producers, durable execution and the recent agent-recovery papers (LIMBO, UndoBench, RetryBench, Atomix, Agent libOS, Cordon) are placed correctly as far as I can judge.
-- Candid: "We ran no LLM agent and no phone"; "On Element simpler mechanisms also hold".
+**Điểm mạnh**
+- Bảo đảm (Phương trình 1) có điều kiện theo `X` và không cần xác suất tiên nghiệm; Hệ quả 4.2 cho thấy `alpha = 0` buộc `beta = 1`, nên ngân sách sai sót mới là đối tượng nên cam kết trung thực.
+- Mệnh đề 4.4 giải quyết đúng vấn đề bằng chứng tương quan: hiệu chuẩn cả miền dừng thay vì các phần riêng lẻ. Lập luận chuỗi cố định (Phụ lục A.3) đúng và hệ quả về số mẫu được định lượng (Bảng 1).
+- Phân phối cực trị hai điểm của Bổ đề 4.5 được kiểm tra và phù hợp (trung bình `epsilon`, phương sai `rho epsilon(1-epsilon)`); trường hợp hoán đổi được (*exchangeable*) được xử lý riêng.
+- Định lý 4.8 là kiến thức kinh điển và bài báo cũng nói rõ; thời hạn `D` và phạm vi thiết bị mới là các yếu tố mới được đo (Mục 7.7).
+- Bài báo phân biệt điều đã chứng minh với giả định ("Chúng tôi không khẳng định các bất đẳng thức này") và chỉ rõ loại nguồn gốc của từng con số.
 
-**Weaknesses (ordered by severity)**
-1. **Significance is argued, not measured (Sections 1, 2.3, 7.8).** The motivating claim is that deployed agents create ghost duplicates; the paper measures that a scripted redo does. Whether an LLM agent, seeing K-9's "Unable to send message", resends is left to a planned study. The rig exists. Without a small agent run, the first sentence is a hypothesis.
-2. **The recommended mode is not the mode that works (abstract, Section 7.7, Table 4).** The abstract recommends joint certification. On Element, joint asks 72.9% at 2,000 labels and 12.7% at 5,000; the product mode asks 3.0% and a 30 s rule 3.1%, all within budget. On K-9 every mode asks 100%. Section 7.7 concedes "the decisive pieces are G2 classification, fault-injected labels, and asking", but the abstract and conclusion lead with joint.
-3. **MobiSys fit is thin in the body.** Two of twelve pages are theory, four are a simulation of a world the authors defined, one is the mobile measurement (7.7). The content a MobiSys audience will read (G2 per app, K-9 state, lag by fault class, ledger under power loss, `am kill` semantics) arrives last.
-4. **Too many modes, RQs and tables (Section 7).** Seven RQs, three certification modes, two rule variants plus a 12-member rule family, an "earlier design", 15 tables and 5 figures. The reader needs one decision: which mode is GhostEffect? The abstract says joint, Figure 1 and Table 2's bold row say product, K-9 says "every mode asks".
-5. **Title vs. content.** Corollary 4.2 says exactly-once by verification is impossible; the title promises it. "Budgeted exactly-once" is explained in Section 4.1, which a MobiSys reader may not reach.
-6. **Density.** The abstract has 287 words and 18 numbers. Average sentence 23 words, 31 sentences over 45 words, 151 semicolons, 43 bold lead-ins, 373 parentheses. See the readability report.
+**Điểm yếu (sắp theo mức độ nghiêm trọng)**
+1. **Đại lượng được chứng nhận bỏ qua nguồn sai sót chi phối (Phương trình 1; Bảng 4).** `P_v` chỉ là tỷ lệ planner tự quyết định retry sai; câu trả lời sai của người dùng nằm "ngoài (1)". Với Element, joint có `P_v = 0,00%` nhưng tỷ lệ trùng `dup = 3,17%` và thất lạc `loss = 2,04%` vì nó hỏi 72,9% số lần trong khi người dùng trả lời sai với xác suất 5%. Product có `P_v = 0,00%`, `dup = 0,15%`, `loss = 0,09%`. Bảo đảm xếp hạng các mode ngược với lỗi đầu-cuối. Hãy nêu cận tổng hợp, ví dụ `P(dup) ≤ pi(alpha + P(ask) epsilon_u)`, và chỉ rõ người triển khai nên dùng đại lượng nào.
+2. **Mốc tính độ trễ trong lý thuyết không khớp phân phối độ trễ được hiệu chuẩn (Mục 3, Phương trình 2, Thuật toán 1 so với Bảng 3b).** `T` bắt đầu từ `t0`; độ trễ emulator lại tính từ lúc mở lại ứng dụng hoặc phục hồi mạng (`real_params.py`: "t0 = relaunch intent / network restore / Send tap"). Nếu có thời gian ngừng hoạt động, planner chờ `w` tính từ `t0` thực chất chờ ít hơn `w` theo đồng hồ trong bảng, khiến phần ngân sách độ trễ không còn được chứng nhận. Artifact đã định lượng điều này (`planner_real4_t0down5.csv`: `P_v` 18,8% product, 29,9% joint khi ngừng 5 giây) nhưng bài báo không nói đến. Hãy định nghĩa lại `T` theo từng lớp lỗi từ một mốc quan sát được `r_e` và chứng minh Phương trình 2 tương ứng, hoặc cộng thời gian ngừng vào khoảng chờ.
+3. **Số lượng nhãn được nhấn mạnh che khuất kích thước bảng độ trễ (Mục 7.7, Bảng 4).** "2.000 / 5.000 nhãn cho mỗi lớp" là nhãn kết luận; các bảng độ trễ chứa 20.000 mẫu bootstrap cho mỗi lớp (`N_LAG = 20000`). Bảng 1 cho biết một khoảng chờ ở mức `0.2 alpha`, với không lần vượt ngưỡng, cần 4.649 mẫu độ trễ khi `alpha = 0,01`, còn phải nhân bốn theo lớp. Con số 12,7% dựa trên số mẫu độ trễ mà ngân sách nhãn được công bố không trang trải; `planner_real4_lag5k.csv` cho thấy joint hỏi 30,6% và product hỏi 60,3% khi số mẫu độ trễ bằng số nhãn, còn `lag2k.csv` là 100%.
+4. **Nhận định "joint vượt qua được đuôi độ trễ không ghi nhận" chỉ đúng với một số lượng nhãn nhất định (Mục 7.7).** Với 2.000 nhãn, joint giữ ràng buộc "chỉ vì nó hỏi 74,4%"; nhưng với 5.000 nhãn, `planner_real4_tail5.csv` cho `P_v` của joint là 2,01% (cận CP 2,32), vượt ngân sách. Abstract khiến người đọc hiểu joint miễn nhiễm với đuôi trễ. Điều đó không đúng.
+5. **`R(tau)` trong Mệnh đề 4.3 chưa được đặc tả đủ rõ cho nhánh chuyển giao (*hand-over*).** Dòng 9 của Thuật toán 1 đặt lại `P = 1` sau khi một mục hop-1 lỗi/bị kẹt, rồi quay lại chuỗi kiểm chứng. Chứng minh Phương trình 2 bao quát trường hợp này dưới `Pi_0`, nhưng mệnh đề nên nêu `P` được đặt lại đúng một lần và `R(tau)` bao gồm cả phân bổ bắt đầu sau hand-over.
+6. **Bổ đề 4.6(ii) trong hiệu chuẩn theo khóa lớp.** Với một hiệu ứng không biết lớp, cơ chế dự phòng dùng cận của cả bốn lớp nên phép hợp có `4K` cận. Với `delta = min(alpha, beta)/(10K)`, phần nới biên là `0.4 alpha`, vượt `alpha_cal = 0.1 alpha`. Hoặc phải chia `delta` thêm cho số lớp (và nói rõ), hoặc đường đi chưa biết lớp vượt ngân sách ở phần hiệu chuẩn.
+7. **Định lý 4.1(c,d) yêu cầu `T` độc lập với các phép đọc khi đã biết `X`.** Phụ lục A giả định điều này ngay đầu phần chứng minh; A1 ở Mục 3 không ghi rõ. Cần bổ sung.
 
-**Detailed comments for authors**
-1. Intro, "Why existing fixes do not transfer": the first sentence packs three results from three papers into one citation group. Split and attribute.
-2. Intro, "Approach" (187 words) introduces about sixteen named concepts before any is defined. Give the one-sentence version first (readability report, 3d).
-3. Section 2.3's heading "How often do agents create ghost effects?" is answered with "No published study measures" and a scripted redo. Retitle to what you answer: "Do apps show the trap?"
-4. Section 5.4: Algorithm 1 is 29 lines with inline comments like "bkgd., fallible". Add a 5-line prose walk-through of one K-9 and one Element case before the listing.
-5. Section 7.4: "Theorem 4.8 alone retries nothing but escalates 73.0%". This baseline and always-ask bracket the design space; lead the comparison with them and the recommended mode, and move the other eleven baselines to table-only treatment.
-6. Table 5 (positioning) belongs in the body; Table 1 (sample sizes) in the appendix.
-7. "G2" is a label from a proof. Call it "idempotent-retry app" in prose.
-8. The conclusion repeats the abstract with the same numbers. Use it for lessons: on apps that retry idempotently the agent should not retry; on apps that do not, the GUI cannot tell you and you must ask; calibration is the price of knowing which is which.
-9. Missing citation candidates (verify): Gray and Reuter, "Transaction Processing: Concepts and Techniques" (1992) for the exactly-once/at-least-once discussion; Bailis et al., "Coordination Avoidance in Database Systems" (VLDB 2015). Not insisted upon.
+**Nhận xét chi tiết cho tác giả**
+1. "`alpha = 0` buộc `beta = 1`" trong Hệ quả 4.2 là thông điệp quan trọng và giải thích tiêu đề; hãy diễn đạt bằng lời ở Mục 1.
+2. Mệnh đề 4.4: bài báo chưa nói kích thước tập pilot dùng để cố định hàm điểm. Hãy nêu rõ nó tách biệt với `n` hiệu ứng mới và cho biết kích thước sử dụng trong simulator.
+3. Định lý 4.8, H3: "cửa sổ dương" giữa lúc tạo mục và lần truyền đầu là tính chất của ứng dụng. Với Element, cửa sổ ngắn hơn một lần đọc (20–100 ms so với dump 2 giây), nên Element không có nhóm bằng chứng hop-1. Hãy ghi ngay cạnh H3.
+4. Mệnh đề A.1: KKT "đôi khi còn tệ hơn phân bổ đều" (38% ở `k = 2`); phần thân bài nói phân bổ đều "không tạo khác biệt đáng kể (`p = 0,57`)". Giá trị của tầng saga nằm ở an toàn theo union bound, không phải tối ưu hóa. Nên rút gọn.
+5. Ký hiệu: `D` vừa là thời hạn dedup (Định lý 4.8), trong khi `D0`, `D1` là các độ phân kỳ KL. Hãy đổi ký hiệu cho thời hạn.
+6. Cụm "bất kể mức phụ thuộc giữa các nhóm bằng chứng" (Mệnh đề 4.4) là đúng, nhưng bảo đảm vẫn đòi hỏi quần thể hiệu chuẩn phù hợp với triển khai (Bổ đề 4.6(ii)). Câu "không giả định độc lập" trong abstract không nên bị hiểu thành "không cần bất kỳ giả định nào".
 
-**Questions for the authors' response**
-1. If you had to ship one mode today, which is it, and why does the abstract recommend a different one?
-2. What fraction of an LLM agent's interrupted K-9 sends end in a resend on your rig? Ten trials with one agent would answer this.
-3. Is there any app in Table 8 where certification, as opposed to G2 classification plus asking, changed an outcome in your measurements?
-4. Is "classify G2, read the outbox, otherwise ask" the practical takeaway for a harness author without the calibration pipeline?
+**Câu hỏi dành cho phần phản hồi của tác giả**
+1. Định nghĩa mốc thời gian của `T` cho từng lớp lỗi và phát biểu lại Phương trình 2. `P_v` bằng bao nhiêu nếu planner chờ từ `ISSUED` còn bảng ghi từ lúc mở lại, với 5 và 15 giây ngừng hoạt động?
+2. Bảng 4 dùng bao nhiêu mẫu độ trễ được ghi lại trên mỗi lớp, và tỷ lệ escalation là bao nhiêu khi kích thước bảng độ trễ bằng số nhãn công bố?
+3. Với 5.000 nhãn, `P_v` của joint là bao nhiêu dưới phần đuôi độ trễ 2,9% không được ghi nhận?
+4. Biểu diễn `P(dup)` qua `alpha`, `P(ask)` và `epsilon_u`; tính cho các dòng joint và product của Bảng 4.
+5. Với hiệu ứng không xác định được lớp, `delta` có được chia cho cả số lớp lẫn `K` hay không?
 
-**Ethical / anonymity concerns.** None; scrub host paths in the artifact.
+**Vấn đề đạo đức / ẩn danh.** Không có.
 
-**Confidence and what would change my score.** Medium-high. The paper is sound and honest; what a MobiSys audience needs is small and arrives last, under an apparatus whose recommended output the measurements do not support. A short agent run, a reordered paper that leads with measurements, and an abstract that recommends what works would make this a clear accept.
+**Mức độ tin cậy và điều gì khiến tôi đổi điểm.** Tin cậy cao; tôi đã kiểm tra mọi phát biểu và các chứng minh ở Phụ lục A đúng trong phạm vi tôi có thể đánh giá. Điểm 3 phản ánh khoảng cách giữa đại lượng được chứng minh (`P_v`) và đại lượng thực sự quan trọng (trùng + mất), cũng như vấn đề mốc thời gian và bảng độ trễ; các vấn đề này có thể sửa bằng văn bản và một lần chạy lại. Nếu sửa và nêu cận tổng hợp, tôi sẽ chấm 4.
+
+---
+## Phản biện 3 — Reviewer chuyên thực nghiệm, đo đạc và khả năng tái lập
+
+**Tóm tắt bài báo.** GhostEffect giải quyết việc hiệu ứng GUI bị thực hiện trùng hoặc bị mất sau khi gián đoạn. Có ba tầng đánh giá: (i) mô phỏng dựa trên mô hình gồm 12.000 quy trình bị gián đoạn trên 8 hồ sơ ứng dụng giả lập, so sánh thao tác lại, checkpoint-resume, phương pháp kiểu Atomix, kiểm chứng trước khi retry, ledger cộng khóa, baseline luôn hỏi, chuỗi luật dựa trên cùng bằng chứng và ba mode chứng nhận (product, source families, joint), đồng thời nghiên cứu stress, phân bố quần thể và kích thước mẫu; (ii) chiến dịch 149 lượt chạy emulator trên Element, K-9 và Etar/DAVx5, đo hành vi hop 2 sau khi mất phản hồi, trùng lặp khi làm lại bằng GUI, độ trễ theo lớp lỗi và tỷ lệ sai của nhóm bằng chứng; (iii) "mô phỏng bằng tham số đo được" chạy lại tất cả mode trên các hồ sơ xây dựng từ (ii). Kết quả được nhấn mạnh: joint certification đáp ứng ngân sách trên Element với tỷ lệ phải hỏi 12,7% khi dùng 5.000 nhãn cho mỗi lớp, và hỏi với tất cả lần gửi K-9, nơi cách dùng luật gây trùng lặp.
+
+**Điểm tổng thể:** 2 (Nghiêng về từ chối / Weak reject)  
+**Mức độ chuyên môn reviewer:** 4 (Chuyên gia)  
+**Điểm thành phần (1–5):** Tính mới 3; tính vững chắc kỹ thuật 3; đánh giá thực nghiệm 2; mức độ quan trọng/tác động 3; trình bày và diễn đạt 2.
+
+**Điểm mạnh**
+- Bài báo khớp artifact. Mọi số liệu là macro được sinh từ CSV (`others/notes.md` làm sổ theo dõi). Tôi đã đối chiếu 13 số liệu chính; tất cả khớp.
+- Chiến dịch emulator cẩn thận ở những chỗ quan trọng: có ground truth từ server, proxy commit rồi làm rơi phản hồi, trình đọc xác minh trạng thái màn hình, không có mẫu bị kiểm duyệt (0/101 quá 120 giây), và độ trễ có điều kiện theo lớp lỗi.
+- Các lần thử bị mất hay bị loại đều được công bố (bảy lượt mất vì ANR; bốn lượt bị loại khi khởi động lại tiến trình).
+- Trùng lặp do làm lại bằng GUI được chứng minh bằng các `Message-ID` khác nhau (K-9) và tài nguyên server mới (CalDAV), loại trừ khả năng phía nhận đã khử trùng.
+- Kết quả không thuận lợi vẫn được giữ: trên Element, luật chờ 30 giây ngang product (3,1% so với 3,0% phải hỏi); joint hỏi 72,9% với 2.000 nhãn; các luật đã tinh chỉnh ngang product ở `P_v` khoảng 0,1% trong thế giới mô phỏng mặc định.
+
+**Điểm yếu (sắp theo mức độ nghiêm trọng)**
+1. **Kết quả chính là mô phỏng mà các phép đo khiến nó gần như hiển nhiên (Mục 7.7, Bảng 4).** Lỗi ở nhóm bằng chứng đọc muộn của Element là 0/99, nên hồ sơ đo được đặt mọi lỗi ở phía đã commit bằng 0 (`params.csv`: `hop1_view1 = 0`, `nonce_view = 0`, `digest_view = 0`). Phân phối độ trễ sinh các hiệu ứng kiểm tra cũng chính là bootstrap dùng để hiệu chuẩn planner. Vì vậy "mọi mode được chứng nhận đều trong ngân sách" gần như đã được bảo đảm bởi cách dựng mô phỏng; thí nghiệm kiểm tra cơ chế CP chứ không kiểm tra ứng dụng. Phải nói rõ Bảng 4 chứng minh được gì và không chứng minh được gì.
+2. **Kích thước mẫu ngoài Element chỉ đủ để mô tả hành vi, nhưng khẳng định so sánh mạnh nhất lại dựa vào chúng (Bảng 3a, Bảng 4).** Các ô K-9 chỉ có `n = 2–4` (12 và 8 lượt thử); CalDAV có `n = 8` cộng 3 lượt làm lại. Độ trễ K-9 `U(45 s, 15 min)` "là một giả định" (chú thích Bảng 4). `P_v` 28,91–65,85% của rules trên K-9, được trích trong abstract, phần giới thiệu và kết luận đến hai chữ số thập phân, thực chất là kết quả mô phỏng từ phân phối độ trễ giả định và quan sát hành vi 15 lượt thử.
+3. **Kích thước bảng độ trễ không được nêu và lớn gấp 4–10 lần ngân sách nhãn được công bố.** `N_LAG = 20000`; Bảng 1 cần 4.649 mẫu độ trễ cho mỗi lần chờ ở `alpha = 0,01`, còn phải nhân bốn theo lớp. Khi ràng buộc ngân sách mẫu độ trễ bằng ngân sách nhãn, artifact cho tỷ lệ hỏi 100% với 2.000 mẫu và 30,6% joint / 60,3% product với 5.000 mẫu. Không thể tái lập con số 12,7% chỉ từ thông tin "5.000 nhãn mỗi lớp".
+4. **Chi phí gắn nhãn bị đánh giá thấp (Mục 5.3).** "Khoảng 15 giây" mỗi nhãn, trong khi trial dài 120–300 giây. Bốn lớp nhân hai kết quả nhân 5.000 là 40.000 hiệu ứng cho mỗi phiên bản ứng dụng: 670 giờ-thiết-bị nếu 60 giây/lần, 167 giờ nếu 15 giây/lần. Bài báo thừa nhận phép kiểm thử dịch chuyển phân phối ở cấp miền để gộp dữ liệu "chúng tôi chưa xây dựng".
+5. **Baseline dùng luật không được tiếp cận cùng dữ liệu như GhostEffect (Mục 7.1, 7.7).** Các luật chờ cố định 10 hoặc 30 giây và tin vào thư mục Sent; GhostEffect có 2.000–5.000 nhãn tiêm lỗi cho mỗi lớp. Người thiết kế luật có các nhãn này sẽ nhận thấy Outbox và Sent của K-9 cho kết quả sai ở 20/20 và 8/8 lượt thử. Artifact đã có luật được thẩm định (`planner_real4_vet.csv`: Element hỏi 5,3% / 3,1%, `P_v = 0`), nhưng chúng không xuất hiện trong bài báo.
+6. **"Nhãn thụ động làm hỏng mọi mode được chứng nhận" là việc vi phạm điều kiện tiên quyết nhưng lại được trình bày như một kết quả (Mục 7.7, abstract).** Phương pháp vốn yêu cầu nhãn từ thao tác tiêm lỗi (Bổ đề 4.6(ii)). Đây là cảnh báo hữu ích, không phải phát hiện có trọng lượng tương đương phép đo thực.
+7. **Phạm vi bao phủ lỗi hẹp (Mục 6).** Chỉ một dạng lỗi mạng (TCP reset sau commit) trong 83/101 thử nghiệm Element, và giữ lại phản hồi trong 6 lượt; chưa tiêm lỗi tác tử chết trên emulator; không có LMK dưới áp lực bộ nhớ (`am kill` không có tác dụng); không có Doze. Hiệu chuẩn theo lớp chỉ khái quát được cho các lớp lỗi đã tiêm.
+8. **Không có liên kết artifact.** "Một bản ẩn danh sẽ được cung cấp cho reviewer" (Mục 8, `artifact/README.md`). Với các kết luận dựa trên số liệu sinh tự động, artifact cần được cung cấp ngay khi nộp.
+
+**Nhận xét chi tiết cho tác giả**
+1. Chú thích Bảng 4: nêu rõ calibration và test lấy mẫu từ cùng một phân phối đo được, nên không có dịch chuyển phân phối trừ khi một dòng cố tình thêm vào (passive, tail).
+2. Bảng 3b: p90 với `n = 20` là quan sát lớn thứ hai. Hãy báo cáo min/median/max hoặc vẽ đủ 20 điểm.
+3. Bảng 3c, "không có hai nhóm bằng chứng cùng sai trong 0/101": các nhóm của Element đều đọc cùng một timeline đã render ("một nguồn bằng chứng", Mục 5.3), nên dòng này không kiểm tra A2 giữa các nguồn. Cần nói rõ.
+4. Mục 7.7: "lần đọc có quan sát đầu tiên sai trong 3/68, tất cả đều không xét độ trễ". Khoảng chờ được chứng nhận bằng chính các thử nghiệm đã tạo ra dữ liệu này; một chiến dịch đo độ trễ độc lập (ngày khác, tải máy khác) sẽ làm bảo đảm đáng tin hơn.
+5. Mục 7.5: đếm số dòng stress mà product vượt ngân sách (Bảng 6: đuôi trễ không ghi nhận 0,98; Doze không phát hiện 5,83) bên cạnh câu "rules vượt trong 3/14 trường hợp".
+6. `SUMMARY.md` ghi rằng thành phần chuyển tiếp accessibility của AndroidWorld "đã được quan sát trả về cây trạng thái cũ (timeline của một phòng từ vài phút trước khi màn hình đang hiển thị danh sách phòng)", và một trial pilot có "digest cũ, một lần đọc thực sự sai" dù màn hình đã được xác minh. Đây là các sự kiện màn hình cũ duy nhất đã đo, đồng thời là bằng chứng trực tiếp cho dạng lỗi Mục 5.3. Hãy đưa vào bài cùng số đếm.
+7. Khả năng tái lập: nêu phiên bản Python, ghi rõ `run_all.sh` chạy khoảng 20 phút và benchmark ledger trên host không có tính xác định hoàn toàn. Xóa đường dẫn host (`/Users/...` trong `run_all.log`).
+
+**Câu hỏi dành cho phần phản hồi của tác giả**
+1. Bảng 4 dùng bao nhiêu mẫu độ trễ trên mỗi lớp? Hãy báo cáo tỷ lệ escalation của joint và product trên Element với 2.000 và 5.000 mẫu độ trễ mỗi lớp.
+2. Hãy báo cáo kết quả của các luật đã được thẩm định trên cùng bộ nhãn tiêm lỗi cho Element, K-9 và K-9+Sent.
+3. Chi phí thời gian thực đo được của một nhãn tiêm lỗi là bao nhiêu, và cần bao nhiêu giờ-thiết-bị để đạt mốc 5.000 nhãn mỗi lớp?
+4. Có trial nào cho kết quả đọc nhóm bằng chứng sai trên màn hình đã xác minh sau khi hiệu ứng hiển thị không? Nếu chỉ có digest cũ trong pilot, làm sao một hồ sơ không có lỗi có thể kiểm tra bộ máy chứng nhận?
+5. Có thể cung cấp artifact ẩn danh, gồm cả bộ thử nghiệm emulator, trong giai đoạn phản hồi không?
+
+**Vấn đề đạo đức / ẩn danh.** Không có, ngoại trừ đường dẫn host trong log.
+
+**Mức độ tin cậy và điều gì khiến tôi đổi điểm.** Tin cậy cao. Các phép đo trung thực và khớp artifact; điều tôi lo ngại là các kết luận được xây dựng từ đó. Để đạt điểm 3 cần: (a) công bố kích thước bảng độ trễ cùng các dòng thí nghiệm ràng buộc ngân sách, (b) baseline luật được thẩm định, (c) bỏ số mô phỏng K-9 khỏi abstract hoặc nêu rõ xuất xứ, (d) liên kết artifact. Để đạt điểm 4 cần một thí nghiệm tác tử LLM và chiến dịch đo độ trễ trên tập độc lập.
 
 ---
 
-## Meta-review
+## Phản biện 4 — Thành viên PC cấp cao tổng quát (mức liên quan đến LLM agent, mức phù hợp MobiSys, định vị, độ rõ ràng)
 
-### Score table
+**Tóm tắt bài báo.** Khi tác tử GUI trên điện thoại nhấn Send và bị gián đoạn trước khi thấy kết quả, nó không thể biết tin đã gửi hay chưa; nếu làm lại, nó gửi hai lần. Bài báo gọi đây là ghost effect, đo trên emulator (làm lại bằng kịch bản gây trùng mọi email K-9 và sự kiện CalDAV được thử; Element và DAVx5 tự phục hồi vì client retry với ID idempotent), đồng thời đề xuất GhostEffect: ghi hiệu ứng vào ledger không mất cùng tác tử trước khi nhấn, gắn nonce, đọc màn hình ứng dụng làm bằng chứng sau khi khởi động lại, chờ khoảng thời gian đã hiệu chuẩn, chỉ retry khi các cận đã hiệu chuẩn cho thấy xác suất trùng thấp; nếu không, hỏi người dùng. Ngân sách là `(alpha, beta)`. Lý thuyết gắn bài toán với kiểm định tuần tự; đánh giá chủ yếu gồm mô phỏng và một chiến dịch emulator.
 
-| Reviewer | Overall | Expertise | Novelty | Soundness | Evaluation | Significance | Presentation |
+**Điểm tổng thể:** 3 (Nghiêng về chấp nhận / Weak accept)  
+**Mức độ chuyên môn reviewer:** 3 (Có hiểu biết chuyên môn)  
+**Điểm thành phần (1–5):** Tính mới 3; tính vững chắc kỹ thuật 3; đánh giá thực nghiệm 2; mức độ quan trọng/tác động 3; trình bày và diễn đạt 2.
+
+**Điểm mạnh**
+- Vấn đề thực sự tồn tại nhưng ít được nghiên cứu. Benchmark thường thưởng cho việc thay đổi trạng thái, framework chạy lại hoặc phát lại khi phục hồi, nhưng chưa ai đo điều gì xảy ra với thông điệp khi tác tử chết sau khi nhấn Send. Quan sát lỗi vĩnh viễn của K-9 tuy nhỏ nhưng đáng nhớ; việc dẫn lại tiền lệ từ năm 1988 (RFC 1047) cũng thú vị.
+- Ý tưởng hai chặng là đóng góp dễ chuyển giao nhất: Outbox của ứng dụng là tầng retry mang khóa mà tác tử không tự xây dựng; "ứng dụng có thuộc G2 không?" là câu hỏi người xây dựng harness có thể trả lời cho từng ứng dụng.
+- Định vị nghiên cứu toàn diện và công bằng. Bảng 5 so sánh khóa, mô hình đọc lại, khả năng hỏi, độ bền trước crash và GUI của 12 hệ thống; idempotency key, saga, RPC at-most-once, Kafka idempotent producer, thực thi bền vững và các paper gần đây về khôi phục tác tử (LIMBO, UndoBench, RetryBench, Atomix, Agent libOS, Cordon) đều được đặt đúng vị trí trong phạm vi tôi đánh giá.
+- Thẳng thắn: "Chúng tôi chưa chạy LLM agent và chưa dùng điện thoại thật"; "Trên Element, cơ chế đơn giản hơn cũng giữ được ràng buộc".
+
+**Điểm yếu (sắp theo mức độ nghiêm trọng)**
+1. **Tầm quan trọng mới được lập luận, chưa được đo (Mục 1, 2.3, 7.8).** Khẳng định tạo động lực là tác tử khi triển khai gây trùng ghost effect; nhưng bài báo chỉ đo một driver có kịch bản làm lại. Việc tác tử LLM nhìn thấy "Unable to send message" của K-9 rồi có gửi lại hay không được để dành cho nghiên cứu tương lai. Bộ thử nghiệm đã có. Không chạy một thí nghiệm agent nhỏ thì câu khẳng định mở đầu vẫn là giả thuyết.
+2. **Mode được khuyến nghị không phải mode hiệu quả trong phép đo (abstract, Mục 7.7, Bảng 4).** Abstract khuyến nghị joint certification. Với Element, joint hỏi 72,9% khi có 2.000 nhãn và 12,7% khi có 5.000; product hỏi 3,0% và luật chờ 30 giây hỏi 3,1%, tất cả vẫn trong ngân sách. Với K-9, mọi mode đều hỏi 100%. Mục 7.7 thừa nhận "yếu tố quyết định là phân loại G2, nhãn tiêm lỗi và hỏi người dùng", nhưng abstract và kết luận lại đặt joint lên trước.
+3. **Mức phù hợp với MobiSys thể hiện quá ít ở phần thân.** Hai trong 12 trang dành cho lý thuyết, bốn trang dành cho mô phỏng một thế giới do tác giả định nghĩa, chỉ một trang dành cho phép đo di động (7.7). Những gì độc giả MobiSys cần đọc (G2 từng ứng dụng, trạng thái K-9, độ trễ theo lớp lỗi, ledger khi mất điện, ngữ nghĩa `am kill`) lại xuất hiện cuối cùng.
+4. **Quá nhiều mode, câu hỏi nghiên cứu và bảng (Mục 7).** Bảy RQ, ba mode chứng nhận, hai biến thể luật cộng họ 12 luật, một "thiết kế trước đó", 15 bảng và 5 hình. Người đọc cần biết một điều: mode nào mới thực sự là GhostEffect? Abstract chọn joint, Hình 1 và dòng in đậm Bảng 2 chọn product, còn K-9 thì "mọi mode đều hỏi".
+5. **Tiêu đề so với nội dung.** Hệ quả 4.2 nói đạt exactly-once chỉ bằng kiểm chứng là bất khả thi, nhưng tiêu đề dường như cam kết điều đó. "Budgeted exactly-once" chỉ được giải thích ở Mục 4.1, nơi độc giả MobiSys có thể chưa kịp đọc tới.
+6. **Mật độ thông tin quá dày.** Abstract có 287 từ và 18 con số. Câu trung bình 23 từ, 31 câu dài hơn 45 từ, 151 dấu chấm phẩy, 43 đoạn mở đầu in đậm và 373 dấu ngoặc đơn. Xem báo cáo về độ dễ đọc.
+
+**Nhận xét chi tiết cho tác giả**
+1. Phần giới thiệu, "Vì sao các giải pháp hiện có không áp dụng trực tiếp": câu đầu nhồi ba kết quả của ba paper vào cùng một cụm trích dẫn. Nên tách câu và gán nguồn rõ ràng.
+2. Phần giới thiệu, "Phương pháp" (187 từ) giới thiệu khoảng 16 khái niệm được đặt tên trước khi định nghĩa bất kỳ khái niệm nào. Hãy đưa phiên bản một câu trước (báo cáo độ dễ đọc, 3d).
+3. Tiêu đề Mục 2.3 "Tác tử tạo ghost effect thường xuyên đến đâu?" lại được trả lời bằng "Chưa có nghiên cứu công bố nào đo" và bằng một kịch bản thao tác lại. Hãy đổi tiêu đề cho đúng nội dung: "Các ứng dụng có biểu hiện bẫy này không?".
+4. Mục 5.4: Thuật toán 1 có 29 dòng với chú thích rút gọn như "bkgd., fallible". Thêm phần diễn giải năm dòng về một ca K-9 và một ca Element trước phần thuật toán.
+5. Mục 7.4: "Chỉ dùng Định lý 4.8 không retry lần nào nhưng escalation 73,0%". Baseline này cùng always-ask xác định hai phía của không gian thiết kế; hãy mở đầu so sánh bằng chúng và mode khuyến nghị, đưa 11 baseline khác vào bảng mà không cần diễn giải dài.
+6. Bảng 5 (định vị) nên ở thân bài; Bảng 1 (kích thước mẫu) nên ở phụ lục.
+7. "G2" là nhãn từ chứng minh. Trong văn xuôi, hãy gọi là "ứng dụng tự retry idempotent".
+8. Kết luận lặp abstract với cùng các con số. Hãy dùng kết luận cho bài học: ở ứng dụng tự retry idempotent, agent không nên retry; ở ứng dụng không có cơ chế đó, GUI không cho biết kết quả nên phải hỏi; calibration là chi phí để biết mình có thể tin vào trường hợp nào.
+9. Các tài liệu có thể trích dẫn nhưng cần kiểm tra: Gray và Reuter, "Transaction Processing: Concepts and Techniques" (1992) cho thảo luận exactly-once/at-least-once; Bailis và cộng sự, "Coordination Avoidance in Database Systems" (VLDB 2015). Đây không phải yêu cầu bắt buộc.
+
+**Câu hỏi dành cho phần phản hồi của tác giả**
+1. Nếu phải đưa ra sản phẩm một mode ngay hôm nay, bạn chọn mode nào và vì sao abstract lại khuyến nghị mode khác?
+2. Trong các lần gửi K-9 bị gián đoạn trên harness, tỷ lệ lần mà tác tử LLM gửi lại là bao nhiêu? Mười lượt thử với một tác tử đã trả lời được câu hỏi.
+3. Có ứng dụng nào ở Bảng 8 mà chứng nhận xác suất, thay vì chỉ phân loại G2 cộng việc hỏi người dùng, đã thay đổi kết quả đo được không?
+4. Với người xây dựng harness không có pipeline calibration, bài học thực dụng có phải là "phân loại G2, đọc Outbox, nếu không chắc thì hỏi" không?
+
+**Vấn đề đạo đức / ẩn danh.** Không có; cần xóa đường dẫn host khỏi artifact.
+
+**Mức độ tin cậy và điều gì khiến tôi đổi điểm.** Trung bình đến cao. Bài báo đúng đắn và trung thực; nhưng nội dung quan trọng với độc giả MobiSys vừa ít vừa nằm cuối bài, phía sau bộ khung phương pháp mà đầu ra được khuyến nghị chưa được phép đo ủng hộ. Một thí nghiệm agent ngắn, bố cục đưa phép đo lên trước và abstract khuyến nghị cơ chế thực sự hiệu quả sẽ khiến đây là bài rõ ràng đáng chấp nhận.
+
+---
+## Tổng hợp phản biện (Meta-review)
+
+### Bảng điểm
+
+| Reviewer | Tổng thể | Chuyên môn | Tính mới | Độ vững chắc | Thực nghiệm | Tầm quan trọng | Trình bày |
 |---|---|---|---|---|---|---|---|
-| R1 (mobile systems) | 3 Weak accept | 4 | 3 | 3 | 2 | 3 | 3 |
-| R2 (theory) | 3 Weak accept | 4 | 3 | 4 | 3 | 3 | 2 |
-| R3 (empirical) | 2 Weak reject | 4 | 3 | 3 | 2 | 3 | 2 |
-| R4 (generalist) | 3 Weak accept | 3 | 3 | 3 | 2 | 3 | 2 |
+| R1 (hệ thống di động) | 3 — Nghiêng chấp nhận | 4 | 3 | 3 | 2 | 3 | 3 |
+| R2 (lý thuyết) | 3 — Nghiêng chấp nhận | 4 | 3 | 4 | 3 | 3 | 2 |
+| R3 (thực nghiệm) | 2 — Nghiêng từ chối | 4 | 3 | 3 | 2 | 3 | 2 |
+| R4 (tổng quát) | 3 — Nghiêng chấp nhận | 3 | 3 | 3 | 2 | 3 | 2 |
 
-### Decision: Major revision (one-shot)
+### Quyết định: Sửa đổi lớn một lần (Major revision — one-shot)
 
-The committee agrees that the problem is real, the K-9 and two-hop measurements are genuine systems contributions, the theory is correct and clearly scoped, and the paper equals its artifact (13 of 13 checked numbers match). It also agrees the evaluation does not yet support the framing. The headline mode (joint) is the most expensive and buys nothing on the apps measured; the headline label count omits a 20,000-entry lag table the artifact shows is load-bearing (12.7% becomes 30.6% escalations when lags are tied to labels); the modeled lag clock (from the tap) does not match the measured one (from relaunch), and the artifact shows the mismatch is not benign; no LLM agent was run although the rig exists; and the rule baseline is denied the labels GhostEffect gets. None of these is a flaw in what was measured. All are fixable with text, reruns already in the artifact, and one small agent experiment. A one-shot revision is preferred over shepherding because the abstract, headline and recommended mode would change, and over rejection because the measurement core is sound and the fixes are known.
+Hội đồng thống nhất rằng bài toán là có thật; các phép đo K-9 và hai chặng là đóng góp hệ thống xác thực; lý thuyết đúng và nêu phạm vi rõ ràng; bài báo khớp artifact (13/13 số liệu đối chiếu khớp). Tuy nhiên, hội đồng cũng thống nhất rằng phần đánh giá chưa đủ hỗ trợ cách bài báo định vị đóng góp. Mode được nhấn mạnh (joint) tốn kém nhất nhưng không mang lại lợi ích trên các ứng dụng đã đo. Số nhãn được nhấn mạnh không tính một bảng độ trễ 20.000 mục mà artifact cho thấy là thiết yếu (tỷ lệ escalation 12,7% thành 30,6% khi số mẫu độ trễ bị ràng buộc bằng số nhãn). Mốc độ trễ trong mô hình (từ lúc nhấn) không khớp mốc đo (từ lúc khởi động lại); artifact cho thấy sai khác này gây hậu quả rõ rệt. Chưa chạy một LLM agent nào dù đã có test rig. Baseline luật lại không được cấp cùng dữ liệu nhãn như GhostEffect. Những vấn đề này không phủ nhận tính đúng đắn của những gì đã đo. Có thể xử lý bằng sửa văn bản, các lần chạy lại vốn đã có trong artifact và một thí nghiệm agent nhỏ. Hội đồng ưu tiên sửa lớn một lần thay vì chấp nhận có người giám sát sửa (*shepherding*) vì abstract, kết quả chính và mode khuyến nghị đều phải thay đổi; cũng không chọn từ chối vì lõi phép đo đáng tin và cách sửa đã rõ.
 
-### Points of consensus
-- The ghost-effect framing and the K-9 permanent-error finding are new and well measured (all four).
-- The two-hop decomposition with a measured dedup horizon is the most reusable idea (R1, R2, R4).
-- The theory is correct and honest about what is classical (R2; R4 on honesty).
-- Paper equals artifact; disclosure of discarded trials is good (R1, R3).
-- No LLM agent was run; the significance claim is unmeasured (R1, R3, R4).
-- The recommended joint mode is not supported by the measured apps (R2, R3, R4).
-- The writing is too dense and number-heavy (R2, R3, R4).
+### Các điểm đồng thuận
+- Cách đặt vấn đề ghost effect và phát hiện lỗi vĩnh viễn của K-9 là mới và được đo tốt (cả bốn reviewer).
+- Phân rã hai chặng với thời hạn dedup được đo là ý tưởng có thể tái sử dụng tốt nhất (R1, R2, R4).
+- Lý thuyết đúng và trung thực về phần nào là kiến thức kinh điển (R2; R4 đánh giá tính trung thực).
+- Bài báo khớp artifact; việc công bố các lượt thử bị loại là tốt (R1, R3).
+- Không chạy LLM agent nên tuyên bố về tầm quan trọng chưa được kiểm chứng (R1, R3, R4).
+- Joint mode được khuyến nghị chưa được các phép đo ứng dụng thực ủng hộ (R2, R3, R4).
+- Văn bản quá dày và chứa quá nhiều số (R2, R3, R4).
 
-### Points of disagreement and resolution
-- **R3 (2) vs. others (3) on the evaluation.** R3 holds Table 4 is near-tautological on Element (zero committed-side error; calibration and test share one law). R2 accepts the simulation as a test of the certification machinery but wants the composed bound. R1 and R4 weight the measurement core more. The meta-reviewer sides with R3 on the specific point (the paper must say what Table 4 can show) and with the majority on merit: the measurements stand on their own once the framing matches them.
-- **Is the clock-origin issue blocking?** R2 and R1 say a literal Algorithm 1 under-waits; R4 does not raise it. Blocking, because the artifact's own rows show P_v of 18.8-46.4% under modest downtime.
-- **Is an LLM-agent run required?** R1 and R4 ask for 10-20 trials; R3 treats it as a path to 4. Required, because the rig exists, the cost is hours, and the first claim depends on it.
+### Điểm bất đồng và cách kết luận
+- **R3 (điểm 2) so với các reviewer khác (điểm 3) về thực nghiệm.** R3 cho rằng Bảng 4 gần như hiển nhiên đối với Element (lỗi ở phía đã commit bằng 0; calibration và test dùng cùng một phân phối). R2 chấp nhận mô phỏng như phép thử bộ máy chứng nhận nhưng muốn thêm cận lỗi tổng hợp. R1 và R4 đánh giá cao hơn phần đo thực tế. Người tổng hợp đồng ý với R3 ở điểm cụ thể này (bài báo phải nêu Bảng 4 chứng minh được gì) và theo đa số về giá trị bài: các phép đo tự đứng vững nếu cách định vị phù hợp với chúng.
+- **Vấn đề mốc thời gian có chặn chấp nhận không?** R2 và R1 nói triển khai đúng nguyên văn Thuật toán 1 sẽ chờ thiếu; R4 không nêu vấn đề. Kết luận: đây là vấn đề bắt buộc sửa, vì chính các dòng trong artifact cho `P_v` từ 18,8% đến 46,4% dưới thời gian ngừng hoạt động tương đối nhỏ.
+- **Có bắt buộc thí nghiệm tác tử LLM không?** R1 và R4 yêu cầu 10–20 lượt; R3 xem đây là đường để tăng lên điểm 4. Kết luận: bắt buộc, vì đã có test rig, chi phí tính bằng giờ và tuyên bố mở đầu phụ thuộc vào kết quả này.
 
-### Checklist for the authors
+### Checklist dành cho tác giả
 
-**Required (blocking)**
-- [ ] Define the clock origin of T per fault class (tap for agent death, relaunch for app death, restore for connectivity); restate Eq. 2 and CertifiedWait for it; report measured-parameter rows with 5 s and 15 s downtime (Sections 3, 4.2, 5.4, 7.7).
-- [ ] State the lag-table size in Table 4 and add rows with logged lags per class equal to the quoted label count (2,000; 5,000); revise "12.7% escalations (5,000 labels per class)" accordingly (Table 4, abstract, Sections 1, 10).
-- [ ] Report joint P_v under the unlogged 2.9% tail at 5,000 labels; correct "joint holds" to "joint holds only while it asks" (Section 7.7, abstract).
-- [ ] Add rules vetted on the same fault-injected labels to Table 4 for Element, K-9, K-9+Sent; rewrite the "rules retry 28.91-65.85%" claims (Sections 7.1, 7.7, abstract, 1, 10).
-- [ ] Run at least one LLM-based agent on at least 10 interrupted K-9 sends on the existing rig and report resends; if none, say so and reframe Section 2.3 (Sections 2.3, 7.7, 7.8).
-- [ ] Make the recommended mode consistent across abstract, Figure 1, Table 2's bold row, Section 7.7 and the conclusion; if it is "product where A2 is checked, joint otherwise, ask when neither certifies", say so in the abstract.
-- [ ] Reconcile the mail nonce field: Section 5.2 default vs. Figure 1 (subject) vs. Table 8 (body); state that measured runs used counterparty-visible fields under opt-in.
-- [ ] State in Table 4's caption that the Element profile has zero committed-side family error by measurement, that calibration and test share one law, and what the table therefore tests (Section 7.7).
-- [ ] Add the composed bound P(dup) in alpha, P(ask), epsilon_u and evaluate it for Table 4 (Section 3 or 4.1, Section 7.7).
-- [ ] Provide the anonymized artifact including the emulator rig at revision time (Section 8).
+**Bắt buộc (vấn đề chặn chấp nhận)**
+- [ ] Xác định mốc đồng hồ của `T` theo từng lớp lỗi (lúc nhấn cho lỗi tác tử chết, lúc khởi động lại cho lỗi ứng dụng chết, lúc phục hồi kết nối cho lỗi mạng); phát biểu lại Phương trình 2 và `CertifiedWait` theo mốc đó; báo cáo các dòng mô phỏng theo tham số đo được với 5 giây và 15 giây ngừng hoạt động (Mục 3, 4.2, 5.4, 7.7).
+- [ ] Nêu kích thước bảng độ trễ trong Bảng 4 và thêm các dòng có số mẫu độ trễ theo lớp bằng đúng lượng nhãn đã công bố (2.000; 5.000); sửa cách diễn đạt "escalation 12,7% (5.000 nhãn mỗi lớp)" cho phù hợp (Bảng 4, abstract, Mục 1, 10).
+- [ ] Báo cáo `P_v` của joint dưới đuôi độ trễ 2,9% chưa được ghi nhận với 5.000 nhãn; sửa "joint vẫn đạt ràng buộc" thành "joint chỉ đạt ràng buộc khi nó còn hỏi đủ nhiều" (Mục 7.7, abstract).
+- [ ] Thêm các luật được thẩm định bằng cùng bộ nhãn tiêm lỗi vào Bảng 4 cho Element, K-9, K-9+Sent; viết lại nhận định "rules retry 28,91–65,85%" (Mục 7.1, 7.7, abstract, 1, 10).
+- [ ] Chạy tối thiểu một tác tử dựa trên LLM trên ít nhất 10 lần gửi K-9 bị gián đoạn với bộ thử nghiệm hiện có và báo cáo số lượt gửi lại; nếu không lần nào gửi lại thì nói rõ và đổi cách đặt vấn đề ở Mục 2.3 (Mục 2.3, 7.7, 7.8).
+- [ ] Thống nhất mode được khuyến nghị giữa abstract, Hình 1, dòng in đậm của Bảng 2, Mục 7.7 và kết luận; nếu chọn "product khi đã xác minh A2, joint ở các trường hợp khác, hỏi khi không cách nào chứng nhận" thì ghi rõ trong abstract.
+- [ ] Hòa giải mâu thuẫn về trường chứa nonce trong email: mặc định ở Mục 5.2 so với Hình 1 (tiêu đề) và Bảng 8 (nội dung); nêu rõ các lượt đo dùng trường mà người nhận nhìn thấy, với sự đồng ý chủ động của người dùng.
+- [ ] Trong chú thích Bảng 4, ghi rằng hồ sơ Element có tỷ lệ sai phía đã commit của các nhóm bằng chứng bằng 0 theo phép đo, rằng calibration và test có cùng một phân phối, và từ đó Bảng 4 thực sự kiểm tra điều gì (Mục 7.7).
+- [ ] Bổ sung cận tổng hợp cho `P(dup)` theo `alpha`, `P(ask)`, `epsilon_u` và tính giá trị với Bảng 4 (Mục 3 hoặc 4.1, Mục 7.7).
+- [ ] Cung cấp artifact ẩn danh kèm test rig emulator khi nộp bản sửa (Mục 8).
 
-**Strongly recommended**
-- [ ] Reorder Section 7 so the emulator measurements come first; cut the simulation to baselines that bracket the design (redo, Thm-4.8-only, always-ask, rules, vetted rules, product, joint).
-- [ ] Abstract at most 200 words and 4 numbers; no two-decimal K-9 simulation numbers.
-- [ ] Shorten Section 4 in the body (Theorem 4.1 in three lines; Lemma 4.5 and Prop. A.1 to the appendix); spend the space on a worked K-9/Element walk-through of Algorithm 1 (Sections 4, 5.4).
-- [ ] Correct the label-cost estimate (15 s) to the measured trial duration and give device-hours for 5,000 labels per class and outcome (Section 5.3).
-- [ ] Fix the unknown-class union bound: is delta divided by the class count? (Section 4.3, Lemma 4.6).
-- [ ] Add the two measured stale-screen events from the artifact (forwarder stale tree; pilot stale digest) with counts (Section 7.7).
-- [ ] Replace p90 from n = 20 with min/median/max or a dot plot (Table 3b).
-- [ ] Rename the dedup horizon symbol D (Section 4.4).
-- [ ] Swap Table 5 into the body and Table 1 into the appendix (Sections 2.2, 5.3).
-- [ ] Count the stress rows where the product mode exceeds the budget (Section 7.5, Table 6).
+**Rất nên làm**
+- [ ] Sắp xếp lại Mục 7 để đưa phép đo emulator lên trước; rút gọn mô phỏng còn các baseline đại diện cho không gian thiết kế (redo, chỉ Định lý 4.8, always-ask, rules, vetted rules, product, joint).
+- [ ] Abstract tối đa 200 từ và 4 con số; không đưa số mô phỏng K-9 đến hai chữ số thập phân.
+- [ ] Rút ngắn Mục 4 trong thân bài (Định lý 4.1 chỉ ba dòng; Bổ đề 4.5 và Mệnh đề A.1 đưa vào phụ lục); dùng diện tích tiết kiệm được để diễn giải từng bước Thuật toán 1 với ví dụ K-9/Element (Mục 4, 5.4).
+- [ ] Sửa ước lượng chi phí gắn nhãn (15 giây) thành thời lượng trial đo thực tế và báo cáo giờ-thiết-bị để có 5.000 nhãn mỗi lớp và kết quả (Mục 5.3).
+- [ ] Sửa union bound khi không biết lớp lỗi: `delta` có được chia cho số lớp không? (Mục 4.3, Bổ đề 4.6).
+- [ ] Thêm hai sự kiện màn hình cũ đã đo từ artifact (forwarder trả cây cũ; digest cũ ở pilot), kèm số lượng (Mục 7.7).
+- [ ] Thay p90 tính từ `n = 20` bằng min/median/max hoặc biểu đồ chấm (*dot plot*) (Bảng 3b).
+- [ ] Đổi ký hiệu `D` của thời hạn dedup (Mục 4.4).
+- [ ] Chuyển Bảng 5 vào thân bài và Bảng 1 sang phụ lục (Mục 2.2, 5.3).
+- [ ] Đếm số dòng stress mà product vượt ngân sách (Mục 7.5, Bảng 6).
 
-**Nice to have**
-- [ ] Measure the on-device controller (foreground service) ISSUED-before-tap latency and survival under `am kill`/LMK on the emulator (Sections 5.1, 6).
-- [ ] Per-seed variance for headline rows of Tables 2 and 4 (Section 7.1).
-- [ ] A held-out lag campaign (another day or host load) for Element (Section 7.7).
-- [ ] One E2EE Element room to confirm the txnId path and nonce probe (Section 8).
-- [ ] Gray and Reuter (1992), Bailis et al. (VLDB 2015) if they fit (Section 9; verify).
+**Có thì tốt (nice to have)**
+- [ ] Đo độ trễ từ `ISSUED` đến trước thao tác nhấn và khả năng sống sót dưới `am kill`/LMK của bộ điều khiển trên thiết bị (foreground service), trên emulator (Mục 5.1, 6).
+- [ ] Báo cáo phương sai giữa các seed cho các dòng kết quả chính của Bảng 2 và 4 (Mục 7.1).
+- [ ] Thực hiện chiến dịch đo độ trễ độc lập với tập hiệu chuẩn (ngày khác hoặc mức tải host khác) cho Element (Mục 7.7).
+- [ ] Thử một phòng Element có mã hóa đầu-cuối (E2EE) để xác nhận đường xử lý `txnId` và phép dò nonce (Mục 8).
+- [ ] Cân nhắc Gray và Reuter (1992), Bailis và cộng sự (VLDB 2015) nếu phù hợp (Mục 9; phải kiểm tra nguồn).
 
-### Shepherding notes
-If the PC converts this to accept with shepherding, the shepherd should hold the authors to the first six required items (clock origin, lag-table size, tail at 5,000, vetted rules, one agent run, consistent recommended mode) and the abstract rewrite. The rest are text changes the authors can make unsupervised.
+### Ghi chú về quá trình sửa dưới sự giám sát (shepherding)
+
+Nếu PC chuyển sang chấp nhận có người giám sát sửa, người giám sát nên yêu cầu tác giả hoàn thành sáu mục bắt buộc đầu tiên (mốc thời gian, kích thước bảng độ trễ, đuôi trễ ở 5.000 nhãn, luật đã thẩm định, một thí nghiệm agent, thống nhất mode khuyến nghị) và viết lại abstract. Phần còn lại là thay đổi văn bản tác giả có thể tự xử lý.
 
 ---
+## Báo cáo về độ dễ đọc, độ rõ ràng và cách viết "ít giống AI" hơn
 
-## Readability, clarity, and "less AI" report
+### 1. Chẩn đoán
 
-### 1. Diagnosis
+**(a) Abstract giống một bảng kết quả được viết thành văn xuôi.** Có 287 từ, 18 token là số cùng cặp ký hiệu `(alpha, beta)`; 14 số được lấy từ macro và bốn số có hai chữ số thập phân (28,91; 65,85; 0,05; 12,7). Người đọc phải tới câu thứ 6 trong tổng số 11 câu, sau 118 từ trình bày phép đo, mới biết GhostEffect thực sự làm gì.
 
-**(a) The abstract is a results table in prose.** 287 words, 18 numeric tokens plus the symbol pair (alpha, beta); 14 numbers are macros; four carry two decimals (28.91, 65.85, 0.05, 12.7). The reader learns what GhostEffect does in sentence 6 of 11, after 118 words of measurements.
+**(b) Các câu khẳng định trước khi giải thích.** Đoạn "Approach" (Phương pháp) trong phần giới thiệu (187 từ) sử dụng các khái niệm ngân sách, ngưỡng sàn, hop 1, nonce, digest, hiệu chuẩn trên toàn bộ hiệu ứng, family, product, joint, phần ngân sách độ trễ, phân rã hai chặng, thời hạn dedup, ledger, controller, planner và người dùng có thể mắc lỗi, trước khi định nghĩa bất kỳ khái niệm nào:
 
-**(b) Sentences assert before they explain.** The intro's "Approach" paragraph (187 words) uses budget, floors, hop 1, nonce, digest, calibration over whole effects, family, product, joint, lag share, two-hop decomposition, dedup horizon, ledger, controller, planner and the fallible user before any is defined:
+> "Điều làm ngân sách rủi ro trở nên khả thi là bằng chứng được đọc dưới dạng văn bản accessibility: Outbox cục bộ của ứng dụng (hop 1), nonce mang trong nội dung để biến các mục trông giống nhau thành đối tượng có thể so khớp bằng văn bản (Bổ đề 4.7), và digest của danh sách lịch sử."
 
-> "What makes the budget reachable is evidence, read as accessibility text: the app's local outbox (hop 1), a content-carried nonce that turns look-alikes into text matches (Lemma 4.7), and a digest of the history list."
+> "Điều làm kết quả có thể được chứng nhận là hiệu chuẩn trên toàn bộ hiệu ứng: theo từng nhóm bằng chứng, cho phép các lượt đọc trong nhóm phụ thuộc tùy ý (Mệnh đề 4.3), hoặc hiệu chuẩn chung trên miền dừng của chuỗi quyết định mà không cần các nhóm độc lập với nhau (Mệnh đề 4.4)."
 
-> "What makes it certifiable is calibration over whole effects: per family, which survives any dependence among a family's views (Proposition 4.3), or jointly over the cascade's stopping region, which needs no independence across families (Proposition 4.4)."
+**(c) Quá nhiều khái niệm có tên riêng.** Số lần xuất hiện trong phần thân: `family` 79, `certif-` 70, `hop` 66, `joint` 63, `G2` 57, `nonce` 53, `escalat-` 39, `ledger` 38, `budget` 37, `product` 32, `digest` 20, `ghost` 18, `look-alike` 11, `fault class` 10, `passive label` 8, `dedup horizon` 7, `lag tail` 7, `two-hop` 6, `certified wait` 4. Có ít nhất 19 khái niệm được đặt tên; ba khái niệm trong số đó (`product`, `source families`, `joint`) là các lựa chọn thay thế lẫn nhau. Ký hiệu: `alpha`, `beta`, `alpha_test`, `alpha_lag`, `alpha_cal`, `G(w)`, `T`, `X`, `t0`, `w0`, `w1`, `q`, `q_h`, `tau`, `B(tau)`, `R(tau)`, `Q(t)`, `K`, `delta`, `kappa`, `eta`, `epsilon_0`, `epsilon_1`, `epsilon_u`, `D0`, `D1`, `D` (thời hạn), `u*`, `v*`, `P_v`, `L_v`, `W_max`, `n1`, `C_e`, `G2`, `G2-prime`.
 
-**(c) Too many named concepts.** Body occurrences: family 79, certif- 70, hop 66, joint 63, G2 57, nonce 53, escalat- 39, ledger 38, budget 37, product 32, digest 20, ghost 18, look-alike 11, fault class 10, passive label 8, dedup horizon 7, lag tail 7, two-hop 6, certified wait 4. At least 19 named concepts, three of them (product, source families, joint) alternatives to each other. Notation: alpha, beta, alpha_test, alpha_lag, alpha_cal, G(w), T, X, t0, w0, w1, q, q_h, tau, B(tau), R(tau), Q(t), K, delta, kappa, eta, epsilon_0, epsilon_1, epsilon_u, D0, D1, D (horizon), u*, v*, P_v, L_v, W_max, n1, C_e, G2, G2-prime.
+**(d) Độ dài câu và dấu câu.** Có 427 câu trong thân bài, trung bình 22,9 từ/câu; 31 câu dài hơn 45 từ; 151 dấu chấm phẩy (mỗi 2,8 câu có một dấu); 66 mệnh đề dẫn bằng dấu hai chấm; 373 dấu ngoặc đơn mở. Ví dụ (Mục 4.4):
 
-**(d) Sentence length and punctuation.** 427 body sentences average 22.9 words; 31 exceed 45 words; 151 semicolons (one per 2.8 sentences); 66 colon-led clauses; 373 opening parentheses. Example (Section 4.4):
+> "Vì vậy, planner đếm các mục hop-1 được tạo sau `t0` (hai mục có nghĩa là một bản sao trùng), coi 'không tồn tại' là không xuất hiện ở cả Outbox và danh sách Sent, đồng thời theo dõi mục đang chờ cho đến khi được xác nhận; nếu tuổi của mục tiến gần `D` thì chuyển sang hỏi người dùng."
 
-> "The planner therefore counts hop-1 entries created after t0 (two entries mean a duplicate), treats 'absent' as absent from both outbox and sent list, and monitors a pending entry until it is acknowledged, escalating it before its age approaches D."
+**(e) Phân biệt mô phỏng và phép đo được giải thích quá muộn.** Bảng 1 và 2 (mô phỏng) xuất hiện trước Bảng 3 (phép đo); Bảng 4 là loại thứ ba và chỉ được định nghĩa trong chú thích ("không phải một lần chạy emulator"). Mục 7.7:
 
-**(e) Simulation vs. measurement is explained late.** Tables 1 and 2 (simulation) precede Table 3 (measurement); Table 4 is a third kind whose definition lives in its caption ("not an emulator run"). Section 7.7:
+> "Bảng 4 chạy lại từng mode trên các hồ sơ xây dựng từ phép đo này (`params.csv` ghi nguồn của từng giá trị), với độ trễ riêng cho từng lớp và `bottom` biểu thị không có quan sát."
 
-> "Table 4 reruns every mode on profiles built from these measurements (params.csv records each value's source), with per-class lags and bottom as no observation."
+**(f) Độ dài đoạn văn và cách nhấn mạnh.** Mục 4 có các đoạn dài 436, 268, 243 và 227 từ; Mục 7.7 có các đoạn dài 275, 268 và 209 từ. Có 43 phần mở đầu in đậm bằng `\para` và 94 đoạn nhấn mạnh bằng `\emph`, khiến việc nhấn mạnh mất tác dụng phân biệt thông tin quan trọng.
 
-**(f) Paragraph length and emphasis.** Section 4 has paragraphs of 436, 268, 243 and 227 words; Section 7.7 of 275, 268 and 209. 43 bold `\para` lead-ins and 94 `\emph` spans, so emphasis stops carrying signal.
+Bằng chứng bổ sung, mỗi mục một câu ví dụ:
 
-Further evidence, one sentence per section:
+> Mục 1: "Với tác tử dùng công cụ, khóa idempotency giảm trùng lặp từ 28% xuống 4%; các mô hình hàng đầu tạo bản sao trong 56–74% episode khi đọc lại không thể xác nhận kết quả; và không chính sách chỉ dựa vào kiểm chứng nào bảo đảm đúng một lần nếu commit có thể đến muộn mà không có cận cho thời gian đang xử lý."
 
-> Section 1: "For tool agents, idempotency keys cut duplicates from 28% to 4%, frontier models duplicate in 56-74% of episodes when a read-back cannot reveal the outcome, and no verification-only policy is exactly-once under late commits without a bound on in-flight time."
+> Mục 5.3: "Chứng nhận joint và các khoảng chờ cần khoảng `ln(1/delta)/alpha_test` mẫu ngay cả khi không quan sát lỗi; tức hàng nghìn mẫu ở `alpha = 1%` và hàng chục nghìn ở `10^-3`, khoảng gấp đôi khi tỷ lệ thật của miền bằng một phần tư `alpha_test`, và gấp bốn khi chia theo lớp lỗi."
 
-> Section 5.3: "Joint certification and the waits need about ln(1/delta)/alpha_test samples even with zero events, i.e. thousands at alpha = 1% and tens of thousands at 10^-3, about twice that if the region's true rate is a quarter of alpha_test, and four times that when keyed by fault class."
+> Mục 7.4: "Ở `P_v` xấp xỉ 0,1%, biến thể tốt nhất trong 12 biến thể (chờ 60 giây, bất kỳ hai bằng chứng) có escalation 17,6%, bằng product chạy với `alpha = 0,03`; ở `P_v` khoảng 0,5%, product chạy với `alpha` danh nghĩa 0,1 (bảo đảm 10%, không phải 0,5%) hỏi 10,4% so với 16,3% của luật tốt nhất, còn chứng nhận joint hỏi 8,7% tại `P_v = 0,88%`; không luật nào giảm escalation xuống dưới 16,2%."
 
-> Section 7.4: "At P_v about 0.1% the best of 12 variants (wait 60 s, any two) escalates 17.6%, as many as the product mode run at alpha = 0.03; at P_v about 0.5% the product mode, run at a nominal alpha = 0.1 (a 10% guarantee, not 0.5%), escalates 10.4% against 16.3% for the best rule, and joint certification 8.7% at P_v = 0.88%; no rule goes below 16.2% escalations."
+### 2. Các dấu hiệu văn phong giống AI được phát hiện
 
-### 2. AI-prose tells found
-
-Commands, run from `manuscript/sections/` over the twelve body files with comment lines removed (`$FILES` = the twelve body `.tex` files):
+Các lệnh sau được chạy trong `manuscript/sections/` trên 12 tệp `.tex` phần thân sau khi bỏ các dòng chú thích (`$FILES` đại diện cho 12 tệp này). **Giữ nguyên mẫu chuỗi và cú pháp trong lệnh**, vì chúng dùng để tìm đúng văn bản tiếng Anh của bản thảo:
 
 ```
 for pat in "not only" "not merely" "not just" "rather than" "crucially" "notably" \
@@ -327,77 +325,77 @@ for pat in "not only" "not merely" "not just" "rather than" "crucially" "notably
   "What makes" "by design" "the price"; do
   printf "%-14s %s\n" "$pat" "$(cat $FILES | grep -v '^%' | grep -o -i -- "$pat" | wc -l)"; done
 cat $FILES | grep -v '^%' | sed 's/\\[a-zA-Z]*//g; s/[{}$]//g' | tr '\n' ' ' | sed 's/\. /.\n/g' \
-  | grep -cE "^ *(This|These|It) "          # sentences opening with a bare demonstrative
-cat $FILES | grep -o "\\\\para{" | wc -l    # bold lead-ins
-cat $FILES | grep -o "\\\\emph{" | wc -l    # italics
-cat $FILES | grep -o "(" | wc -l            # parentheticals
+  | grep -cE "^ *(This|These|It) "          # câu bắt đầu bằng đại từ chỉ định chung
+cat $FILES | grep -o "\\\\para{" | wc -l    # phần mở đầu in đậm
+cat $FILES | grep -o "\\\\emph{" | wc -l    # phần in nghiêng
+cat $FILES | grep -o "(" | wc -l            # dấu ngoặc đơn
 ```
 
-Counts: "not only" 0; "not merely" 0; "not just" 0; "rather than" 1; "crucially" 0; "notably" 0; "importantly" 0; "in essence" 0; "robust" 3; "leverage" 0; "delve" 0; "landscape" 0; "seamless" 0; "novel" 0; "comprehensive" 0; em-dash `---` 0; semicolons 151; "We present/We propose" 0; "We recommend" 2; "What makes ..." 2; "by design" 4; "the price" 3; sentences opening with This/These/It 7; bold lead-ins 43; `\emph` 94; parentheses 373; sentences over 45 words 31 of 427.
+**Số lần xuất hiện:** `not only` 0; `not merely` 0; `not just` 0; `rather than` 1; `crucially` 0; `notably` 0; `importantly` 0; `in essence` 0; `robust` 3; `leverage` 0; `delve` 0; `landscape` 0; `seamless` 0; `novel` 0; `comprehensive` 0; dấu gạch ngang dài `---` 0; dấu chấm phẩy 151; `We present/We propose` 0; `We recommend` 2; `What makes ...` 2; `by design` 4; `the price` 3; câu mở đầu bằng `This/These/It` 7; đoạn mở đầu in đậm 43; `\emph` 94; dấu ngoặc đơn 373; câu trên 45 từ: 31/427.
 
-Reading: the vocabulary tells of machine prose (crucially, leverage, landscape, em-dashes, "not X but Y") are absent, to the authors' credit. The structural tells are present: semicolon chains; parenthetical reference stacking; rule-of-three lists ("the agent, the app or the network"; "outbox, a content-carried nonce, a history digest"; "retries, declares or asks"); punchline closings on most paragraphs ("certification uses what the labels show"; "calibration adds a guarantee that follows the labels"; "the two-hop reduction is where phones differ"; "an agent's redo is not"); rhetorical "What makes X is Y" openers; over-precise numbers in the abstract. Hedging stacks are rare, which is good.
+**Diễn giải:** Những dấu hiệu từ vựng thường thấy của văn bản do máy tạo (`crucially`, `leverage`, `landscape`, dấu gạch ngang dài, cấu trúc "không phải X mà là Y") đều vắng mặt; đây là điểm tốt của tác giả. Tuy nhiên, dấu hiệu về cấu trúc vẫn tồn tại: chuỗi mệnh đề nối bằng dấu chấm phẩy; chồng chất tham chiếu trong ngoặc; các danh sách theo quy tắc bộ ba ("tác tử, ứng dụng hoặc mạng"; "Outbox, nonce mang trong nội dung, digest lịch sử"; "retry, tuyên bố đã hoàn thành hoặc hỏi"); kết luận dạng câu chốt ở cuối hầu hết các đoạn ("chứng nhận dùng những gì nhãn thể hiện"; "hiệu chuẩn bổ sung bảo đảm đi theo dữ liệu nhãn"; "phân rã hai chặng là nơi điện thoại khác biệt"; "việc agent làm lại thì không"); cách mở đầu mang tính tu từ "Điều khiến X trở thành Y là Z"; số liệu quá chi tiết trong abstract. Ít có các chuỗi diễn đạt dè dặt chồng nhau, đây là điểm tốt.
 
-### 3. Rewrites
+### 3. Các đoạn đề xuất viết lại
 
-**(a) Abstract, at most 200 words and 4 numbers**
+**(a) Abstract, tối đa 200 từ và 4 con số**
 
-> A mobile GUI agent that taps Send and is then interrupted cannot tell whether the message went out. If it redoes the step, the app creates a new request, and the server has no key to deduplicate it. We call such an effect a ghost effect. On Android emulators with self-hosted servers we show the trap directly: after a lost SMTP reply, K-9 Mail keeps the accepted mail in its Outbox as a permanent error, and a scripted redo duplicated every one of 20 sends. Apps whose clients retry with their own idempotent id (Element on Matrix, DAVx5 on CalDAV) recovered by themselves, within the server's dedup window. GhostEffect is a recovery layer that records each effect in a write-ahead ledger before the tap, tags it with a nonce, reads the app's own screens for evidence after a restart, waits a calibrated time for the server to show the result, and retries only when calibrated error bounds keep the probability of a duplicate under a budget. When nothing certifies, it asks the user. On the measured apps, the decisive pieces are knowing whether the app retries idempotently, calibrating on interrupted rather than normal sends, and asking when the screen cannot reveal the outcome; on K-9 that means asking on every interrupted send.
+> Một tác tử thao tác GUI trên điện thoại khi nhấn Gửi rồi bị gián đoạn sẽ không biết thông điệp đã được gửi đi hay chưa. Nếu làm lại bước đó, ứng dụng tạo một yêu cầu mới và máy chủ không có khóa để khử trùng. Chúng tôi gọi kết quả như vậy là *ghost effect*. Trên Android emulator với máy chủ tự lưu trữ, chúng tôi trực tiếp chứng minh cái bẫy này: sau khi mất phản hồi SMTP, K-9 Mail vẫn giữ email đã được máy chủ chấp nhận trong Outbox dưới trạng thái lỗi vĩnh viễn; thao tác làm lại có kịch bản khiến cả 20 lần gửi đều bị trùng. Những ứng dụng có client tự thử lại bằng mã định danh idempotent (Element với Matrix, DAVx5 với CalDAV) có thể tự phục hồi trong thời hạn khử trùng của máy chủ. GhostEffect là tầng phục hồi ghi mỗi hiệu ứng vào ledger kiểu write-ahead trước khi nhấn, gắn nonce, đọc các màn hình của ứng dụng làm bằng chứng sau khi khởi động lại, chờ khoảng thời gian đã hiệu chuẩn để kết quả hiển thị trên server, và chỉ thử lại khi các cận sai số đã hiệu chuẩn giữ xác suất tạo bản sao dưới mức ngân sách. Khi không thể chứng nhận, hệ thống hỏi người dùng. Trên các ứng dụng đã đo, điều quyết định là biết ứng dụng có retry idempotent hay không, hiệu chuẩn bằng các lần gửi bị gián đoạn thay vì các lần gửi bình thường, và hỏi khi màn hình không thể cho biết kết quả; với K-9, điều đó nghĩa là hỏi trong mọi lần gửi bị gián đoạn.
 
-(197 words, 2 numbers.)
+*(Bản gốc tiếng Anh: 197 từ, 2 con số. Số từ có thể khác trong bản dịch.)*
 
-**(b) First paragraph of the introduction**
+**(b) Đoạn đầu tiên của phần giới thiệu**
 
-> Ask a phone agent to email the signed lease to Alex. It opens K-9 Mail, writes the mail and taps Send. The SMTP server accepts the message; the reply is lost when the connection drops. K-9 records the send as failed, for good: the mail stays in the Outbox with an error, and later syncs skip it. The agent resumes, reads the screen, sees an unsent mail, writes it again and taps Send. Alex gets the lease twice, and the agent reports success. We ran this on an Android emulator against our own mail server; a scripted redo duplicated every K-9 send we tried. We call an effect whose outcome the agent cannot read back a ghost effect. This paper is about deciding what to do with one.
+> Hãy yêu cầu một tác tử trên điện thoại gửi email kèm hợp đồng thuê nhà đã ký cho Alex. Nó mở K-9 Mail, soạn email và nhấn Gửi. Máy chủ SMTP chấp nhận thông điệp, nhưng phản hồi bị mất khi kết nối đứt. K-9 ghi nhận lần gửi là thất bại, và trạng thái ấy không tự biến mất: email vẫn ở Outbox với lỗi, các lần đồng bộ tiếp theo đều bỏ qua nó. Tác tử khôi phục, đọc màn hình, thấy email chưa gửi, soạn lại rồi nhấn Gửi. Alex nhận hợp đồng hai lần và tác tử báo thành công. Chúng tôi đã chạy tình huống này trên Android emulator với máy chủ email riêng; kịch bản làm lại khiến mọi email K-9 được thử đều bị gửi trùng. Chúng tôi gọi một hiệu ứng mà tác tử không thể đọc lại kết quả là *ghost effect*. Bài báo này nghiên cứu cách quyết định phải làm gì với một hiệu ứng như vậy.
 
-**(c) Ten before/after sentence rewrites**
+**(c) Mười ví dụ sửa câu — Trước/Sau**
 
-1. Section 1. Before: "We express exactly-once as a budget: the probability alpha of retrying a committed effect and beta of abandoning an absent one, conditional on the hidden outcome." After: "Exactly-once cannot be guaranteed from a screen. We ask for a budget instead: retry a committed effect with probability at most alpha, and abandon an absent one with probability at most beta."
-2. Section 2.2. Before: "A GUI read-back is a perception that can be wrong, tends to repeat its error on a re-read, and is defeated by look-alikes; VeriGUI trains an action-effect verifier for this setting without an error guarantee." After: "Reading a screen is perception. It can be wrong, it repeats the error when read again, and a look-alike item makes the screen consistent with both outcomes. VeriGUI learns such a verifier but gives no error bound."
-3. Section 3. Before: "Re-reading a view adds nothing in this model (a reader tends to repeat its answer)." After: "In this model a view is read once. Reading it again returns the same answer and adds no evidence."
-4. Section 4.1. Before: "Exactly-once by verification is a limit, not a point, so GhostEffect exposes (alpha, beta) as a knob; reads cost about log(1/alpha)/D0, and the gap between (ub) and (lb) under X = 1 tends to u*/D1 as alpha, beta go to 0 provided alpha log(1/beta) goes to 0." After: "Verification can approach exactly-once but never reach it, so GhostEffect exposes the budget as a knob. Each factor of ten in alpha costs about 1/D0 more reads. In the limit the upper and lower bounds differ by one read's worth of evidence."
-5. Section 4.2. Before: "A2 lets bounds multiply, and it is doubtful when families read the same screens: a stale history after a restart fools nonce, digest and VLM at once." After: "Multiplying bounds needs independence across families. That is doubtful when the families read the same screen: a stale history after a restart fools the nonce, the digest and the VLM together."
-6. Section 5.3. Before: "Validity holds at any sample size; small samples only widen the bounds and raise escalations." After: "The guarantee holds at any sample size. With few labels the bounds are loose, so the planner asks more often; it never retries more often."
-7. Section 5.4. Before: "A hop-1 verdict starts the product on either side, so the 'committed' side of a G2 or local app is certified like any other declaration (its bound enters B_com), and a hop-1 'absent' verdict relaxes its own wait w1, with half of the lag share (Eq. 2)." After: "The outbox read is the first factor in the product. If it says committed for an idempotent-retry app, that verdict is certified like any other. If it says absent, the planner may wait less, because the outbox does not lag; this uses half of the lag share (Eq. 2)."
-8. Section 7.1. Before: "The default world departs from the planner's assumptions: nonce misses are persistent (eta = 1% hidden field, plus 0.6% per view); hop-1 views err at 1-5% each plus 0.5% persistently, and the Monitor misreads 1% of terminal states; digest views miss 3% each plus 2% persistently; VLM views err at epsilon_0 in U[0.06, 0.26], epsilon_1 in U[0.04, 0.20], with within-view correlation 0.6 and cross-view correlation 0.1." After: "The simulated world breaks the planner's assumptions on purpose. Some errors are persistent: a hidden nonce field (1%), a stuck outbox reading (0.5%), a stale digest (2%). VLM reads are noisy and correlated within and across views. Full parameters are in Table 2's caption."
-9. Section 7.7. Before: "On real apps the decisive pieces are G2 classification, fault-injected labels, and asking when the GUI cannot reveal the outcome; calibration adds a guarantee that follows the labels." After: "On the apps we measured, three things decide the outcome: knowing whether the app retries idempotently, calibrating on interrupted sends, and asking when the screen cannot tell. Calibration does not change those outcomes; it tells you when you may trust them."
-10. Section 8. Before: "The decision results come from simulation, model-based or with measured parameters; the generative model departs from the planner's assumptions on purpose, but it is ours." After: "Every decision result is a simulation. The world it simulates breaks our own assumptions on purpose, but we wrote it."
+1. **Mục 1.** **Trước:** "Chúng tôi biểu diễn tính đúng một lần bằng một ngân sách: xác suất `alpha` của việc thử lại một hiệu ứng đã commit và `beta` của việc bỏ qua một hiệu ứng chưa tồn tại, có điều kiện theo kết quả ẩn." **Sau:** "Không thể bảo đảm đúng một lần chỉ từ màn hình. Thay vào đó, chúng tôi đặt ngân sách: xác suất thử lại một hiệu ứng đã commit không vượt `alpha`, và xác suất bỏ qua một hiệu ứng chưa tồn tại không vượt `beta`."
+2. **Mục 2.2.** **Trước:** "Đọc lại GUI là một hình thức nhận thức có thể sai, có xu hướng lặp lại lỗi khi đọc lại và dễ bị đánh lừa bởi các mục trông giống nhau; VeriGUI huấn luyện bộ xác minh hiệu ứng thao tác trong bối cảnh này nhưng không có bảo đảm lỗi." **Sau:** "Đọc màn hình là một hoạt động nhận thức. Nó có thể sai và lặp lại cùng lỗi khi đọc lại; một mục trông giống mục cần tìm khiến màn hình phù hợp với cả hai kết quả. VeriGUI học một bộ xác minh như vậy nhưng không đưa ra cận sai số."
+3. **Mục 3.** **Trước:** "Đọc lại một view không bổ sung thông tin trong mô hình này (trình đọc có xu hướng lặp lại câu trả lời)." **Sau:** "Trong mô hình này, mỗi view chỉ được đọc một lần. Đọc lại sẽ trả về cùng câu trả lời và không bổ sung bằng chứng."
+4. **Mục 4.1.** **Trước:** "Đúng một lần nhờ kiểm chứng là một giới hạn chứ không phải điểm có thể đạt, vì vậy GhostEffect cung cấp `(alpha, beta)` như núm điều chỉnh; chi phí lượt đọc xấp xỉ `log(1/alpha)/D0`, và khoảng cách giữa cận trên `(ub)` và cận dưới `(lb)` với `X = 1` tiến tới `u*/D1` khi `alpha, beta → 0`, nếu `alpha log(1/beta) → 0`." **Sau:** "Kiểm chứng có thể tiến gần tới đúng một lần nhưng không bao giờ đạt tuyệt đối, nên GhostEffect cho phép điều chỉnh ngân sách. Mỗi lần `alpha` giảm một bậc thập phân cần thêm khoảng `1/D0` lượt đọc. Ở giới hạn, cận trên và cận dưới chênh nhau lượng bằng chứng tương đương một lượt đọc."
+5. **Mục 4.2.** **Trước:** "A2 cho phép nhân các cận với nhau, nhưng giả định này đáng ngờ khi các nhóm cùng đọc một màn hình: lịch sử cũ sau khi khởi động lại có thể cùng lúc đánh lừa nonce, digest và VLM." **Sau:** "Muốn nhân các cận cần giả định các nhóm bằng chứng độc lập. Điều này đáng ngờ khi chúng đọc cùng màn hình: lịch sử cũ sau khi khởi động lại có thể đồng thời đánh lừa nonce, digest và VLM."
+6. **Mục 5.3.** **Trước:** "Tính hợp lệ được giữ ở mọi kích thước mẫu; mẫu nhỏ chỉ làm các cận rộng hơn và tăng escalation." **Sau:** "Bảo đảm vẫn đúng ở mọi kích thước mẫu. Khi có ít nhãn, các cận lỏng hơn nên planner phải hỏi thường xuyên hơn, chứ không retry thường xuyên hơn."
+7. **Mục 5.4.** **Trước:** "Một kết luận hop-1 khởi tạo tích xác suất ở cả hai phía, nên phía 'đã commit' của ứng dụng G2 hoặc ứng dụng cục bộ được chứng nhận như các kết luận khác (cận của nó được đưa vào `B_com`), còn kết luận 'không tồn tại' của hop-1 cho phép nới điều kiện chờ riêng `w1`, với một nửa ngân sách độ trễ (Phương trình 2)." **Sau:** "Lượt đọc Outbox là thừa số đầu tiên của tích xác suất. Nếu nó báo đã commit đối với ứng dụng tự retry idempotent, kết luận đó được chứng nhận như mọi kết luận khác. Nếu nó báo không tồn tại, planner có thể chờ ít hơn vì Outbox không có độ trễ; cách này dùng một nửa phần ngân sách độ trễ (Phương trình 2)."
+8. **Mục 7.1.** **Trước:** "Thế giới mặc định đi chệch giả định của planner: lỗi không thấy nonce có tính dai dẳng (`eta = 1%` do trường ẩn, cộng 0,6% mỗi view); các view hop-1 sai 1–5% mỗi view cộng 0,5% lỗi dai dẳng; Monitor đọc sai 1% trạng thái kết thúc; các view digest bỏ sót 3% mỗi view cộng 2% lỗi dai dẳng; view VLM có tỷ lệ sai `epsilon_0` thuộc `U[0.06, 0.26]`, `epsilon_1` thuộc `U[0.04, 0.20]`, tương quan trong view là 0,6 và giữa các view là 0,1." **Sau:** "Thế giới mô phỏng cố ý vi phạm các giả định của planner. Một số lỗi có tính dai dẳng: trường nonce bị ẩn (1%), lượt đọc Outbox bị kẹt (0,5%), digest cũ (2%). Các lượt đọc VLM có nhiễu và tương quan cả trong lẫn giữa các view. Toàn bộ tham số được ghi trong chú thích Bảng 2."
+9. **Mục 7.7.** **Trước:** "Trên các ứng dụng thật, yếu tố quyết định là phân loại G2, nhãn tiêm lỗi và hỏi khi GUI không thể tiết lộ kết quả; hiệu chuẩn bổ sung bảo đảm phù hợp với các nhãn." **Sau:** "Trên các ứng dụng đã đo, ba điều quyết định kết quả: biết ứng dụng có retry idempotent không, hiệu chuẩn bằng những lần gửi bị gián đoạn và hỏi khi màn hình không trả lời được. Hiệu chuẩn không thay đổi các kết quả ấy; nó cho biết lúc nào có thể tin chúng."
+10. **Mục 8.** **Trước:** "Các kết quả ra quyết định đến từ mô phỏng, hoặc dựa trên mô hình hoặc theo tham số đo được; mô hình sinh dữ liệu cố ý đi chệch các giả định của planner, nhưng là mô hình do chúng tôi xây dựng." **Sau:** "Mọi kết quả ra quyết định đều đến từ mô phỏng. Thế giới mô phỏng cố ý vi phạm các giả định của chúng tôi, nhưng chính chúng tôi là người xây dựng thế giới ấy."
 
-**(d) One-sentence statement the paper lacks**
+**(d) Một câu mô tả mà bài báo còn thiếu**
 
-> GhostEffect logs a GUI effect before the agent commits it and, after an interruption, decides from the app's own screens, a calibrated wait, and if needed the user whether to redo it, so that a committed effect is redone with probability at most alpha and an absent one abandoned with probability at most beta.
+> GhostEffect ghi lại một hiệu ứng GUI trước khi tác tử thực hiện nó; sau gián đoạn, hệ thống dùng chính màn hình ứng dụng, một khoảng chờ đã hiệu chuẩn và, nếu cần, ý kiến người dùng để quyết định có làm lại hay không, sao cho xác suất làm lại hiệu ứng đã commit không vượt `alpha` và xác suất bỏ qua hiệu ứng chưa tồn tại không vượt `beta`.
 
-Place it as the last sentence of the first introduction paragraph.
+Đặt câu này ở cuối đoạn đầu tiên của phần giới thiệu.
 
-### 4. Structural suggestions
+### 4. Đề xuất chỉnh sửa cấu trúc
 
-- **Abstract.** Use the 197-word version. Keep K-9 20/20 and the Element/DAVx5 contrast. Drop simulation numbers.
-- **Section 1.** Open with the K-9 story (3b). Cut "Why existing fixes do not transfer" to three sentences. Replace "Approach" and "Results" with one paragraph: the one-sentence statement (3d), the mechanisms (ledger, nonce, screen evidence with calibrated bounds, certified wait, ask), the two measured findings. Four contribution bullets, measurements first.
-- **Section 2.** Merge 2.1 and 2.2 to one page. Rename 2.3 "Do apps show the trap?" and answer with Table 3a. Move Table 5 here from the appendix.
-- **Section 3.** Keep. Add a 4-row table: symbol, meaning, where measured. Move the 0.5/0.4/0.1 split to Section 5.
-- **Section 4.** Cut to 1.5 pages. Theorem 4.1 in three lines plus the "what is classical" note. Keep Proposition 4.4 and Theorem 4.8 in full. Move Proposition 4.3, Lemma 4.5, Lemma 4.6(iii), Lemma 4.7 and the saga allocation to the appendix with pointers. Rename D.
-- **Section 5.** In 5.3, replace "How many labels" with Table 1 and two sentences; correct the label cost. In 5.4, add a worked example before Algorithm 1 (one K-9 send: hop 1 failed, nothing certifies, ask; one Element send: no hop 1, certified wait 13.6 s, row reads Sent). Figure 1 already tells it; point to it.
-- **Section 6.** Keep. State host load and dump time. Move "Planned agent harness" to 7.8 or cut.
-- **Section 7.** Reorder: 7.1 emulator measurements (Table 3), 7.2 measured-parameter rerun (Table 4 with lag-table size and vetted rules), 7.3 model-based simulation (Table 2 cut to redo, Thm-only, always-ask, rules, vetted rules, product, joint), 7.4 stress and population (one paragraph; Tables 6-7 in appendix), 7.5 mechanisms (one paragraph). Drop RQ1-RQ2 from the body (classical validation; one sentence plus pointer). Replace Table 3b's p90 column with a dot plot of the 83 lags by class.
-- **Section 7.8.** Three sentences in Section 8, or replace with the agent run.
-- **Section 8.** Keep Limitations and Android realism; fold Ethics into one paragraph; add the composed error bound here or in Section 3.
-- **Section 9.** Add one sentence each for LIMBO, Agent libOS and VeriGUI stating the difference.
-- **Section 10.** Three sentences of lessons. No numbers.
-- **Page budget.** The body is exactly 12 pages. Cuts (Section 4 about 0.7 page; 7.2-7.6 about 1 page; 7.8 0.2; intro 0.3) free about 2 pages, paying for the agent run (0.3), worked example (0.3), lag dot plot (0.2), Table 5 in the body (0.3) and vetted-rules rows (0.1), with margin.
+- **Abstract.** Dùng bản 197 từ ở trên. Giữ kết quả K-9 20/20 và sự tương phản với Element/DAVx5. Bỏ số liệu mô phỏng.
+- **Mục 1.** Mở bằng câu chuyện K-9 (3b). Rút đoạn "Vì sao các giải pháp hiện có không áp dụng trực tiếp" xuống ba câu. Thay phần "Approach" và "Results" bằng một đoạn gồm câu mô tả ngắn (3d), các cơ chế (ledger, nonce, bằng chứng trên màn hình với cận đã hiệu chuẩn, chờ được chứng nhận, hỏi người dùng) và hai phát hiện đo được. Bốn gạch đầu dòng đóng góp, đưa phép đo lên trước.
+- **Mục 2.** Gộp 2.1 và 2.2 còn một trang. Đổi tên 2.3 thành "Các ứng dụng có biểu hiện bẫy này không?" rồi trả lời bằng Bảng 3a. Chuyển Bảng 5 từ phụ lục vào đây.
+- **Mục 3.** Giữ nguyên. Thêm bảng bốn dòng: ký hiệu, ý nghĩa, nơi đo. Chuyển cách chia ngân sách 0,5/0,4/0,1 sang Mục 5.
+- **Mục 4.** Rút còn 1,5 trang. Định lý 4.1 còn ba dòng cộng ghi chú "phần nào là kiến thức kinh điển". Giữ đầy đủ Mệnh đề 4.4 và Định lý 4.8. Chuyển Mệnh đề 4.3, Bổ đề 4.5, Bổ đề 4.6(iii), Bổ đề 4.7 và phân bổ saga sang phụ lục, có chỉ dẫn tham chiếu. Đổi tên ký hiệu `D`.
+- **Mục 5.** Trong 5.3, thay "Cần bao nhiêu nhãn" bằng Bảng 1 và hai câu; sửa chi phí nhãn. Trong 5.4, thêm ví dụ cụ thể trước Thuật toán 1 (một lần gửi K-9: hop 1 thất bại, không gì chứng nhận được nên hỏi; một lần gửi Element: không có hop 1, chờ được chứng nhận 13,6 giây, bản ghi hiển thị Sent). Hình 1 đã kể câu chuyện này; hãy trỏ sang hình.
+- **Mục 6.** Giữ. Báo cáo tải host và thời gian dump. Chuyển "Planned agent harness" sang 7.8 hoặc bỏ.
+- **Mục 7.** Sắp xếp lại: 7.1 phép đo emulator (Bảng 3); 7.2 chạy lại với tham số đo được (Bảng 4, bổ sung kích thước bảng độ trễ và luật đã thẩm định); 7.3 mô phỏng dựa trên mô hình (Bảng 2 rút xuống redo, chỉ định lý, always-ask, rules, vetted rules, product, joint); 7.4 stress và phân bố (một đoạn, Bảng 6–7 sang phụ lục); 7.5 cơ chế (một đoạn). Bỏ RQ1–RQ2 khỏi thân bài (kiểm chứng kết quả cổ điển; chỉ một câu và dẫn sang phụ lục). Thay cột p90 của Bảng 3b bằng biểu đồ chấm của 83 độ trễ, chia theo lớp.
+- **Mục 7.8.** Rút còn ba câu trong Mục 8, hoặc thay bằng kết quả thí nghiệm agent.
+- **Mục 8.** Giữ phần Hạn chế và mức độ sát thực tế Android; gộp Đạo đức thành một đoạn; thêm cận lỗi tổng hợp tại đây hoặc Mục 3.
+- **Mục 9.** Thêm một câu cho mỗi hệ thống LIMBO, Agent libOS và VeriGUI để nêu khác biệt.
+- **Mục 10.** Ba câu rút ra bài học. Không cần số liệu.
+- **Ngân sách trang.** Nội dung chính đang đúng 12 trang. Cắt bớt (Mục 4 khoảng 0,7 trang; Mục 7.2–7.6 khoảng 1 trang; Mục 7.8 khoảng 0,2; phần giới thiệu 0,3) giải phóng khoảng 2 trang. Dùng chỗ đó cho thí nghiệm agent (0,3), ví dụ chạy từng bước (0,3), biểu đồ độ trễ (0,2), Bảng 5 chuyển vào thân bài (0,3) và các dòng luật đã thẩm định (0,1), vẫn còn một ít dự phòng.
 
-### 5. Style checklist for this paper
+### 5. Checklist phong cách viết cho bài báo
 
-1. One claim per sentence; split every sentence over 35 words (31 are over 45).
-2. At most one semicolon per paragraph; convert the rest to full stops.
-3. No number without its kind in the same sentence: measured, simulated, or exact. Table 4 numbers are "simulated with measured parameters" every time.
-4. Counts as fractions (20/20); percentages with one decimal; none in the abstract beyond the K-9 and Element counts.
-5. Define a term before first use or do not use it in that section: hop 1, G2, family, verdict, product, joint.
-6. One name per concept: "idempotent-retry app" in prose, G2 in theorems; "outbox evidence" in prose, hop 1 in theorems; either "escalation" or "ask".
-7. Replace "What makes X Y is Z" with "Z makes X Y".
-8. Move parenthetical cross-references to the end of the sentence or the next sentence.
-9. Bold lead-ins only where a reader scans (setup, baselines, metrics), not for argument steps.
-10. Italics only at a term's first definition; 94 `\emph` spans is too many.
-11. End a paragraph with its result, not an aphorism; delete closings like "certification uses what the labels show" unless they add information.
-12. State the simulation-measurement relationship once, early in Section 7, in three sentences.
-13. Every table caption answers "a measurement of what, with what n" in its first sentence.
-14. Lists of three only when there are three things; do not pad or cut to three.
-15. Read the abstract aloud; over 60 seconds is too long.
+1. Mỗi câu chỉ đưa ra một luận điểm; tách mọi câu dài trên 35 từ (có 31 câu trên 45 từ).
+2. Tối đa một dấu chấm phẩy trong mỗi đoạn; thay các dấu còn lại bằng dấu chấm.
+3. Không đưa con số nào mà thiếu loại kết quả trong cùng câu: đo thực tế, mô phỏng hay chính xác theo lý thuyết. Mọi số trong Bảng 4 đều phải được mô tả là "mô phỏng với tham số đo được".
+4. Viết số lượng dạng phân số (20/20); tỷ lệ phần trăm một chữ số thập phân; abstract không nêu thêm tỷ lệ ngoài số đếm của K-9 và Element.
+5. Định nghĩa thuật ngữ trước lần dùng đầu tiên hoặc đừng dùng trong mục đó: hop 1, G2, family, verdict, product, joint.
+6. Một tên cho mỗi khái niệm: dùng "ứng dụng tự retry idempotent" trong văn xuôi, `G2` trong định lý; dùng "bằng chứng Outbox" trong văn xuôi, `hop 1` trong định lý; chọn thống nhất "escalation" hoặc "ask".
+7. Thay cấu trúc "Điều khiến X thành Y là Z" bằng "Z khiến X thành Y".
+8. Chuyển tham chiếu trong ngoặc về cuối câu hoặc sang câu kế tiếp.
+9. Chỉ dùng phần mở đầu in đậm ở nơi người đọc cần quét nhanh (thiết lập, baseline, metric), không dùng cho từng bước lập luận.
+10. Chỉ in nghiêng thuật ngữ khi định nghĩa lần đầu; 94 đoạn `\emph` là quá nhiều.
+11. Kết thúc mỗi đoạn bằng kết quả chứ không bằng câu châm ngôn; bỏ những câu như "chứng nhận dùng những gì nhãn thể hiện" nếu không thêm thông tin.
+12. Trình bày mối liên hệ giữa mô phỏng và phép đo một lần, từ sớm trong Mục 7, bằng ba câu.
+13. Câu đầu mỗi chú thích bảng phải trả lời "đây là phép đo đại lượng gì, với cỡ mẫu n bao nhiêu?".
+14. Chỉ viết danh sách ba mục khi thực sự có ba ý; đừng thêm hoặc bỏ ý chỉ để đủ ba.
+15. Đọc to abstract; nếu mất hơn 60 giây thì quá dài.

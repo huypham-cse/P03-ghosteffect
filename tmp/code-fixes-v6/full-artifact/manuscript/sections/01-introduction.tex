@@ -1,0 +1,60 @@
+\section{Introduction}
+\label{sec:intro}
+
+\input{figures/fig1}
+
+Mobile GUI agents have moved from reading screens to acting on them. Systems such as
+AutoDroid~\cite{wen2024autodroid}, AppAgent~\cite{zhang2025appagent}, Mobile-Agent~\cite{wang2024mobileagent,ye2025mobileagentv3},
+UI-TARS~\cite{qin2025uitars} and AgentProg~\cite{tian2025agentprog} complete multi-step tasks in unmodified apps, and
+AndroidWorld~\cite{rawles2025androidworld} rewards them for changing app state. Many of these changes are \emph{effects}: a message sent,
+an event created, a transfer made. An effect should happen exactly once.
+
+Phones are hostile to that requirement: the low-memory killer reclaims processes, Doze defers jobs, and links drop~\cite{android_lmkd,android_doze,sentosa2025cellreplay}.
+If an interruption lands after the agent taps \emph{Send} but before it sees the confirmation (Figure~\ref{fig:teaser}a), the resumed agent cannot reliably tell \emph{whether
+the effect happened}; we call such an effect a \emph{ghost effect}. AgentProg redoes the step~\cite{tian2025agentprog} and checkpoint-resume frameworks re-execute the
+interrupted node~\cite{khan2026resume,langgraph_durable}, so a committed ghost effect is duplicated while the agent reports success.
+
+\para{Why existing fixes do not transfer.}
+For tool agents, idempotency keys cut duplicates from 28\% to 4\%, frontier models duplicate in 56--74\% of episodes when a read-back cannot reveal the outcome, and no
+verification-only policy is exactly-once under late commits without a bound on in-flight time~\cite{li2026exactlyonce,sah2026undobench,liu2026retrybench}. A GUI effect
+differs twice. The agent has no key: the app may attach its own request id, but a redo through the GUI creates a new request. And the only read-back is perceptual: a reader's
+errors repeat when it re-reads a screen, and a \emph{look-alike} (last month's identical transfer) makes a screen consistent with both outcomes.
+
+\para{Approach.}
+We express exactly-once as a \emph{budget}: the probability $\alpha$ of retrying a committed effect and $\beta$ of abandoning an absent one, conditional on the hidden outcome.
+Classical sequential analysis prices it and gives two floors, for weak evidence and for deciding before the effect is visible (\S\ref{sec:theory-main}). What makes the budget
+reachable is evidence, read as accessibility text: the app's local outbox (hop~1), a content-carried nonce that turns look-alikes into text matches (Lemma~\ref{lem:nonce}), and a
+digest of the history list. What makes it \emph{certifiable} is calibration over whole effects: per family, which survives any dependence among a family's views
+(Proposition~\ref{prop:family}), or jointly over the cascade's stopping region, which needs no independence across families (Proposition~\ref{prop:joint}). The lag gets a
+certified share of the budget, and a \emph{two-hop decomposition} (Theorem~\ref{thm:twohop}) hands late commits to apps that retry until acknowledged against a server that
+deduplicates within a horizon. A write-ahead \emph{effect ledger}, owned by a controller outside the agent, records each effect before the commit tap; the \alg planner
+(Algorithm~\ref{alg:recover}) combines families until the budget is certified and otherwise asks the user, whom we model as slow and fallible (Figure~\ref{fig:teaser}b).
+
+\para{Emulator measurements.} On Android~13 emulators with self-hosted servers we run \RealTwoN{} sends (faulted, plus controls) in three open-source apps, read with a screen-validating
+reader (\S\ref{sec:eval-real}). After a commit whose reply was lost, K-9~Mail never re-sent: by design it records a permanent error, keeps the mail in its Outbox, and its
+optional Sent folder never shows it. A scripted agent that redoes the step duplicated \RealKRecDup/\RealKRecN{} K-9 sends (distinct Message-IDs) and \RealCalRecDup/\RealCalRecN{}
+CalDAV events: these are measured ghost-effect duplicates. Element (Matrix) and DAVx5 (CalDAV) resolved the same fault exactly once by themselves (\RealElemRL/\RealElemRL{}
+and \RealCalN/\RealCalN), so for them the \emph{app's} retry is safe, on the same device and within the server's dedup horizon (24\,h for Synapse); an agent's redo is not.
+Element's evidence families were never wrong together once the message was visible (0/\RealCoN), and its post-restart visibility lag depends on the fault class
+(p90 \RealLagNetNinety--\RealLagFsNinety\,s, none censored).
+
+\para{Results.}
+We recommend \emph{joint} certification on fault-injected labels keyed by fault class. With the measured parameters it retries no committed Element send (CP upper
+\RsimFiveJointPvHi\%) at \RsimFiveJointAsk\% escalations with 5{,}000 labels per class, and asks on every interrupted K-9 send, where a same-evidence rule cascade retries
+\RsimKsentRulesPv--\RsimKnineRulesPv\% of committed mail. On Element simpler mechanisms also hold: Theorem~\ref{thm:twohop} alone never retries, at \RsimElemGtwoAsk\% escalations.
+Passive labels break every certified mode on Element; an unlogged lag tail breaks the product mode. In a model-based simulation of \SimN interrupted workflows, joint certification retries \SimJointPv\% at
+\SimJointAsk\% escalations with 2{,}000 labels (\NcalFJointAsk\% with 5{,}000); the product mode, which assumes independence across families, escalates \SimGhostAsk\%, as
+often as a rule cascade that retries \SimRulesRatio$\times$ more, and tuned rules match it at $P_{\mathrm{v}}\approx0.1\%$ without a guarantee. We ran no LLM agent and no phone.
+
+\para{Contributions.}
+\begin{itemize}[leftmargin=*,topsep=2pt,itemsep=1pt]
+\item A budgeted model of GUI-effect recovery with a lag share certified by waits and a fallible user, in which classical sequential-analysis results apply (\S\ref{sec:model}--\S\ref{sec:theory-main}).
+\item View-level certification calibrated on whole effects, in a product form (independence across families) and a joint form (none), with exact finite-sample bounds, and a persistent-error
+  floor that is tight for conditionally i.i.d.\ views (\S\ref{sec:theory-corr}--\S\ref{sec:theory-cal}).
+\item Two mobile reductions, the content-carried nonce and the two-hop decomposition with a dedup horizon and monitored hop-1 entries (\S\ref{sec:twohop}).
+\item \sys's ledger, fault-injected calibration pipeline and planner, and a model-based evaluation against a same-evidence rule cascade, with stress, calibration-population and
+  sample-size studies (\S\ref{sec:design}--\S\ref{sec:eval}).
+\item Emulator measurements of three apps with a screen-validating reader: per-app G2 classification and dedup horizon, a permanent misleading failed state, measured GUI-redo
+  duplicates, fault-class-conditioned visibility lags, family errors with no-observation separated, and a measured-parameter rerun of every planner mode against a
+  Theorem~\ref{thm:twohop}-only baseline (\S\ref{sec:eval-real}).
+\end{itemize}

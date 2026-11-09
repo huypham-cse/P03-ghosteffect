@@ -1,0 +1,125 @@
+\section{\sys Design}
+\label{sec:design}
+
+\sys is a recovery layer beneath an unmodified GUI agent. It intercepts the agent's actions, records effects before they commit, and after any interruption
+decides each ambiguous effect with the rules of \S\ref{sec:theory}. Its parts are an effect classifier, the ledger, the nonce writer, the probe families with their
+calibration store, and the \alg planner with its saga layer (Figure~\ref{fig:arch}).
+
+\input{figures/fig-arch}
+
+\subsection{Where it runs, and the ledger}
+\label{sec:design-ledger}
+\para{Topology.} The ledger must outlive the agent. In the host topology (our testbed), the controller is a host process separate from the agent, which drives the
+emulator over adb; killing the agent then cannot erase the ledger, by process separation alone. In the on-device topology, the controller is an Android foreground service
+in its own process, with the ledger in app-private storage. A foreground service has an elevated OOM priority but is not immune to the low-memory killer; safety does not depend on
+it surviving, because the write-ahead invariant below holds across its death, and the controller resolves outstanding records when it restarts (sticky service or next agent launch).
+We have built the host topology's decision core and ledger; the on-device service is design only.
+
+\para{Commit points.} Agents with structured plans label effects directly~\cite{tian2025agentprog}; otherwise a conservative classifier matches the target's text, content
+description or resource id against a per-locale lexicon (send, pay, save, post, book, confirm, delete), or a VLM flags it~\cite{lee2025verisafe,sun2025ossentinel}. A false
+positive costs one ledger write; a false negative falls back to the agent's native recovery.
+
+\para{Write-ahead ledger.} Each effect has a record \{\textit{id}, workflow, step, app package and version, description, nonce, history digest, attempt, state, $t_0$\}. States are
+\textsf{PLANNED} $\to$ \textsf{ISSUED} $\to$ \{\textsf{COMMITTED}, \textsf{ABSENT}, \textsf{PENDING}, \textsf{ASKED}\}, with \textsf{ABSENT} $\to$ \textsf{ISSUED} on retry
+(attempt$+1$, same nonce) and \textsf{COMMITTED} $\to$ \textsf{COMPENSATING} $\to$ \textsf{COMPENSATED} when a duplicate is detected. The invariant is write-ahead:
+\textsf{ISSUED} is committed in SQLite (WAL mode, \texttt{synchronous=FULL}) \emph{before} the commit tap is injected. On restart, every \textsf{ISSUED} record is a ghost-effect
+candidate and is resolved before the agent continues. This is the prepare--dispatch--settle discipline of Agent libOS~\cite{zhang2026agentlibos}, except that settlement is a
+statistical decision.
+
+\subsection{Content-carried nonce}
+\label{sec:design-nonce}
+A per-app field map names a free-text field that the app stores and displays: a private note on an event or contact, a memo on a transfer, a trailing tag on a message.
+Before the commit tap, \sys types \texttt{gx:} and six Crockford base-32 symbols (30 bits; the alphabet omits I, L, O, U) into that field, and a retry reuses the tag.
+The nonce probe reads the app's sent/history view through the accessibility tree and through in-app search, matches outgoing items of the verified account within edit distance~1,
+and ignores drafts, failed entries and notifications (Lemma~\ref{lem:nonce}). With $M{=}40$ visible tokens this gives $\epsilon_0\le\NonceEpsZero$ per view (Table~\ref{tab:nonce}).
+By default \sys uses only fields that the counterparty cannot see. Counterparty-visible fields (an SMS or chat body, a payment memo printed on a statement) need per-app opt-in, change
+the content of the effect, and break graders that compare content exactly, such as AndroidWorld's SMS and Markor checks, unless they strip \texttt{gx:} tags.
+
+\subsection{Probe families and calibration}
+\label{sec:design-probes}
+Each probe is a short navigation script plus a reader, grouped into families:
+(1)~\emph{hop-1}: count outbox and sent-list entries created after $t_0$ that match the ledger description or nonce (two views: outbox list, conversation status);
+(2)~\emph{nonce}: two views as above;
+(3)~\emph{digest}: before the tap the ledger stores a digest of matching history items; after recovery the probe counts matching items in the history list and in search results
+and reports whether a new one appeared. This answers look-alikes without a nonce, since last month's transfer is already in the digest;
+(4)~\emph{VLM}: a yes/no question about the ledger description, asked once each of the list, detail and search views. The VLM family is skipped when the digest shows a look-alike.
+Hop~1 reads the app's local database, and an app whose status is drawn only with the rendered history (Element) has no hop-1 family; the other three read the history as
+the app renders it, and in-app search often queries the server. They are therefore one
+\emph{evidence source}, and a stale history after a restart can fool all three at once. A server-backed search view inherits the hop-2 lag, so it counts toward ``absent'' only after the wait.
+
+\para{Calibration labels.} For each (app version, family, verdict level or region) the store holds one-sided Clopper--Pearson bounds (Lemma~\ref{lem:calib}(ii)) from calibration
+\emph{effects}, not reads. Lemma~\ref{lem:calib} needs effects drawn from the \emph{interrupted} population, so labels come from fault-injected runs on test accounts or a staging backend:
+the controller injects the fault classes of \S\ref{sec:impl} at the commit point, records the true outcome from the test backend, runs every family once per view on recovery, and logs the
+time from $t_0$ to visibility. Bounds and lag tables are keyed by the observable fault class (Lemma~\ref{lem:calib}(ii)), so the lab's fault mix need not match deployment's;
+an effect whose class the controller cannot tell uses the per-class maximum. Passive labels (confirmed sends, abandoned forms) are cheaper but miss cached history after a
+kill, optimistic entries and restart lags (\S\ref{sec:eval-pop},~\S\ref{sec:eval-real}). A label costs a fault-injected effect plus one read of every view ($\approx$15\,s), on test
+devices.
+
+\para{How many labels.} Validity holds at any sample size; small samples only widen the bounds and raise escalations (\S\ref{sec:eval-pop}). Table~\ref{tab:nsize} gives the sizes that
+make certification \emph{possible}. Product certification needs a few hundred effects per stratum at $\alpha{=}1\%$, because per-family bounds multiply. Joint certification and the waits
+need about $\ln(1/\delta)/\alpha_{\mathrm{test}}$ samples even with zero events, i.e.\ thousands at $\alpha{=}1\%$ and tens of thousands at $10^{-3}$, about twice that if the region's true
+rate is a quarter of $\alpha_{\mathrm{test}}$, and four times that when keyed by fault class. A single user produces nowhere near this per app version, so the store is
+pooled: lag tables per app and backend across versions (lag is a property of the network path and the app's sync, not its UI), and verdict bounds per app across versions and devices,
+with a shift test on a small sample of the new version that falls back to that sample's own bounds (more escalations, not fewer guarantees) when it detects an increase.
+The shift test is per family and level; pooling \emph{joint} regions across versions needs a region-level test, which we have not built. The nonce's
+false-match bound is analytic. Pooling across devices assumes the devices are exchangeable within a stratum (app version, locale, VLM); per-device drift is not detected yet.
+
+\input{generated/tab_nsize}
+
+\subsection{The \alg planner}
+\label{sec:design-planner}
+
+\begin{algorithm}[t]
+\caption{\alg: resolve one ghost effect $e$}
+\label{alg:recover}
+\small
+\begin{algorithmic}[1]
+\Require record $e$ (\textsf{ISSUED} at $t_0$); budget $(\alpha_e,\beta_e)$ from the saga layer; calibrated bounds $q$; lag tables
+\State $\alpha_t,\alpha_l,\beta_t\gets 0.5\alpha_e,\,0.4\alpha_e,\,0.9\beta_e$ \Comment{$\alpha_{\mathrm{cal}}$ via $\delta$}
+\State $\tau_a,\tau_c\gets$ largest thresholds certified for $\alpha_t,\beta_t$ \Comment{Prop.~\ref{prop:family} or \ref{prop:joint}}
+\State \Call{VerifyForeground}{$e$.app}; $P\gets1$; $d\gets\bot$; $\ell\gets\alpha_l$
+\If{$e$.app has a hop-1 family}
+  \State $\ell\gets\alpha_l/2$; $(s,r)\gets$ \Call{Readout}{hop-1} \Comment{entries after $t_0$}
+  \If{$s=$ com $\wedge$ (G2 $\vee$ local)} $P\gets q^{\mathrm{com}}_{\text{hop1}}(r)$; $d\gets$ com
+    \State $o\gets$ acked; \textbf{if} G2: $o\gets$ \Call{Monitor}{$e$} \Comment{bkgd., fallible}
+    \State \textbf{if} $o=$ acked $\wedge\,P\le\tau_c$: \Return \Call{Mark}{$e$, \textsf{COMMITTED}}
+    \State \textbf{if} $o\in\{$failed, stuck$\}$: $P\gets1$; $d\gets\bot$ \Comment{hand over}
+  \ElsIf{$s=$ abs} $P\gets q^{\mathrm{abs}}_{\text{hop1}}(r)$; $d\gets$ abs; \textbf{if} $P\le\tau_a$ \Return \Call{Retry}{$e$}
+  \EndIf
+\EndIf
+\If{$d\ne$ com \textbf{and} app not local}
+  \State $w\gets$ \Call{CertifiedWait}{$e$.app, $e$.class, $d{=}$abs ? $\ell/q_h$ : $\ell$} \Comment{$q_h{=}\max_r q^{\mathrm{abs}}_{\text{hop1}}(r)$}
+  \State \textbf{if} $w-\text{elapsed}>W_{\max}$ \Return \Call{Ask}{$e$}; \Call{WaitUntil}{$t_0+w$}
+\EndIf
+\For{$f\in$ [nonce, digest, VLM] available for $e$}
+  \State $(s,r)\gets$ \Call{Readout}{$f$} \Comment{one read per view}
+  \State \textbf{if} $s=\bot$ \textbf{continue}; \textbf{if} $d\notin\{\bot,s\}$ \textbf{break}
+  \State $P\gets P\cdot q^{s}_f(r)$; $d\gets s$
+  \State \textbf{if} $s=$ abs $\wedge P\le\tau_a$: \Call{VerifyForeground}{}; \Return \Call{Retry}{$e$}
+  \State \textbf{if} $s=$ com $\wedge P\le\tau_c$: \Return \Call{Mark}{$e$, \textsf{COMMITTED}}
+\EndFor
+\State \Return \Call{Ask}{$e$} \Comment{disagreement or not certifiable}
+\end{algorithmic}
+\end{algorithm}
+
+Algorithm~\ref{alg:recover} applies \S\ref{sec:theory} to one effect. \textsc{Readout} reads each view of a family once and returns the majority side and its count.
+The thresholds come from enumerating stopping assignments (at most $4^4$ per app, precomputed) or, for joint certification, from the fixed-sequence test. \textsc{CertifiedWait} returns
+the smallest logged commit-to-visibility time of the effect's fault class (the maximum over classes if unknown) whose CP upper bound on the exceedance probability is at most
+its argument; a logged effect that never became visible counts as an exceedance at every wait. \textsc{Retry} reuses the nonce. Four details matter in practice.
+
+\para{Hop 1 and monitoring.} A hop-1 verdict starts the product on either side, so the ``committed'' side of a G2 or local app is certified like any other declaration
+(its bound enters $B_{\mathrm{com}}$), and a hop-1 ``absent'' verdict relaxes its own wait $w_1$, with half of the lag share (Eq.~\eqref{eq:lagsplit}). For a G2 app with an outbox entry,
+\textsc{Monitor} marks the record \textsf{PENDING} and lets the agent continue; the controller re-reads hop~1 in the background until a terminal state. Its reads are fallible, so an
+``acknowledged'' entry whose hop-1 bound alone does not certify is corroborated by the end-to-end families, read in the background once the entry is acknowledged (and visible).
+A failed entry, or one pending longer than a stuck limit (120\,s) or close to the server's dedup horizon $D$ (Theorem~\ref{thm:twohop}), goes to the end-to-end path; there the wait is still measured from $t_0$, with $w_0$ certified from the
+unconditional lag table, which is what the proof of Eq.~\eqref{eq:lagsplit} needs. Two entries mean a duplicate, which is compensated or asked about.
+
+\para{Waiting.} The wait is the price of the lag share (Theorem~\ref{thm:main}(a,b)). If the certified wait exceeds $W_{\max}$ (120\,s), or recovery was delayed while the device
+dozed and no lag table exists for that state, the planner asks instead of waiting. Local-only apps have no hop~2, so their lag share is returned to the test share. A ``committed''
+reading needs no wait (A1), so a variant could read before waiting and declare early, at the cost of splitting $\beta_{\mathrm{test}}$ between the two reads of each view.
+
+\para{Asking and security.} The prompt names the effect, shows the pre-tap screenshot and the digest, and offers ``done'', ``not done'' and ``not sure''. An app that wins
+the foreground can redirect a retry~\cite{qian2026rebinding}, so \textsc{VerifyForeground} checks package, activity and window before every retry, compensation or prompt.
+
+\para{Saga layer.} A workflow's budget is split across effects by~\eqref{eq:kkt} with each step's strongest family as its probe; a duplicate of a reversible effect detected
+later (two nonce matches, or two hop-1 entries) triggers the compensating effect as a new ledger record.

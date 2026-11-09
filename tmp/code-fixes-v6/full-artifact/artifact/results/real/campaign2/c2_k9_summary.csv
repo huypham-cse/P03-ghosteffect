@@ -1,0 +1,12 @@
+mode,cell,n,committed,smtp_DATA_before_sync,app_state_late,shade_cleared_before,outbox_late_present,outbox_late_absent,outbox_late_bot,failure_notif_late,sync_new_DATA,copies_after_sync,app_state_after_sync,still_in_outbox_after_sync_ui,sendmsgs_new_DATA,copies_after_sendmsgs,app_state_after_sendmsgs,still_in_outbox_after_sendmsgs_ui,recompose_copies,recompose_distinct_msgids,sent_ui_first_s,sent_server_first_s,sent_ui_late,sent_server_end,sent_server_append_after_send_s
+nosent,bg_kill9/respdrop,3,3,1|1|1,Outbox:error,3,3,0,0,3,0,1|1|1,Outbox:error,present|present|present,0,1|1|1,Outbox:error,BOT|BOT|BOT,2|2|2,3,,,,,
+nosent,force_stop/respdrop,3,3,1|1|1,Outbox:error,3,3,0,0,0,0,1|1|1,Outbox:error,present|present|present,0,1|1|1,Outbox:error,BOT|BOT|BOT,2|2|2,3,,,,,
+nosent,netcut/respdrop,3,3,1|1|1,Outbox:error,3,3,0,0,3,0,1|1|1,Outbox:error,present|present|present,0,1|1|1,Outbox:error,BOT|BOT|BOT,2|2|2,3,,,,,
+nosent,none/acked,3,3,1|1|1,gone,3,0,3,0,0,0,1|1|1,gone,absent|absent|absent,0,1|1|1,gone,BOT|BOT|BOT,||,0,,,,,
+nosent,none/respdrop,3,3,1|1|1,Outbox:error,3,3,0,0,3,0,1|1|1,Outbox:error,present|present|present,0,1|1|1,Outbox:error,BOT|BOT|BOT,2|2|2,3,,,,,
+sent,bg_kill9/acked,3,3,1|1|1,Sent:no_outbox_state,3,0,3,0,0,0,1|1|1,Sent:no_outbox_state,absent|absent|absent,0,1|1|1,Sent:no_outbox_state,absent|absent|absent,||,0,40.1|39.9|41.7,40.1|39.9|41.7,present|present|present,1|1|1,5.2|5.3|5.3
+sent,bg_kill9/net_pre,3,0,0|0|0,Outbox:ready,3,3,0,0,3,3,1|1|1,Sent:no_outbox_state,absent|absent|absent,0,1|1|1,Sent:no_outbox_state,absent|absent|absent,||,0,||,||,absent|absent|absent,1|1|1,122.8|117.7|122.9
+sent,bg_kill9/respdrop,3,3,1|1|1,Outbox:error,3,3,0,0,3,0,1|1|1,Outbox:error,present|present|present,0,1|1|1,Outbox:error,present|present|present,2|2|2,3,||,||,absent|absent|absent,0|0|0,never(orig)|never(orig)|never(orig)
+sent,force_stop/respdrop,2,2,1|1,Outbox:error,2,2,0,0,0,0,1|1,Outbox:error,present|present,0,1|1,Outbox:error,present|present,2|2,2,|,|,absent|absent,0|0,never(orig)|never(orig)
+sent,none/acked,4,4,1|1|1|1,Sent:no_outbox_state,4,0,4,0,0,0,1|1|1|1,Sent:no_outbox_state,absent|absent|absent|absent,0,1|1|1|1,Sent:no_outbox_state,absent|absent|absent|absent,|||,0,39.6|39.5|42.2|42.9,39.6|39.5|42.2|42.9,present|present|present|present,1|1|1|1,5.2|5.2|5.2|3.3
+sent,none/respdrop,3,3,1|1|1,Outbox:error,3,3,0,0,3,0,1|1|1,Outbox:error,present|present|present,0,1|1|1,Outbox:error,present|present|present,2|2|2,3,||,||,absent|absent|absent,0|0|0,never(orig)|never(orig)|never(orig)

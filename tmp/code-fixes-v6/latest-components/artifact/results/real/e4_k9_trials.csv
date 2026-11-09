@@ -1,0 +1,22 @@
+app,trial,fault,timing,nonce,kill_method,proc_dead,server_copies,outcome,n_smtp_data,server_copies_at_early_read,t_server_arrival_after_restart_s,early_t,early_outbox_copies,early_fail_text,late_outbox_copies,server_copies_after_sync,outbox_after_sync,late_fail_text,shade_text,early_indicator,late_indicator
+k9,0,bg_kill,respdrop,mx909105k00,am_kill,True,1,exactly_once,1,1,14.7,14.7,2,,2,1,,,Failed to send some messages / Unable to send message,pending,pending
+k9,1,force_stop,net_pre,mx909218k01,force_stop,True,0,lost,1,0,,15.2,2,,2,1,,,,pending,pending
+k9,2,bg_kill,respdrop,mx909338k02,am_kill,True,1,exactly_once,1,1,15.6,15.6,2,,2,1,,,Failed to send some messages / Unable to send message,pending,pending
+k9,3,none,respdrop,mx909451k03,,,1,exactly_once,1,1,14.3,14.3,2,,2,1,,,Failed to send some messages / Unable to send message,pending,pending
+k9,4,bg_kill,acked,mx909562k04,am_kill,True,1,exactly_once,1,1,15.2,15.2,0,,0,1,,,Failed to send some messages / Unable to send message,committed,committed
+k9,5,bg_kill,net_pre,mx909674k05,am_kill,True,0,lost,1,0,,16.2,2,,2,1,,,Failed to send some messages / Unable to send message,pending,pending
+k9,6,none,net_pre,mx909796k06,,,0,lost,1,0,,14.4,2,,2,1,,,Failed to send some messages / Unable to send message,pending,pending
+k9,7,none,respdrop,mx909928k07,,,1,exactly_once,1,1,14.9,14.8,2,,2,1,,,Failed to send some messages / Unable to send message,pending,pending
+k9,8,none,respdrop,mx910040k08,,,1,exactly_once,1,1,15.0,15.0,2,,2,1,,,Failed to send some messages / Unable to send message,pending,pending
+k9,9,bg_kill,respdrop,mx910152k09,am_kill,True,1,exactly_once,1,1,16.2,16.2,2,,2,1,,,Failed to send some messages / Unable to send message,pending,pending
+k9,10,none,net_pre,mx910265k10,,,0,lost,1,0,,14.8,2,,2,1,,,Failed to send some messages / Unable to send message,pending,pending
+k9,11,force_stop,net_pre,mx910397k11,force_stop,True,1,exactly_once,1,0,,15.6,2,,0,1,,,Failed to send some messages / Unable to send message,pending,committed
+k9,12,bg_kill,net_pre,mx910518k12,am_kill,True,0,lost,1,0,,15.9,2,,2,1,,,Failed to send some messages / Unable to send message,pending,pending
+k9,13,bg_kill,net_pre,mx910641k13,am_kill,True,0,lost,1,0,,15.3,2,,2,1,,,Failed to send some messages / Unable to send message,pending,pending
+k9,14,force_stop,respdrop,mx910764k14,force_stop,True,1,exactly_once,1,1,15.0,15.0,2,,2,1,,,,pending,pending
+k9,15,bg_kill,acked,mx910874k15,am_kill,True,1,exactly_once,1,1,15.4,15.4,0,,0,1,,,Failed to send some messages / Unable to send message,committed,committed
+k9,16,force_stop,net_pre,mx910985k16,force_stop,True,0,lost,1,0,,15.2,2,,2,1,,,,pending,pending
+k9,17,none,net_pre,mx911104k17,,,0,lost,1,0,,14.5,2,,2,1,,,Failed to send some messages / Unable to send message,pending,pending
+k9,18,force_stop,respdrop,mx911234k18,force_stop,True,1,exactly_once,1,1,15.6,15.6,2,,2,1,,,,pending,pending
+k9,19,bg_kill,acked,mx911346k19,am_kill,True,1,exactly_once,1,1,15.7,15.7,0,,0,1,,,Failed to send some messages / Unable to send message,committed,committed
+k9,20,force_stop,respdrop,mx911459k20,force_stop,True,1,exactly_once,1,1,16.7,16.7,2,,2,1,,,,pending,pending

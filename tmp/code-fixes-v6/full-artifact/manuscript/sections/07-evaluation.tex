@@ -1,0 +1,104 @@
+\section{Evaluation}
+\label{sec:eval}
+
+We ask seven questions. \textbf{RQ1}: Do the guarantees hold, and what do they cost? \textbf{RQ2}: What happens when reads are correlated or misses persist?
+\textbf{RQ3}: How does \sys compare with recovery strategies, including asking and a rule cascade over the same evidence? \textbf{RQ4}: Does it stay within budget when the world
+departs from its model? \textbf{RQ5}: What do calibration population, cross-family dependence and calibration size cost? \textbf{RQ6}: What do its mechanisms contribute? \textbf{RQ7}: What do real apps on an emulator do, and how does each planner mode fare with their measured parameters?
+Every number is exact computation, simulation, host or emulator measurement, inserted by a generator from the artifact's CSVs; none measures an LLM agent, a VLM or a phone.
+
+\subsection{Setup}
+\label{sec:setup}
+\para{Model-based simulation.} The simulator instantiates \S\ref{sec:model} with 8 app profiles that differ in G2, hop-1 observability, nonce field (private, counterparty-visible,
+none), an enumerable history (for the digest), look-alike probability, local-only storage, and outbox durability. Each interrupted workflow has 1--4 effects; faults (agent kill, app
+kill, blackout, both) and interruption points follow \S\ref{sec:impl}. The \emph{default world} departs from the planner's assumptions: nonce misses are persistent ($\eta{=}1\%$ hidden
+field, plus 0.6\% per view); hop-1 views err at 1--5\% each plus 0.5\% persistently, and the Monitor misreads 1\% of terminal states; digest views miss 3\% each plus 2\% persistently;
+VLM views err at $\epsilon_0{\sim}U[0.06,0.26]$, $\epsilon_1{\sim}U[0.04,0.20]$, with within-view correlation 0.6 and cross-view correlation 0.1 (single-screen error is a free
+parameter~\cite{pan2024autonomous}). The user answers wrongly on 5\% of asks (10\% with a look-alike) and takes 60\,s. Calibration uses 2{,}000 whole effects per app and outcome, each read by every family; lag tables have 20{,}000 times; $\delta=\alpha/(10K)$
+with $K{=}11$ (product), 8 (source families) or 5 (joint). All policies see the same \SimN interrupted workflows (5 seeds $\times$ 2{,}400); we report Clopper--Pearson intervals and exact
+McNemar tests against the product planner with Holm correction.
+
+\para{Baselines.} \emph{Redo}~\cite{tian2025agentprog}; \emph{checkpoint-resume}~\cite{langgraph_durable,khan2026resume}; \emph{Atomix-style} adapters with one
+read-back~\cite{mohammadi2026atomix}; \emph{verify-before-retry}~\cite{mansoor2026verified}; \emph{ledger + key}~\cite{li2026exactlyonce}; four that may ask; and the \emph{re-read
+SPRT} of our earlier design. The \emph{same-evidence rules} have \sys's ledger, hop~1 with the same fallible Monitor, the same families read once per view, a fixed 10\,s wait and
+asking: an acknowledged entry or a nonce match means done, retry only if every available family reads absent, otherwise ask. A \emph{lenient} variant acts on the first
+unanimous family unless another contradicts it, and a \emph{rule family} sweeps the wait (5, 10, 30, 60\,s) and the quorum (all families, all but the VLM, any two). The
+\emph{Theorem~\ref{thm:twohop}-only} baseline classifies each app's G2 status offline and never retries: a G2 app's acknowledged hop-1 entry means done, everything else is asked.
+\emph{Metrics}: dup and loss from any cause (\% of workflows, including wrong user answers); escalations (\% of workflows); $P_{\mathrm{v}}$, the fraction of committed effects the planner
+itself retried, which is the guaranteed quantity~\eqref{eq:guarantee}; $L_{\mathrm{v}}$, its loss-side analogue; and blocking recovery seconds.
+
+\subsection{RQ1: Guarantees and their price}
+\label{sec:eval-guar}
+For an i.i.d.\ probe the exact error probabilities are within budget in \SprtAllWithin \SprtCells cells and the SPRT stays within \SprtGapMax reads of~\eqref{eq:lb};
+trusting a nominal ``92\% accurate'' claim violates the budget for \CalNomViol\% of probe types (appendix). Light-tailed lags certify $\alpha_{\mathrm{lag}}{=}10^{-3}$ in
+\LagLogThree; a Pareto tail of shape $\kappa{=}1.1$ (our choice, after the heavy-tailed delays Li reports~\cite{li2026exactlyonce}) needs \LagParetoTwo{} at $10^{-2}$ and
+\LagParetoThree{} at $10^{-3}$ (Table~\ref{tab:lag}).
+
+\subsection{RQ2: Correlated reads and persistent misses}
+\label{sec:eval-robust}
+With errors correlated within a view, an SPRT that re-reads one view reaches \CorrNaiveOne\% duplicates at $\rho{=}1$, while reading each view once keeps it at most
+\CorrViewWithinMax\% (Table~\ref{tab:corr}, appendix). Across views, a view-level SPRT that assumes independence fails (\CorrViewCrossTwo\% at $\rho{=}0.2$); the certified
+family verdict stays at or below \CorrCertMaxHi\%, escalating once all views being wrong exceeds the budget.
+
+
+\subsection{RQ3: Comparison with existing recovery}
+\label{sec:eval-e2e}
+Table~\ref{tab:planner} replays the same \SimN interrupted workflows under every policy. Redo and checkpoint-resume duplicate \SimRedoDup\% and \SimCkptDup\% of workflows.
+A durable Atomix log removes the agent-kill duplicates of the in-memory port (\SimAtomixDup\% $\to$ \SimAtomixDurDup\%), but its single read loses \SimAtomixDurLoss\%. Ledger + key has
+the lowest dup + loss among non-asking baselines, yet retries \SimKeyPv\% of committed effects (\ClassKeyGtwoPv\% on G2 apps, where its single read precedes the server commit).
+Always-ask has $P_{\mathrm{v}}{=}0$ but \SimAskAllDup\% duplicates and \SimAskAllLoss\% losses from wrong answers; nonce + ask escalates \SimNonceAskAsk\% yet retries \SimNonceAskPv\%,
+because one family with persistent misses cannot certify 1\%. The re-read SPRT retries \SimVonePv\%, over budget. \sys retries \SimGhostPv\% (CP upper \SimGhostPvHi\%) and escalates \SimGhostAsk\% of interrupted workflows with product certification, and retries
+\SimJointPv\% at \SimJointAsk\% escalations with joint certification (\SimSrcAsk\% with source families). Theorem~\ref{thm:twohop} alone retries nothing but escalates
+\SimGtwoAsk\% of workflows, because it cannot clear any effect of a non-G2 app.
+
+\para{Same evidence, rules vs.\ certification.} The default rule cascade escalates about as often as the product mode (\SimRulesAsk\%) with similar total errors
+($p{=}\SimRulesP$ for duplicates), because wrong user answers dominate both, but retries \SimRulesPv\% of committed effects (CP upper \SimRulesPvHi\%), \SimRulesRatio$\times$
+more; the lenient variant retries \SimRulesLenPv\% (over budget). Tuning the rules narrows the gap (Figure~\ref{fig:pareto}, top). At $P_{\mathrm{v}}\approx0.1\%$ the best of
+\RuleN{} variants (\RuleBestThreeName) escalates \RuleBestThreeAsk\%, as many as the product mode run at $\alpha{=}0.03$; at $P_{\mathrm{v}}\approx0.5\%$ the product mode, run at a
+nominal $\alpha{=}0.1$ (a 10\% guarantee, not 0.5\%), escalates \SweepTenAsk\% against \RuleBestTenAsk\% for the best rule, and joint certification \SweepJointTenAsk\% at
+$P_{\mathrm{v}}{=}\SweepJointTenPv\%$; no rule goes below \RuleMinAsk\% escalations. At $\alpha{=}0.03$ joint certification escalates \SweepJointThreeAsk\% at \SweepJointThreePv\%,
+more than the tuned rules. The default world satisfies A2 by construction, which favours the product mode. What rules lack is a guarantee that follows the labels: the default
+rules exceed the budget in \StressRulesOver{} of the 14 stress rows of Table~\ref{tab:stress} and in \PopRulesOver{} of the \PopRows{} interrupted-population rows of Table~\ref{tab:pop},
+and on measured K-9 profiles they retry \RsimKsentRulesPv--\RsimKnineRulesPv\% (\S\ref{sec:eval-real}). Nominal i.i.d.\ bounds escalate least but exceed the budget at every $\alpha\ge10^{-2}$.
+
+\input{generated/tab_planner}
+\input{generated/fig_pareto}
+
+\para{Where escalations go, and what certifies.} By app class, local apps escalate \ClassLocalAsk\%, G2 apps \ClassGtwoAsk\% and other apps with a hop-1 or digest family
+\ClassNonGtwoAsk\%. The VLM-only app escalates \ClassVlmAsk\%; this follows from its calibrated bounds at the configured error rates, not from a theorem. Of interrupted effects, \WhyStruct\% escalate because no verdict could certify, \WhyWait\% because the wait exceeds $W_{\max}$, \WhyContra\% on contradictions, and
+\WhyUncert\% because agreeing evidence fell short of $\tau$, the only slack a tighter analysis could recover (a lower bound is open). Among certified decisions, hop~1 enters \ShareHop\%, the nonce \ShareNonce\%, the digest \ShareDigest\%, and the VLM is needed in
+\ShareVlm\%: the accessibility-text families certify, and the VLM is a weak tie-breaker.
+
+\para{Over-delivery and user.} The product mode's $P_{\mathrm{v}}$ is \SimBudgetRatio$\times$ below the budget: the lag and calibration shares are barely used, and the certified
+union bounds average \DecompBcp\% of the 0.5\% test share against \DecompBtrue\% with the true rates (CP slack \DecompCPratio$\times$). Tightening $\alpha$ from $10^{-1}$ to $10^{-3}$
+raises its escalations from \SweepAskLo\% to \SweepAskHi\%. With a user wrong on 20\% of asks, always-ask reaches \UserAskAllTwenty\% dup + loss, the rules \UserRulesTwenty\%, and
+the product mode \UserGhostTwenty\%.
+
+\subsection{RQ4--RQ5: Stress, calibration population, dependence, size}
+\label{sec:eval-stress}\label{sec:eval-pop}
+Under generative models that depart from the planner's (Table~\ref{tab:stress}, appendix), the product mode stays within budget (CP upper at most \StressMaxHi\%) except where
+calibration misses what deployment sees: heavy lag tails absent from the logs give $P_{\mathrm{v}}{=}\StressLag\%$ (CP upper \StressLagHi\%; logged, it escalates \StressLagCalAsk\%),
+and an undetected delayed recovery in Doze gives \StressDoze\% (detected, it escalates \StressDozeAsk\%). A G2-classified app whose server does not deduplicate duplicates by
+itself (\StressNodedupDup\% of workflows): G2 is an app property. In an \emph{interrupted world} (stale history after restarts, optimistic entries, longer lags; Table~\ref{tab:pop}),
+passive labels bring the product mode to \PopIwPProd\% (CP upper \PopIwPProdHi\%) and joint to \PopIwPJoint\%, fault-injected labels to \PopIwFProd\% and \PopIwFJoint\%, while the
+rules stay at \PopIwFRules\%: certification uses what the labels show. Under a 5\% common-mode stale history (violating A2) the product mode retries \PopCmCProd\%, source
+families \PopCmCSrc\% and joint \PopCmCJoint\%. Their cost is labels: at 2{,}000 effects source and joint escalate \NcalESrcAsk\% and \NcalEJointAsk\% against \NcalEProdAsk\%,
+at 5{,}000 \NcalFSrcAsk\% and \NcalFJointAsk\% (Table~\ref{tab:nsize}). Under version drift ($\kappa{=}10$) the product mode reaches \DriftTenPv\% (CP upper \DriftTenPvHi\%), and a
+200-effect shift test keeps it at most \DriftTenTestPvHi\%.
+
+\subsection{RQ6: Mechanisms}
+\label{sec:eval-mech}
+Without the nonce the product mode escalates \SimNoNonceAsk\%, without hop~1 \SimNoHopAsk\%, without the digest \SimNoDigestAsk\% (Table~\ref{tab:planner}); nominal i.i.d.\
+bounds escalate \SimNoCalAsk\% but retry \SimNoCalPv\%; declaring when uncertified loses \SimNoAskLv\% of absent effects; visible nonces cut escalations to \SimVisAsk\% but alter
+\SimAltered\% of effects; a uniform budget split changes nothing significant ($p{=}\SimPUni$). A six-symbol nonce has $\epsilon_0\le\NonceEpsZero$, and giving every saga step the
+full $\alpha$ yields duplicate probabilities up to \SagaNaiveSixteen\% at $k{=}16$ (Tables~\ref{tab:nonce},~\ref{tab:saga}, appendix).
+
+\input{generated/real_section}
+
+\subsection{Planned device study}
+\label{sec:device-plan}
+RQ7 measured app behaviour, not agents. The device study will run M3A, T3A, AgentProg, UI-TARS-1.5 and Mobile-Agent-v3 on 40 effectful tasks over the apps of
+Table~\ref{tab:apps} (appendix) with the faults of \S\ref{sec:impl}, and measure the agents' native duplicate, loss and false-success rates; VLM error and correlation on real screens;
+lags under Doze and real memory pressure; commit-classifier recall; and \sys end to end. Hypotheses: \textbf{H1} redo-based agents duplicate most committed interrupted effects
+(a scripted redo did so on K-9 and CalDAV every time, Table~\ref{tab:real}); \textbf{H2} VLM errors across views are positively correlated; \textbf{H3} force-stop breaks G2 for
+WorkManager-based outboxes (not supported for Element or DAVx5, which recovered after relaunch); \textbf{H4} \sys keeps $P_{\mathrm{v}}$ within budget and escalates at least
+$3\times$ less than always-ask.

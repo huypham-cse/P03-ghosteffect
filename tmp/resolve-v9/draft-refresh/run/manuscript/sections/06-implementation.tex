@@ -1,0 +1,24 @@
+\section{Implementation}
+\label{sec:impl}
+
+\para{Built.} The ledger, the family-verdict calibration (Clopper--Pearson), the certification tables of Proposition~\ref{prop:family}, the certified-wait lookup,
+the planner, the Bayes rule, and the KKT allocator are written in Python using only the standard library, together with the simulator of \S\ref{sec:eval}. The ledger is SQLite
+in WAL mode with \texttt{synchronous=FULL}, owned by a controller process. On the build host (a laptop running macOS), an \textsf{ISSUED} append takes \LedgerPfifty\,ms at the median
+and \LedgerPninetyfive\,ms at p95, or \LedgerFullPfifty/\LedgerFullPninetyfive\,ms with \texttt{F\_FULLFSYNC}, which forces the disk cache; a record takes \LedgerBytes\,bytes.
+A host write-ordering test SIGKILLs a child that loops over \emph{plan, issue, tap, settle} at random times: over \LedgerTrials kills and \LedgerTaps taps, every tapped effect
+was \textsf{ISSUED} or later (\LedgerViol violations); SIGKILL keeps the page cache, so durability is tested on the emulator (\S\ref{sec:eval-real}). Host timings are not phone
+timings. A DTMC analyzer and a PRISM model~\cite{kwiatkowska2011prism} are in the artifact; we have not run PRISM or Storm~\cite{hensel2022storm}.
+
+\para{Emulator testbed (built).} Android~13 (API~33, arm64) emulators run F-Droid builds of the apps against self-hosted servers on the host. A TCP fault proxy in front of
+each server forwards a matching request (Matrix \texttt{PUT \dots/send/\dots/<txnId>}, SMTP end of \texttt{DATA}, CalDAV \texttt{PUT}) so the server commits, then drops the reply
+and resets the connection (or, in one cell, withholds it until the client times out; or keeps dropping the app's immediate retries until the fault, ``sticky''); it logs every
+request with its id. A scripted driver (uiautomator, adb; no LLM) sends a nonce-tagged message and applies a fault: background + \texttt{kill -9}, \emph{force-stop}, or a
+20\,s \emph{network cut}; it relaunches the app and polls until 20\,s after the message is seen, or for up to 300\,s. Its reader returns $\bot$ unless the foreground package,
+the room title and the timeline are verified, and ``absent'' only on a verified screen scrolled to the bottom with the previous message visible. Ground truth comes from the
+server only. A scripted \emph{GUI redo} recomposes and re-sends the same content, as an agent that trusts the screen would.
+
+\para{Planned agent harness.} The agent study extends AndroidWorld~\cite{rawles2025androidworld}: \sys wraps the action step, appends \textsf{ISSUED} and types the nonce before a
+classified commit action; app databases are read only by the grader. Further faults: agent kill; background-then-kill reaped by \texttt{lmkd} under an
+allocation stressor (\texttt{am kill} spares perceptible processes~\cite{android_adb}: it spared Element, whose sync component keeps it perceptible, so background-then-kill ghost effects may be
+rarer for such G2 apps); and delayed recovery under Doze, App Standby buckets and Data
+Saver~\cite{android_doze,android_standby}, which need the screen off and so matter only when the agent died and the phone slept. Physical phones differ in LMK thresholds and OEM battery managers (\S\ref{sec:discussion}).

@@ -1,0 +1,39 @@
+\section{Model}
+\label{sec:model}
+
+\para{Effects, outcomes, lag.}
+A workflow runs effects $e_1,\dots,e_k$. For effect $e$, let $t_0$ be the time the ledger records \textsf{ISSUED}, immediately before the commit tap,
+and let $T\in[0,\infty]$ be the time from $t_0$ until the effect becomes visible to end-to-end probes (in flight, server, rendering).
+The hidden outcome is $X=\mathbf 1\{T<\infty\}$: $X{=}1$ means \emph{committed}, possibly later; $X{=}0$ means \emph{absent}. The lag tail is
+$G(w)=\PP(T>w\mid X{=}1)$, and $G(w)\to0$ as $w\to\infty$ by definition of $X$. Recovery ends with $C_e$ applied copies: a \emph{duplicate} is $C_e\ge2$
+(retrying when $X{=}1$) and a \emph{loss} is $C_e=0$ (not retrying when $X{=}0$). Partial effects are modeled as several effects.
+
+\para{Views and probe families.}
+A \emph{view} is one rendering read by one reader (the history list through the accessibility tree, a detail screen through a VLM). Views of the same kind of evidence form a \emph{probe family}: hop-1 (the app's local outbox and sent list), nonce, digest
+(a count of matching history items compared with a snapshot taken before the tap), and VLM. A read at time $t$ of view $v$ returns $Y\in\{0,1\}$ ($1$ = ``committed'').
+We assume:
+\begin{itemize}[leftmargin=*,topsep=1pt,itemsep=0pt]
+\item[\textbf{A1}] (\emph{lag}) A read of an end-to-end view at time $t$ has law $p^v_1$ if $X{=}1$ and $T\le t-t_0$, and $p^v_0$ otherwise:
+an effect that is not yet visible looks absent. Hop-1 views observe the outbox entry, which exists from the tap on; a view qualifies as hop~1 only if its content
+does not depend on rendering the end-to-end state (Element's send-state indicator does not qualify: it is drawn with the lagged timeline row, \S\ref{sec:eval-real}).
+\item[\textbf{A2}] (\emph{independence across families}) Given $X$ and visibility, readings of different families are independent.
+Readings of views \emph{within} a family may be arbitrarily dependent, and the planner reads each view at most once. Only product certification
+(Proposition~\ref{prop:family}) uses A2; joint certification (Proposition~\ref{prop:joint}) does not.
+\end{itemize}
+Re-reading a view adds nothing in this model (a reader tends to repeat its answer). For a binary view, $\epsilon_0=p_0(1)$ is the false-``committed'' rate and $\epsilon_1=p_1(0)$ the false-``absent'' rate;
+$D_1=\KL(p_1\|p_0)$, $D_0=\KL(p_0\|p_1)$, and the view is \emph{distinguishing} if $D_0>0$. Theorem~\ref{thm:main} treats the classical case of a family whose
+views are conditionally i.i.d.; \S\ref{sec:theory-corr} drops this.
+
+\para{Actions, user, guarantees.}
+After restart the planner may \emph{observe} a view (cost $c_v$), \emph{retry}, \emph{declare} the effect done, \emph{ask} the user, or \emph{compensate} a
+reversible effect. Asking is itself a noisy probe: the user answers wrongly with probability $\epsilon_u$ (higher when a look-alike is on screen), after a delay
+$c_{\mathrm{ask}}$. A policy is a possibly randomized stopping rule plus a terminal action. It meets an $(\alpha,\beta)$ \emph{guarantee} if its own
+decisions satisfy
+\begin{equation}
+\PP(\text{retry}\mid X{=}1)\le\alpha \quad\text{and}\quad \PP(\text{declare}\mid X{=}0)\le\beta .
+\label{eq:guarantee}
+\end{equation}
+The guarantee is conditional on $X$, so it needs no prior. Exactly-once is $\alpha{=}\beta{=}0$. Errors introduced by wrong user answers are outside~\eqref{eq:guarantee}
+and are reported separately (\S\ref{sec:eval}). \sys splits each effect's duplicate budget into a test share, a lag share (paid in waiting time) and a calibration share,
+$\alpha=\alpha_{\mathrm{test}}+\alpha_{\mathrm{lag}}+\alpha_{\mathrm{cal}}$ with weights $0.5/0.4/0.1$, and $\beta=\beta_{\mathrm{test}}+\beta_{\mathrm{cal}}$ with $0.9/0.1$. These weights are
+a design choice; the guarantee holds for any split.

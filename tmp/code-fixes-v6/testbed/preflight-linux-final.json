@@ -1,0 +1,63 @@
+{
+  "utc_ns": 1794116272414218713,
+  "kind": "reconstruction preflight",
+  "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+  "sqlite": "3.45.1",
+  "platform": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "machine": "x86_64",
+  "cpus": 8,
+  "linux_kvm_exists": false,
+  "linux_kvm_access": false,
+  "adb_exists": false,
+  "java_available": false,
+  "sdk_root": "/mnt/d/NCKH/mobisys/P03-ghosteffect/runtime/android-sdk",
+  "assets": [
+    {
+      "file": "im.vector.app_40106622.apk",
+      "present": false,
+      "hash_matches": false
+    },
+    {
+      "file": "com.fsck.k9_39046.apk",
+      "present": false,
+      "hash_matches": false
+    },
+    {
+      "file": "at.bitfire.davdroid_405210002.apk",
+      "present": false,
+      "hash_matches": false
+    },
+    {
+      "file": "ws.xsoh.etar_57.apk",
+      "present": false,
+      "hash_matches": false
+    },
+    {
+      "file": "greenmail.jar",
+      "present": true,
+      "hash_matches": true
+    }
+  ],
+  "backends": {
+    "matrix-synapse": {
+      "expected": "1.164.2",
+      "installed_here": null,
+      "matches": false
+    },
+    "Radicale": {
+      "expected": "3.9.0",
+      "installed_here": null,
+      "matches": false
+    }
+  },
+  "android_connected": false,
+  "status": "ANDROID_NOT_READY",
+  "not_verified": [
+    "backend accounts/reset/snapshots",
+    "APK signatures and installed versions",
+    "actual GUI reader profiles",
+    "models and five framework adapters",
+    "calibration/certificates",
+    "scientific campaign results"
+  ]
+}

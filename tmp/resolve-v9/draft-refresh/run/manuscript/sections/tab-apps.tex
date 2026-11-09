@@ -1,0 +1,23 @@
+\begin{table}[!htbp]
+\centering
+\caption{Testbed apps. Hop-2 dedup basis from protocol specifications~\cite{matrix_spec,rfc4791,rfc9110,rfc5321}; candidate nonce field from the app's UI. Retry behavior,
+failed states and hop-1 visibility are measured, not assumed: so far for Element (with Synapse), Etar + DAVx5 (with Radicale) and K-9 Mail 24.0 (with GreenMail instead of
+Postfix), Table~\ref{tab:real}; the others are planned.}
+\label{tab:apps}
+\footnotesize
+\setlength{\tabcolsep}{2pt}
+\begin{tabular}{@{}lll l@{}}
+\toprule
+App & Backend & Hop-2 dedup basis & Candidate nonce field \\
+\midrule
+Element & Synapse & Matrix transaction id & message body (visible) \\
+Etar + DAVx5 & Radicale & CalDAV URL + If-None-Match & event description \\
+Tasks.org + DAVx5 & Radicale & CalDAV URL + If-None-Match & task note \\
+Joplin & WebDAV & \texttt{PUT} by note id & note body \\
+Thunderbird (K-9) & Postfix & none (SMTP) & mail body (visible) \\
+Simple SMS & SMS & none & message body (visible) \\
+MockBank-A / B & ours & request id / none & private note \\
+Pro Expense, Markor & local & n/a & note / file \\
+\bottomrule
+\end{tabular}
+\end{table}

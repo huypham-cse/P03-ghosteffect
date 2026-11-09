@@ -1,0 +1,13 @@
+{
+  "kind": "adb-sequential-bracketed-capture",
+  "serial": "emulator-5580",
+  "mono_start_ns": 58396265000000,
+  "mono_end_ns": 58411875000000,
+  "utc_ns": 1794120460226694200,
+  "foreground_before": "ws.xsoh.etar/com.android.calendar.AllInOneActivity",
+  "foreground_after": "ws.xsoh.etar/com.android.calendar.AllInOneActivity",
+  "stable_tree": true,
+  "same_foreground": true,
+  "tree_sha256": "3beeec38aa4e8f4ad803f0e8818cb7d1a2986941d4568f02e73404ff25852fd4",
+  "png_sha256": "28cc4d7ad531458912605be3b0bd67fdbdb7a38ab053de85dc1ca78def2c620d"
+}

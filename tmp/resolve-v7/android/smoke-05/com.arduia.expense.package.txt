@@ -1,0 +1,159 @@
+Activity Resolver Table:
+  Non-Data Actions:
+      android.intent.action.MAIN:
+        bfa35c3 com.arduia.expense/.ui.MainActivity filter dbc7e40
+          Action: "android.intent.action.MAIN"
+          Category: "android.intent.category.LAUNCHER"
+
+Receiver Resolver Table:
+  Non-Data Actions:
+      android.intent.action.BATTERY_OKAY:
+        f406b1f com.arduia.expense/androidx.work.impl.background.systemalarm.ConstraintProxy$BatteryNotLowProxy filter 80b3e6c
+          Action: "android.intent.action.BATTERY_OKAY"
+          Action: "android.intent.action.BATTERY_LOW"
+      android.intent.action.ACTION_POWER_DISCONNECTED:
+        d397179 com.arduia.expense/androidx.work.impl.background.systemalarm.ConstraintProxy$BatteryChargingProxy filter e9e5ebe
+          Action: "android.intent.action.ACTION_POWER_CONNECTED"
+          Action: "android.intent.action.ACTION_POWER_DISCONNECTED"
+      android.intent.action.DEVICE_STORAGE_LOW:
+        d56ac35 com.arduia.expense/androidx.work.impl.background.systemalarm.ConstraintProxy$StorageNotLowProxy filter c5da8ca
+          Action: "android.intent.action.DEVICE_STORAGE_LOW"
+          Action: "android.intent.action.DEVICE_STORAGE_OK"
+      android.net.conn.CONNECTIVITY_CHANGE:
+        38a9a3b com.arduia.expense/androidx.work.impl.background.systemalarm.ConstraintProxy$NetworkStateProxy filter 1a3d558
+          Action: "android.net.conn.CONNECTIVITY_CHANGE"
+      android.intent.action.DEVICE_STORAGE_OK:
+        d56ac35 com.arduia.expense/androidx.work.impl.background.systemalarm.ConstraintProxy$StorageNotLowProxy filter c5da8ca
+          Action: "android.intent.action.DEVICE_STORAGE_LOW"
+          Action: "android.intent.action.DEVICE_STORAGE_OK"
+      android.intent.action.BATTERY_LOW:
+        f406b1f com.arduia.expense/androidx.work.impl.background.systemalarm.ConstraintProxy$BatteryNotLowProxy filter 80b3e6c
+          Action: "android.intent.action.BATTERY_OKAY"
+          Action: "android.intent.action.BATTERY_LOW"
+      android.intent.action.TIMEZONE_CHANGED:
+        7d2d6b1 com.arduia.expense/androidx.work.impl.background.systemalarm.RescheduleReceiver filter 158796
+          Action: "android.intent.action.BOOT_COMPLETED"
+          Action: "android.intent.action.TIME_SET"
+          Action: "android.intent.action.TIMEZONE_CHANGED"
+      android.intent.action.TIME_SET:
+        7d2d6b1 com.arduia.expense/androidx.work.impl.background.systemalarm.RescheduleReceiver filter 158796
+          Action: "android.intent.action.BOOT_COMPLETED"
+          Action: "android.intent.action.TIME_SET"
+          Action: "android.intent.action.TIMEZONE_CHANGED"
+      android.intent.action.BOOT_COMPLETED:
+        7d2d6b1 com.arduia.expense/androidx.work.impl.background.systemalarm.RescheduleReceiver filter 158796
+          Action: "android.intent.action.BOOT_COMPLETED"
+          Action: "android.intent.action.TIME_SET"
+          Action: "android.intent.action.TIMEZONE_CHANGED"
+      android.intent.action.ACTION_POWER_CONNECTED:
+        d397179 com.arduia.expense/androidx.work.impl.background.systemalarm.ConstraintProxy$BatteryChargingProxy filter e9e5ebe
+          Action: "android.intent.action.ACTION_POWER_CONNECTED"
+          Action: "android.intent.action.ACTION_POWER_DISCONNECTED"
+      androidx.work.diagnostics.REQUEST_DIAGNOSTICS:
+        a0d2ced com.arduia.expense/androidx.work.impl.diagnostics.DiagnosticsReceiver filter 79a8722
+          Action: "androidx.work.diagnostics.REQUEST_DIAGNOSTICS"
+      androidx.work.impl.background.systemalarm.UpdateProxies:
+        c7e9f17 com.arduia.expense/androidx.work.impl.background.systemalarm.ConstraintProxyUpdateReceiver filter 92cef04
+          Action: "androidx.work.impl.background.systemalarm.UpdateProxies"
+
+Domain verification status:
+
+Registered ContentProviders:
+  com.arduia.expense/androidx.lifecycle.ProcessLifecycleOwnerInitializer:
+    Provider{b6416bb com.arduia.expense/androidx.lifecycle.ProcessLifecycleOwnerInitializer}
+
+ContentProvider Authorities:
+  [com.arduia.expense.lifecycle-process]:
+    Provider{b6416bb com.arduia.expense/androidx.lifecycle.ProcessLifecycleOwnerInitializer}
+      applicationInfo=ApplicationInfo{82cd7d8 com.arduia.expense}
+
+Key Set Manager:
+  [com.arduia.expense]
+      Signing KeySets: 57
+
+Packages:
+  Package [com.arduia.expense] (debe731):
+    userId=10178
+    pkg=Package{ec88e16 com.arduia.expense}
+    codePath=/data/app/~~hvYR3di8IBvC4pzpnkWaDw==/com.arduia.expense-K1pK5JlEKp-aGfR0p5KLMA==
+    resourcePath=/data/app/~~hvYR3di8IBvC4pzpnkWaDw==/com.arduia.expense-K1pK5JlEKp-aGfR0p5KLMA==
+    legacyNativeLibraryDir=/data/app/~~hvYR3di8IBvC4pzpnkWaDw==/com.arduia.expense-K1pK5JlEKp-aGfR0p5KLMA==/lib
+    extractNativeLibs=true
+    primaryCpuAbi=null
+    secondaryCpuAbi=null
+    cpuAbiOverride=null
+    versionCode=11 minSdk=21 targetSdk=30
+    minExtensionVersions=[]
+    versionName=1.0.0-beta05
+    usesNonSdkApi=false
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ HAS_CODE ALLOW_CLEAR_USER_DATA ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PARTIALLY_DIRECT_BOOT_AWARE PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    dataDir=/data/user/0/com.arduia.expense
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    timeStamp=2026-11-08 13:51:34
+    lastUpdateTime=2026-11-08 13:51:38
+    packageSource=0
+    signatures=PackageSignatures{1b36397 version:3, signatures:[bb1a30b7], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ HAS_CODE ALLOW_CLEAR_USER_DATA ]
+    requested permissions:
+      android.permission.INTERNET
+      android.permission.WAKE_LOCK
+      android.permission.ACCESS_NETWORK_STATE
+      android.permission.RECEIVE_BOOT_COMPLETED
+      android.permission.FOREGROUND_SERVICE
+      android.permission.POST_NOTIFICATIONS
+    install permissions:
+      android.permission.FOREGROUND_SERVICE: granted=true
+      android.permission.RECEIVE_BOOT_COMPLETED: granted=true
+      android.permission.INTERNET: granted=true
+      android.permission.ACCESS_NETWORK_STATE: granted=true
+      android.permission.WAKE_LOCK: granted=true
+    User 0: ceDataInode=123508 installed=true hidden=false suspended=false distractionFlags=0 stopped=true notLaunched=true enabled=0 instant=false virtual=false
+      installReason=0
+      firstInstallTime=2026-11-08 13:51:38
+      uninstallReason=0
+      overlay paths:
+        /product/overlay/EmulationPixel6/EmulationPixel6Overlay.apk
+        /product/overlay/NavigationBarModeGestural/NavigationBarModeGesturalOverlay.apk
+      legacy overlay paths:
+        /product/overlay/EmulationPixel6/EmulationPixel6Overlay.apk
+        /product/overlay/NavigationBarModeGestural/NavigationBarModeGesturalOverlay.apk
+      gids=[3003]
+      runtime permissions:
+        android.permission.POST_NOTIFICATIONS: granted=true
+
+Queries:
+  system apps queryable: false
+  queries via forceQueryable:
+  queries via package name:
+  queries via component:
+  queryable via interaction:
+    User 0:
+  queryable via uses-library:
+
+Dexopt state:
+  [com.arduia.expense]
+    path: /data/app/~~hvYR3di8IBvC4pzpnkWaDw==/com.arduia.expense-K1pK5JlEKp-aGfR0p5KLMA==/base.apk
+      x86_64: [status=verify] [reason=install]
+  BgDexopt state:
+    enabled:true
+    mDexOptThread:null
+    mDexOptCancellingThread:null
+    mFinishedPostBootUpdate:false
+    mLastExecutionStatus:0
+    mLastExecutionStartTimeMs:0
+    mLastExecutionDurationIncludingSleepMs:0
+    mLastExecutionStartUptimeMs:0
+    mLastExecutionDurationMs:0
+    now:52847
+    mLastCancelledPackages:
+    mFailedPackageNamesPrimary:
+    mFailedPackageNamesSecondary:
+
+Compiler stats:
+  [com.arduia.expense]
+     base.apk - 3325

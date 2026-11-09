@@ -1,0 +1,57 @@
+\begin{table*}[t]
+\centering
+\caption{\emph{Measured-parameter simulation} (12{,}000 paired interrupted workflows per row; not an emulator run). Measured (Table~\ref{tab:real}): G2 and its
+mechanisms, per-fault-class lag laws with lag-blind first reads, the 2\% late no-observation rate and zero late family errors (Element); the permanent failed state,
+the client-written Sent folder and its APPEND lag (K-9). Modelled: fault mix, absent-side errors, Monitor, user; K-9's queued-mail lag $U$(45\,s, 15\,min) is an
+assumption. Element has no hop-1 family (its indicator is not lag-free). Labels are simulated draws from the measured law. Tail: committed effects (the 95\%
+upper bound from 0/101 censored) visible only after 14--300\,s. Always ask: dup/loss \RsimElemAskAllDup/\RsimElemAskAllLoss{} (Element). dup, loss, ask: \% of workflows; $P_{\mathrm{v}}$: \% of committed effects the policy retried by itself
+(CP 95\% upper bound; budget 1\%).}
+\label{tab:realsim}
+\scriptsize
+\setlength{\tabcolsep}{2.4pt}
+\begin{minipage}[t]{0.495\textwidth}\vspace{0pt}
+\begin{tabular}{@{}l cccc@{}}
+\toprule
+Policy & dup & loss & ask & $P_{\mathrm{v}}$ (hi) \\
+\midrule
+\multicolumn{5}{@{}l}{\emph{Element: fault-injected, class-keyed labels (2{,}000 per class and outcome)}} \\
+redo & 71.24 & 0.00 & 0.0 & 100.00 (100.00) \\
+trust app status & 1.03 & 0.00 & 0.0 & 1.33 (1.58) \\
+rules, 10\,s wait & 0.42 & 0.07 & 9.0 & 0.00 (0.04) \\
+rules, 30\,s wait & 0.10 & 0.06 & 3.1 & 0.00 (0.04) \\
+Thm.~\ref{thm:twohop} only & 0.13 & 2.13 & 37.2 & 0.00 (0.04) \\
+\alg, product & 0.15 & 0.09 & 3.0 & 0.00 (0.04) \\
+\alg, source families & 3.16 & 2.14 & 72.9 & 0.00 (0.04) \\
+\alg, joint & 3.17 & 2.04 & 72.9 & 0.00 (0.04) \\
+\multicolumn{5}{@{}l}{\emph{Element, \alg\ with other labels}} \\
+5{,}000 per class, product & 0.05 & 0.09 & 2.7 & 0.00 (0.04) \\
+5{,}000 per class, joint & 0.09 & 0.67 & 12.7 & 0.00 (0.04) \\
+passive labels, product & 11.25 & 0.06 & 3.6 & 14.59 (15.32) \\
+passive labels, joint & 6.97 & 1.38 & 60.3 & 5.21 (5.68) \\
+\bottomrule
+\end{tabular}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.475\textwidth}\vspace{0pt}
+\begin{tabular}{@{}l cccc@{}}
+\toprule
+Policy & dup & loss & ask & $P_{\mathrm{v}}$ (hi) \\
+\midrule
+\multicolumn{5}{@{}l}{\emph{Element, lag tail beyond 14\,s (\RsimTail\%)}} \\
+not logged, product & 2.24 & 0.10 & 3.4 & 2.77 (3.12) \\
+not logged, joint & 3.08 & 2.13 & 74.4 & 0.00 (0.04) \\
+logged, product & 4.62 & 1.96 & 100.0 & 0.00 (0.04) \\
+logged, joint & 4.62 & 2.09 & 100.0 & 0.00 (0.04) \\
+\multicolumn{5}{@{}l}{\emph{K-9, no Sent folder (fault-injected labels)}} \\
+trust app status & 21.07 & 34.34 & 0.0 & 27.67 (28.59) \\
+rules, 10\,s wait & 49.91 & 0.07 & 28.1 & 65.85 (66.81) \\
+Thm.~\ref{thm:twohop} only & 4.47 & 2.08 & 100.0 & 0.00 (0.04) \\
+\alg, every mode & 3.96 & 2.05 & 100.0 & 0.00 (0.04) \\
+\multicolumn{5}{@{}l}{\emph{K-9 + IMAP Sent folder}} \\
+trust app status & 20.91 & 34.54 & 0.0 & 27.64 (28.56) \\
+rules, 10\,s wait & 24.42 & 0.07 & 49.4 & 28.91 (29.84) \\
+\alg, every mode & 4.09 & 1.95 & 100.0 & 0.00 (0.04) \\
+passive labels, joint & 11.37 & 1.27 & 79.3 & 9.85 (10.48) \\
+\bottomrule
+\end{tabular}
+\end{minipage}
+\end{table*}

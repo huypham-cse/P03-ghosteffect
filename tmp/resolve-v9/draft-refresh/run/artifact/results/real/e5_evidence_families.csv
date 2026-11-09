@@ -1,0 +1,16 @@
+app,family,n,errors,error_rate,ci95_lo,ci95_hi
+element,a_indicator_early,33,0,0.0,0,0.104
+element,a_indicator_late,37,5,0.135,0.059,0.28
+element,b_copycount_late,37,5,0.135,0.059,0.28
+element,b_nonce_early,33,0,0.0,0,0.104
+element,b_nonce_late,37,5,0.135,0.059,0.28
+element,c_listdigest_late,37,1,0.027,0.005,0.138
+element,cofail:a_indicator_late&b_nonce_late,37,5,0.135,marg_i=5,marg_j=5
+element,cofail:a_indicator_late&c_listdigest_late,37,1,0.027,marg_i=5,marg_j=1
+element,cofail:b_nonce_late&c_listdigest_late,37,1,0.027,marg_i=5,marg_j=1
+element,cofail:all_late_families,37,1,0.027,,
+k9,a_outbox_early,35,17,0.486,0.33,0.644
+k9,a_outbox_late,35,15,0.429,0.28,0.591
+k9,b_notification_late,35,21,0.6,0.436,0.744
+k9,cofail:a_outbox_late&b_notification_late,35,10,0.286,marg_i=15,marg_j=21
+k9,cofail:all_late_families,35,10,0.286,,

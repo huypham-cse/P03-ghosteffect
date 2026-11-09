@@ -53,7 +53,7 @@ NCAL = 2000                  # calibration EFFECTS per (app, outcome); every fam
 N_LAG = 20000
 V = dict(hop1=2, nonce=2, digest=2, vlm=3)       # distinct views per probe family
 NONCE_EPS0_VIEW = 40 * 6 * 32 / 32 ** 6         # Lemma 4.7, edit distance t=1: M k m / m^k, k=6, M=40
-# K = number of Clopper-Pearson bounds one effect's decision can use (Lemma 4.6(ii)); delta = alpha / (10 K).
+# K = number of CP bounds one decision can use; delta = min(alpha,beta) / (10 K), Lemma 4.6(ii).
 #   product (Prop. 4.3): abs levels hop1 1 + nonce 1 + digest 1 + VLM 2, com levels hop1 1 + digest 1 + VLM 2
 #   (the nonce's com bound is analytic), plus the two certified waits w1, w0             -> K = 11
 #   joint (Prop. 4.4): retry region 1 + declare region 1 + q_h 1 + waits 2             -> K = 5
@@ -1462,15 +1462,23 @@ def app_errors(wrng, S=None):
     return app_eps, est_v1
 
 
+def calibration_deltas(alpha, beta, keyed=False):
+    """Pay the calibration union bound on both sides, including unknown-class fallback."""
+    if not 0 < alpha < 1 or not 0 < beta < 1:
+        raise ValueError('alpha and beta must lie strictly between 0 and 1')
+    budget = min(alpha, beta)
+    classes = len(CLASSES) if keyed else 1
+    return tuple(budget / (10 * k * classes) for k in (K_PRODUCT, K_JOINT, K_SRC))
+
+
 def run(policies, scenario='default', seeds=SEEDS, n_per_seed=N_PER_SEED, alpha=0.01, beta=0.01, overrides=None):
     S = scen(scenario)
     if overrides:
         S.update(overrides)
-    d_prod, d_joint, d_src = alpha / (10 * K_PRODUCT), alpha / (10 * K_JOINT), alpha / (10 * K_SRC)
-    if S.get('keyed') == 'all':                        # the unknown-class fallback uses every class's bounds
-        d_prod, d_joint, d_src = (d / len(CLASSES) for d in (d_prod, d_joint, d_src))
+    d_prod, d_joint, d_src = calibration_deltas(alpha, beta, S.get('keyed') == 'all')
     out = {p: [] for p in policies}
-    eff = {p: dict(d1=0, n1=0, l0=0, n0=0, altered=0, amb=0, all=0, cls={}, why=Counter(), dlag=0) for p in policies}
+    eff = {p: dict(d1=0, n1=0, l0=0, n0=0, ask1=0, ask0=0, uerr1=0, uerr0=0,
+                   altered=0, amb=0, all=0, cls={}, why=Counter(), dlag=0) for p in policies}
     for s in seeds:
         wrng = random.Random(s)
         app_eps, est_v1 = app_errors(wrng, S)
@@ -1550,6 +1558,8 @@ def run(policies, scenario='default', seeds=SEEDS, n_per_seed=N_PER_SEED, alpha=
                         secs += T_RETRY
                     if e['X'] == 1:
                         eff[p]['n1'] += 1
+                        eff[p]['ask1'] += int(asked)
+                        eff[p]['uerr1'] += int(asked and retry)
                         C['n1'] += 1
                         if retry:
                             dup = 1
@@ -1558,12 +1568,19 @@ def run(policies, scenario='default', seeds=SEEDS, n_per_seed=N_PER_SEED, alpha=
                                 C['d1'] += 1
                     else:
                         eff[p]['n0'] += 1
+                        eff[p]['ask0'] += int(asked)
+                        eff[p]['uerr0'] += int(asked and not retry)
                         if not retry:
                             loss = 1
                             if not asked:
                                 eff[p]['l0'] += 1
                 out[p].append((dup, loss, ask, nobs, secs, bg, uerr))
     return out, eff
+
+
+def percent(k, n):
+    """A missing population is undefined, never a measured zero-error rate."""
+    return 100 * k / n if n and k is not None else float('nan')
 
 
 def summarize(out, eff, policies):
@@ -1574,21 +1591,28 @@ def summarize(out, eff, policies):
         r = dict(policy=p, n=N)
         for key, idx in (('dup', 0), ('loss', 1), ('ask', 2), ('uerr', 6)):
             k = sum(x[idx] for x in ep)
-            lo, hi = clopper_pearson(k, N)
-            r[key], r[key + '_lo'], r[key + '_hi'] = 100 * k / N, 100 * lo, 100 * hi
-        r['obs'] = sum(x[3] for x in ep) / N
-        r['secs'] = sum(x[4] for x in ep) / N
-        r['bg'] = sum(x[5] for x in ep) / N
+            lo, hi = clopper_pearson(k, N) if N else (float('nan'), float('nan'))
+            r[key], r[key + '_lo'], r[key + '_hi'] = percent(k, N), 100 * lo, 100 * hi
+        r['obs'] = sum(x[3] for x in ep) / N if N else float('nan')
+        r['secs'] = sum(x[4] for x in ep) / N if N else float('nan')
+        r['bg'] = sum(x[5] for x in ep) / N if N else float('nan')
         E = eff[p]
-        r['cdup'] = 100 * E['d1'] / max(1, E['n1'])
-        r['cdup_hi'] = 100 * clopper_pearson(E['d1'], max(1, E['n1']))[1]
-        r['closs'] = 100 * E['l0'] / max(1, E['n0'])
-        r['closs_hi'] = 100 * clopper_pearson(E['l0'], max(1, E['n0']))[1]
-        r['altered'] = 100 * E['altered'] / max(1, E['all'])
-        nw = sum(E['why'].values())
+        r['cdup'] = percent(E['d1'], E['n1'])
+        r['cdup_hi'] = 100 * clopper_pearson(E['d1'], E['n1'])[1] if E['n1'] else float('nan')
+        r['closs'] = percent(E['l0'], E['n0'])
+        r['closs_hi'] = 100 * clopper_pearson(E['l0'], E['n0'])[1] if E['n0'] else float('nan')
+        r['altered'] = percent(E['altered'], E['all'])
         for k in ('wait', 'contra', 'struct', 'uncert'):
-            r['why_' + k] = 100 * E['why'][k] / max(1, E['amb'])        # % of interrupted EFFECTS
+            r['why_' + k] = percent(E['why'][k], E['amb'])        # % of interrupted EFFECTS
         r['amb'] = E['amb']
+        # Conditional asks/user mistakes are whole-effect counts, not workflow
+        # ask rates. They support R2's composed-risk analysis without substituting
+        # overall ASK for q1/q0 or calling simulated replies human measurements.
+        r['n1'], r['n0'] = E['n1'], E['n0']
+        r['ask1'], r['ask0'] = E.get('ask1'), E.get('ask0')
+        r['q1'], r['q0'] = percent(E.get('ask1'), E['n1']), percent(E.get('ask0'), E['n0'])
+        r['user_e1'] = percent(E.get('uerr1'), E.get('ask1'))
+        r['user_e0'] = percent(E.get('uerr0'), E.get('ask0'))
         rows.append(r)
     return rows
 
@@ -1642,7 +1666,7 @@ def part_main():
     for p in ('ghost', 'ghost-src', 'ghost-joint', 'rules', 'always-ask', 'key', 'g2-only'):
         for c, C in sorted(eff[p]['cls'].items()):
             cl.append(dict(policy=p, cls=c, effects=C['n'], ask=100 * C['ask'] / C['n'], secs=C['secs'] / C['n'],
-                           cdup=100 * C['d1'] / max(1, C['n1'])))
+                           cdup=percent(C['d1'], C['n1'])))
             show('class', cl[-1])
     write('planner_class.csv', cl)
 
@@ -1928,10 +1952,10 @@ def part_share():
         tot = sum(USED.values())
         for fam in ('hop1', 'nonce', 'digest', 'vlm'):
             k = sum(c for key, c in USED.items() if fam in key[1:])
-            rows.append(dict(policy=p, family=fam, share=100 * k / max(1, tot), n=k, total=tot))
+            rows.append(dict(policy=p, family=fam, share=percent(k, tot), n=k, total=tot))
             show('share', rows[-1])
         k = sum(c for key, c in USED.items() if key[1:] == ('vlm',) or (len(key) > 1 and 'vlm' == key[-1]))
-        rows.append(dict(policy=p, family='vlm-decisive', share=100 * k / max(1, tot), n=k, total=tot))
+        rows.append(dict(policy=p, family='vlm-decisive', share=percent(k, tot), n=k, total=tot))
         show('share', rows[-1])
     write('planner_share.csv', rows)
 

@@ -1,0 +1,25 @@
+{
+  "kind": "adb-sequential-bracketed-capture",
+  "serial": "emulator-5580",
+  "mono_start_ns": 61858921000000,
+  "mono_end_ns": 61871406000000,
+  "utc_ns": 1794123919763541100,
+  "foreground_before": "com.simplemobiletools.smsmessenger/com.simplemobiletools.smsmessenger.activities.MainActivity",
+  "foreground_after": "com.simplemobiletools.smsmessenger/com.simplemobiletools.smsmessenger.activities.MainActivity",
+  "stable_tree": false,
+  "same_foreground": true,
+  "window_before": {
+    "component": "com.simplemobiletools.smsmessenger/com.simplemobiletools.smsmessenger.activities.MainActivity",
+    "token": "a9dea35",
+    "user": 0,
+    "display_id": 0
+  },
+  "window_after": {
+    "component": "com.simplemobiletools.smsmessenger/com.simplemobiletools.smsmessenger.activities.MainActivity",
+    "token": "a9dea35",
+    "user": 0,
+    "display_id": 0
+  },
+  "tree_sha256": "9bc323fc98669c24122769ed29c833c7bd7c308bd3f52eeba8485005341fb5c7",
+  "png_sha256": "0aa1560e22bb5f3315597f797d91e1c949318846ac81f56c2fdd7bbad3cfb0d1"
+}

@@ -1,0 +1,9 @@
+t,step,txn,body,event_id,copies_after,db_rows_for_txn
+1793925554.4,S0_first_send_dev1,txnA1793925553,body-txnA1793925553,$mXwuAO5081fAbDnRHUTFMwfXhC5zkhF6Ea_QVtDh_mA,1,1
+1793925554.4,S1_immediate_retry_same_device,txnA1793925553,body-txnA1793925553,$mXwuAO5081fAbDnRHUTFMwfXhC5zkhF6Ea_QVtDh_mA,1,1
+1793925554.4,S2_same_txn_other_device,txnA1793925553,body-txnA1793925553,$MJ-qBrVmZvRgZR2eEac6-EqatWUKXzIBPtRBHc7M_kg,2,2
+1793925554.6,S3_same_device_new_token,txnA1793925553,body-txnA1793925553,$mXwuAO5081fAbDnRHUTFMwfXhC5zkhF6Ea_QVtDh_mA,2,2
+1793925558.3,S4_retry_after_restart,txnA1793925553,body-txnA1793925553,$mXwuAO5081fAbDnRHUTFMwfXhC5zkhF6Ea_QVtDh_mA,2,2
+1793925561.4,S6a_first_send_txnB_after_restart,txnB1793925553,body-txnB1793925553,$hBl2DzW5p7tM_ZTlFt5ODj_WODUsoOVEm5a3WsG3fs8,1,1
+1793925861.6,S5_retry_after_row_cleanup_and_restart,txnA1793925553,body-txnA1793925553,$2JVqcRmG8K3766HBGn2ddpo93cauffrZ0jq2y2xjBW4,3,1
+1793925861.7,S6b_retry_after_row_cleanup_cache_alive,txnB1793925553,body-txnB1793925553,$hBl2DzW5p7tM_ZTlFt5ODj_WODUsoOVEm5a3WsG3fs8,1,0

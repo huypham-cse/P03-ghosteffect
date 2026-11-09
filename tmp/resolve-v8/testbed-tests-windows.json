@@ -1,0 +1,18 @@
+{
+  "host": "windows",
+  "command": [
+    "C:\\Users\\ADM\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+    "-B",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "testbed/tests",
+    "-v"
+  ],
+  "started_utc_ns": 1794123118344450400,
+  "finished_utc_ns": 1794123124617943400,
+  "exit_code": 0,
+  "scope": "component/synthetic fixtures; not agent/Android/calibration trials",
+  "log_sha256": "bbd071da6bc4750e9e8201829cc46935f761fff26532c89fe47b8346b3f3827d"
+}

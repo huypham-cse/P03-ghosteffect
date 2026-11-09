@@ -1,0 +1,30 @@
+{
+  "kind": "local Windows/x86_64 Android setup, not a study result",
+  "status": "FAILED",
+  "image": "system-images;android-33;google_apis;x86_64",
+  "expected_image_revision": "17",
+  "operations": [
+    {
+      "operation": "sdk-install",
+      "exit_code": 0
+    },
+    {
+      "operation": "avd-create",
+      "exit_code": 1
+    }
+  ],
+  "started_utc_ns": 1794119312833067600,
+  "script_sha256": "acbd8db0fcb3280e35d423dcce168d9ea97202c9c06f74d04d4200977a105cfc",
+  "image_archive": {
+    "package": "system-images;android-33;google_apis;x86_64",
+    "revision": "17.0.0",
+    "url": "x86_64-33_r17.zip",
+    "bytes": 1707857511,
+    "checksum": "2b96f5bd5c79bfe1cc645e70b3e630b5755d9711",
+    "checksum_type": "sha1"
+  },
+  "image_metadata_sha256": "f46a7c36aba029eba520189f731901a95c8f423bc446d16c326bf351efd8855e",
+  "installed_image_package_sha256": "9dfdb65e0d731c4fdd3665f2d89615def2012245efb581c80a90a06e30042122",
+  "error_type": "RuntimeError",
+  "reason": "avd-create failed; inspect saved logs"
+}

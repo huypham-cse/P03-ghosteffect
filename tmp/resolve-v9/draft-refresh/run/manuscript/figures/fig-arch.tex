@@ -1,0 +1,34 @@
+% Figure: GhostEffect architecture (single column). All text \footnotesize (7pt).
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[
+  font=\footnotesize,
+  box/.style={draw=#1!60!black, fill=#1!7, rounded corners=2pt, text width=2.2cm, minimum height=0.86cm, align=center, inner sep=2pt},
+  arr/.style={-{Stealth[length=1.8mm]}, semithick, gray!70!black},
+  lab/.style={font=\footnotesize\itshape, text=gray!40!black, inner sep=1pt}
+]
+\node[box=gray]   (agent) at (0,0)      {GUI agent\\(LLM/VLM policy)};
+\node[box=teal]   (int)   at (2.78,0)   {Interceptor: effect classifier + nonce writer};
+\node[box=gray]   (dev)   at (5.56,0)   {Android apps\\outbox $\to$ server};
+\node[box=teal]   (led)   at (2.78,-1.42) {Effect ledger\\(WAL, own process)};
+\node[box=orange] (plan)  at (2.78,-2.84) {\textbf{\alg}: certified family cascade};
+\node[box=teal]   (saga)  at (0,-2.84)  {Saga layer\\$(\alpha_i,\beta_i)$ by KKT};
+\node[box=teal]   (probe) at (5.56,-2.84) {Families: hop-1, nonce, digest, VLM views};
+\node[box=teal]   (cal)   at (5.56,-1.42) {Calibration: verdict bounds $q$, lag tables, G2};
+\node[box=gray, text width=7.6cm, minimum height=0.6cm] (out) at (2.78,-4.05)
+     {\textsf{COMMITTED} $\mid$ \textsf{PENDING} (monitor) $\mid$ verify foreground $\to$ retry (same nonce) $\mid$ ask};
+\draw[arr] (agent) -- (int);
+\draw[arr] (int) -- (dev);
+\draw[arr] (int) -- node[lab,right]{\textsf{ISSUED}, fsync} (led);
+\draw[arr] (led) -- node[lab,right]{restart / error} (plan);
+\draw[arr] (saga) -- (plan);
+\draw[arr] (plan) -- (probe);
+\draw[arr] (cal) -- (probe);
+\draw[arr, dashed] (probe.east) -- ++(0.2,0) |- (dev.east);
+\draw[arr] (plan) -- (out);
+\end{tikzpicture}
+\caption{\sys architecture. The interceptor records each effect in the ledger before its commit tap. After a restart or error,
+the planner resolves every \textsf{ISSUED} effect by reading each view of a probe family once (dashed) and combining family verdicts
+until the saga layer's budget is certified; otherwise it asks.}
+\label{fig:arch}
+\end{figure}

@@ -1,0 +1,14 @@
+{
+  "kind": "clarification of the frozen smoke receipt schema; raw receipts are unchanged",
+  "receipt": "tmp/resolve-v10/native-wire-host-02/native-env/RESULT.json",
+  "legacy_field": "agent_steps=0",
+  "meaning": "The field was initialized before the optional scripted fixture and did not count its two native code steps. It must not be interpreted as no native code having run.",
+  "actual_model_driven_agent_steps": 0,
+  "actual_scripted_native_steps": 2,
+  "scientific_episodes": 0,
+  "evidence": [
+    "tmp/resolve-v10/native-wire-host-02/native-env/scripted-wire-m3a/RESULT.json",
+    "tmp/resolve-v10/native-wire-host-02/native-env/scripted-wire-t3a/RESULT.json"
+  ],
+  "code_correction": "Future receipts use model_driven_agent_steps and scripted_native_steps separately. No additional AVD run was made just to replace metadata."
+}

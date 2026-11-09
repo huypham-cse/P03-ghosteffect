@@ -1,0 +1,7 @@
+{
+  "status": "FAILED",
+  "kind": "local setup diagnostic only",
+  "error_type": "RuntimeError",
+  "reason": "no unblocked chooser within development deadline",
+  "events": []
+}

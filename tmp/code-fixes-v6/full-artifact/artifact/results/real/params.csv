@@ -1,0 +1,23 @@
+name,value,provenance
+g2_break,0.0,Element: 101/101 trials exactly once; 83/83 response-loss trials re-sent a single txnId or reconciled via /sync (c2_element_outcomes.csv)
+g2_nodedup,0.0,Element: 0 duplicates in 101 trials (c2_element_outcomes.csv)
+elem_lag_floor,2.63:0|2.43:0|2.32:0|2.30:0|2.32:0|2.41:0|3.78:0|2.44:0|2.85:0|2.81:0|2.87:0|2.58:0,"Element none/nofault: 12 trials; recovery-to-visible lag (upper end of the interval, s; t0 = relaunch intent / network restore / Send tap) : first verified read was lag-blind ""absent"" (1) or not (0) (c2_element_first_visible.csv, c2_element_per_trial_families.csv)"
+elem_lag_appdeath,11.11:0|3.55:0|3.13:0|10.13:0|3.09:0|10.74:0|10.96:0|3.28:0|3.70:0|3.28:0|10.93:0|3.36:0|3.66:0|5.16:0|12.61:1|4.36:0|11.15:0|11.93:0|3.78:0|12.04:0|12.05:0|13.56:1|12.27:0|12.03:0|12.23:0|4.30:0|12.33:0|4.57:0|12.19:0|12.15:0|12.69:0|11.01:0|11.08:0|4.11:0|7.47:0|4.39:0|4.55:1|11.37:0|3.97:0|11.97:0|3.74:0|4.28:0|11.47:0|11.11:0|12.44:0|4.58:0|10.61:0|12.31:0|3.47:0|4.15:0|3.88:0|4.24:0|4.11:0|10.16:0|3.79:0|11.69:0|11.67:0|4.12:0|4.39:0|10.63:0|10.63:0|10.99:0|3.74:0,"Element bg_kill9/respdrop+bg_kill9_sticky/respdrop+bg_kill9_sticky_v1/respdrop+force_stop/respdrop+force_stop_sticky/respdrop+force_stop_sticky_v1/respdrop: 63 trials; recovery-to-visible lag (upper end of the interval, s; t0 = relaunch intent / network restore / Send tap) : first verified read was lag-blind ""absent"" (1) or not (0) (c2_element_first_visible.csv, c2_element_per_trial_families.csv)"
+elem_lag_net,2.26:0|2.27:0|2.33:0|2.23:0|2.51:0|2.35:0|2.74:0|2.42:0|2.36:0|2.35:0|2.45:0|2.94:0|2.62:0|2.33:0|2.69:0|2.60:0|2.29:0|2.40:0|2.38:0|2.48:0,"Element netcut/respdrop: 20 trials; recovery-to-visible lag (upper end of the interval, s; t0 = relaunch intent / network restore / Send tap) : first verified read was lag-blind ""absent"" (1) or not (0) (c2_element_first_visible.csv, c2_element_per_trial_families.csv)"
+elem_lag_acked,3.21:0|3.24:0|3.41:0|3.78:0|3.90:0|3.83:0,"Element bg_kill9/acked: 6 trials; recovery-to-visible lag (upper end of the interval, s; t0 = relaunch intent / network restore / Send tap) : first verified read was lag-blind ""absent"" (1) or not (0) (c2_element_first_visible.csv, c2_element_per_trial_families.csv)"
+bot_late,0.019801980198019802,"Element: all three families bot (no observation, wrong screen) together at the late read in 2/101; never one alone (c2_element_per_trial_families.csv)"
+hop1_persist1,0.0,Element committed side: 0 wrong late reads among 99 observed (c2_element_families.csv); bounds still come from CP on simulated labels
+hop1_view1,0.0,Element committed side: 0 wrong late reads among 99 observed (c2_element_families.csv); bounds still come from CP on simulated labels
+nonce_persist,0.0,Element committed side: 0 wrong late reads among 99 observed (c2_element_families.csv); bounds still come from CP on simulated labels
+nonce_view,0.0,Element committed side: 0 wrong late reads among 99 observed (c2_element_families.csv); bounds still come from CP on simulated labels
+digest_persist,0.0,Element committed side: 0 wrong late reads among 99 observed (c2_element_families.csv); bounds still come from CP on simulated labels
+digest_view,0.0,Element committed side: 0 wrong late reads among 99 observed (c2_element_families.csv); bounds still come from CP on simulated labels
+elem_tail_ub,0.029225153539039095,one-sided 95% CP upper bound on P(not visible within the window) from 0/101 censored (used only for the lag-tail sensitivity rows; not a measurement)
+k9_failed_commit,1.0,"K-9 (campaign 2): after a lost SMTP reply the mail stays in the Outbox with send_state=error, 0 new DATA on Sync or Send-messages, in 20/20 (c2_k9_summary.csv)"
+k9_queued_delivered,1.0,K-9 (campaign 1): queued (offline) mail delivered exactly once after a sync in 15/15 (e4_outcomes.csv); campaign 2 net_pre 3/3 after Sync
+k9_lag_lo,45.0,"K-9 queued-mail delivery lag, lower end: the 45 s window (campaign 1, measured)"
+k9_lag_hi,900.0,"K-9 queued-mail delivery lag, upper end: K-9's 15-min poll interval (assumption: uniform law; the unattended poll was not measured)"
+k9_sent_lo,3.3,"K-9 + IMAP Sent: APPEND of an acknowledged mail after Send, min of 7 (c2_k9_summary.csv)"
+k9_sent_hi,5.3,"K-9 + IMAP Sent: APPEND of an acknowledged mail after Send, max of 7"
+nonce_policy,visible,Element: the experiment typed the nonce into the message body (counterparty-visible)
+no_vlm,1,no VLM was measured (no-LLM rule); the VLM family is removed rather than modelled

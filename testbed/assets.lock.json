@@ -1,0 +1,12 @@
+{
+  "kind": "historical hashes from campaign2/logs/versions_hashes.txt; reconstruction downloads",
+  "assets": [
+    {"file": "im.vector.app_40106622.apk", "version": "Element 1.6.62 arm64", "sha256": "ff73751599211c709c1e691d1a2b7412df0bab979ffbe8ff0d4b7f31c6a444c9", "license": "upstream F-Droid metadata", "urls": ["https://f-droid.org/repo/im.vector.app_40106622.apk", "https://f-droid.org/archive/im.vector.app_40106622.apk"]},
+    {"file": "com.fsck.k9_39046.apk", "version": "K-9 24.0", "sha256": "0f9dd57fbd06dddfd8bcf7de6106d27fa0f0297793193828c4eac904518b1e05", "license": "upstream F-Droid metadata", "urls": ["https://f-droid.org/repo/com.fsck.k9_39046.apk", "https://f-droid.org/archive/com.fsck.k9_39046.apk"]},
+    {"file": "at.bitfire.davdroid_405210002.apk", "version": "DAVx5 4.5.21-ose", "sha256": "41cf9832d97c31e3fc694e5c66b38990dec3312936cc336141714db07259081b", "license": "upstream F-Droid metadata", "urls": ["https://f-droid.org/repo/at.bitfire.davdroid_405210002.apk", "https://f-droid.org/archive/at.bitfire.davdroid_405210002.apk"]},
+    {"file": "ws.xsoh.etar_57.apk", "version": "Etar 1.0.57", "sha256": "dae01d93c8920aa63845868db2190bcc4aa6ff8410b1289de1ce27b1bb89c599", "license": "upstream F-Droid metadata", "urls": ["https://f-droid.org/repo/ws.xsoh.etar_57.apk", "https://f-droid.org/archive/ws.xsoh.etar_57.apk"]},
+    {"file": "greenmail.jar", "version": "GreenMail standalone 2.1.2", "sha256": "0d0676812f656ff84e484ef736d9149d324d2dec0ea8dbfd6dbd0b59283c3004", "license": "Apache-2.0 (verify release metadata)", "urls": ["https://repo.maven.apache.org/maven2/com/icegreen/greenmail-standalone/2.1.2/greenmail-standalone-2.1.2.jar"]}
+  ],
+  "python_backends": {"matrix-synapse": "1.164.2", "Radicale": "3.9.0"},
+  "sdk": {"api": 33, "historical_abi": "arm64-v8a", "historical_image_revision": 17, "historical_emulator": "37.2.13", "note": "host/ABI port requires a new stratum; never silently replace unavailable pins"}
+}

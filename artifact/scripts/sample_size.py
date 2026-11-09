@@ -23,30 +23,54 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(__file__))
-from ge_core import cp_upper_one_sided
+from ge_core import binom_cdf
 
 RES = os.path.join(os.path.dirname(__file__), '..', 'results')
 
 
 def n_zero(target, delta):
     """smallest n with CP(0, n, delta) = 1 - delta^(1/n) <= target."""
-    return math.ceil(math.log(delta) / math.log(1 - target))
+    if not 0 < target < 1 or not 0 < delta < 1:
+        raise ValueError('target and delta must lie strictly between 0 and 1')
+    return math.ceil(math.log(delta) / math.log1p(-target))
 
 
 def n_rate(target, delta, p, lo=10, hi=10 ** 7):
-    """smallest n with CP(ceil(p n), n, delta) <= target (bisection; CP decreases in n for fixed rate)."""
+    """Exact minimum in [lo, hi], searching each constant-ceil(p*n) interval.
+
+    CP(k,n) decreases in n only while k is fixed. Test interval endpoints in
+    increasing order, then bisect inside the first passing interval. Testing
+    BinomialCDF(k;n,target) <= delta is equivalent to inverting CP, and avoids
+    repeatedly solving a 60-step CP inversion at very large n.
+    """
+    n_zero(target, delta)  # validate the confidence/target arguments
+    if not 0 <= p < 1 or not isinstance(lo, int) or not isinstance(hi, int) or lo < 1 or hi < lo:
+        raise ValueError('require 0 <= p < 1 and integer 1 <= lo <= hi')
     if p >= target:
         return float('inf')
-    ok = lambda n: cp_upper_one_sided(math.ceil(p * n), n, delta) <= target
-    while not ok(hi):
-        return float('inf')
-    while lo < hi:
-        mid = (lo + hi) // 2
-        if ok(mid):
-            hi = mid
-        else:
-            lo = mid + 1
-    return lo
+    start = max(lo, n_zero(target, delta))
+    if p == 0:
+        return start if start <= hi else float('inf')
+    ok = lambda n: binom_cdf(math.ceil(p * n), n, target) <= delta
+    while start <= hi:
+        k = math.ceil(p * start)
+        end = min(hi, math.floor(k / p))
+        # Respect the same floating-point ceil(p*n) convention as the caller.
+        while end < hi and math.ceil(p * (end + 1)) <= k:
+            end += 1
+        while end >= start and math.ceil(p * end) > k:
+            end -= 1
+        if end >= start and ok(end):
+            left, right = start, end
+            while left < right:
+                mid = (left + right) // 2
+                if ok(mid):
+                    right = mid
+                else:
+                    left = mid + 1
+            return left
+        start = max(start + 1, end + 1)
+    return float('inf')
 
 
 def main():

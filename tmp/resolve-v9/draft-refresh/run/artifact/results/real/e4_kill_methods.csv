@@ -1,0 +1,6 @@
+app,kill_method,n
+element,am_kill_noop+kill9,13
+element,fg_kill9,5
+element,force_stop,10
+k9,am_kill,15
+k9,force_stop,10

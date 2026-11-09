@@ -1,0 +1,372 @@
+--------- beginning of main
+11-08 14:12:33.007   361   378 W TransactionTracing: Could not find layer handle 0x7e27647aded0
+11-08 14:12:33.007   361   378 W TransactionTracing: Could not find layer handle 0x7e27647aff70
+11-08 14:12:33.008   361   378 W TransactionTracing: Could not find layer handle 0x7e27647b05d0
+11-08 14:12:33.008   361   378 W TransactionTracing: Could not find layer handle 0x7e27647b07b0
+11-08 14:12:33.008   361   378 W TransactionTracing: Could not find layer handle 0x7e27647b05d0
+11-08 14:12:33.058   277  2259 I netd    : tetherGetStats() -> {[]} <2.82ms>
+11-08 14:12:33.154   277  2259 I netd    : bandwidthSetGlobalAlert(2097152) <0.20ms>
+11-08 14:12:33.155  1505  1557 D EGL_emulation: app_time_stats: avg=32479.42ms min=189.21ms max=64769.62ms count=2
+11-08 14:12:33.204   354   476 D AudioFlinger: mixer(0x7ba31e4fd9a0) throttle end: throttle time(33)
+11-08 14:12:33.246  2029  2037 I .android.as.oss: Background young concurrent copying GC freed 34661(3150KB) AllocSpace objects, 0(0B) LOS objects, 52% free, 2848KB/6010KB, paused 1.455ms,154us total 114.670ms
+11-08 14:12:33.251   493   531 I libprocessgroup: Successfully killed process cgroup uid 10157 pid 690 in 633ms
+11-08 14:12:33.291   354   476 D AudioFlinger: mixer(0x7ba31e4fd9a0) throttle end: throttle time(10)
+11-08 14:12:33.317   354   476 D AudioFlinger: mixer(0x7ba31e4fd9a0) throttle end: throttle time(4)
+11-08 14:12:33.335   277  2259 I netd    : bandwidthRemoveInterfaceQuota(eth0) <1.07ms>
+11-08 14:12:33.337   277  2259 I netd    : bandwidthSetInterfaceQuota(eth0, 9223372036854775807) <1.68ms>
+--------- beginning of kernel
+11-08 14:12:33.557     0     0 I binder  : undelivered transaction 321087, process died.
+11-08 14:12:33.560     0     0 I binder  : undelivered transaction 321242, process died.
+11-08 14:12:33.561     0     0 I binder  : undelivered transaction 321290, process died.
+11-08 14:12:33.564     0     0 I binder  : undelivered transaction 321790, process died.
+11-08 14:12:33.565     0     0 I binder  : undelivered transaction 320944, process died.
+11-08 14:12:33.566     0     0 I binder  : undelivered transaction 320951, process died.
+11-08 14:12:33.569     0     0 I binder  : undelivered transaction 320979, process died.
+11-08 14:12:33.571     0     0 I binder  : undelivered transaction 321000, process died.
+11-08 14:12:33.573     0     0 I binder  : undelivered transaction 321006, process died.
+11-08 14:12:33.578     0     0 I binder  : undelivered transaction 321025, process died.
+--------- beginning of system
+11-08 14:12:33.652   493  1689 D NotificationListeners: Removing active service ComponentInfo{com.android.systemui/com.android.systemui.statusbar.NotificationListener}
+11-08 14:12:33.674   493   630 D ConnectivityService: releasing NetworkRequest [ REQUEST id=40, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10157 RequestorUid: 10157 RequestorPkg: com.android.systemui UnderlyingNetworks: Null] ] (release request)
+11-08 14:12:33.675   493   630 D ConnectivityService: releasing NetworkRequest [ REQUEST id=38, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10157 RequestorUid: 10157 RequestorPkg: com.android.systemui UnderlyingNetworks: Null] ] (release request)
+11-08 14:12:33.681   493   514 I StatusBarManagerService: binder died for pkg=com.android.systemui
+11-08 14:12:33.719   493   519 W Looper  : Drained
+11-08 14:12:33.728   493  1554 E LockoutResetTracker: Callback binder died: android.os.BinderProxy@d1726a3
+11-08 14:12:33.728   493  1554 E LockoutResetTracker: Removing dead callback for: com.android.systemui
+11-08 14:12:33.735   493  1346 E BiometricService: Enabled callback binder died
+11-08 14:12:33.737   493   563 I ActivityManager: Process com.android.systemui (pid 690) has died: pers PER 
+11-08 14:12:33.738   493  1389 W AS.AudioService: Current remote volume controller died, unregistering
+11-08 14:12:33.741   493  1245 E BiometricService: Enabled callback binder died
+11-08 14:12:33.743   493   493 W WallpaperManagerService: Wallpaper service gone: ComponentInfo{com.android.systemui/com.android.systemui.wallpapers.ImageWallpaper}
+11-08 14:12:33.747   493  1342 W BiometricStateCallback: Callback binder died: android.os.BinderProxy@5b34da0
+11-08 14:12:33.751   493   684 I MR2ServiceImpl: unregisterManager | package: com.android.systemui, user: 0, manager: 1
+11-08 14:12:33.799   493  1691 D DisplayAreaOrganizerController: Organizer died before sending onDisplayAreaVanished
+11-08 14:12:33.800   493   493 W Looper  : Slow dispatch took 101ms main h=android.app.ActivityThread$H c=android.app.LoadedApk$ServiceDispatcher$RunConnection@c8fa3cc m=0
+11-08 14:12:33.800   493   493 W WallpaperManagerService: Wallpaper service gone: ComponentInfo{com.android.systemui/com.android.systemui.wallpapers.ImageWallpaper}
+11-08 14:12:33.808   493  1528 W InputManager-JNI: Input channel object '[Gesture Monitor] edge-swipe (client)' was disposed without first being removed with the input manager!
+11-08 14:12:33.818   493  1667 W system_server: Long monitor contention with owner binder:493_1F (1691) at void com.android.server.wm.DisplayAreaOrganizerController$DeathRecipient.binderDied()(DisplayAreaOrganizerController.java:78) waiters=0 in void com.android.server.wm.Session.binderDied() for 206ms
+11-08 14:12:33.821   493  1692 W system_server: Long monitor contention with owner binder:493_1F (1691) at void com.android.server.wm.DisplayAreaOrganizerController$DeathRecipient.binderDied()(DisplayAreaOrganizerController.java:78) waiters=1 in void com.android.server.wm.TaskOrganizerController$DeathRecipient.binderDied() for 225ms
+11-08 14:12:33.874   493  1342 W BiometricStateCallback: Removed dead listener for android.os.BinderProxy@5b34da0
+11-08 14:12:33.909   361   378 W TransactionTracing: Could not find layer handle 0x7e27647aec50
+11-08 14:12:33.910   443   731 D BufferPoolAccessor2.0: bufferpool2 0x7c694f0cfa08 : 0(0 size) total buffers - 0(0 size) used buffers - 12/16 (recycle/alloc) - 4/15 (fetch/transfer)
+11-08 14:12:33.916   443   731 D BufferPoolAccessor2.0: Destruction - bufferpool2 0x7c694f0cfa08 cached: 0/0M, 0/0% in use; allocs: 16, 75% recycled; transfers: 15, 73% unfetched
+11-08 14:12:33.923   493   531 I libprocessgroup: Successfully killed process cgroup uid 10157 pid 690 in 0ms
+11-08 14:12:33.925   443   443 D BufferPoolAccessor2.0: bufferpool2 0x7c694f0cfc58 : 0(0 size) total buffers - 0(0 size) used buffers - 6/7 (recycle/alloc) - 1/6 (fetch/transfer)
+11-08 14:12:33.931   443   443 D BufferPoolAccessor2.0: Destruction - bufferpool2 0x7c694f0cfc58 cached: 0/0M, 0/0% in use; allocs: 7, 86% recycled; transfers: 6, 83% unfetched
+11-08 14:12:33.999   493  1347 W AudioService.RecordingActivityMonitor: client died
+11-08 14:12:34.076   493  1389 W VolumeController: Error calling dismiss
+11-08 14:12:34.076   493  1389 W VolumeController: android.os.DeadObjectException
+11-08 14:12:34.076   493  1389 W VolumeController: 	at android.os.BinderProxy.transactNative(Native Method)
+11-08 14:12:34.076   493  1389 W VolumeController: 	at android.os.BinderProxy.transact(BinderProxy.java:584)
+11-08 14:12:34.076   493  1389 W VolumeController: 	at android.media.IVolumeController$Stub$Proxy.dismiss(IVolumeController.java:249)
+11-08 14:12:34.076   493  1389 W VolumeController: 	at com.android.server.audio.AudioService$VolumeController.postDismiss(AudioService.java:11116)
+11-08 14:12:34.076   493  1389 W VolumeController: 	at com.android.server.audio.AudioService.setVolumeController(AudioService.java:10941)
+11-08 14:12:34.076   493  1389 W VolumeController: 	at com.android.server.audio.AudioService$5.binderDied(AudioService.java:10950)
+11-08 14:12:34.076   493  1389 W VolumeController: 	at android.os.IBinder$DeathRecipient.binderDied(IBinder.java:317)
+11-08 14:12:34.076   493  1389 W VolumeController: 	at android.os.BinderProxy.sendDeathNotice(BinderProxy.java:704)
+11-08 14:12:34.115   493  1683 D DisplayAreaOrganizerController: Organizer died before sending onDisplayAreaVanished
+11-08 14:12:34.126   493   513 I WindowManager: WIN DEATH: Window{f081a83 u0 ShellDropTarget}
+11-08 14:12:34.126   493   513 W InputManager-JNI: Input channel object 'f081a83 ShellDropTarget (client)' was disposed without first being removed with the input manager!
+11-08 14:12:34.129   443   731 D BufferPoolAccessor2.0: bufferpool2 0x7c694f0d07e8 : 0(0 size) total buffers - 0(0 size) used buffers - 15/17 (recycle/alloc) - 2/16 (fetch/transfer)
+11-08 14:12:34.129   443   731 D BufferPoolAccessor2.0: Destruction - bufferpool2 0x7c694f0d07e8 cached: 0/0M, 0/0% in use; allocs: 17, 88% recycled; transfers: 16, 88% unfetched
+11-08 14:12:34.138   278   278 I Zygote  : Process 690 exited due to signal 9 (Killed)
+11-08 14:12:34.156   361   378 W TransactionTracing: Could not find layer handle 0x7e27647a5170
+11-08 14:12:34.160   361   378 W TransactionTracing: Could not find layer handle 0x7e27647acbb0
+11-08 14:12:34.160   493  1679 I WindowManager: WIN DEATH: Window{f6b78d u0 com.android.systemui.wallpapers.ImageWallpaper}
+11-08 14:12:34.165   361   378 W TransactionTracing: Could not find layer handle 0x7e27647ac6d0
+11-08 14:12:34.166   361   378 W TransactionTracing: Could not find layer handle 0x7e27647b0570
+11-08 14:12:34.168   361   378 W TransactionTracing: Could not find layer handle 0x7e27647af3d0
+11-08 14:12:34.168   493  1679 W InputManager-JNI: Input channel object 'f6b78d com.android.systemui.wallpapers.ImageWallpaper (client)' was disposed without first being removed with the input manager!
+11-08 14:12:34.174   361   378 W TransactionTracing: Could not find layer handle 0x7e27647ad150
+11-08 14:12:34.175   361   378 W TransactionTracing: Could not find layer handle 0x7e27647aca90
+11-08 14:12:34.176   361   378 W TransactionTracing: Could not find layer handle 0x7e27647aca30
+11-08 14:12:34.178   361   378 W TransactionTracing: Could not find layer handle 0x7e27647b0030
+11-08 14:12:34.181   361   378 W TransactionTracing: Could not find layer handle 0x7e27647a60d0
+11-08 14:12:34.181   361   378 W TransactionTracing: Could not find layer handle 0x7e27647ac850
+11-08 14:12:34.186   493  1555 I WindowManager: WIN DEATH: Window{6cdc681 u0 ScreenDecorOverlay}
+11-08 14:12:34.188   493  1555 W InputManager-JNI: Input channel object '6cdc681 ScreenDecorOverlay (client)' was disposed without first being removed with the input manager!
+11-08 14:12:34.194   493  1678 I WindowManager: WIN DEATH: Window{fb68df3 u0 StatusBar}
+11-08 14:12:34.194   493  1678 W InputManager-JNI: Input channel object 'fb68df3 StatusBar (client)' was disposed without first being removed with the input manager!
+11-08 14:12:34.211  1505  1557 D EGL_emulation: app_time_stats: avg=500.37ms min=11.78ms max=988.97ms count=2
+11-08 14:12:34.229  2824  3384 I DialerTaskExecutor: com.android.voicemail.impl.scheduling.TaskExecutor$WorkerThreadHandler.handleMessage:221 executing task com.android.voicemail.impl.ActivationTask@ebb2e06 [CONTEXT enable_persistent_logger=true ]
+11-08 14:12:34.231  2824  2824 I DialerLogcatLoggingBindings: com.android.dialer.logging.logcat.LogcatLoggingBindings.logImpression:41 Impression: VVM_ACTIVATION_STARTED
+11-08 14:12:34.234   361   361 E BpTransactionCompletedListener: Failed to transact (-32)
+11-08 14:12:34.243   361   361 E BpTransactionCompletedListener: Failed to transact (-32)
+11-08 14:12:34.289   361   378 W TransactionTracing: Could not find layer handle 0x7e27647ae530
+11-08 14:12:34.289   361   378 W TransactionTracing: Could not find layer handle 0x7e27647ae050
+11-08 14:12:34.289   361   378 W TransactionTracing: Could not find layer handle 0x7e27647adf30
+11-08 14:12:34.323  2824  3384 I DialerPreOMigrationHandler: com.android.voicemail.impl.PreOMigrationHandler.migrate:76 ComponentInfo{com.android.phone/com.android.services.telephony.TelephonyConnectionService}, 1, UserHandle{0} already migrated [CONTEXT enable_persistent_logger=true ]
+11-08 14:12:34.360   493  1678 W WindowManager: Failed to deliver inset state change
+11-08 14:12:34.360   493  1678 W WindowManager: android.os.DeadObjectException
+11-08 14:12:34.360   493  1678 W WindowManager: 	at android.os.BinderProxy.transactNative(Native Method)
+11-08 14:12:34.360   493  1678 W WindowManager: 	at android.os.BinderProxy.transact(BinderProxy.java:584)
+11-08 14:12:34.360   493  1678 W WindowManager: 	at android.view.IDisplayWindowInsetsController$Stub$Proxy.insetsChanged(IDisplayWindowInsetsController.java:220)
+11-08 14:12:34.360   493  1678 W WindowManager: 	at com.android.server.wm.DisplayContent$RemoteInsetsControlTarget.notifyInsetsChanged(DisplayContent.java:6735)
+11-08 14:12:34.360   493  1678 W WindowManager: 	at com.android.server.wm.DisplayContent.notifyInsetsChanged(DisplayContent.java:2066)
+11-08 14:12:34.360   493  1678 W WindowManager: 	at com.android.server.wm.InsetsStateController.notifyInsetsChanged(InsetsStateController.java:370)
+11-08 14:12:34.360   493  1678 W WindowManager: 	at com.android.server.wm.InsetsStateController.onPostLayout(InsetsStateController.java:154)
+11-08 14:12:34.360   493  1678 W WindowManager: 	at com.android.server.wm.DisplayContent.applySurfaceChangesTransaction(DisplayContent.java:4861)
+11-08 14:12:34.360   493  1678 W WindowManager: 	at com.android.server.wm.RootWindowContainer.applySurfaceChangesTransaction(RootWindowContainer.java:1014)
+11-08 14:12:34.360   493  1678 W WindowManager: 	at com.android.server.wm.RootWindowContainer.performSurfacePlacementNoTrace(RootWindowContainer.java:816)
+11-08 14:12:34.360   493  1678 W WindowManager: 	at com.android.server.wm.RootWindowContainer.performSurfacePlacement(RootWindowContainer.java:777)
+11-08 14:12:34.360   493  1678 W WindowManager: 	at com.android.server.wm.WindowSurfacePlacer.performSurfacePlacementLoop(WindowSurfacePlacer.java:177)
+11-08 14:12:34.360   493  1678 W WindowManager: 	at com.android.server.wm.WindowSurfacePlacer.performSurfacePlacement(WindowSurfacePlacer.java:126)
+11-08 14:12:34.360   493  1678 W WindowManager: 	at com.android.server.wm.WindowSurfacePlacer.performSurfacePlacement(WindowSurfacePlacer.java:115)
+11-08 14:12:34.360   493  1678 W WindowManager: 	at com.android.server.wm.WindowManagerService.postWindowRemoveCleanupLocked(WindowManagerService.java:2137)
+11-08 14:12:34.360   493  1678 W WindowManager: 	at com.android.server.wm.WindowState.removeImmediately(WindowState.java:2481)
+11-08 14:12:34.360   493  1678 W WindowManager: 	at com.android.server.wm.WindowState.removeIfPossible(WindowState.java:2636)
+11-08 14:12:34.360   493  1678 W WindowManager: 	at com.android.server.wm.WindowState.-$$Nest$mremoveIfPossible(Unknown Source:0)
+11-08 14:12:34.360   493  1678 W WindowManager: 	at com.android.server.wm.WindowState$DeathRecipient.binderDied(WindowState.java:3126)
+11-08 14:12:34.360   493  1678 W WindowManager: 	at android.os.IBinder$DeathRecipient.binderDied(IBinder.java:317)
+11-08 14:12:34.360   493  1678 W WindowManager: 	at android.os.BinderProxy.sendDeathNotice(BinderProxy.java:704)
+11-08 14:12:34.384   493  1678 W WindowManager: Failed to report 'resized' to Window{8854ff2 u0 NavigationBar0} due to android.os.DeadObjectException
+11-08 14:12:34.384   493  1678 W WindowManager: Failed to report 'resized' to Window{ea82bb2 u0 ScreenDecorOverlayBottom} due to android.os.DeadObjectException
+11-08 14:12:34.391   361   361 E BpTransactionCompletedListener: Failed to transact (-32)
+11-08 14:12:34.395   361   378 W TransactionTracing: Could not find layer handle 0x7e27647af8b0
+11-08 14:12:34.395   361   378 W TransactionTracing: Could not find layer handle 0x7e27647adc30
+11-08 14:12:34.395   361   378 W TransactionTracing: Could not find layer handle 0x7e27647af130
+11-08 14:12:34.418   493  1368 I WindowManager: WIN DEATH: Window{2d5a0f1 u0 NotificationShade}
+11-08 14:12:34.419   493  1368 W InputManager-JNI: Input channel object '2d5a0f1 NotificationShade (client)' was disposed without first being removed with the input manager!
+11-08 14:12:34.421   493  1681 I WindowManager: WIN DEATH: Window{ea82bb2 u0 ScreenDecorOverlayBottom}
+11-08 14:12:34.421   493  1681 W InputManager-JNI: Input channel object 'ea82bb2 ScreenDecorOverlayBottom (client)' was disposed without first being removed with the input manager!
+11-08 14:12:34.430   361   378 W TransactionTracing: Could not find layer handle 0x7e27647af1f0
+11-08 14:12:34.430   361   378 W TransactionTracing: Could not find layer handle 0x7e27647af430
+11-08 14:12:34.433   493  1071 I WindowManager: WIN DEATH: Window{a069e1b u0 SecondaryHomeHandle0}
+11-08 14:12:34.433   493  1071 W InputManager-JNI: Input channel object 'a069e1b SecondaryHomeHandle0 (client)' was disposed without first being removed with the input manager!
+11-08 14:12:34.436   493  1413 I WindowManager: WIN DEATH: Window{8854ff2 u0 NavigationBar0}
+11-08 14:12:34.437   493  1413 W InputManager-JNI: Input channel object '8854ff2 NavigationBar0 (client)' was disposed without first being removed with the input manager!
+11-08 14:12:34.438   493  1413 W WindowManager: Failed to deliver inset state change
+11-08 14:12:34.438   493  1413 W WindowManager: android.os.DeadObjectException
+11-08 14:12:34.438   493  1413 W WindowManager: 	at android.os.BinderProxy.transactNative(Native Method)
+11-08 14:12:34.438   493  1413 W WindowManager: 	at android.os.BinderProxy.transact(BinderProxy.java:584)
+11-08 14:12:34.438   493  1413 W WindowManager: 	at android.view.IDisplayWindowInsetsController$Stub$Proxy.insetsChanged(IDisplayWindowInsetsController.java:220)
+11-08 14:12:34.438   493  1413 W WindowManager: 	at com.android.server.wm.DisplayContent$RemoteInsetsControlTarget.notifyInsetsChanged(DisplayContent.java:6735)
+11-08 14:12:34.438   493  1413 W WindowManager: 	at com.android.server.wm.DisplayContent.notifyInsetsChanged(DisplayContent.java:2066)
+11-08 14:12:34.438   493  1413 W WindowManager: 	at com.android.server.wm.InsetsStateController.notifyInsetsChanged(InsetsStateController.java:370)
+11-08 14:12:34.438   493  1413 W WindowManager: 	at com.android.server.wm.InsetsStateController.onPostLayout(InsetsStateController.java:154)
+11-08 14:12:34.438   493  1413 W WindowManager: 	at com.android.server.wm.DisplayContent.applySurfaceChangesTransaction(DisplayContent.java:4861)
+11-08 14:12:34.438   493  1413 W WindowManager: 	at com.android.server.wm.RootWindowContainer.applySurfaceChangesTransaction(RootWindowContainer.java:1014)
+11-08 14:12:34.438   493  1413 W WindowManager: 	at com.android.server.wm.RootWindowContainer.performSurfacePlacementNoTrace(RootWindowContainer.java:816)
+11-08 14:12:34.438   493  1413 W WindowManager: 	at com.android.server.wm.RootWindowContainer.performSurfacePlacement(RootWindowContainer.java:777)
+11-08 14:12:34.438   493  1413 W WindowManager: 	at com.android.server.wm.WindowSurfacePlacer.performSurfacePlacementLoop(WindowSurfacePlacer.java:177)
+11-08 14:12:34.438   493  1413 W WindowManager: 	at com.android.server.wm.WindowSurfacePlacer.performSurfacePlacement(WindowSurfacePlacer.java:126)
+11-08 14:12:34.438   493  1413 W WindowManager: 	at com.android.server.wm.WindowSurfacePlacer.performSurfacePlacement(WindowSurfacePlacer.java:115)
+11-08 14:12:34.438   493  1413 W WindowManager: 	at com.android.server.wm.WindowManagerService.postWindowRemoveCleanupLocked(WindowManagerService.java:2137)
+11-08 14:12:34.438   493  1413 W WindowManager: 	at com.android.server.wm.WindowState.removeImmediately(WindowState.java:2481)
+11-08 14:12:34.438   493  1413 W WindowManager: 	at com.android.server.wm.WindowState.removeIfPossible(WindowState.java:2636)
+11-08 14:12:34.438   493  1413 W WindowManager: 	at com.android.server.wm.WindowState.-$$Nest$mremoveIfPossible(Unknown Source:0)
+11-08 14:12:34.438   493  1413 W WindowManager: 	at com.android.server.wm.WindowState$DeathRecipient.binderDied(WindowState.java:3126)
+11-08 14:12:34.438   493  1413 W WindowManager: 	at android.os.IBinder$DeathRecipient.binderDied(IBinder.java:317)
+11-08 14:12:34.438   493  1413 W WindowManager: 	at android.os.BinderProxy.sendDeathNotice(BinderProxy.java:704)
+11-08 14:12:34.442   361   361 E BpTransactionCompletedListener: Failed to transact (-32)
+11-08 14:12:34.457   361   378 W TransactionTracing: Could not find layer handle 0x7e27647b0f90
+11-08 14:12:34.457   361   378 W TransactionTracing: Could not find layer handle 0x7e27647ae110
+11-08 14:12:34.457   361   378 W TransactionTracing: Could not find layer handle 0x7e27647ae650
+11-08 14:12:34.458   361   378 W TransactionTracing: Could not find layer handle 0x7e27647adf90
+11-08 14:12:34.458   361   378 W TransactionTracing: Could not find layer handle 0x7e27647adb70
+11-08 14:12:34.466  2824  3384 I DialerOmtpVvmCarrierConfigHelper: com.android.voicemail.impl.OmtpVvmCarrierConfigHelper.isCarrierAppInstalled:637 carrier app not installed in this device [CONTEXT ratelimit_period="1 MINUTES [skipped: 4]" ]
+11-08 14:12:34.466  2824  3384 I DialerVoicemailStatus: com.android.voicemail.impl.VoicemailStatus$Editor.apply:112 enter
+11-08 14:12:34.514  2824  3384 I DialerVoicemailStatusDataServiceImpl: com.android.dialer.voicemailstatus.dataservice.impl.VoicemailStatusDataServiceImpl.insertOrUpdateVoicemailStatus:196 enter
+11-08 14:12:34.523   361   361 E BpTransactionCompletedListener: Failed to transact (-32)
+11-08 14:12:34.708   493  1413 I ActivityTaskManager: Config changes=20000400 {1.0 310mcc260mnc [en_US] ldltr sw411dp w411dp h866dp 420dpi nrml long port finger qwerty/v/v dpad/v winConfig={ mBounds=Rect(0, 0 - 1080, 2400) mAppBounds=Rect(0, 128 - 1080, 2400) mMaxBounds=Rect(0, 0 - 1080, 2400) mDisplayRotation=ROTATION_0 mWindowingMode=fullscreen mDisplayWindowingMode=fullscreen mActivityType=undefined mAlwaysOnTop=undefined mRotation=ROTATION_0} as.3 s.115 fontWeightAdjustment=0}
+11-08 14:12:34.727   493  1413 W ActivityTaskManager: Current config: {1.0 310mcc260mnc [en_US] ldltr sw411dp w411dp h842dp 420dpi nrml long port finger qwerty/v/v dpad/v winConfig={ mBounds=Rect(0, 0 - 1080, 2400) mAppBounds=Rect(0, 128 - 1080, 2337) mMaxBounds=Rect(0, 0 - 1080, 2400) mDisplayRotation=ROTATION_0 mWindowingMode=fullscreen mDisplayWindowingMode=fullscreen mActivityType=undefined mAlwaysOnTop=undefined mRotation=ROTATION_0} as.3 s.115 fontWeightAdjustment=0} unchanged for IME proc com.google.android.inputmethod.latin
+11-08 14:12:34.827   493  1413 E ActivityTaskManager: Failed to schedule configuration change: ProcessRecord{18ed03f 690:com.android.systemui/u0a157}
+11-08 14:12:34.827   493  1413 E ActivityTaskManager: android.os.DeadObjectException
+11-08 14:12:34.827   493  1413 E ActivityTaskManager: 	at android.os.BinderProxy.transactNative(Native Method)
+11-08 14:12:34.827   493  1413 E ActivityTaskManager: 	at android.os.BinderProxy.transact(BinderProxy.java:584)
+11-08 14:12:34.827   493  1413 E ActivityTaskManager: 	at android.app.IApplicationThread$Stub$Proxy.scheduleTransaction(IApplicationThread.java:1900)
+11-08 14:12:34.827   493  1413 E ActivityTaskManager: 	at android.app.servertransaction.ClientTransaction.schedule(ClientTransaction.java:136)
+11-08 14:12:34.827   493  1413 E ActivityTaskManager: 	at com.android.server.wm.ClientLifecycleManager.scheduleTransaction(ClientLifecycleManager.java:47)
+11-08 14:12:34.827   493  1413 E ActivityTaskManager: 	at com.android.server.wm.ClientLifecycleManager.scheduleTransaction(ClientLifecycleManager.java:100)
+11-08 14:12:34.827   493  1413 E ActivityTaskManager: 	at com.android.server.wm.WindowProcessController.scheduleConfigurationChange(WindowProcessController.java:1462)
+11-08 14:12:34.827   493  1413 E ActivityTaskManager: 	at com.android.server.wm.WindowProcessController.dispatchConfiguration(WindowProcessController.java:1450)
+11-08 14:12:34.827   493  1413 E ActivityTaskManager: 	at com.android.server.wm.WindowProcessController.onConfigurationChanged(WindowProcessController.java:1397)
+11-08 14:12:34.827   493  1413 E ActivityTaskManager: 	at com.android.server.wm.ActivityTaskManagerService.updateGlobalConfigurationLocked(ActivityTaskManagerService.java:4454)
+11-08 14:12:34.827   493  1413 E ActivityTaskManager: 	at com.android.server.wm.DisplayContent.updateDisplayOverrideConfigurationLocked(DisplayContent.java:6077)
+11-08 14:12:34.827   493  1413 E ActivityTaskManager: 	at com.android.server.wm.DisplayContent.updateDisplayOverrideConfigurationLocked(DisplayContent.java:6054)
+11-08 14:12:34.827   493  1413 E ActivityTaskManager: 	at com.android.server.wm.DisplayContent.sendNewConfiguration(DisplayContent.java:1558)
+11-08 14:12:34.827   493  1413 E ActivityTaskManager: 	at com.android.server.wm.WindowState.removeIfPossible(WindowState.java:2646)
+11-08 14:12:34.827   493  1413 E ActivityTaskManager: 	at com.android.server.wm.WindowState.-$$Nest$mremoveIfPossible(Unknown Source:0)
+11-08 14:12:34.827   493  1413 E ActivityTaskManager: 	at com.android.server.wm.WindowState$DeathRecipient.binderDied(WindowState.java:3126)
+11-08 14:12:34.827   493  1413 E ActivityTaskManager: 	at android.os.IBinder$DeathRecipient.binderDied(IBinder.java:317)
+11-08 14:12:34.827   493  1413 E ActivityTaskManager: 	at android.os.BinderProxy.sendDeathNotice(BinderProxy.java:704)
+11-08 14:12:34.831   493  1413 I WindowManager: Override config changes=20000400 {1.0 310mcc260mnc [en_US] ldltr sw411dp w411dp h866dp 420dpi nrml long port finger qwerty/v/v dpad/v winConfig={ mBounds=Rect(0, 0 - 1080, 2400) mAppBounds=Rect(0, 128 - 1080, 2400) mMaxBounds=Rect(0, 0 - 1080, 2400) mDisplayRotation=ROTATION_0 mWindowingMode=fullscreen mDisplayWindowingMode=fullscreen mActivityType=undefined mAlwaysOnTop=undefined mRotation=ROTATION_0} as.3 s.115 fontWeightAdjustment=0} for displayId=0
+11-08 14:12:34.838   995   995 D b/254119092: TaskbarManager#mComponentCallbacks.onConfigurationChanged: {1.0 310mcc260mnc [en_US] ldltr sw411dp w411dp h866dp 420dpi nrml long port finger qwerty/v/v dpad/v winConfig={ mBounds=Rect(0, 0 - 1080, 2400) mAppBounds=Rect(0, 128 - 1080, 2400) mMaxBounds=Rect(0, 0 - 1080, 2400) mDisplayRotation=ROTATION_0 mWindowingMode=fullscreen mDisplayWindowingMode=fullscreen mActivityType=undefined mAlwaysOnTop=undefined mRotation=ROTATION_0} as.3 s.115 fontWeightAdjustment=0}
+11-08 14:12:34.838   995   995 D b/254119092: mActivity and mContext agree taskbarIsPresent=false
+11-08 14:12:34.839   995   995 D b/254119092: ComponentCallbacks#onConfigurationChanged() configDiffForRecreate={CONFIG_SCREEN_SIZE, CONFIG_WINDOW_CONFIGURATION}
+11-08 14:12:34.839   995   995 D b/254119092: mActivity and mContext agree taskbarIsPresent=false
+11-08 14:12:34.840   995   995 D b/254119092: destroyExistingTaskbar: null
+11-08 14:12:34.840   995   995 D b/254119092: mActivity and mContext agree taskbarIsPresent=false
+11-08 14:12:34.840   995   995 D b/254119092: recreateTaskbar: isTaskbarEnabled=false [dp != null (i.e. mUserUnlocked)]=true FLAG_HIDE_NAVBAR_WINDOW=false dp.isTaskbarPresent=false
+11-08 14:12:34.840   995   995 D b/254119092: mActivity and mContext agree taskbarIsPresent=false
+11-08 14:12:34.840   493  1413 V ActivityTaskManager: Sending to IME proc com.google.android.inputmethod.latin new config {1.0 310mcc260mnc [en_US] ldltr sw411dp w411dp h866dp 420dpi nrml long port finger qwerty/v/v dpad/v winConfig={ mBounds=Rect(0, 0 - 1080, 2400) mAppBounds=Rect(0, 128 - 1080, 2400) mMaxBounds=Rect(0, 0 - 1080, 2400) mDisplayRotation=ROTATION_0 mWindowingMode=fullscreen mDisplayWindowingMode=fullscreen mActivityType=undefined mAlwaysOnTop=undefined mRotation=ROTATION_0} as.3 s.181 fontWeightAdjustment=0}
+11-08 14:12:34.840   493  1413 W ActivityTaskManager: Unable to send config for IME proc com.google.android.inputmethod.latin: no app thread
+11-08 14:12:34.842   995   995 D b/254119092: DisplayController#onConfigurationChanged: {1.0 310mcc260mnc [en_US] ldltr sw411dp w411dp h866dp 420dpi nrml long port finger qwerty/v/v dpad/v winConfig={ mBounds=Rect(0, 0 - 1080, 2400) mAppBounds=Rect(0, 128 - 1080, 2400) mMaxBounds=Rect(0, 0 - 1080, 2400) mDisplayRotation=ROTATION_0 mWindowingMode=fullscreen mDisplayWindowingMode=fullscreen mActivityType=undefined mAlwaysOnTop=undefined mRotation=ROTATION_0} as.3 s.115 fontWeightAdjustment=0}
+11-08 14:12:34.895  2747  2747 I DeviceModeUtil: DeviceModeUtil.getDeviceMode():122 Get device mode phone by ui mode:1 and smallestScreenWidthDp:411
+11-08 14:12:34.943  2747  2747 E putmethod.latin: Failed to open file '/data/resource-cache/data@resource-cache@com.android.systemui-neutral-RWCF.frro@idmap': No such file or directory
+11-08 14:12:34.943  2747  2747 E putmethod.latin: failed to read IDMAP /data/resource-cache/data@resource-cache@com.android.systemui-neutral-RWCF.frro@idmap
+11-08 14:12:34.969  2824  3021 I DialerRestVoicemailEnabledFn: com.android.dialer.voicemail.service.impl.vvmclients.rest.RestVoicemailEnabledFn.isEnabled:51 disabled by flag [CONTEXT ratelimit_period="1 MINUTES [skipped: 35]" ]
+11-08 14:12:34.972  2824  3021 I DialerCvvmEnabledFn: com.android.dialer.voicemail.service.impl.vvmclients.omtp.protocol.cvvm.CvvmEnabledFn.isEnabled:37 disabled by flag [CONTEXT ratelimit_period="1 MINUTES [skipped: 17]" ]
+11-08 14:12:34.973  2747  2747 W ResourcesManager: failed to add overlay path '/data/resource-cache/com.android.systemui-neutral-RWCF.frro'
+11-08 14:12:34.973  2747  2747 W ResourcesManager: java.io.IOException: Failed to load asset path /data/resource-cache/data@resource-cache@com.android.systemui-neutral-RWCF.frro@idmap
+11-08 14:12:34.973  2747  2747 W ResourcesManager: 	at android.content.res.ApkAssets.nativeLoad(Native Method)
+11-08 14:12:34.973  2747  2747 W ResourcesManager: 	at android.content.res.ApkAssets.<init>(ApkAssets.java:296)
+11-08 14:12:34.973  2747  2747 W ResourcesManager: 	at android.content.res.ApkAssets.loadOverlayFromPath(ApkAssets.java:216)
+11-08 14:12:34.973  2747  2747 W ResourcesManager: 	at android.app.ResourcesManager.loadApkAssets(ResourcesManager.java:470)
+11-08 14:12:34.973  2747  2747 W ResourcesManager: 	at android.app.ResourcesManager.createAssetManager(ResourcesManager.java:548)
+11-08 14:12:34.973  2747  2747 W ResourcesManager: 	at android.app.ResourcesManager.createResourcesImpl(ResourcesManager.java:630)
+11-08 14:12:34.973  2747  2747 W ResourcesManager: 	at android.app.ResourcesManager.findOrCreateResourcesImplForKeyLocked(ResourcesManager.java:682)
+11-08 14:12:34.973  2747  2747 W ResourcesManager: 	at android.app.ResourcesManager.findOrCreateResourcesImplForKeyLocked(ResourcesManager.java:671)
+11-08 14:12:34.973  2747  2747 W ResourcesManager: 	at android.app.ResourcesManager.updateResourcesForActivity(ResourcesManager.java:1220)
+11-08 14:12:34.973  2747  2747 W ResourcesManager: 	at android.window.WindowTokenClient.onConfigurationChanged(WindowTokenClient.java:249)
+11-08 14:12:34.973  2747  2747 W ResourcesManager: 	at android.window.WindowTokenClient$$ExternalSyntheticLambda1.accept(Unknown Source:16)
+11-08 14:12:34.973  2747  2747 W ResourcesManager: 	at com.android.internal.util.function.pooled.PooledLambdaImpl.doInvoke(PooledLambdaImpl.java:295)
+11-08 14:12:34.973  2747  2747 W ResourcesManager: 	at com.android.internal.util.function.pooled.PooledLambdaImpl.invoke(PooledLambdaImpl.java:204)
+11-08 14:12:34.973  2747  2747 W ResourcesManager: 	at com.android.internal.util.function.pooled.OmniFunction.run(OmniFunction.java:97)
+11-08 14:12:34.973  2747  2747 W ResourcesManager: 	at android.os.Handler.handleCallback(Handler.java:942)
+11-08 14:12:34.973  2747  2747 W ResourcesManager: 	at android.os.Handler.dispatchMessage(Handler.java:99)
+11-08 14:12:34.973  2747  2747 W ResourcesManager: 	at android.os.Looper.loopOnce(Looper.java:201)
+11-08 14:12:34.973  2747  2747 W ResourcesManager: 	at android.os.Looper.loop(Looper.java:288)
+11-08 14:12:34.973  2747  2747 W ResourcesManager: 	at android.app.ActivityThread.main(ActivityThread.java:7924)
+11-08 14:12:34.973  2747  2747 W ResourcesManager: 	at java.lang.reflect.Method.invoke(Native Method)
+11-08 14:12:34.973  2747  2747 W ResourcesManager: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:548)
+11-08 14:12:34.973  2747  2747 W ResourcesManager: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:936)
+11-08 14:12:34.973  2747  2747 E putmethod.latin: Failed to open file '/data/resource-cache/data@resource-cache@com.android.systemui-accent-Uwni.frro@idmap': No such file or directory
+11-08 14:12:34.973  2747  2747 E putmethod.latin: failed to read IDMAP /data/resource-cache/data@resource-cache@com.android.systemui-accent-Uwni.frro@idmap
+11-08 14:12:34.974  2747  2747 W ResourcesManager: failed to add overlay path '/data/resource-cache/com.android.systemui-accent-Uwni.frro'
+11-08 14:12:34.974  2747  2747 W ResourcesManager: java.io.IOException: Failed to load asset path /data/resource-cache/data@resource-cache@com.android.systemui-accent-Uwni.frro@idmap
+11-08 14:12:34.974  2747  2747 W ResourcesManager: 	at android.content.res.ApkAssets.nativeLoad(Native Method)
+11-08 14:12:34.974  2747  2747 W ResourcesManager: 	at android.content.res.ApkAssets.<init>(ApkAssets.java:296)
+11-08 14:12:34.974  2747  2747 W ResourcesManager: 	at android.content.res.ApkAssets.loadOverlayFromPath(ApkAssets.java:216)
+11-08 14:12:34.974  2747  2747 W ResourcesManager: 	at android.app.ResourcesManager.loadApkAssets(ResourcesManager.java:470)
+11-08 14:12:34.974  2747  2747 W ResourcesManager: 	at android.app.ResourcesManager.createAssetManager(ResourcesManager.java:548)
+11-08 14:12:34.974  2747  2747 W ResourcesManager: 	at android.app.ResourcesManager.createResourcesImpl(ResourcesManager.java:630)
+11-08 14:12:34.974  2747  2747 W ResourcesManager: 	at android.app.ResourcesManager.findOrCreateResourcesImplForKeyLocked(ResourcesManager.java:682)
+11-08 14:12:34.974  2747  2747 W ResourcesManager: 	at android.app.ResourcesManager.findOrCreateResourcesImplForKeyLocked(ResourcesManager.java:671)
+11-08 14:12:34.974  2747  2747 W ResourcesManager: 	at android.app.ResourcesManager.updateResourcesForActivity(ResourcesManager.java:1220)
+11-08 14:12:34.974  2747  2747 W ResourcesManager: 	at android.window.WindowTokenClient.onConfigurationChanged(WindowTokenClient.java:249)
+11-08 14:12:34.974  2747  2747 W ResourcesManager: 	at android.window.WindowTokenClient$$ExternalSyntheticLambda1.accept(Unknown Source:16)
+11-08 14:12:34.974  2747  2747 W ResourcesManager: 	at com.android.internal.util.function.pooled.PooledLambdaImpl.doInvoke(PooledLambdaImpl.java:295)
+11-08 14:12:34.974  2747  2747 W ResourcesManager: 	at com.android.internal.util.function.pooled.PooledLambdaImpl.invoke(PooledLambdaImpl.java:204)
+11-08 14:12:34.974  2747  2747 W ResourcesManager: 	at com.android.internal.util.function.pooled.OmniFunction.run(OmniFunction.java:97)
+11-08 14:12:34.974  2747  2747 W ResourcesManager: 	at android.os.Handler.handleCallback(Handler.java:942)
+11-08 14:12:34.974  2747  2747 W ResourcesManager: 	at android.os.Handler.dispatchMessage(Handler.java:99)
+11-08 14:12:34.974  2747  2747 W ResourcesManager: 	at android.os.Looper.loopOnce(Looper.java:201)
+11-08 14:12:34.974  2747  2747 W ResourcesManager: 	at android.os.Looper.loop(Looper.java:288)
+11-08 14:12:34.974  2747  2747 W ResourcesManager: 	at android.app.ActivityThread.main(ActivityThread.java:7924)
+11-08 14:12:34.974  2747  2747 W ResourcesManager: 	at java.lang.reflect.Method.invoke(Native Method)
+11-08 14:12:34.974  2747  2747 W ResourcesManager: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:548)
+11-08 14:12:34.974  2747  2747 W ResourcesManager: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:936)
+11-08 14:12:34.980  2747  2747 E putmethod.latin: Failed to open file '/data/resource-cache/data@resource-cache@com.android.systemui-neutral-RWCF.frro@idmap': No such file or directory
+11-08 14:12:34.980  2747  2747 E putmethod.latin: failed to read IDMAP /data/resource-cache/data@resource-cache@com.android.systemui-neutral-RWCF.frro@idmap
+11-08 14:12:34.985  2747  2747 W ResourcesManager: failed to add overlay path '/data/resource-cache/com.android.systemui-neutral-RWCF.frro'
+11-08 14:12:34.985  2747  2747 W ResourcesManager: java.io.IOException: Failed to load asset path /data/resource-cache/data@resource-cache@com.android.systemui-neutral-RWCF.frro@idmap
+11-08 14:12:34.985  2747  2747 W ResourcesManager: 	at android.content.res.ApkAssets.nativeLoad(Native Method)
+11-08 14:12:34.985  2747  2747 W ResourcesManager: 	at android.content.res.ApkAssets.<init>(ApkAssets.java:296)
+11-08 14:12:34.985  2747  2747 W ResourcesManager: 	at android.content.res.ApkAssets.loadOverlayFromPath(ApkAssets.java:216)
+11-08 14:12:34.985  2747  2747 W ResourcesManager: 	at android.app.ResourcesManager.loadApkAssets(ResourcesManager.java:470)
+11-08 14:12:34.985  2747  2747 W ResourcesManager: 	at android.app.ResourcesManager.createAssetManager(ResourcesManager.java:548)
+11-08 14:12:34.985  2747  2747 W ResourcesManager: 	at android.app.ResourcesManager.createResourcesImpl(ResourcesManager.java:630)
+11-08 14:12:34.985  2747  2747 W ResourcesManager: 	at android.app.ResourcesManager.findOrCreateResourcesImplForKeyLocked(ResourcesManager.java:682)
+11-08 14:12:34.985  2747  2747 W ResourcesManager: 	at android.app.ResourcesManager.findOrCreateResourcesImplForKeyLocked(ResourcesManager.java:671)
+11-08 14:12:34.985  2747  2747 W ResourcesManager: 	at android.app.ResourcesManager.updateResourcesForActivity(ResourcesManager.java:1220)
+11-08 14:12:34.985  2747  2747 W ResourcesManager: 	at android.window.WindowTokenClient.onConfigurationChanged(WindowTokenClient.java:249)
+11-08 14:12:34.985  2747  2747 W ResourcesManager: 	at android.window.WindowTokenClient$$ExternalSyntheticLambda1.accept(Unknown Source:16)
+11-08 14:12:34.985  2747  2747 W ResourcesManager: 	at com.android.internal.util.function.pooled.PooledLambdaImpl.doInvoke(PooledLambdaImpl.java:295)
+11-08 14:12:34.985  2747  2747 W ResourcesManager: 	at com.android.internal.util.function.pooled.PooledLambdaImpl.invoke(PooledLambdaImpl.java:204)
+11-08 14:12:34.985  2747  2747 W ResourcesManager: 	at com.android.internal.util.function.pooled.OmniFunction.run(OmniFunction.java:97)
+11-08 14:12:34.985  2747  2747 W ResourcesManager: 	at android.os.Handler.handleCallback(Handler.java:942)
+11-08 14:12:34.985  2747  2747 W ResourcesManager: 	at android.os.Handler.dispatchMessage(Handler.java:99)
+11-08 14:12:34.985  2747  2747 W ResourcesManager: 	at android.os.Looper.loopOnce(Looper.java:201)
+11-08 14:12:34.985  2747  2747 W ResourcesManager: 	at android.os.Looper.loop(Looper.java:288)
+11-08 14:12:34.985  2747  2747 W ResourcesManager: 	at android.app.ActivityThread.main(ActivityThread.java:7924)
+11-08 14:12:34.985  2747  2747 W ResourcesManager: 	at java.lang.reflect.Method.invoke(Native Method)
+11-08 14:12:34.985  2747  2747 W ResourcesManager: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:548)
+11-08 14:12:34.985  2747  2747 W ResourcesManager: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:936)
+11-08 14:12:34.985  2747  2747 E putmethod.latin: Failed to open file '/data/resource-cache/data@resource-cache@com.android.systemui-accent-Uwni.frro@idmap': No such file or directory
+11-08 14:12:34.985  2747  2747 E putmethod.latin: failed to read IDMAP /data/resource-cache/data@resource-cache@com.android.systemui-accent-Uwni.frro@idmap
+11-08 14:12:34.985  2747  2747 W ResourcesManager: failed to add overlay path '/data/resource-cache/com.android.systemui-accent-Uwni.frro'
+11-08 14:12:34.985  2747  2747 W ResourcesManager: java.io.IOException: Failed to load asset path /data/resource-cache/data@resource-cache@com.android.systemui-accent-Uwni.frro@idmap
+11-08 14:12:34.985  2747  2747 W ResourcesManager: 	at android.content.res.ApkAssets.nativeLoad(Native Method)
+11-08 14:12:34.985  2747  2747 W ResourcesManager: 	at android.content.res.ApkAssets.<init>(ApkAssets.java:296)
+11-08 14:12:34.985  2747  2747 W ResourcesManager: 	at android.content.res.ApkAssets.loadOverlayFromPath(ApkAssets.java:216)
+11-08 14:12:34.985  2747  2747 W ResourcesManager: 	at android.app.ResourcesManager.loadApkAssets(ResourcesManager.java:470)
+11-08 14:12:34.985  2747  2747 W ResourcesManager: 	at android.app.ResourcesManager.createAssetManager(ResourcesManager.java:548)
+11-08 14:12:34.985  2747  2747 W ResourcesManager: 	at android.app.ResourcesManager.createResourcesImpl(ResourcesManager.java:630)
+11-08 14:12:34.985  2747  2747 W ResourcesManager: 	at android.app.ResourcesManager.findOrCreateResourcesImplForKeyLocked(ResourcesManager.java:682)
+11-08 14:12:34.985  2747  2747 W ResourcesManager: 	at android.app.ResourcesManager.findOrCreateResourcesImplForKeyLocked(ResourcesManager.java:671)
+11-08 14:12:34.985  2747  2747 W ResourcesManager: 	at android.app.ResourcesManager.updateResourcesForActivity(ResourcesManager.java:1220)
+11-08 14:12:34.985  2747  2747 W ResourcesManager: 	at android.window.WindowTokenClient.onConfigurationChanged(WindowTokenClient.java:249)
+11-08 14:12:34.985  2747  2747 W ResourcesManager: 	at android.window.WindowTokenClient$$ExternalSyntheticLambda1.accept(Unknown Source:16)
+11-08 14:12:34.985  2747  2747 W ResourcesManager: 	at com.android.internal.util.function.pooled.PooledLambdaImpl.doInvoke(PooledLambdaImpl.java:295)
+11-08 14:12:34.985  2747  2747 W ResourcesManager: 	at com.android.internal.util.function.pooled.PooledLambdaImpl.invoke(PooledLambdaImpl.java:204)
+11-08 14:12:34.985  2747  2747 W ResourcesManager: 	at com.android.internal.util.function.pooled.OmniFunction.run(OmniFunction.java:97)
+11-08 14:12:34.985  2747  2747 W ResourcesManager: 	at android.os.Handler.handleCallback(Handler.java:942)
+11-08 14:12:34.985  2747  2747 W ResourcesManager: 	at android.os.Handler.dispatchMessage(Handler.java:99)
+11-08 14:12:34.985  2747  2747 W ResourcesManager: 	at android.os.Looper.loopOnce(Looper.java:201)
+11-08 14:12:34.985  2747  2747 W ResourcesManager: 	at android.os.Looper.loop(Looper.java:288)
+11-08 14:12:34.985  2747  2747 W ResourcesManager: 	at android.app.ActivityThread.main(ActivityThread.java:7924)
+11-08 14:12:34.985  2747  2747 W ResourcesManager: 	at java.lang.reflect.Method.invoke(Native Method)
+11-08 14:12:34.985  2747  2747 W ResourcesManager: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:548)
+11-08 14:12:34.985  2747  2747 W ResourcesManager: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:936)
+11-08 14:12:34.988  2747  2747 W GoogleInputMethodService: GoogleInputMethodService.onConfigurationChanged():1557 onConfigurationChanged() : NewConfig = {1.0 310mcc260mnc [en_US] ldltr sw411dp w411dp h866dp 420dpi nrml long port finger qwerty/v/v dpad/v winConfig={ mBounds=Rect(0, 0 - 1080, 2400) mAppBounds=Rect(0, 128 - 1080, 2400) mMaxBounds=Rect(0, 0 - 1080, 2400) mDisplayRotation=ROTATION_0 mWindowingMode=fullscreen mDisplayWindowingMode=fullscreen mActivityType=undefined mAlwaysOnTop=undefined mRotation=ROTATION_0} as.3 s.115 fontWeightAdjustment=0}
+11-08 14:12:34.992  2747  2747 I GoogleInputMethodService: GoogleInputMethodService.onConfigurationChanged():1575 changedMask : 20000400
+11-08 14:12:34.998  2747  2747 I DeviceModeUtil: DeviceModeUtil.getDeviceMode():122 Get device mode phone by ui mode:1 and smallestScreenWidthDp:411
+11-08 14:12:35.004  2747  2747 I KeyboardModeManager: KeyboardModeManager.setInputView():364 setInputView() : supportsOneHandedMode=true
+11-08 14:12:35.005  2747  2747 I NormalModeController: NormalModeController.getKeyboardBodyViewHolderPaddingBottom():116 currentPrimeKeyboardType:SOFT systemPaddingBottom:-1
+11-08 14:12:35.006  2747  2747 I KeyboardModeManager: KeyboardModeManager.setInputView():356 setInputView() : entry=hwn{languageTag=en-US, variant=qwerty, hasLocalizedResources=true, conditionCacheKey=_device=phone_device_size=default_enable_adaptive_text_editing=false_enable_inline_suggestions_on_client_side=false_enable_large_tablet_batch_1=false_enable_large_tablet_batch_2=false_enable_more_candidates_view_for_multilingual=false_enable_nav_redesign=false_enable_number_row=false_enable_preemptive_decode=true_enable_secondary_symbols=false_expressions=normal_four_or_more_letter_rows=false_keyboard_mode=normal_language=en-US_orientation=portrait_physical_keyboard=qwerty_show_secondary_digits=true_show_suggestions=true_split_with_duplicate_keys=true_variant=qwerty, imeDef.stringId=ime_english_united_states, imeDef.className=com.google.android.apps.inputmethod.libs.latin5.LatinIme, imeDef.languageTag=en-US}
+11-08 14:12:35.040  2747  2747 I StyledKeyboardTheme: StyledKeyboardTheme.<init>():87 Pref: [], themeName: [silk:], darkMode: [false], cacheKey: [overlay_builtin_dynamic_color_light_base.binarypb:dynamic-light-fff0f0f3-ff76d1ff-ce191c6173d879ea127e4e40bfd70d3c]
+11-08 14:12:35.040  2747  2747 I DeviceModeUtil: DeviceModeUtil.getDeviceMode():122 Get device mode phone by ui mode:1 and smallestScreenWidthDp:411
+11-08 14:12:35.040  2747  2747 I DeviceModeUtil: DeviceModeUtil.getDeviceMode():122 Get device mode phone by ui mode:1 and smallestScreenWidthDp:411
+11-08 14:12:35.041  2747  2747 I DeviceModeUtil: DeviceModeUtil.getDeviceMode():122 Get device mode phone by ui mode:1 and smallestScreenWidthDp:411
+11-08 14:12:35.048  2747  2747 I DeviceModeUtil: DeviceModeUtil.getDeviceMode():122 Get device mode phone by ui mode:1 and smallestScreenWidthDp:411
+11-08 14:12:35.049  2747  2747 I DeviceModeUtil: DeviceModeUtil.getDeviceMode():122 Get device mode phone by ui mode:1 and smallestScreenWidthDp:411
+11-08 14:12:35.049  2747  2747 I GoogleInputMethodService: GoogleInputMethodService.initializeKeyboardTheme():1343 Apply keyboard theme: theme_border_bottom4dp_stylesheet_noshadow_gsans_pillkey_silkpopup_materiallight_phone_400_overlay_builtin_dynamic_color_light_base.binarypb:dynamic-light-fff0f0f3-ff76d1ff-ce191c6173d879ea127e4e40bfd70d3c_port
+11-08 14:12:35.064  2747  2747 I DeviceModeUtil: DeviceModeUtil.getDeviceMode():122 Get device mode phone by ui mode:1 and smallestScreenWidthDp:411
+11-08 14:12:35.068  2029  2037 I .android.as.oss: Background young concurrent copying GC freed 28844(3055KB) AllocSpace objects, 0(0B) LOS objects, 30% free, 4177KB/6010KB, paused 1.217ms,198us total 421.618ms
+11-08 14:12:35.098  2747  2747 I DeviceModeUtil: DeviceModeUtil.getDeviceMode():122 Get device mode phone by ui mode:1 and smallestScreenWidthDp:411
+11-08 14:12:35.106  2747  2747 I KeyboardViewUtil: KeyboardViewUtil.getKeyboardHeightRatio():189 systemKeyboardHeightRatio:1.000000; userKeyboardHeightRatio:1.000000.
+11-08 14:12:35.258   493   519 D ActivityTaskManager: Top Process State changed to PROCESS_STATE_TOP_SLEEPING
+11-08 14:12:35.268  2824  3021 W Settings: Setting airplane_mode_on has moved from android.provider.Settings.System to android.provider.Settings.Global, returning read-only value.
+11-08 14:12:35.268  2824  3021 I DialerVoicemailStatusDataServiceImpl: com.android.dialer.voicemailstatus.dataservice.impl.VoicemailStatusDataServiceImpl.lambda$insertOrUpdateVoicemailStatus$5:213 merged status: # kee@6600c263
+11-08 14:12:35.271  2824  3384 I DialerActivationTask: com.android.voicemail.impl.ActivationTask.onExecuteInBackgroundThread:292 VVM content provider configured - vvm_type_cvvm PhoneAccountHandle: [ComponentName: com.android.phone/com.android.services.telephony.TelephonyConnectionService subId: 1] [CONTEXT enable_persistent_logger=true ]
+11-08 14:12:35.272  2824  3384 I DialerActivationTask: com.android.voicemail.impl.ActivationTask.updateVoicemailsWithIccId:477 conversion disabled [CONTEXT enable_persistent_logger=true ]
+11-08 14:12:35.286  2824  3384 I DialerOmtpVvmCarrierConfigHelper: com.android.voicemail.impl.OmtpVvmCarrierConfigHelper.handleEvent:527 OmtpEvent:CONFIG_ACTIVATING PhoneAccountHandle: [ComponentName: com.android.phone/com.android.services.telephony.TelephonyConnectionService subId: 1] [CONTEXT enable_persistent_logger=true ]
+11-08 14:12:35.287  2824  3384 I DialerVoicemailStatus: com.android.voicemail.impl.VoicemailStatus$Editor.apply:112 enter
+11-08 14:12:35.287   493   519 W Looper  : Slow dispatch took 1568ms android.ui h=android.os.Handler c=com.android.server.policy.keyguard.KeyguardServiceDelegate$1$$ExternalSyntheticLambda0@8ca19c7 m=0
+11-08 14:12:35.288   493   519 W Looper  : Slow delivery took 989ms android.ui h=com.android.server.wm.DisplayPolicy$PolicyHandler c=com.android.server.wm.DisplayPolicy$$ExternalSyntheticLambda13@8d1cbf4 m=0
+11-08 14:12:35.288   493   519 W Looper  : Drained
+11-08 14:12:35.293   361   378 W TransactionTracing: Could not find layer handle 0x7e27647af430
+11-08 14:12:35.293   361   378 W TransactionTracing: Could not find layer handle 0x7e27647affd0
+11-08 14:12:35.299  2824  3384 I DialerVoicemailStatusDataServiceImpl: com.android.dialer.voicemailstatus.dataservice.impl.VoicemailStatusDataServiceImpl.insertOrUpdateVoicemailStatus:196 enter
+11-08 14:12:35.313   493   563 W ActivityManager: Scheduling restart of crashed service com.android.systemui/.SystemUIService in 0ms for persistent
+11-08 14:12:35.313   493   563 W ActivityManager: Scheduling restart of crashed service com.android.systemui/.keyguard.KeyguardService in 0ms for persistent
+11-08 14:12:35.314   493   563 W ActivityManager: Scheduling restart of crashed service com.android.systemui/.dump.SystemUIAuxiliaryDumpService in 0ms for persistent
+11-08 14:12:35.315   493   563 W ActivityManager: Scheduling restart of crashed service com.android.systemui/.wallpapers.ImageWallpaper in 0ms for persistent
+11-08 14:12:35.329   361   378 W TransactionTracing: Could not find layer handle 0x7e27647b08d0
+11-08 14:12:35.331   361   378 W TransactionTracing: Could not find layer handle 0x7e27647ae350
+11-08 14:12:35.332   361   378 W TransactionTracing: Could not find layer handle 0x7e27647af7f0
+11-08 14:12:35.333   361   378 W TransactionTracing: Could not find layer handle 0x7e27647af190
+11-08 14:12:35.342   361   378 W TransactionTracing: Could not find layer handle 0x7e27647aee90
+11-08 14:12:35.344   493  1554 I WindowManager: WIN DEATH: Window{2ddd57c u0 EdgeBackGestureHandler0}
+11-08 14:12:35.344   493  1554 W InputManager-JNI: Input channel object '2ddd57c EdgeBackGestureHandler0 (client)' was disposed without first being removed with the input manager!
+11-08 14:12:35.348   493   563 W ActivityManager: Re-adding persistent process ProcessRecord{18ed03f 690:com.android.systemui/u0a157}
+11-08 14:12:35.359   361   378 W TransactionTracing: Could not find layer handle 0x7e27647afcd0
+11-08 14:12:35.359   361   378 W TransactionTracing: Could not find layer handle 0x7e27647aefb0
+11-08 14:12:35.362   995   995 D TouchInteractionService: Touch service destroyed: user=0
+11-08 14:12:35.369   493  1676 W InputManager-JNI: Input channel object 'recents_animation_input_consumer (client)' was disposed without first being removed with the input manager!
+11-08 14:12:35.385   493   563 D CompatibilityChangeReporter: Compat change id reported: 135634846; UID 10157; state: DISABLED
+11-08 14:12:35.389   493   530 D CompatibilityChangeReporter: Compat change id reported: 143937733; UID 10157; state: ENABLED
+11-08 14:12:35.395   278   278 D Zygote  : Forked child process 5181
+11-08 14:12:35.412  5181  5181 I ndroid.systemui: Using CollectorTypeCC GC.
+11-08 14:12:35.414  5181  5181 W ndroid.systemui: Unexpected CPU variant for x86: x86_64.
+11-08 14:12:35.414  5181  5181 W ndroid.systemui: Known variants: atom, sandybridge, silvermont, kabylake, default
+11-08 14:12:35.419   380   405 I adbd    : jdwp connection from 5181
+11-08 14:12:35.471   493  1158 D HostConnection: HostComposition ext ANDROID_EMU_CHECKSUM_HELPER_v1 ANDROID_EMU_native_sync_v2 ANDROID_EMU_dma_v1 ANDROID_EMU_direct_mem ANDROID_EMU_host_composition_v1 ANDROID_EMU_host_composition_v2 ANDROID_EMU_vulkan ANDROID_EMU_deferred_vulkan_commands ANDROID_EMU_vulkan_null_optional_strings ANDROID_EMU_vulkan_create_resources_with_requirements ANDROID_EMU_YUV_Cache ANDROID_EMU_vulkan_ignored_handles ANDROID_EMU_has_shared_slots_host_memory_allocator ANDROID_EMU_vulkan_free_memory_sync ANDROID_EMU_vulkan_shader_float16_int8 ANDROID_EMU_vulkan_async_queue_submit ANDROID_EMU_vulkan_queue_submit_with_commands ANDROID_EMU_sync_buffer_data ANDROID_EMU_vulkan_async_qsri ANDROID_EMU_read_color_buffer_dma ANDROID_EMU_hwc_multi_configs ANDROID_EMU_hwc_color_transform GL_OES_EGL_image_external_essl3 GL_OES_vertex_array_object GL_KHR_texture_compression_astc_ldr ANDROID_EMU_host_side_tracing ANDROID_EMU_gles_max_version_3_0 
+11-08 14:12:35.482   493  1158 W OpenGLRenderer: Failed to initialize 101010-2 format, error = EGL_SUCCESS
+11-08 14:12:35.517   493  1158 D EGL_emulation: eglCreateContext: 0x771e0648e8d0: maj 3 min 0 rcv 3
+11-08 14:12:35.527   493  1158 D EGL_emulation: eglMakeCurrent: 0x771e0648e8d0: ver 3 0 (tinfo 0x772014bfd080) (first time)
+11-08 14:12:35.569   493   666 W system_server: Long monitor contention with owner binder:493_3 (563) at void com.android.server.am.ActivityManagerService$AppDeathRecipient.binderDied()(ActivityManagerService.java:1479) waiters=0 in android.app.ContentProviderHolder com.android.server.am.ContentProviderHelper.getContentProviderImpl(android.app.IApplicationThread, java.lang.String, android.os.IBinder, int, java.lang.String, java.lang.String, boolean, int) for 1.850s
+11-08 14:12:35.677   493   666 W ContentProviderHelper: Slow operation: 108ms so far, now at getContentProviderImpl: updating data structures
+11-08 14:12:35.678   493   666 W ContentProviderHelper: Slow operation: 109ms so far, now at getContentProviderImpl: done!
+11-08 14:12:35.679   493   528 W system_server: Long monitor contention with owner binder:493_3 (563) at void com.android.server.am.ActivityManagerService$AppDeathRecipient.binderDied()(ActivityManagerService.java:1479) waiters=1 in void com.android.server.am.ContentProviderHelper.handleProviderRemoval(com.android.server.am.ContentProviderConnection, boolean, boolean) for 1.930s

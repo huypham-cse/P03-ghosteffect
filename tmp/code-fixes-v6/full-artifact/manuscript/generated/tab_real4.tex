@@ -1,0 +1,47 @@
+\begin{table*}[!htbp]
+\centering
+\caption{REAL4 sensitivities: measured-parameter simulations, not fresh device or agent runs.
+Calibration labels and lag entries are generated; clock/downtime are explicit.
+$P_{\mathrm v}$, its CP upper bound and ASK are percentages.}
+\label{tab:real4}
+\scriptsize
+\begin{tabular}{@{}llllllrrr@{}}
+\toprule
+Case & App & Policy & Labels & Lags & Clock/down(s) & $P_{\mathrm v}$ & CP hi & ASK \\
+\midrule
+boot10k & element & ghost & 10000 & 20000 & origin/0.0 & 0.00 & 0.04 & 2.5 \\
+boot10k & element & ghost-joint & 10000 & 20000 & origin/0.0 & 0.00 & 0.04 & 2.2 \\
+down15 & element & ghost & 5000 & 20000 & origin/15.0 & 0.00 & 0.04 & 2.7 \\
+down15 & element & ghost-joint & 5000 & 20000 & origin/15.0 & 0.00 & 0.04 & 12.7 \\
+down5 & element & ghost & 5000 & 20000 & origin/5.0 & 0.00 & 0.04 & 2.7 \\
+down5 & element & ghost-joint & 5000 & 20000 & origin/5.0 & 0.00 & 0.04 & 12.7 \\
+lag10k & element & ghost & 10000 & 10000 & origin/0.0 & 0.00 & 0.04 & 11.5 \\
+lag10k & element & ghost-joint & 10000 & 10000 & origin/0.0 & 0.00 & 0.04 & 2.2 \\
+lag20k & element & ghost & 20000 & 20000 & origin/0.0 & 0.00 & 0.04 & 2.2 \\
+lag20k & element & ghost-joint & 20000 & 20000 & origin/0.0 & 0.00 & 0.04 & 2.2 \\
+lag2k & element & ghost & 2000 & 2000 & origin/0.0 & 0.00 & 0.04 & 100.0 \\
+lag2k & element & ghost-joint & 2000 & 2000 & origin/0.0 & 0.00 & 0.04 & 100.0 \\
+lag5k & element & ghost & 5000 & 5000 & origin/0.0 & 0.00 & 0.04 & 60.3 \\
+lag5k & element & ghost-joint & 5000 & 5000 & origin/0.0 & 0.00 & 0.04 & 30.6 \\
+netlab & element & ghost & 2000 & 20000 & origin/0.0 & 14.59 & 15.32 & 3.6 \\
+netlab & element & ghost-joint & 2000 & 20000 & origin/0.0 & 5.21 & 5.68 & 60.3 \\
+netlabkey & element & ghost & 2000 & 20000 & origin/0.0 & 0.00 & 0.04 & 3.0 \\
+netlabkey & element & ghost-joint & 2000 & 20000 & origin/0.0 & 0.00 & 0.04 & 72.9 \\
+t0down15 & element & ghost & 5000 & 20000 & t0/15.0 & 43.77 & 44.78 & 20.7 \\
+t0down15 & element & ghost-joint & 5000 & 20000 & t0/15.0 & 46.42 & 47.44 & 25.8 \\
+t0down5 & element & ghost & 5000 & 20000 & t0/5.0 & 18.82 & 19.62 & 21.2 \\
+t0down5 & element & ghost-joint & 5000 & 20000 & t0/5.0 & 29.93 & 30.87 & 21.6 \\
+tail5 & element & ghost & 5000 & 20000 & origin/0.0 & 2.83 & 3.19 & 3.0 \\
+tail5 & element & ghost-joint & 5000 & 20000 & origin/0.0 & 2.01 & 2.32 & 13.7 \\
+tail5tied & element & ghost & 5000 & 5000 & origin/0.0 & 0.99 & 1.21 & 61.4 \\
+tail5tied & element & ghost-joint & 5000 & 5000 & origin/0.0 & 2.01 & 2.32 & 31.7 \\
+vet & element & rules-vetted & 2000 & 20000 & origin/0.0 & 0.00 & 0.04 & 5.3 \\
+vet & element & rules-vetted-small & 2000 & 20000 & origin/0.0 & 0.00 & 0.04 & 3.1 \\
+vet & element & rules-w30-all & 2000 & 20000 & origin/0.0 & 0.00 & 0.04 & 3.1 \\
+vetk9 & k9 & rules-vetted & 2000 & 20000 & origin/0.0 & 0.00 & 0.04 & 100.0 \\
+vetk9 & k9 & rules-vetted-small & 2000 & 20000 & origin/0.0 & 0.00 & 0.04 & 100.0 \\
+vetk9sent & k9sent & rules-vetted & 2000 & 20000 & origin/0.0 & 0.00 & 0.04 & 100.0 \\
+vetk9sent & k9sent & rules-vetted-small & 2000 & 20000 & origin/0.0 & 0.00 & 0.04 & 100.0 \\
+\bottomrule
+\end{tabular}
+\end{table*}

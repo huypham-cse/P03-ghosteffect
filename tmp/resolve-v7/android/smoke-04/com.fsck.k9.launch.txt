@@ -1,0 +1,7 @@
+Starting: Intent { cmp=com.fsck.k9/net.thunderbird.app.common.MainActivity }
+Status: ok
+LaunchState: COLD
+Activity: com.fsck.k9/app.k9mail.feature.launcher.FeatureLauncherActivity
+TotalTime: 10802
+WaitTime: 10875
+Complete

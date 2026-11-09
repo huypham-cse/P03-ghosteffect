@@ -1,0 +1,13 @@
+{
+  "kind": "adb-sequential-bracketed-capture",
+  "serial": "emulator-5580",
+  "mono_start_ns": 58124593000000,
+  "mono_end_ns": 58137171000000,
+  "utc_ns": 1794120185519609500,
+  "foreground_before": "com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity",
+  "foreground_after": "com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity",
+  "stable_tree": false,
+  "same_foreground": true,
+  "tree_sha256": "412025f758298dfbea36447197a40c12f683926333d3d43ba25d7dc510fd4fa2",
+  "png_sha256": "a5c3cd3dccd53e13dd2b68e4235045ebc1ac6f86f4210ebd73e8753dad05c8c1"
+}

@@ -1,0 +1,491 @@
+Activity Resolver Table:
+  Full MIME Types:
+      */*:
+        6f6ace im.vector.app/.features.share.IncomingShareActivity filter b4f6def
+          Action: "android.intent.action.SEND"
+          Category: "android.intent.category.DEFAULT"
+          Category: "android.intent.category.OPENABLE"
+          StaticType: "*"
+          mPriority=0, mOrder=0, mHasStaticPartialTypes=true, mHasDynamicPartialTypes=false
+        6f6ace im.vector.app/.features.share.IncomingShareActivity filter a2ad0fc
+          Action: "android.intent.action.SEND_MULTIPLE"
+          Category: "android.intent.category.DEFAULT"
+          Category: "android.intent.category.OPENABLE"
+          StaticType: "*"
+          mPriority=0, mOrder=0, mHasStaticPartialTypes=true, mHasDynamicPartialTypes=false
+
+  Wild MIME Types:
+      *:
+        6f6ace im.vector.app/.features.share.IncomingShareActivity filter b4f6def
+          Action: "android.intent.action.SEND"
+          Category: "android.intent.category.DEFAULT"
+          Category: "android.intent.category.OPENABLE"
+          StaticType: "*"
+          mPriority=0, mOrder=0, mHasStaticPartialTypes=true, mHasDynamicPartialTypes=false
+        6f6ace im.vector.app/.features.share.IncomingShareActivity filter a2ad0fc
+          Action: "android.intent.action.SEND_MULTIPLE"
+          Category: "android.intent.category.DEFAULT"
+          Category: "android.intent.category.OPENABLE"
+          StaticType: "*"
+          mPriority=0, mOrder=0, mHasStaticPartialTypes=true, mHasDynamicPartialTypes=false
+
+  Schemes:
+      element:
+        130f2f6 im.vector.app/.features.login.SSORedirectRouterActivity filter c2296f7
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          Category: "android.intent.category.BROWSABLE"
+          Scheme: "element"
+          Authority: "connect": -1
+        ab507d0 im.vector.app/.features.permalink.PermalinkHandlerActivity filter 255e3c9
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          Category: "android.intent.category.BROWSABLE"
+          Scheme: "http"
+          Scheme: "https"
+          Scheme: "element"
+          Authority: "matrix.to": -1
+          Authority: "user": -1
+          Authority: "room": -1
+      http:
+        ab507d0 im.vector.app/.features.permalink.PermalinkHandlerActivity filter 255e3c9
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          Category: "android.intent.category.BROWSABLE"
+          Scheme: "http"
+          Scheme: "https"
+          Scheme: "element"
+          Authority: "matrix.to": -1
+          Authority: "user": -1
+          Authority: "room": -1
+      https:
+        ec3b964 im.vector.app/.features.link.LinkHandlerActivity filter 32a97cd
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          Category: "android.intent.category.BROWSABLE"
+          Scheme: "https"
+          Authority: "riot.im": -1
+        ec3b964 im.vector.app/.features.link.LinkHandlerActivity filter 8f14882
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          Category: "android.intent.category.BROWSABLE"
+          Scheme: "https"
+          Authority: "app.element.io": -1
+          Authority: "develop.element.io": -1
+          Authority: "staging.element.io": -1
+          AutoVerify=true
+        ec3b964 im.vector.app/.features.link.LinkHandlerActivity filter 95fab93
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          Category: "android.intent.category.BROWSABLE"
+          Scheme: "https"
+          Authority: "mobile.element.io": -1
+          Path: "PatternMatcher{LITERAL: /}"
+          AutoVerify=true
+        ab507d0 im.vector.app/.features.permalink.PermalinkHandlerActivity filter 255e3c9
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          Category: "android.intent.category.BROWSABLE"
+          Scheme: "http"
+          Scheme: "https"
+          Scheme: "element"
+          Authority: "matrix.to": -1
+          Authority: "user": -1
+          Authority: "room": -1
+
+  Non-Data Actions:
+      android.intent.action.MAIN:
+        3e0b9b8 im.vector.app/im.vector.application.features.Alias filter b955391
+          Action: "android.intent.action.MAIN"
+          Category: "android.intent.category.LAUNCHER"
+
+  MIME Typed Actions:
+      android.intent.action.SEND:
+        6f6ace im.vector.app/.features.share.IncomingShareActivity filter b4f6def
+          Action: "android.intent.action.SEND"
+          Category: "android.intent.category.DEFAULT"
+          Category: "android.intent.category.OPENABLE"
+          StaticType: "*"
+          mPriority=0, mOrder=0, mHasStaticPartialTypes=true, mHasDynamicPartialTypes=false
+      android.intent.action.SEND_MULTIPLE:
+        6f6ace im.vector.app/.features.share.IncomingShareActivity filter a2ad0fc
+          Action: "android.intent.action.SEND_MULTIPLE"
+          Category: "android.intent.category.DEFAULT"
+          Category: "android.intent.category.OPENABLE"
+          StaticType: "*"
+          mPriority=0, mOrder=0, mHasStaticPartialTypes=true, mHasDynamicPartialTypes=false
+
+Receiver Resolver Table:
+  Non-Data Actions:
+      android.intent.action.BATTERY_OKAY:
+        71a9f83 im.vector.app/androidx.work.impl.background.systemalarm.ConstraintProxy$BatteryNotLowProxy filter 5420500
+          Action: "android.intent.action.BATTERY_OKAY"
+          Action: "android.intent.action.BATTERY_LOW"
+      android.intent.action.ACTION_POWER_DISCONNECTED:
+        fde0e3d im.vector.app/androidx.work.impl.background.systemalarm.ConstraintProxy$BatteryChargingProxy filter a10d632
+          Action: "android.intent.action.ACTION_POWER_CONNECTED"
+          Action: "android.intent.action.ACTION_POWER_DISCONNECTED"
+      org.unifiedpush.android.connector.REGISTRATION_REFUSED:
+        7214301 im.vector.app/.core.pushers.VectorUnifiedPushMessagingReceiver filter f5a05a6
+          Action: "org.unifiedpush.android.connector.MESSAGE"
+          Action: "org.unifiedpush.android.connector.UNREGISTERED"
+          Action: "org.unifiedpush.android.connector.NEW_ENDPOINT"
+          Action: "org.unifiedpush.android.connector.REGISTRATION_FAILED"
+          Action: "org.unifiedpush.android.connector.REGISTRATION_REFUSED"
+      org.unifiedpush.android.connector.MESSAGE:
+        7214301 im.vector.app/.core.pushers.VectorUnifiedPushMessagingReceiver filter f5a05a6
+          Action: "org.unifiedpush.android.connector.MESSAGE"
+          Action: "org.unifiedpush.android.connector.UNREGISTERED"
+          Action: "org.unifiedpush.android.connector.NEW_ENDPOINT"
+          Action: "org.unifiedpush.android.connector.REGISTRATION_FAILED"
+          Action: "org.unifiedpush.android.connector.REGISTRATION_REFUSED"
+      androidx.profileinstaller.action.SAVE_PROFILE:
+        2c6dcd7 im.vector.app/androidx.profileinstaller.ProfileInstallReceiver filter cc72fe2
+          Action: "androidx.profileinstaller.action.SAVE_PROFILE"
+      android.intent.action.DEVICE_STORAGE_LOW:
+        8a25139 im.vector.app/androidx.work.impl.background.systemalarm.ConstraintProxy$StorageNotLowProxy filter cf2237e
+          Action: "android.intent.action.DEVICE_STORAGE_LOW"
+          Action: "android.intent.action.DEVICE_STORAGE_OK"
+      android.net.conn.CONNECTIVITY_CHANGE:
+        b5db0df im.vector.app/androidx.work.impl.background.systemalarm.ConstraintProxy$NetworkStateProxy filter e42712c
+          Action: "android.net.conn.CONNECTIVITY_CHANGE"
+      android.intent.action.DEVICE_STORAGE_OK:
+        8a25139 im.vector.app/androidx.work.impl.background.systemalarm.ConstraintProxy$StorageNotLowProxy filter cf2237e
+          Action: "android.intent.action.DEVICE_STORAGE_LOW"
+          Action: "android.intent.action.DEVICE_STORAGE_OK"
+      org.unifiedpush.android.connector.UNREGISTERED:
+        7214301 im.vector.app/.core.pushers.VectorUnifiedPushMessagingReceiver filter f5a05a6
+          Action: "org.unifiedpush.android.connector.MESSAGE"
+          Action: "org.unifiedpush.android.connector.UNREGISTERED"
+          Action: "org.unifiedpush.android.connector.NEW_ENDPOINT"
+          Action: "org.unifiedpush.android.connector.REGISTRATION_FAILED"
+          Action: "org.unifiedpush.android.connector.REGISTRATION_REFUSED"
+      org.unifiedpush.android.connector.REGISTRATION_FAILED:
+        7214301 im.vector.app/.core.pushers.VectorUnifiedPushMessagingReceiver filter f5a05a6
+          Action: "org.unifiedpush.android.connector.MESSAGE"
+          Action: "org.unifiedpush.android.connector.UNREGISTERED"
+          Action: "org.unifiedpush.android.connector.NEW_ENDPOINT"
+          Action: "org.unifiedpush.android.connector.REGISTRATION_FAILED"
+          Action: "org.unifiedpush.android.connector.REGISTRATION_REFUSED"
+      androidx.profileinstaller.action.INSTALL_PROFILE:
+        2c6dcd7 im.vector.app/androidx.profileinstaller.ProfileInstallReceiver filter b3fb9c4
+          Action: "androidx.profileinstaller.action.INSTALL_PROFILE"
+      android.intent.action.BATTERY_LOW:
+        71a9f83 im.vector.app/androidx.work.impl.background.systemalarm.ConstraintProxy$BatteryNotLowProxy filter 5420500
+          Action: "android.intent.action.BATTERY_OKAY"
+          Action: "android.intent.action.BATTERY_LOW"
+      android.intent.action.TIMEZONE_CHANGED:
+        4cdc7f5 im.vector.app/androidx.work.impl.background.systemalarm.RescheduleReceiver filter b08f98a
+          Action: "android.intent.action.BOOT_COMPLETED"
+          Action: "android.intent.action.TIME_SET"
+          Action: "android.intent.action.TIMEZONE_CHANGED"
+      android.intent.action.TIME_SET:
+        4cdc7f5 im.vector.app/androidx.work.impl.background.systemalarm.RescheduleReceiver filter b08f98a
+          Action: "android.intent.action.BOOT_COMPLETED"
+          Action: "android.intent.action.TIME_SET"
+          Action: "android.intent.action.TIMEZONE_CHANGED"
+      androidx.profileinstaller.action.SKIP_FILE:
+        2c6dcd7 im.vector.app/androidx.profileinstaller.ProfileInstallReceiver filter 65400ad
+          Action: "androidx.profileinstaller.action.SKIP_FILE"
+      androidx.profileinstaller.action.BENCHMARK_OPERATION:
+        2c6dcd7 im.vector.app/androidx.profileinstaller.ProfileInstallReceiver filter c326f73
+          Action: "androidx.profileinstaller.action.BENCHMARK_OPERATION"
+      android.intent.action.BOOT_COMPLETED:
+        ecff385 im.vector.app/.fdroid.receiver.OnApplicationUpgradeOrRebootReceiver filter 89b65da
+          Action: "android.intent.action.MY_PACKAGE_REPLACED"
+          Action: "android.intent.action.BOOT_COMPLETED"
+        4cdc7f5 im.vector.app/androidx.work.impl.background.systemalarm.RescheduleReceiver filter b08f98a
+          Action: "android.intent.action.BOOT_COMPLETED"
+          Action: "android.intent.action.TIME_SET"
+          Action: "android.intent.action.TIMEZONE_CHANGED"
+      android.intent.action.ACTION_POWER_CONNECTED:
+        fde0e3d im.vector.app/androidx.work.impl.background.systemalarm.ConstraintProxy$BatteryChargingProxy filter a10d632
+          Action: "android.intent.action.ACTION_POWER_CONNECTED"
+          Action: "android.intent.action.ACTION_POWER_DISCONNECTED"
+      org.unifiedpush.android.distributor.REGISTER:
+        b712be7 im.vector.app/.core.pushers.KeepInternalDistributor filter 63a4394
+          Action: "org.unifiedpush.android.distributor.REGISTER"
+      androidx.work.diagnostics.REQUEST_DIAGNOSTICS:
+        3ffee71 im.vector.app/androidx.work.impl.diagnostics.DiagnosticsReceiver filter b052456
+          Action: "androidx.work.diagnostics.REQUEST_DIAGNOSTICS"
+      org.unifiedpush.android.connector.NEW_ENDPOINT:
+        7214301 im.vector.app/.core.pushers.VectorUnifiedPushMessagingReceiver filter f5a05a6
+          Action: "org.unifiedpush.android.connector.MESSAGE"
+          Action: "org.unifiedpush.android.connector.UNREGISTERED"
+          Action: "org.unifiedpush.android.connector.NEW_ENDPOINT"
+          Action: "org.unifiedpush.android.connector.REGISTRATION_FAILED"
+          Action: "org.unifiedpush.android.connector.REGISTRATION_REFUSED"
+      android.intent.action.MY_PACKAGE_REPLACED:
+        ecff385 im.vector.app/.fdroid.receiver.OnApplicationUpgradeOrRebootReceiver filter 89b65da
+          Action: "android.intent.action.MY_PACKAGE_REPLACED"
+          Action: "android.intent.action.BOOT_COMPLETED"
+      androidx.work.impl.background.systemalarm.UpdateProxies:
+        9967bfb im.vector.app/androidx.work.impl.background.systemalarm.ConstraintProxyUpdateReceiver filter dfb7418
+          Action: "androidx.work.impl.background.systemalarm.UpdateProxies"
+      android.intent.action.MEDIA_BUTTON:
+        3cefa0b im.vector.app/androidx.media.session.MediaButtonReceiver filter ed200e8
+          Action: "android.intent.action.MEDIA_BUTTON"
+
+Service Resolver Table:
+  Non-Data Actions:
+      android.telecom.ConnectionService:
+        bac682e im.vector.app/.features.call.telecom.VectorConnectionAndroidService filter 1ba8fcf permission android.permission.BIND_TELECOM_CONNECTION_SERVICE
+          Action: "android.telecom.ConnectionService"
+        d5a7d5c im.vector.app/org.jitsi.meet.sdk.ConnectionService filter 2e19865 permission android.permission.BIND_TELECOM_CONNECTION_SERVICE
+          Action: "android.telecom.ConnectionService"
+      android.service.chooser.ChooserTargetService:
+        99ad93a im.vector.app/androidx.sharetarget.ChooserTargetServiceCompat filter 1fa59eb permission android.permission.BIND_CHOOSER_TARGET_SERVICE
+          Action: "android.service.chooser.ChooserTargetService"
+      android.intent.action.MEDIA_BUTTON:
+        560ae30 im.vector.app/.core.services.CallAndroidService filter 85cfaa9
+          Action: "android.intent.action.MEDIA_BUTTON"
+
+Domain verification status:
+  im.vector.app:
+    ID: d16764bb-29c1-4740-af88-c449fef80600
+    Signatures: [B1:5D:9B:67:3B:55:B9:FE:65:61:90:79:4D:87:2E:59:EC:5B:85:B3:BF:B8:A7:6B:94:42:F1:7E:AE:28:87:C9]
+    Domain verification state:
+      staging.element.io: none
+      mobile.element.io: none
+      develop.element.io: none
+      app.element.io: none
+    User all:
+      Verification link handling allowed: true
+      Selection state:
+        Disabled:
+          staging.element.io
+          mobile.element.io
+          develop.element.io
+          app.element.io
+          matrix.to
+          riot.im
+
+Permissions:
+  Permission [im.vector.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION] (6db35b5):
+    sourcePackage=im.vector.app
+    uid=10174 gids=[] type=0 prot=signature
+    perm=PermissionInfo{4b1344a im.vector.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION}
+
+Registered ContentProviders:
+  im.vector.app/io.sentry.android.core.SentryPerformanceProvider:
+    Provider{e6402a2 im.vector.app/io.sentry.android.core.SentryPerformanceProvider}
+  im.vector.app/io.sentry.android.core.SentryInitProvider:
+    Provider{4aeab33 im.vector.app/io.sentry.android.core.SentryInitProvider}
+  im.vector.app/org.matrix.android.sdk.api.session.file.MatrixSDKFileProvider:
+    Provider{2fa9ef0 im.vector.app/org.matrix.android.sdk.api.session.file.MatrixSDKFileProvider}
+  im.vector.app/com.reactnativecommunity.webview.RNCWebViewFileProvider:
+    Provider{ec2fc69 im.vector.app/com.reactnativecommunity.webview.RNCWebViewFileProvider}
+  im.vector.app/androidx.core.content.FileProvider:
+    Provider{423a6ee im.vector.app/androidx.core.content.FileProvider}
+  im.vector.app/com.oblador.performance.StartTimeProvider:
+    Provider{a1ec78f im.vector.app/com.oblador.performance.StartTimeProvider}
+  im.vector.app/im.vector.lib.multipicker.provider.MultiPickerFileProvider:
+    Provider{782ba1c im.vector.app/im.vector.lib.multipicker.provider.MultiPickerFileProvider}
+  im.vector.app/androidx.startup.InitializationProvider:
+    Provider{505f625 im.vector.app/androidx.startup.InitializationProvider}
+  im.vector.app/ru.noties.jlatexmath.JLatexMathInitProvider:
+    Provider{a2743fa im.vector.app/ru.noties.jlatexmath.JLatexMathInitProvider}
+
+ContentProvider Authorities:
+  [im.vector.app.fileprovider]:
+    Provider{ec2fc69 im.vector.app/com.reactnativecommunity.webview.RNCWebViewFileProvider}
+      applicationInfo=ApplicationInfo{6ca4dab im.vector.app}
+  [im.vector.app.fileProvider]:
+    Provider{423a6ee im.vector.app/androidx.core.content.FileProvider}
+      applicationInfo=ApplicationInfo{50f5c08 im.vector.app}
+  [im.vector.app.SentryPerformanceProvider]:
+    Provider{e6402a2 im.vector.app/io.sentry.android.core.SentryPerformanceProvider}
+      applicationInfo=ApplicationInfo{195a5c6 im.vector.app}
+  [im.vector.app.androidx-startup]:
+    Provider{505f625 im.vector.app/androidx.startup.InitializationProvider}
+      applicationInfo=ApplicationInfo{25e1987 im.vector.app}
+  [im.vector.app.multipicker.fileprovider]:
+    Provider{782ba1c im.vector.app/im.vector.lib.multipicker.provider.MultiPickerFileProvider}
+      applicationInfo=ApplicationInfo{34230b4 im.vector.app}
+  [im.vector.app.jlatexmathinitprovider]:
+    Provider{a2743fa im.vector.app/ru.noties.jlatexmath.JLatexMathInitProvider}
+      applicationInfo=ApplicationInfo{d3dc4dd im.vector.app}
+  [im.vector.app.mx-sdk.fileprovider]:
+    Provider{2fa9ef0 im.vector.app/org.matrix.android.sdk.api.session.file.MatrixSDKFileProvider}
+      applicationInfo=ApplicationInfo{5365852 im.vector.app}
+  [im.vector.app.start.time.provider]:
+    Provider{a1ec78f im.vector.app/com.oblador.performance.StartTimeProvider}
+      applicationInfo=ApplicationInfo{878c723 im.vector.app}
+  [im.vector.app.SentryInitProvider]:
+    Provider{4aeab33 im.vector.app/io.sentry.android.core.SentryInitProvider}
+      applicationInfo=ApplicationInfo{2ba420 im.vector.app}
+
+Key Set Manager:
+  [im.vector.app]
+      Signing KeySets: 53
+
+Packages:
+  Package [im.vector.app] (f56d1d9):
+    userId=10174
+    pkg=Package{2bda79e im.vector.app}
+    codePath=/data/app/~~mT-2YMqRKvAaXzouCEkyiA==/im.vector.app-B3uxd8i6sjKP7EgCXtYw_Q==
+    resourcePath=/data/app/~~mT-2YMqRKvAaXzouCEkyiA==/im.vector.app-B3uxd8i6sjKP7EgCXtYw_Q==
+    legacyNativeLibraryDir=/data/app/~~mT-2YMqRKvAaXzouCEkyiA==/im.vector.app-B3uxd8i6sjKP7EgCXtYw_Q==/lib
+    extractNativeLibs=true
+    primaryCpuAbi=x86_64
+    secondaryCpuAbi=null
+    cpuAbiOverride=null
+    versionCode=40106624 minSdk=21 targetSdk=35
+    minExtensionVersions=[]
+    versionName=1.6.62
+    usesNonSdkApi=false
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ HAS_CODE ALLOW_CLEAR_USER_DATA LARGE_HEAP ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE ALLOW_AUDIO_PLAYBACK_CAPTURE HAS_DOMAIN_URLS PARTIALLY_DIRECT_BOOT_AWARE PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    queriesIntents=[Intent { act=android.support.customtabs.action.CustomTabsService }, Intent { act=android.intent.action.VIEW dat=content://*/... typ=*/* }, Intent { act=org.unifiedpush.android.distributor.REGISTER }, Intent { act=org.unifiedpush.android.distributor.UNREGISTER }]
+    dataDir=/data/user/0/im.vector.app
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    usesOptionalLibraries:
+      androidx.window.extensions
+      androidx.window.sidecar
+    usesLibraryFiles:
+      /system_ext/framework/androidx.window.extensions.jar
+      /system_ext/framework/androidx.window.sidecar.jar
+    timeStamp=2026-11-08 13:35:01
+    lastUpdateTime=2026-11-08 13:35:28
+    packageSource=0
+    signatures=PackageSignatures{e02e349 version:3, signatures:[908cf106], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ HAS_CODE ALLOW_CLEAR_USER_DATA LARGE_HEAP ]
+    declared permissions:
+      im.vector.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION: prot=signature, INSTALLED
+    requested permissions:
+      android.permission.WAKE_LOCK
+      android.permission.RECEIVE_BOOT_COMPLETED
+      android.permission.FOREGROUND_SERVICE
+      android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+      android.permission.FOREGROUND_SERVICE_DATA_SYNC
+      android.permission.BLUETOOTH_CONNECT
+      android.permission.INTERNET
+      android.permission.READ_CONTACTS
+      android.permission.VIBRATE
+      android.permission.CAMERA
+      android.permission.RECORD_AUDIO
+      android.permission.READ_EXTERNAL_STORAGE
+      android.permission.ACCESS_NETWORK_STATE
+      android.permission.POST_NOTIFICATIONS
+      android.permission.MANAGE_OWN_CALLS
+      android.permission.MODIFY_AUDIO_SETTINGS
+      android.permission.USE_FULL_SCREEN_INTENT
+      android.permission.SYSTEM_ALERT_WINDOW
+      android.permission.REQUEST_INSTALL_PACKAGES
+      android.permission.ACCESS_COARSE_LOCATION
+      android.permission.ACCESS_FINE_LOCATION
+      android.permission.FOREGROUND_SERVICE_PHONE_CALL
+      android.permission.FOREGROUND_SERVICE_LOCATION
+      android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION
+      android.permission.FOREGROUND_SERVICE_MICROPHONE
+      android.permission.WRITE_EXTERNAL_STORAGE
+      android.permission.ACCESS_WIFI_STATE
+      android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK
+      android.permission.USE_BIOMETRIC
+      android.permission.USE_FINGERPRINT
+      android.permission.WRITE_CALENDAR
+      android.permission.READ_CALENDAR
+      im.vector.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+    install permissions:
+      im.vector.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION: granted=true
+      android.permission.MODIFY_AUDIO_SETTINGS: granted=true
+      android.permission.SYSTEM_ALERT_WINDOW: granted=true
+      android.permission.FOREGROUND_SERVICE: granted=true
+      android.permission.RECEIVE_BOOT_COMPLETED: granted=true
+      android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS: granted=true
+      android.permission.INTERNET: granted=true
+      android.permission.USE_FULL_SCREEN_INTENT: granted=true
+      android.permission.ACCESS_NETWORK_STATE: granted=true
+      android.permission.USE_FINGERPRINT: granted=true
+      android.permission.MANAGE_OWN_CALLS: granted=true
+      android.permission.VIBRATE: granted=true
+      android.permission.ACCESS_WIFI_STATE: granted=true
+      android.permission.USE_BIOMETRIC: granted=true
+      android.permission.REQUEST_INSTALL_PACKAGES: granted=false
+      android.permission.WAKE_LOCK: granted=true
+    User 0: ceDataInode=131437 installed=true hidden=false suspended=false distractionFlags=0 stopped=true notLaunched=true enabled=0 instant=false virtual=false
+      installReason=0
+      firstInstallTime=2026-11-08 13:35:28
+      uninstallReason=0
+      overlay paths:
+        /product/overlay/EmulationPixel6/EmulationPixel6Overlay.apk
+        /product/overlay/NavigationBarModeGestural/NavigationBarModeGesturalOverlay.apk
+        /data/resource-cache/com.android.systemui-neutral-EKn8.frro
+        /data/resource-cache/com.android.systemui-accent-COHb.frro
+      legacy overlay paths:
+        /product/overlay/EmulationPixel6/EmulationPixel6Overlay.apk
+        /product/overlay/NavigationBarModeGestural/NavigationBarModeGesturalOverlay.apk
+      gids=[3003]
+      runtime permissions:
+        android.permission.READ_CALENDAR: granted=true
+        android.permission.POST_NOTIFICATIONS: granted=true
+        android.permission.ACCESS_FINE_LOCATION: granted=true
+        android.permission.BLUETOOTH_CONNECT: granted=true
+        android.permission.READ_EXTERNAL_STORAGE: granted=true, flags=[ RESTRICTION_INSTALLER_EXEMPT]
+        android.permission.ACCESS_COARSE_LOCATION: granted=true
+        android.permission.CAMERA: granted=true
+        android.permission.WRITE_CALENDAR: granted=true
+        android.permission.WRITE_EXTERNAL_STORAGE: granted=true, flags=[ RESTRICTION_INSTALLER_EXEMPT]
+        android.permission.RECORD_AUDIO: granted=true
+        android.permission.READ_CONTACTS: granted=true
+
+Queries:
+  system apps queryable: false
+  queries via forceQueryable:
+  queries via package name:
+  queries via component:
+    com.google.android.settings.intelligence:
+      im.vector.app
+    com.google.android.apps.messaging:
+      im.vector.app
+    com.google.android.apps.youtube.music:
+      im.vector.app
+    com.google.android.youtube:
+      im.vector.app
+    com.google.android.apps.maps:
+      im.vector.app
+    com.google.android.apps.photos:
+      im.vector.app
+    im.vector.app:
+      com.google.android.tag
+      com.google.android.documentsui
+      com.android.htmlviewer
+      com.google.android.dialer
+      com.google.android.contacts
+      com.google.android.apps.docs
+      com.google.android.apps.youtube.music
+      com.android.chrome
+      com.google.android.calendar
+      com.google.android.apps.maps
+      com.google.android.apps.photos
+      com.google.android.gm
+  queryable via interaction:
+    User 0:
+  queryable via uses-library:
+
+Dexopt state:
+  [im.vector.app]
+    path: /data/app/~~mT-2YMqRKvAaXzouCEkyiA==/im.vector.app-B3uxd8i6sjKP7EgCXtYw_Q==/base.apk
+      x86_64: [status=verify] [reason=install]
+  BgDexopt state:
+    enabled:true
+    mDexOptThread:null
+    mDexOptCancellingThread:null
+    mFinishedPostBootUpdate:false
+    mLastExecutionStatus:0
+    mLastExecutionStartTimeMs:0
+    mLastExecutionDurationIncludingSleepMs:0
+    mLastExecutionStartUptimeMs:0
+    mLastExecutionDurationMs:0
+    now:267463
+    mLastCancelledPackages:
+    mFailedPackageNamesPrimary:
+    mFailedPackageNamesSecondary:
+
+Compiler stats:
+  [im.vector.app]
+     base.apk - 71598

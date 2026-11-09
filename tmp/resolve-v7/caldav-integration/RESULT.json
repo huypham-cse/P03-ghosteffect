@@ -1,0 +1,47 @@
+{
+  "status": "PASS",
+  "kind": "real backend protocol integration with synthetic payloads",
+  "protocol": "caldav",
+  "android": false,
+  "llm": false,
+  "app_fault": false,
+  "cases": [
+    {
+      "case": "nofault",
+      "copies": 1
+    },
+    {
+      "case": "lost_ack_same_href_conditional_retry",
+      "copies": 1,
+      "retry_status": 412
+    },
+    {
+      "case": "new_href_uid_same_content",
+      "copies": 2
+    },
+    {
+      "case": "preapply_reject_and_late_same_id",
+      "copies": 0
+    }
+  ],
+  "version": "3.9.0",
+  "seconds": 6.298103304,
+  "source_sha256": {
+    "app_driver.py": "4db819d9b47a628f8d399a8d8b4c76455c119dc77f52c39c238eecc3b641a69d",
+    "calibration.py": "35697858b0221e7df25734aebc23df02c1882163dda9c4c1b37ebfd093568343",
+    "classifier.py": "08ab7ecc841094bb05e0f37ad8da0f96150dc6ac4f57dd424d30d21240525c73",
+    "controller.py": "01cc7cecb59061aef8f929b9120428697c75737168cb7c5c631eaa351c7dac86",
+    "faultproxy.py": "0cabf8cd81a12353c006e15d2924e81d67ce6311a5c1cf23d489cf3c1c097bee",
+    "grader.py": "e8bca947e33017ee9ad19d2ff97d0056d1315fbdbd293f4fcf5b13de8c2ace44",
+    "local_model.py": "2f40337300c63395c2a50f1cfdc6e64755567ba8319764f803b723a8353b66fb",
+    "preflight.py": "2627bbbef4f45daba4faeefbd62ad57074bec35fbaff45b0ab21ac154639f61d",
+    "probes.py": "287a1e84c78ba72ad7b812f3bc10fbb059e41fd9a71c5f0608dc0c8c361a379b",
+    "recovery.py": "d44f949d118282bec516a03facbf41e2919b6b69db19375c5c71c67c3329c7a1",
+    "run_case.py": "fe6e4b5ef5edf8befc9bf2f4d3d0787da97088d3ab483e5a0d1897ccd7d50fad",
+    "setup_assets.py": "bb3a2fde07693aa77357ebb180d8ef0e114c0cfcac600fd7d9a904dca39392ef",
+    "setup_backends.py": "228a5b5dbe26405e1de966e6ed370a1e1a13f767bfa08ac4cde14dadfcd3c62c",
+    "smoke_greenmail.py": "54e22e3b4e3a008cab4eb50a8cceb390a132883f2fd68bb5e799da8d0c48e856",
+    "smoke_http_backends.py": "6f32a155a8e82d8523ac4ec8706952734f28f8b1736857adb285065575e2f186",
+    "ui.py": "4492acc4cab846471c3ed14a63cc0d51e7619b6d6e1a298fc99071e1676877d9"
+  }
+}

@@ -1,0 +1,7 @@
+Starting: Intent { cmp=com.simplemobiletools.smsmessenger/.activities.SplashActivity.Orange }
+Status: ok
+LaunchState: COLD
+Activity: com.google.android.permissioncontroller/com.android.permissioncontroller.role.ui.RequestRoleActivity
+TotalTime: 7995
+WaitTime: 8197
+Complete

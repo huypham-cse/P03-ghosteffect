@@ -1,0 +1,6 @@
+# Historical top-level pins. Resolve/download into a project-local Linux venv,
+# record pip freeze + wheel hashes before running a new replication stratum.
+# Fail if unavailable; do not silently upgrade. These are not runtime deps of
+# faultproxy.py, controller.py, ui.py or the numerical artifact (stdlib only).
+matrix-synapse==1.164.2
+Radicale==3.9.0

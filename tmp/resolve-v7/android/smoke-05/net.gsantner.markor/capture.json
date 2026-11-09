@@ -1,0 +1,13 @@
+{
+  "kind": "adb-sequential-bracketed-capture",
+  "serial": "emulator-5580",
+  "mono_start_ns": 58707437000000,
+  "mono_end_ns": 58717718000000,
+  "utc_ns": 1794120766066693100,
+  "foreground_before": "net.gsantner.markor/net.gsantner.markor.activity.IntroActivity",
+  "foreground_after": "net.gsantner.markor/net.gsantner.markor.activity.IntroActivity",
+  "stable_tree": true,
+  "same_foreground": true,
+  "tree_sha256": "30ab20623806ffaebae69adfe01c6f0dc250c650650bfab3b6d5133f74e2757e",
+  "png_sha256": "f276c06e26c376f0440c34321e575135bd0c3fc65db64cbdfbf01da94353dfb3"
+}

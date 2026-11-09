@@ -1,0 +1,13 @@
+{
+  "kind": "adb-sequential-bracketed-capture",
+  "serial": "emulator-5580",
+  "mono_start_ns": 58865562000000,
+  "mono_end_ns": 58878687000000,
+  "utc_ns": 1794120927042126900,
+  "foreground_before": "net.cozic.joplin/net.cozic.joplin.MainActivity",
+  "foreground_after": "net.cozic.joplin/net.cozic.joplin.MainActivity",
+  "stable_tree": true,
+  "same_foreground": true,
+  "tree_sha256": "558dda31eb3cdbbce8d8dbf5e1eacf33d7a6bc71c662f05c5ea9b9db53976c5b",
+  "png_sha256": "c12fb2da1c4845dc9f679852ebd2dafb8f4ea7e33639db4e5cf677d0e6860587"
+}

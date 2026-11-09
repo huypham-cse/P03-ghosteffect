@@ -1,0 +1,32 @@
+\section{Related Work}
+\label{sec:related}
+
+\para{Exactly-once and recovery for tool-using agents.}
+LIMBO~\cite{li2026exactlyonce} measures duplicates with and without idempotency keys and proves that verification-only recovery is not exactly-once under late commits;
+UndoBench~\cite{sah2026undobench} finds recovery phase-dependent, with server-side idempotency helping after commit but before acknowledgement, the window of our two-hop
+decomposition. RetryBench~\cite{liu2026retrybench}, evidence-guided recovery~\cite{zhu2026evidence}, retained outcome records~\cite{he2026kedgeflow} and budget
+conservation~\cite{zhu2026budget} reason over exact, possibly partial evidence for API tools; we add perceptual, correlated evidence, death of the agent, and the app's own outbox.
+Atomix~\cite{mohammadi2026atomix}, Agent libOS~\cite{zhang2026agentlibos},
+Cordon~\cite{chen2026cordon}, reject-and-rerun~\cite{salas2026authority}, Yin~\cite{yin2026safety}, verified tool calls~\cite{mansoor2026verified}, RAC~\cite{perera2026rac},
+Revisable by Design~\cite{zhai2026revisable}, ALAS~\cite{geng2025alas}, SAFEFLOW~\cite{li2025safeflow}, bounded loops~\cite{bhardwaj2026bounded}, GoEX~\cite{patil2024goex} and effect-aware harnesses~\cite{ma2026guardrailed,shaikh2026agentmesh,kovalenko2026effectworld,wang2026industrial}
+settle, stage, check, log, compensate or undo effects, assuming exact read-back. RFC~1047 identified the window between SMTP's final ``.'' and its reply as a source of
+duplicate mail~\cite{rfc1047}; K-9's error state is its client-side face. Checkpoint restore can replay irreversible effects~\cite{khan2026resume,li2025agentgit,zheng2026acrfence,wu2026safe}; durable execution~\cite{temporal_docs,langgraph_durable,burckhardt2021durable,zhang2020beldi,jia2021boki}
+gives exactly-once inside the system; \sys addresses an app the agent can only see. At-most-once RPC~\cite{birrell1984rpc}, idempotent producers~\cite{wang2021kafka}
+and idempotence~\cite{helland2012idempotence} are ancestors of Theorem~\ref{thm:twohop}.
+
+\para{Mobile GUI agents, verification and safety.}
+Agents and benchmarks~\cite{rawles2025androidworld,rawles2023aitw,wen2024autodroid,zhang2025appagent,wang2024mobileagent,ye2025mobileagentv3,qin2025uitars,tian2025agentprog}
+advance task success; D-GARA~\cite{chen2025dgara}, GUI-RobustEval~\cite{bu2026recovering}, GraceBench~\cite{zhang2026gracebench}, PhoneHarness~\cite{li2026phoneharness},
+LegacyWorld, CUA-Recovery and ReTrace~\cite{reintjes2026legacyworld,hu2026cuarecovery,bang2026lostinrecovery} test robustness, recovery, atomicity and evidence of the intended
+effect. AndroidReality adds training-free test-time recovery to perturbed AndroidWorld tasks~\cite{liu2026androidreality}; a recovery that redoes a step whose effect is not
+visible is the verify-then-redo step that duplicates a ghost effect. Coati's on-phone host checks outcomes against host evidence and flags unauditable completions~\cite{ying2026coati}, without budgets or lag semantics. Outcome verifiers~\cite{zhang2026verigui,zheng2026tsr,yang2026taskvm} fit the VLM family once calibrated; GUI critics~\cite{wu2025osoracle}, two systems named VeriCUA~\cite{sun2026vericua,wang2026vericuaproactive} and judge
+benchmarks~\cite{lu2025agentrewardbench,pan2024autonomous,zheng2023judging} show how noisy such oracles are. Safety work guards actions before they run~\cite{lee2025verisafe,sun2025ossentinel,lee2024mobilesafetybench,yu2026seerguard};
+CORA calibrates execute/abstain decisions~\cite{feng2026cora}; threat, rebinding and TOCTOU studies~\cite{liu2025mobilethreats,qian2026rebinding,lilienthal2025toctou,jiang2026atomicity,xu2026temporal,he2026cognitive}
+expose races between observation and action.
+
+\para{Correlated verifiers and calibration.} A cross-model vote over \emph{shared} evidence approves 62.9\% of unsafe proposals against 22.9\% with an independent
+source~\cite{zheng2026vpcontrol}; this lineage problem motivates joint certification. Identical screens can hide different states~\cite{liu2026guinotstate}, agents defer
+to stale accessibility structure~\cite{zhang2026believe}, and K-9's Outbox and Sent folder, both written by the client, were wrong together in every lost-reply trial. LLM systems use SPRT and Clopper--Pearson recipes too~\cite{morandi2026sequential,lee2025consol,badshah2026judge}. Our foundations are sequential analysis~\cite{wald1945sprt,wald1948optimum,tartakovsky2014sequential,kaufmann2016complexity,chernoff1959sequential,naghshvar2013active},
+decision and information theory~\cite{kaelbling1998pomdp,cover2006elements,tsybakov2009nonparametric}, conformal calibration~\cite{vovk2005algorithmic,angelopoulos2021gentle,angelopoulos2024crc},
+sagas~\cite{garciamolina1987sagas,chang2025sagallm}, the end-to-end argument~\cite{saltzer1984endtoend}, and the limits of deciding from imperfect
+evidence~\cite{akkoyunlu1975constraints,gray1978notes,chandra1996unreliable,fischer1985impossibility}.

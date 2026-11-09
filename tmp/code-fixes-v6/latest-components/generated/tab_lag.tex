@@ -1,0 +1,21 @@
+\begin{table}[!htbp]
+\centering
+\caption{Wait needed so that the lag tail uses at most $\alpha_{\mathrm{lag}}$ of the duplicate budget (Theorem~\ref{thm:main}(a,b)):
+exact quantile $G^{-1}(\alpha_{\mathrm{lag}})$ and the wait certified from 20{,}000 logged commit-to-visibility times
+(one-sided CP, $\delta{=}10^{-4}$). Median and shape of $T$ given per row; ``--'': not certifiable with 20{,}000 samples ($\alpha_{\mathrm{lag}}{=}10^{-4}$ never is).}
+\label{tab:lag}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}l cc cc@{}}
+\toprule
+ & \multicolumn{2}{c}{$\alpha_{\mathrm{lag}}{=}10^{-2}$} & \multicolumn{2}{c}{$\alpha_{\mathrm{lag}}{=}10^{-3}$} \\
+\cmidrule(lr){2-3}\cmidrule(l){4-5}
+Lag $T$ & exact & certified & exact & certified \\
+\midrule
+lognormal, 1.5\,s, $\sigma{=}0.6$ & 6\,s & 7\,s & 10\,s & 12\,s \\
+lognormal, 3\,s, $\sigma{=}1.2$ & 49\,s & 57\,s & 2\,min & 3\,min \\
+Pareto, 1\,s, $\kappa{=}3$ & 5\,s & 5\,s & 10\,s & 16\,s \\
+Pareto, 2\,s, $\kappa{=}1.1$ & 2\,min & 3\,min & 18\,min & 98\,min \\
+\bottomrule
+\end{tabular}
+\end{table}

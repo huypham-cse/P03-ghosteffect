@@ -1,0 +1,31 @@
+\begin{table}[t]
+\centering
+\caption{Misspecification and stress (model-based simulation, 12{,}000 paired workflows per row; the generative model departs from
+the planner's assumptions as listed). $P_{\mathrm{v}}$: \% of committed effects retried by the planner (budget 1\%; CP 95\% upper bound in
+parentheses); $L_{\mathrm{v}}$: \% of absent effects the planner declared done; ask: \% of workflows. Rules: the same-evidence rule baseline.}
+\label{tab:stress}
+\footnotesize
+\setlength{\tabcolsep}{2pt}
+\begin{tabular}{@{}l cc ccc@{}}
+\toprule
+ & Re-read & Rules & \multicolumn{3}{c}{\alg (product)} \\
+\cmidrule(l){4-6}
+Generative model & $P_{\mathrm{v}}$ & $P_{\mathrm{v}}$ & $P_{\mathrm{v}}$ (hi) & $L_{\mathrm{v}}$ & ask \\
+\midrule
+independent re-reads & 0.04 & 0.35 & 0.05 (0.12) & 0.00 & 21.5 \\
+\quad + persistent nonce misses & 0.42 & 0.36 & 0.02 (0.09) & 0.02 & 21.9 \\
+default world (Table~\ref{tab:planner}) & 3.69 & 0.52 & 0.05 (0.12) & 0.00 & 24.9 \\
+cross-view VLM correlation 0.3 & 4.15 & 0.67 & 0.01 (0.07) & 0.00 & 26.7 \\
+heavy lag tail, \emph{not} in calibration & 4.55 & 0.95 & 0.98 (1.22) & 0.00 & 25.6 \\
+heavy lag tail, in calibration & 4.55 & 0.95 & 0.05 (0.12) & 0.00 & 48.7 \\
+G2 broken (retry cap / force-stop) & 3.84 & 0.53 & 0.02 (0.09) & 0.00 & 26.2 \\
+classified G2, server without dedup & 3.69 & 0.52 & 0.05 (0.12) & 0.00 & 24.9 \\
+delayed recovery in Doze, not detected & 11.20 & 8.03 & 5.83 (6.36) & 0.00 & 25.2 \\
+delayed recovery in Doze, detected & 11.20 & 8.03 & 0.00 (0.05) & 0.02 & 46.1 \\
+stale history, 0.5\% common mode & 3.96 & 0.73 & 0.19 (0.31) & 0.02 & 25.2 \\
+Monitor misreads 5\% of terminal states & 3.69 & 0.37 & 0.05 (0.12) & 0.00 & 25.6 \\
+user wrong on 20\% of asks & 3.69 & 0.52 & 0.05 (0.12) & 0.00 & 24.9 \\
+combined & 11.45 & 8.78 & 0.42 (0.58) & 0.00 & 47.9 \\
+\bottomrule
+\end{tabular}
+\end{table}

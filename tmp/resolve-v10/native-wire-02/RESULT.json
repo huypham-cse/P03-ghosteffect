@@ -1,0 +1,39 @@
+{
+  "kind": "actual Android boot/install/first-run UI smoke",
+  "status": "FAILED",
+  "study_result": false,
+  "abi_stratum": "Windows x86_64 API33/r17",
+  "source_sha256": "63c8c2683a3389d7a2c4223e56ba79794c3fa11542f63cd3cc7fe539f84f7236",
+  "apks": [
+    {
+      "file": "net.gsantner.markor_146.apk",
+      "sha256": "1a328c5324b3b33d6cb4d55085637707252569d98c0ffe1cb7089aebbd903256",
+      "installed": true,
+      "launcher": "net.gsantner.markor/.activity.MainActivity",
+      "foreground": "net.gsantner.markor/.activity.MainActivity",
+      "installed_apk_sha256": "1a328c5324b3b33d6cb4d55085637707252569d98c0ffe1cb7089aebbd903256",
+      "reused_exact_installed_apk": true,
+      "expected_foreground": true,
+      "stable_tree": null,
+      "account_configured": false,
+      "capture_scope": "native observation follows"
+    }
+  ],
+  "capture_source_sha256": "d64c8b1dd69ddeb569f4390535a654bec9eec00158b8f30aab21ae3b35facb5d",
+  "verification_sha256": "58fc2ea6543f030a169ae021eabb7afd84e7d16b21cc2992cd1ea44c72e2521c",
+  "started_utc_ns": 1794125218416406800,
+  "acceleration": "accel:\n0\nWHPX(10.0.19045) is installed and usable.\naccel\n",
+  "owned_emulator_pid": 9488,
+  "boot_seconds": 43.17199999999866,
+  "properties": {
+    "ro.build.fingerprint": "google/sdk_gphone64_x86_64/emu64x:13/TE1A.240213.009/12342917:userdebug/dev-keys",
+    "ro.build.version.sdk": "33",
+    "ro.product.cpu.abi": "x86_64",
+    "persist.sys.locale": "",
+    "persist.sys.timezone": "Asia/Bangkok"
+  },
+  "native_env_exit_code": 1,
+  "error_type": "RuntimeError",
+  "reason": "native environment observation failed; inspect native-env.log",
+  "owned_emulator_stopped": true
+}

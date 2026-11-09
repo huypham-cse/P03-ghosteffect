@@ -1,0 +1,86 @@
+{
+  "status": "PARTIAL",
+  "utc_ns": 1794125954364804800,
+  "tests": {
+    "windows": {
+      "tests": 67,
+      "executed": 63,
+      "skipped": 4,
+      "receipt": "tmp/resolve-v10/tests-windows.json",
+      "sha256": "8f4230793d73933bdc37d404770ec7a7c49132e3b99b718952afc1fc3aba81c1"
+    },
+    "linux": {
+      "tests": 67,
+      "executed": 64,
+      "skipped": 3,
+      "receipt": "tmp/resolve-v10/tests-linux.json",
+      "sha256": "d61ad17411cd8489ba2d5ae7dffdb40ce5014ef1dc539721d079c33ccaafdb8f"
+    },
+    "agent-env": {
+      "tests": 67,
+      "executed": 66,
+      "skipped": 1,
+      "receipt": "tmp/resolve-v10/tests-agent-env.json",
+      "sha256": "90dda930b07ddbdda005c3d0f2439b15ba072c3d243d1cda9fdacae3be865c61"
+    }
+  },
+  "native_observation": "PASS",
+  "synthetic_native_wire": {
+    "m3a": {
+      "status": "PASS",
+      "native_scripted_steps": 1,
+      "scientific_episodes": 0,
+      "model_driven_steps": 0,
+      "requests": 2,
+      "images_per_request": 2,
+      "receipt_sha256": "a1b2c3116d1a5e727f3d8b54085565e823d5754343637030bb5e1e2739428d2f"
+    },
+    "t3a": {
+      "status": "PASS",
+      "native_scripted_steps": 1,
+      "scientific_episodes": 0,
+      "model_driven_steps": 0,
+      "requests": 2,
+      "images_per_request": 0,
+      "receipt_sha256": "ef0b9975a72c3681176059af7e4da49cf8e35c872a73d62356fa8adebb8e0eff"
+    }
+  },
+  "preserved_failed_attempts": {
+    "native-wire-01": {
+      "status": "FAILED",
+      "error_type": "RuntimeError",
+      "reason": "focused application window cannot be verified",
+      "sha256": "50d9722aedb80ac334879783ac8b467a2a869e784cbb72cec02237fcc29bd194"
+    },
+    "native-wire-02": {
+      "status": "FAILED",
+      "error_type": "RuntimeError",
+      "reason": "native environment observation failed; inspect native-env.log",
+      "sha256": "7df32cd50b5befae279ee27471447abc19ee47994dd4da130e152c7c8acee5ec"
+    },
+    "native-wire-host-01": {
+      "status": "FAILED",
+      "error_type": "RuntimeError",
+      "reason": "native environment observation failed; inspect native-env.log",
+      "sha256": "4d469f594b8aaaed6559d7a30ed2ba0727371218d854c6cc8306771a3d5e1e88"
+    }
+  },
+  "graphics_recipe": "host renderer in successful scripted-wire attempt; not a frozen/optimal profile",
+  "apks_verified": 11,
+  "core_requires_physical_phone": false,
+  "models_loaded": false,
+  "model_driven_agent_steps": 0,
+  "scientific_episodes": 0,
+  "measured_calibration_effects": 0,
+  "paid_model_api_calls": 0,
+  "h100_connected": false,
+  "manuscript_unchanged": true,
+  "remaining": [
+    "real-model serving/episode harness/full actions",
+    "AgentProg/UI-TARS/MobileAgent adapters",
+    "P40 accounts/fixtures/reset/grader, MockBank/Postfix",
+    "fault injector/semantic fate-clock-probe joins",
+    "classifier labels/calibration coverage",
+    "H100 fit/load/throughput and full scientific campaigns"
+  ]
+}

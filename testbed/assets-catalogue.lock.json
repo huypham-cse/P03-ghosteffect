@@ -1,0 +1,72 @@
+{
+  "kind": "new paper-catalogue candidate assets; not historical campaign labels",
+  "source": "https://github.com/google-research/android_world/blob/55ddaf5edc6f6c25673aed343907d5b9dca66f84/android_world/env/setup_device/apps.py",
+  "source_commit": "55ddaf5edc6f6c25673aed343907d5b9dca66f84",
+  "assets": [
+    {
+      "file": "com.arduia.expense_11.apk",
+      "version": "1.0.0-beta05",
+      "package": "com.arduia.expense",
+      "version_code": 11,
+      "sha256": "e54dcc8250566ab6421119b48d6c4544066c6697c53d27ab06ee5bdf9bf1ee50",
+      "certificate_sha256": "0206a5bc7ecf2a55055ef7e0bdf81e74350a68a69dd0abf81e8554b71aecfe2f",
+      "native_abis": null,
+      "license": "app upstream license metadata still to be recorded before redistribution",
+      "urls": [
+        "https://storage.googleapis.com/gresearch/android_world/com.arduia.expense_11.apk"
+      ]
+    },
+    {
+      "file": "com.simplemobiletools.smsmessenger_85.apk",
+      "version": "5.19.3",
+      "package": "com.simplemobiletools.smsmessenger",
+      "version_code": 85,
+      "sha256": "e134a0e330514de3716dbacfa08d39707ebbb2c9ebde8d08854e159b2cd7c2f4",
+      "certificate_sha256": "fcdcf6664337e20bcad73866c8904e14152032779c723b65697f68d8e2b42c89",
+      "native_abis": null,
+      "license": "app upstream license metadata still to be recorded before redistribution",
+      "urls": [
+        "https://storage.googleapis.com/gresearch/android_world/com.simplemobiletools.smsmessenger_85.apk"
+      ]
+    },
+    {
+      "file": "net.cozic.joplin_2097740.apk",
+      "version": "3.0.1",
+      "package": "net.cozic.joplin",
+      "version_code": 2097740,
+      "sha256": "6f70a460f6bacd777d08b13a06c5ef5d545491f940de0a40ecf44fd2d9eea385",
+      "certificate_sha256": "48a1cf9201b9079a6e0d5b33693e496db3c5cbec64a85afccd75e16d7a6cd54d",
+      "native_abis": "native-code: 'arm64-v8a' 'armeabi-v7a' 'x86' 'x86_64'",
+      "license": "app upstream license metadata still to be recorded before redistribution",
+      "urls": [
+        "https://storage.googleapis.com/gresearch/android_world/net.cozic.joplin_2097740.apk"
+      ]
+    },
+    {
+      "file": "net.gsantner.markor_146.apk",
+      "version": "2.10.9",
+      "package": "net.gsantner.markor",
+      "version_code": 146,
+      "sha256": "1a328c5324b3b33d6cb4d55085637707252569d98c0ffe1cb7089aebbd903256",
+      "certificate_sha256": "9c70033237dc46fe5052e420c665708de8b3105b89842843818981826b7eec9c",
+      "native_abis": null,
+      "license": "app upstream license metadata still to be recorded before redistribution",
+      "urls": [
+        "https://storage.googleapis.com/gresearch/android_world/net.gsantner.markor_146.apk"
+      ]
+    },
+    {
+      "file": "org.tasks_130605.apk",
+      "version": "13.6.3",
+      "package": "org.tasks",
+      "version_code": 130605,
+      "sha256": "3e93405882016be0e8f6c45207bdfb9d4b958bf34430256e77b043d68b8ceb00",
+      "certificate_sha256": "a038a055bf43b2659cbaf862808afd5e447d4d0e2749a10391910009cbd8dcfa",
+      "native_abis": "native-code: 'arm64-v8a' 'armeabi-v7a' 'x86' 'x86_64'",
+      "license": "app upstream license metadata still to be recorded before redistribution",
+      "urls": [
+        "https://storage.googleapis.com/gresearch/android_world/org.tasks_130605.apk"
+      ]
+    }
+  ]
+}

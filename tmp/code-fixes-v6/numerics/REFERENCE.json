@@ -1,0 +1,117 @@
+{
+  "status": "PASS",
+  "checks": [
+    {
+      "alpha": 0.01,
+      "p": 0.005,
+      "field": "prod_n",
+      "n": 163,
+      "independent_minimum": 163
+    },
+    {
+      "alpha": 0.01,
+      "p": 0.005,
+      "field": "prod_n_key",
+      "n": 183,
+      "independent_minimum": 183
+    },
+    {
+      "alpha": 0.01,
+      "p": 0.005,
+      "field": "joint_n_q",
+      "n": 3723,
+      "independent_minimum": 3723
+    },
+    {
+      "alpha": 0.01,
+      "p": 0.005,
+      "field": "joint_n_q_key",
+      "n": 4438,
+      "independent_minimum": 4438
+    },
+    {
+      "alpha": 0.01,
+      "p": 0.01,
+      "field": "prod_n",
+      "n": 193,
+      "independent_minimum": 193
+    },
+    {
+      "alpha": 0.01,
+      "p": 0.01,
+      "field": "prod_n_key",
+      "n": 243,
+      "independent_minimum": 243
+    },
+    {
+      "alpha": 0.01,
+      "p": 0.01,
+      "field": "joint_n_q",
+      "n": 3723,
+      "independent_minimum": 3723
+    },
+    {
+      "alpha": 0.01,
+      "p": 0.01,
+      "field": "joint_n_q_key",
+      "n": 4438,
+      "independent_minimum": 4438
+    },
+    {
+      "alpha": 0.001,
+      "p": 0.005,
+      "field": "prod_n",
+      "n": 1086,
+      "independent_minimum": 1086
+    },
+    {
+      "alpha": 0.001,
+      "p": 0.005,
+      "field": "prod_n_key",
+      "n": 1165,
+      "independent_minimum": 1165
+    },
+    {
+      "alpha": 0.001,
+      "p": 0.005,
+      "field": "joint_n_q",
+      "n": 46887,
+      "independent_minimum": 46887
+    },
+    {
+      "alpha": 0.001,
+      "p": 0.005,
+      "field": "joint_n_q_key",
+      "n": 54087,
+      "independent_minimum": 54087
+    },
+    {
+      "alpha": 0.001,
+      "p": 0.01,
+      "field": "prod_n",
+      "n": 2268,
+      "independent_minimum": 2268
+    },
+    {
+      "alpha": 0.001,
+      "p": 0.01,
+      "field": "prod_n_key",
+      "n": 2569,
+      "independent_minimum": 2569
+    },
+    {
+      "alpha": 0.001,
+      "p": 0.01,
+      "field": "joint_n_q",
+      "n": 46887,
+      "independent_minimum": 46887
+    },
+    {
+      "alpha": 0.001,
+      "p": 0.01,
+      "field": "joint_n_q_key",
+      "n": 54087,
+      "independent_minimum": 54087
+    }
+  ]
+}

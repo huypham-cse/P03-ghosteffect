@@ -1,0 +1,18 @@
+{
+  "artifact": {
+    "status": "PASS",
+    "tests": 32,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 1,
+    "seconds": 7.330937247
+  },
+  "testbed": {
+    "status": "PASS",
+    "tests": 56,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 5.694401399
+  }
+}

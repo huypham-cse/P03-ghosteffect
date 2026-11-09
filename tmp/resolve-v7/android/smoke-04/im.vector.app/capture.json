@@ -1,0 +1,13 @@
+{
+  "kind": "adb-sequential-bracketed-capture",
+  "serial": "emulator-5580",
+  "mono_start_ns": 58274359000000,
+  "mono_end_ns": 58286890000000,
+  "utc_ns": 1794120335249602500,
+  "foreground_before": "im.vector.app/im.vector.app.features.onboarding.OnboardingActivity",
+  "foreground_after": "im.vector.app/im.vector.app.features.onboarding.OnboardingActivity",
+  "stable_tree": false,
+  "same_foreground": true,
+  "tree_sha256": "412025f758298dfbea36447197a40c12f683926333d3d43ba25d7dc510fd4fa2",
+  "png_sha256": "db1073849892934b36c9cba1d7e8d0f5c58cccc0947ae27fee13ab507f988168"
+}

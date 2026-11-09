@@ -1,0 +1,2 @@
+issue_p50_ms,issue_p95_ms,fullfsync_p50_ms,fullfsync_p95_ms,bytes_per_effect,kill_trials,taps_checked,invariant_violations,ghost_candidates,fullfsync_supported
+1.71,4.7,nan,nan,205,300,1491,0,79,False

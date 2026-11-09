@@ -1,0 +1,93 @@
+{
+  "status": "PASS",
+  "utc_ns": 1794124493399173900,
+  "reason": "user explicitly requested no paper edits; paper deferred",
+  "restored": [
+    {
+      "file": "manuscript/generated/fig_floor.tex",
+      "restored_sha256": "838c34323f770b8b781a708f82003b62d480910e8988642dd7286652844b2cab"
+    },
+    {
+      "file": "manuscript/generated/fig_pareto.tex",
+      "restored_sha256": "cb480746d21188cb280b79d02e646e111267047fd34a9655e92d63cefd609c0d"
+    },
+    {
+      "file": "manuscript/generated/fig_sprt.tex",
+      "restored_sha256": "c0a6cb2463d1ae2ba62aee22065d16ad9f55be69a45d9363d6ff81c6eefe9444"
+    },
+    {
+      "file": "manuscript/generated/macros.tex",
+      "restored_sha256": "96174f95a9b43c6e1da2e27fb960793358004b41643a4f258acfb820ac18a4ce"
+    },
+    {
+      "file": "manuscript/generated/real_section.tex",
+      "restored_sha256": "c1ef49823023e0c30e7c148f1c0f38c76661a767495b5dc269035c1f354ebf05"
+    },
+    {
+      "file": "manuscript/generated/tab_calib.tex",
+      "restored_sha256": "d6193e6ae706f1172e8579a46d701b234b836696b9dea7828c5cfdd766a59513"
+    },
+    {
+      "file": "manuscript/generated/tab_corr.tex",
+      "restored_sha256": "99590213dedd7fab0bc5ec298f0985c063f6b17cdfa946a0de08ff77209ad116"
+    },
+    {
+      "file": "manuscript/generated/tab_lag.tex",
+      "restored_sha256": "d307f708cea1f118fab883d9bb16a3a5498fa0b3a1b8f4f851d310060b7f183a"
+    },
+    {
+      "file": "manuscript/generated/tab_nonce.tex",
+      "restored_sha256": "c37530d4e5078b15bdaa178b89d6cc0e4f97ff7570b8c44b6d7a3a7d6e0c4634"
+    },
+    {
+      "file": "manuscript/generated/tab_nsize.tex",
+      "restored_sha256": "10560957988cd7a37b8d058b93b6d955c235530a787fb6ae3a861ee69fb07ee4"
+    },
+    {
+      "file": "manuscript/generated/tab_planner.tex",
+      "restored_sha256": "55f41badca9d1b58fc9d8e3f7b8bb94a59b4f400bd1f11bd1a1d0e20376e5fc9"
+    },
+    {
+      "file": "manuscript/generated/tab_pop.tex",
+      "restored_sha256": "1f880dc58128c1e34741a64d43ed77215cec763ea2f0a4d75a680859a18c66a7"
+    },
+    {
+      "file": "manuscript/generated/tab_real.tex",
+      "restored_sha256": "0409ddace1f71745c84e1ce2cfc1324d4c896c7a25fb47751fbb157e9d26ad7e"
+    },
+    {
+      "file": "manuscript/generated/tab_real4.tex",
+      "restored_sha256": null
+    },
+    {
+      "file": "manuscript/generated/tab_realcone.tex",
+      "restored_sha256": "4fd3155c02fa0ec631f0e9fcc954d2fecbe0b11978891a451141e467e0f4412a"
+    },
+    {
+      "file": "manuscript/generated/tab_realsim.tex",
+      "restored_sha256": "49ffc6ef4a289f345dd1c748a456b4f782263742c67fec5204667fdb360b1add"
+    },
+    {
+      "file": "manuscript/generated/tab_saga.tex",
+      "restored_sha256": "4b17fa262ae1b237d621e5c59fbfce4cd4508f9a854b5bde513836c15daf76b8"
+    },
+    {
+      "file": "manuscript/generated/tab_sens.tex",
+      "restored_sha256": "efe7e807682b7fa0f6c09eda864a4060fba05e7a1e74b5bf1b6dd5eed5274f6b"
+    },
+    {
+      "file": "manuscript/generated/tab_sprt.tex",
+      "restored_sha256": "c9653d290e9995284db96851e0dbbd224a239289388c80df8288a76c9739b2ee"
+    },
+    {
+      "file": "manuscript/generated/tab_stress.tex",
+      "restored_sha256": "e893d6af69d74de6d4583b1d8f0e47c8bce3bccb1e43e5ad64a422d064b87c18"
+    },
+    {
+      "file": "manuscript/main.pdf",
+      "restored_sha256": "121ae325daceee68a2e89951c0d24fe935a77ae7fdd8265ab1cf73cc6750a6c9"
+    }
+  ],
+  "experiment_csvs_retained": true,
+  "scope": "only v9 generated TeX/PDF changes undone; prior worktree changes preserved"
+}

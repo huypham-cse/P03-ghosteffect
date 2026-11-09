@@ -1,0 +1,9 @@
+{
+  "status": "FAILED",
+  "stage": "window_after",
+  "mono_start_ns": 63086421000000,
+  "mono_end_ns": 63094984000000,
+  "error_type": "RuntimeError",
+  "reason": "focused application window cannot be verified",
+  "scope": "capture failure; not a GUI verdict"
+}

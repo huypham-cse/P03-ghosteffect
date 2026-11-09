@@ -1,0 +1,172 @@
+\section{Theory}
+\label{sec:theory}
+
+We first state what classical sequential analysis says in this model (\S\ref{sec:theory-main}), then give the reductions the agent setting needs:
+certification over views (\S\ref{sec:theory-corr}), calibration (\S\ref{sec:theory-cal}), and mobile structure (\S\ref{sec:twohop}).
+Full proofs are in Appendix~\ref{app:proofs}.
+
+\subsection{The price of a budget, and two floors}
+\label{sec:theory-main}
+For a family of conditionally i.i.d.\ views with full support, let $u^\star=\max_y\log\frac{p_1(y)}{p_0(y)}$ and $v^\star=\max_y\log\frac{p_0(y)}{p_1(y)}$, and let
+$d(x\|y)=x\log\frac{x}{y}+(1-x)\log\frac{1-x}{1-y}$. A policy is \emph{verification-only} if it ends by retrying or declaring.
+
+\begin{theorem}[Budgeted exactly-once under a noisy, lagged oracle]
+\label{thm:main}
+Consider an effect with prior $\pi\in(0,1)$, lag tail $G$, and a family of conditionally i.i.d.\ views with laws $p_0,p_1$.
+\begin{enumerate}[leftmargin=*,label=(\alph*),topsep=1pt,itemsep=1pt]
+\item \emph{Achievability.} If $G(w)<\alpha$, waiting until $t_0+w$ and then running the SPRT on $L_n=\sum_{i\le n}\log\frac{p_1(Y_i)}{p_0(Y_i)}$, which declares when
+$L_n\ge a=\log\frac1\beta$ and retries when $L_n\le-b=-\log\frac{1}{\alpha-G(w)}$, meets $(\alpha,\beta)$. Given visibility,
+\begin{equation}
+\E_1[N]\le\frac{a+u^\star}{D_1},\qquad \E_0[N]\le\frac{b+v^\star}{D_0}.
+\label{eq:ub}
+\end{equation}
+\item \emph{Lag converse.} Every policy that decides by $t_0+w$ from end-to-end reads alone has $\PP(\text{retry}\mid X{=}1)\ge G(w)\,\PP(\text{retry}\mid X{=}0)$;
+a verification-only one with $\PP(\text{declare}\mid X{=}0)\le\beta$ thus has $\PP(\text{retry}\mid X{=}1)\ge(1-\beta)\,G(w)$.
+\item \emph{Information converse.} Every verification-only policy meeting $(\alpha,\beta)$ with $\alpha+\beta<1$ and $\E_x[N]<\infty$ satisfies the right inequality
+below for any lag, and the left one if all reads follow visibility:
+\begin{equation}
+\E_1[N]\ge\frac{d(1-\alpha\,\|\,\beta)}{D_1},\qquad \E_0[N]\ge\frac{d(1-\beta\,\|\,\alpha)}{D_0}.
+\label{eq:lb}
+\end{equation}
+\item \emph{Weak evidence.} Every policy that does not ask has $\PP(\dup)+\PP(\loss)\ge\E[\min(\pi_{\mathcal F},1-\pi_{\mathcal F})]$, where $\pi_{\mathcal F}$ is the posterior
+of $X{=}1$ when it decides; the Bayes rule attains this. Under any lag, the right side is at least $\min(\pi,1-\pi)\big(1-\sqrt{D_0\E_0[N]/2}\big)$.
+\end{enumerate}
+\end{theorem}
+
+\para{What is classical.} Part~(a) is Wald's change-of-measure bound~\cite{wald1945sprt} plus a union bound on the lag; (b) is the noisy-read, finite-wait form of the
+waiting argument in Li's concurrent impossibility result~\cite{li2026exactlyonce}; (c) is Lemma~1 of Kaufmann, Capp\'e and Garivier~\cite{kaufmann2016complexity}
+(see also~\cite{tartakovsky2014sequential}); (d) is the binary Bayes risk with Le Cam's two-point method~\cite{tsybakov2009nonparametric}. We claim none of these inequalities
+(proofs in Appendix~\ref{app:proofs}).
+
+\begin{corollary}
+\label{cor:notfree}
+If $0<\epsilon_1<1$, or if $G(t)>0$ for every $t$, every verification-only policy with $\PP(\text{retry}\mid X{=}0)>0$ has $\PP(\text{retry}\mid X{=}1)>0$: $\alpha=0$ forces $\beta=1$,
+for unbounded stopping times too. For $\alpha,\beta>0$ with $\alpha+\beta<1$, $(\alpha,\beta)$ is reachable by verification if and only if $D_0>0$.
+\end{corollary}
+
+\para{Consequences.} Exactly-once by verification is a limit, not a point, so \sys exposes $(\alpha,\beta)$ as a knob; reads cost $\approx\log(1/\alpha)/D_0$, and the gap
+between~\eqref{eq:ub} and~\eqref{eq:lb} under $X{=}1$ tends to $u^\star/D_1$ as $\alpha,\beta\to0$ provided $\alpha\log(1/\beta)\to0$. By~(b), asking or a lag-free family such as
+the app's outbox is the only escape from the lag floor; otherwise the lag share is paid in waiting time, seconds for light tails and minutes to hours for Pareto tails
+(Table~\ref{tab:lag}), so the planner asks when the certified wait exceeds a cap. By~(d), as $D_0\to0$ (a look-alike screen) the error approaches the prior floor for any
+read budget. A fallible user makes asking cost $c_{\mathrm{ask}}+\epsilon_u[\pi_{\mathcal F}c_{\dup}+(1-\pi_{\mathcal F})c_{\loss}]$.
+
+\subsection{Correlated reads: certify views, not reads}
+\label{sec:theory-corr}
+Theorem~\ref{thm:main} counts every read as fresh evidence. A VLM re-reading a screenshot does not supply that, and neither does an OCR pass over a nonce
+field that is hidden. \alg therefore reads each view once and certifies \emph{family verdicts}. A family $f$ with $V_f$ views returns the majority side
+$s\in\{\mathrm{abs},\mathrm{com}\}$ and the number $r$ of views on that side, or nothing on a tie. Let $q^{\mathrm{abs}}_f(r)$ bound the probability that at least $r$
+views of $f$ read absent when $X{=}1$ and the effect is visible, and $q^{\mathrm{com}}_f(r)$ the probability that at least $r$ read committed when $X{=}0$.
+
+\begin{proposition}[Family-level certification]
+\label{prop:family}
+Let the planner consult families in a fixed order, multiply the bounds of the verdicts seen so far, retry at the first point where the product of
+$q^{\mathrm{abs}}$ terms is at most $\tau$, and ask on a contradiction. Under A2,
+\[
+\PP(\text{retry}\mid X{=}1,\text{visible})\;\le\;B(\tau)=\sum_{A\in\mathcal R(\tau)}\;\prod_{(f,r)\in A}q^{\mathrm{abs}}_f(r),
+\]
+where $\mathcal R(\tau)$ is the set of ordered assignments $A$ (each family skipped or at a level $r$) with $\prod_A q\le\tau$ and $\prod_{A\setminus\mathrm{last}(A)}q>\tau$.
+The same holds for declaring with $q^{\mathrm{com}}$. No assumption is made about dependence among the views of a family.
+\end{proposition}
+(Proof in Appendix~\ref{app:proofs}: every retry stops at an assignment in $\mathcal R(\tau)$; A2 and a union bound finish.)
+The planner picks the largest $\tau$ with $B(\tau)\le\alpha_{\mathrm{test}}$. The lag adds two terms. Let $w_1$ be the wait after a hop-1 ``absent'' verdict and $w_0$ the
+wait, measured from $t_0$, on every other path (hop~1 tied or absent from the app, a non-G2 entry, a failed or stuck entry). Then
+\begin{equation}
+\PP(\text{retry}\mid X{=}1)\le B(\tau)+q_h\,G(w_1)+G(w_0),
+\label{eq:lagsplit}
+\end{equation}
+where $q_h$ bounds the hop-1 ``absent'' verdict. The first lag term uses only that hop-1 reads the local outbox, independent of $T$ given $X$; the second needs no
+independence, because the remaining paths are disjoint and each reads end-to-end views no earlier than $t_0+w_0$. \alg certifies each term at $\alpha_{\mathrm{lag}}/2$ (all of
+$\alpha_{\mathrm{lag}}$ to $w_0$ if the app has no hop-1 family).
+
+\para{Without A2.} A2 lets bounds multiply, and it is doubtful when families read the same screens: a stale history after a restart fools nonce, digest and VLM at
+once~\cite{zheng2026vpcontrol}. The remedy is to calibrate larger units.
+
+\begin{proposition}[Joint certification]
+\label{prop:joint}
+Fix a score that orders verdict tuples (products of bounds from a pilot split) and let $R_\tau$ be the set of tuples on which the cascade retries at threshold $\tau$, united
+over the configurations the planner runs (with or without hop~1 and the VLM). Test $\tau_1<\tau_2<\cdots$ in order on $n$ fresh calibration effects and keep the largest
+$\tau_j$ such that, for all $i\le j$, the one-sided $(1-\delta)$ CP bound on $\PP(R_{\tau_i}\mid X{=}1)$ is at most $\alpha_{\mathrm{test}}$. With probability at least $1-\delta$,
+$\PP(\text{retry}\mid X{=}1,\text{visible})\le\alpha_{\mathrm{test}}$, whatever the dependence across families. Certifying needs about $n\ge\ln(1/\delta)/\alpha_{\mathrm{test}}$ effects.
+\end{proposition}
+The regions are nested, so the guarantee fails only if the CP bound of the first $\tau$ whose true risk exceeds $\alpha_{\mathrm{test}}$ undercovers (fixed-sequence testing).
+An intermediate choice keeps A2 only between \emph{evidence sources}: hop~1 reads the app's local outbox, the other three read the server-rendered history. It is available
+only when hop~1 is read from a store distinct from the rendered history, which we check per app by testing hop-1 readings against $T$ on fault-injected trials (Element fails
+the check). Merging the history readers into one jointly calibrated family gives $B(\tau)=q_h\,Q(\tau/q_h)+Q(\tau)$, with $Q(t)$ a CP bound on the history family reaching
+product $t$, $Q(t)=0$ below the smallest reachable product and $Q(t)=1$ for $t\ge1$ (hop~1 alone then retries, whatever the history shows). Neither variant can multiply bounds of history readers, so a history-only decision again needs $n\ge\ln(1/\delta)/\alpha_{\mathrm{test}}$ effects
+(\S\ref{sec:eval-pop}). How small can a family's bound be?
+
+\begin{lemma}[Persistent-error floor]
+\label{lem:floor}
+Let the $V$ views of a family err conditionally i.i.d.\ given a latent per-effect error rate $\theta$ with $\E\theta=\epsilon$ and $\mathrm{Var}\,\theta=\rho\epsilon(1-\epsilon)$,
+so that two views' errors have correlation $\rho$. Then
+\begin{gather*}
+\sup\PP(\text{all $V$ views wrong})=w+(1-w)\big(\epsilon(1-\rho)\big)^V,\\
+w=\rho\epsilon/(1-\epsilon+\rho\epsilon),
+\end{gather*}
+attained when the family is \emph{blind} (all views wrong) with probability $w$ and otherwise errs independently at rate $\epsilon(1-\rho)$.
+If the views are only exchangeable, with $m_2=\epsilon^2+\rho\epsilon(1-\epsilon)$, the supremum is $m_2$ for $2\le V\le(1-m_2)/(\epsilon-m_2)$ and strictly smaller for larger $V$.
+\end{lemma}
+As $V\to\infty$ the supremum tends to $w>0$: more views of one family cannot certify a side below its persistent mass (a hidden nonce field is such a blind state, $w\ge\eta$,
+so certifying ``absent'' at $\alpha<\eta$ needs a second family). Within-view correlation does not matter, because no view is read twice.
+
+\subsection{Calibration}
+\label{sec:theory-cal}
+\begin{lemma}[Conservative calibration]
+\label{lem:calib}
+(i)~For a family of i.i.d.\ binary views, running the SPRT with $\tilde\epsilon_0\ge\epsilon_0$, $\tilde\epsilon_1\ge\epsilon_1$ ($\tilde\epsilon_0+\tilde\epsilon_1<1$) preserves the
+$(\alpha,\beta)$ guarantee.
+(ii)~Suppose each of the $K$ bounds an effect's decision can use (verdict levels or regions, $q_h$, and the two waits) is a one-sided $(1-\delta)$ Clopper--Pearson
+bound~\cite{clopper1934use} from calibration effects that are i.i.d.\ draws from the population of \emph{interrupted} deployment effects \emph{of the effect's observable fault
+class} (agent death, app death seen as a pid change, connectivity loss, both), and an effect of unknown class uses the maximum over classes. Then with probability
+at least $1-K\delta$ all hold; marginally, $\PP(\text{retry}\mid X{=}1)\le\alpha_{\mathrm{test}}+\alpha_{\mathrm{lag}}+K\delta$ and $\PP(\text{declare}\mid X{=}0)\le\beta_{\mathrm{test}}+K\delta$.
+(iii)~If deployed family rates exceed their bounds by factors $\kappa_f\ge1$, the test term of~\eqref{eq:lagsplit} is at most $\max_{A\in\mathcal R(\tau)}\prod_{f\in A}\kappa_f\cdot B(\tau)$.
+\end{lemma}
+Part~(i) is a monotone coupling, (ii) a union bound, and (iii) holds term by term. Keying by class makes the lab's fault mix irrelevant (only within-class exchangeability is
+needed) at the price of labels per class; the unknown-class fallback (per-family maximum, the largest wait, or for joint regions acting only when every class certifies)
+uses all classes' bounds, so $K$ is multiplied by the number of classes. \sys sets $\delta=\min(\alpha,\beta)/(10K)$, with $K{=}11$ for product certification (five ``absent'' and four ``committed''
+verdict levels, two waits; the nonce's false-match bound is analytic) and $K{=}5$ for joint certification, so $K\delta\le\min(\alpha_{\mathrm{cal}},\beta_{\mathrm{cal}})$. The population assumption is the one that bites:
+labels from uninterrupted effects miss cached history after a kill, optimistic ``sending'' entries and blackout lags. Part~(iii) is a margin against drift that is \emph{independent}
+across families; common-mode drift is what joint certification is for (\S\ref{sec:eval-pop}).
+
+\subsection{Mobile structure: nonces and two hops}
+\label{sec:twohop}
+\begin{lemma}[Content-carried nonce]
+\label{lem:nonce}
+Suppose the effect has a free-text field that the app stores verbatim and renders in sent/history views, and that the probe reads only those views, only outgoing items of
+the verified account, and never drafts, failed entries, notifications or keyboard suggestions, so an uncommitted nonce is never visible to it. The planner writes $k$ symbols
+drawn uniformly from an alphabet of size $m$ and reuses them on retry. A view matches if one of its $M$ visible tokens is within edit distance $t$ of the nonce after OCR in which
+each symbol errs independently with probability $e_c$. If the field is hidden, truncated or mis-tokenized (split, merged, wrapped) with probability $\eta$, then per view
+\begin{equation}
+\epsilon_1\le\eta+\PP[\mathrm{Bin}(k,e_c)>t],\qquad \epsilon_0\le M\,|B_t|/m^k,
+\label{eq:nonce}
+\end{equation}
+where $|B_t|$ bounds the number of length-$k$ strings within edit distance $t$ of any token ($|B_0|=1$, $|B_1|\le km$), regardless of look-alike effects on screen.
+\end{lemma}
+The proof is a union bound; $|B_1|\le km$ counts substitutions, insertions into a shorter token, and deletions from a longer one. The hidden-field term $\eta$ is a blind state in the
+sense of Lemma~\ref{lem:floor}, common to all nonce views. Reusing the nonce on retry also makes a later duplicate \emph{detectable}, because two items carry the same tag.
+
+\begin{theorem}[Two-hop decomposition]
+\label{thm:twohop}
+Let hop~1 create $n_1$ entries in the app's local outbox and hop~2 transmit entries to the server. Assume (H1) the server is reached only through the outbox; (H2) each entry
+has an app-assigned id, unique per entry, persisted with it and reused by every retransmission from the same device, also after restarts; and (H3) admissible fault schedules
+have finitely many agent kills, app kills that do not cancel the app's scheduled work, transmissions lost before the server applies them, and acknowledgements lost after;
+every entry is transmitted at least once on the fault-free schedule, a positive window separates an entry's creation from its first transmission, and every retransmission
+happens within the server's \emph{dedup horizon} $D$ of the first application.
+Let \textbf{G2} mean: entries are durable, each is retransmitted until acknowledged, and the server applies each (device, id) at most once within $D$. Then $C_e=1$ under every admissible
+schedule if and only if $n_1=1$ and G2 holds. If retransmission may instead stop in a failed state shown by the app (\textbf{G2$'$}), then $n_1=1$ implies $C_e\le1$ under
+every admissible schedule, and $C_e=0$ only if the entry ends failed.
+\end{theorem}
+($\Leftarrow$) is at-least-once delivery plus idempotent application~\cite{helland2012idempotence,birrell1984rpc,wang2021kafka}. What the agent gains is that hop~1 is
+\emph{observable on the device} within seconds, so for a G2 app the late-commit regime of Theorem~\ref{thm:main}(b) becomes a local check. The planner therefore counts hop-1
+entries created after $t_0$ (two entries mean a duplicate), treats ``absent'' as absent from both outbox and sent list, and monitors a pending entry until it is acknowledged,
+escalating it before its age approaches $D$. ``Retrying is safe'' thus means the \emph{app's own} retry, on the same device, within $D$: an agent that redoes the step
+through the GUI creates a new entry with a new id ($n_1{=}2$), which no server merges, and a re-login creates a new device. Synapse keeps transaction ids per device in a
+30--60\,min cache and a 24\,h table~\cite{synapse_txn,matrix_spec}; we measured both scopes (\S\ref{sec:eval-real}). A failed entry is ambiguous end to end, because the server
+may have applied it before the app gave up, so it goes to the end-to-end path; K-9~Mail enters this state by design after every lost SMTP reply, the client-side face of
+the 1988 SMTP duplicate problem~\cite{rfc1047}. Force-stop cancels scheduled work and violates H3, so a force-stopped app is treated as non-G2 until its entries reach a
+terminal state (Element and DAVx5 nevertheless resolved every force-stop by relaunch). Protocols differ: Matrix clients send with a client-chosen transaction id that makes
+retransmission idempotent~\cite{matrix_spec}; CalDAV creates resources at a client-chosen URL with a conditional \texttt{PUT}~\cite{rfc4791,rfc9110}; SMTP has no end-to-end
+dedup~\cite{rfc5321}.
+
+\para{Budgets across a saga.} Per-step guarantees compose by a union bound under any dependence, so a workflow splits its budget, $\sum_i\alpha_i\le\alpha$, by the KKT
+split of Proposition~\ref{prop:saga} (appendix); giving every step the full $\alpha$ multiplies the duplicate probability by up to $k$. An ambiguous compensation is asked about.

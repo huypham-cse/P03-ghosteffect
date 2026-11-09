@@ -1,0 +1,4 @@
+pair,n,both_wrong,both_bot,wrong_i,wrong_j,ci95_both_wrong
+a_indicator_late&b_row_late,101,0,2,0,0,"(0, 0.037)"
+a_indicator_late&c_digest_late,101,0,2,0,0,"(0, 0.037)"
+b_row_late&c_digest_late,101,0,2,0,0,"(0, 0.037)"

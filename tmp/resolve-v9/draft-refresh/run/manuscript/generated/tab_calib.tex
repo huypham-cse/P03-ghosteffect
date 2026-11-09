@@ -1,0 +1,22 @@
+\begin{table}[!htbp]
+\centering
+\caption{Calibration of an i.i.d.\ binary probe (Lemma~\ref{lem:calib}(i)): share of probe types (\%) whose exact $P(\mathrm{dup}\mid X{=}1)$ or
+$P(\mathrm{loss}\mid X{=}0)$ exceeds $\alpha{=}\beta{=}0.01$, and mean reads, over 200 probe types $\times$ 5 seeds, $\epsilon_0{\in}[0.06,0.26]$,
+$\epsilon_1{\in}[0.04,0.20]$. CP: one-sided Clopper--Pearson upper bounds at confidence $1{-}\delta$.}
+\label{tab:calib}
+\footnotesize
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{@{}r cc cc cc@{}}
+\toprule
+ & \multicolumn{2}{c}{Plug-in} & \multicolumn{2}{c}{CP, $\delta{=}0.05$} & \multicolumn{2}{c}{CP, $\delta{=}\alpha/20$} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(l){6-7}
+$n_{\mathrm{cal}}$ & viol. & $\bar N$ & viol. & $\bar N$ & viol. & $\bar N$ \\
+\midrule
+25 & 56.3 & 4.2 & 1.5 & 9.2 & 0.0 & 22.9 \\
+50 & 44.1 & 4.3 & 1.6 & 7.0 & 0.0 & 13.3 \\
+100 & 33.7 & 4.3 & 1.0 & 5.7 & 0.0 & 8.2 \\
+200 & 19.2 & 4.3 & 0.7 & 5.2 & 0.0 & 6.5 \\
+400 & 12.2 & 4.2 & 0.6 & 4.8 & 0.0 & 5.6 \\
+\bottomrule
+\end{tabular}
+\end{table}

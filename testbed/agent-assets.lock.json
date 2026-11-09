@@ -1,0 +1,16 @@
+{
+  "kind": "native AndroidWorld instrumentation for the reconstructed AVD stratum",
+  "android_env_version": "1.2.3",
+  "assets": [
+    {
+      "file": "2024.05.13-accessibility_forwarder.apk",
+      "package": "com.google.androidenv.accessibilityforwarder",
+      "version": "official dated object 2024.05.13",
+      "sha256": "97a56a544e44d79f9b3181fc7dbdd72cffa908efd3d53c82afad1773061a350a",
+      "urls": ["https://storage.googleapis.com/android_env-tasks/2024.05.13-accessibility_forwarder.apk"],
+      "license": "upstream AndroidEnv instrumentation; exact binary redistribution license not yet audited",
+      "hash_provenance": "first retrieved from the exact URL embedded in android-env1.2.3; not a historical paper checksum",
+      "source_module_sha256": "2fec62f734a1e190376c572db99551f849d5d5d4366eeb4edcad8340cd5efc82"
+    }
+  ]
+}

@@ -1,0 +1,494 @@
+Activity Resolver Table:
+  Full MIME Types:
+      vnd.android.cursor.dir/event:
+        72b2722 ws.xsoh.etar/com.android.calendar.EditEventActivity filter 19d9770
+          Action: "android.intent.action.EDIT"
+          Action: "android.intent.action.INSERT"
+          Category: "android.intent.category.DEFAULT"
+          StaticType: "vnd.android.cursor.dir/event"
+      application/ics:
+        3f2ca5 ws.xsoh.etar/com.android.calendar.ImportActivity filter 71e787a
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          Scheme: "content"
+          Scheme: "file"
+          StaticType: "text/x-vcalendar"
+          StaticType: "text/calendar"
+          StaticType: "application/ics"
+      text/calendar:
+        3f2ca5 ws.xsoh.etar/com.android.calendar.ImportActivity filter 71e787a
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          Scheme: "content"
+          Scheme: "file"
+          StaticType: "text/x-vcalendar"
+          StaticType: "text/calendar"
+          StaticType: "application/ics"
+      time/epoch:
+        6217558 ws.xsoh.etar/com.android.calendar.AllInOneActivity filter 9dc2796
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          Scheme: "content"
+          Authority: "com.android.calendar": -1
+          StaticType: "time/epoch"
+      text/x-vcalendar:
+        3f2ca5 ws.xsoh.etar/com.android.calendar.ImportActivity filter 71e787a
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          Scheme: "content"
+          Scheme: "file"
+          StaticType: "text/x-vcalendar"
+          StaticType: "text/calendar"
+          StaticType: "application/ics"
+      vnd.android.cursor.item/event:
+        ad0bf17 ws.xsoh.etar/com.android.calendar.EventInfoActivity filter fc4ced
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          StaticType: "vnd.android.cursor.item/event"
+        72b2722 ws.xsoh.etar/com.android.calendar.EditEventActivity filter 99835b3
+          Action: "android.intent.action.EDIT"
+          Action: "android.intent.action.INSERT"
+          Category: "android.intent.category.DEFAULT"
+          StaticType: "vnd.android.cursor.item/event"
+
+  Base MIME Types:
+      vnd.android.cursor.dir:
+        72b2722 ws.xsoh.etar/com.android.calendar.EditEventActivity filter 19d9770
+          Action: "android.intent.action.EDIT"
+          Action: "android.intent.action.INSERT"
+          Category: "android.intent.category.DEFAULT"
+          StaticType: "vnd.android.cursor.dir/event"
+      vnd.android.cursor.item:
+        ad0bf17 ws.xsoh.etar/com.android.calendar.EventInfoActivity filter fc4ced
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          StaticType: "vnd.android.cursor.item/event"
+        72b2722 ws.xsoh.etar/com.android.calendar.EditEventActivity filter 99835b3
+          Action: "android.intent.action.EDIT"
+          Action: "android.intent.action.INSERT"
+          Category: "android.intent.category.DEFAULT"
+          StaticType: "vnd.android.cursor.item/event"
+      text:
+        3f2ca5 ws.xsoh.etar/com.android.calendar.ImportActivity filter 71e787a
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          Scheme: "content"
+          Scheme: "file"
+          StaticType: "text/x-vcalendar"
+          StaticType: "text/calendar"
+          StaticType: "application/ics"
+        3f2ca5 ws.xsoh.etar/com.android.calendar.ImportActivity filter 71e787a
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          Scheme: "content"
+          Scheme: "file"
+          StaticType: "text/x-vcalendar"
+          StaticType: "text/calendar"
+          StaticType: "application/ics"
+      time:
+        6217558 ws.xsoh.etar/com.android.calendar.AllInOneActivity filter 9dc2796
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          Scheme: "content"
+          Authority: "com.android.calendar": -1
+          StaticType: "time/epoch"
+      application:
+        3f2ca5 ws.xsoh.etar/com.android.calendar.ImportActivity filter 71e787a
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          Scheme: "content"
+          Scheme: "file"
+          StaticType: "text/x-vcalendar"
+          StaticType: "text/calendar"
+          StaticType: "application/ics"
+
+  Schemes:
+      file:
+        3f2ca5 ws.xsoh.etar/com.android.calendar.ImportActivity filter 71e787a
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          Scheme: "content"
+          Scheme: "file"
+          StaticType: "text/x-vcalendar"
+          StaticType: "text/calendar"
+          StaticType: "application/ics"
+      http:
+        4ddcae9 ws.xsoh.etar/com.android.calendar.GoogleCalendarUriIntentFilter filter f78936e
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          Category: "android.intent.category.BROWSABLE"
+          Scheme: "http"
+          Scheme: "https"
+          Authority: "www.google.com": -1
+          Authority: "www.google.com": -1
+          Authority: "www.google.com": -1
+          Authority: "www.google.com": -1
+          Path: "PatternMatcher{PREFIX: /calendar/event}"
+          Path: "PatternMatcher{PREFIX: /calendar/event}"
+          Path: "PatternMatcher{GLOB: /calendar/hosted/.*/event}"
+          Path: "PatternMatcher{GLOB: /calendar/hosted/.*/event}"
+      https:
+        4ddcae9 ws.xsoh.etar/com.android.calendar.GoogleCalendarUriIntentFilter filter f78936e
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          Category: "android.intent.category.BROWSABLE"
+          Scheme: "http"
+          Scheme: "https"
+          Authority: "www.google.com": -1
+          Authority: "www.google.com": -1
+          Authority: "www.google.com": -1
+          Authority: "www.google.com": -1
+          Path: "PatternMatcher{PREFIX: /calendar/event}"
+          Path: "PatternMatcher{PREFIX: /calendar/event}"
+          Path: "PatternMatcher{GLOB: /calendar/hosted/.*/event}"
+          Path: "PatternMatcher{GLOB: /calendar/hosted/.*/event}"
+      content:
+        6217558 ws.xsoh.etar/com.android.calendar.AllInOneActivity filter 9dc2796
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          Scheme: "content"
+          Authority: "com.android.calendar": -1
+          StaticType: "time/epoch"
+        3f2ca5 ws.xsoh.etar/com.android.calendar.ImportActivity filter 71e787a
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          Scheme: "content"
+          Scheme: "file"
+          StaticType: "text/x-vcalendar"
+          StaticType: "text/calendar"
+          StaticType: "application/ics"
+
+  Non-Data Actions:
+      android.intent.action.MAIN:
+        6217558 ws.xsoh.etar/com.android.calendar.AllInOneActivity filter 80ff6b1
+          Action: "android.intent.action.MAIN"
+          Category: "android.intent.category.DEFAULT"
+          Category: "android.intent.category.LAUNCHER"
+          Category: "android.intent.category.APP_CALENDAR"
+      android.intent.action.VIEW:
+        ad0bf17 ws.xsoh.etar/com.android.calendar.EventInfoActivity filter 7e48f04
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+      android.intent.action.SEARCH:
+        8567a0f ws.xsoh.etar/com.android.calendar.SearchActivity filter c9cba9c
+          Action: "android.intent.action.SEARCH"
+
+  MIME Typed Actions:
+      android.intent.action.EDIT:
+        72b2722 ws.xsoh.etar/com.android.calendar.EditEventActivity filter 99835b3
+          Action: "android.intent.action.EDIT"
+          Action: "android.intent.action.INSERT"
+          Category: "android.intent.category.DEFAULT"
+          StaticType: "vnd.android.cursor.item/event"
+        72b2722 ws.xsoh.etar/com.android.calendar.EditEventActivity filter 19d9770
+          Action: "android.intent.action.EDIT"
+          Action: "android.intent.action.INSERT"
+          Category: "android.intent.category.DEFAULT"
+          StaticType: "vnd.android.cursor.dir/event"
+      android.intent.action.VIEW:
+        6217558 ws.xsoh.etar/com.android.calendar.AllInOneActivity filter 9dc2796
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          Scheme: "content"
+          Authority: "com.android.calendar": -1
+          StaticType: "time/epoch"
+        ad0bf17 ws.xsoh.etar/com.android.calendar.EventInfoActivity filter fc4ced
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          StaticType: "vnd.android.cursor.item/event"
+        3f2ca5 ws.xsoh.etar/com.android.calendar.ImportActivity filter 71e787a
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          Scheme: "content"
+          Scheme: "file"
+          StaticType: "text/x-vcalendar"
+          StaticType: "text/calendar"
+          StaticType: "application/ics"
+      android.intent.action.INSERT:
+        72b2722 ws.xsoh.etar/com.android.calendar.EditEventActivity filter 99835b3
+          Action: "android.intent.action.EDIT"
+          Action: "android.intent.action.INSERT"
+          Category: "android.intent.category.DEFAULT"
+          StaticType: "vnd.android.cursor.item/event"
+        72b2722 ws.xsoh.etar/com.android.calendar.EditEventActivity filter 19d9770
+          Action: "android.intent.action.EDIT"
+          Action: "android.intent.action.INSERT"
+          Category: "android.intent.category.DEFAULT"
+          StaticType: "vnd.android.cursor.dir/event"
+
+Receiver Resolver Table:
+  Full MIME Types:
+      vnd.android.data/update:
+        3bdbca0 ws.xsoh.etar/com.android.calendar.widget.CalendarAppWidgetService$CalendarFactory filter cd004ff
+          Action: "com.android.calendar.APPWIDGET_SCHEDULED_UPDATE"
+          Scheme: "content"
+          Authority: "com.android.calendar": -1
+          StaticType: "vnd.android.data/update"
+
+  Base MIME Types:
+      vnd.android.data:
+        3bdbca0 ws.xsoh.etar/com.android.calendar.widget.CalendarAppWidgetService$CalendarFactory filter cd004ff
+          Action: "com.android.calendar.APPWIDGET_SCHEDULED_UPDATE"
+          Scheme: "content"
+          Authority: "com.android.calendar": -1
+          StaticType: "vnd.android.data/update"
+
+  Schemes:
+      content:
+        90aa82b ws.xsoh.etar/com.android.calendar.alerts.AlertReceiver filter 508e488
+          Action: "android.intent.action.EVENT_REMINDER"
+          Action: "android.intent.action.TIME_SET"
+          Scheme: "content"
+        90aa82b ws.xsoh.etar/com.android.calendar.alerts.AlertReceiver filter c0ba246
+          Action: "android.intent.action.PROVIDER_CHANGED"
+          Scheme: "content"
+          Authority: "com.android.calendar": -1
+        3bdbca0 ws.xsoh.etar/com.android.calendar.widget.CalendarAppWidgetService$CalendarFactory filter d66b41e
+          Action: "android.intent.action.PROVIDER_CHANGED"
+          Scheme: "content"
+          Authority: "com.android.calendar": -1
+        3bdbca0 ws.xsoh.etar/com.android.calendar.widget.CalendarAppWidgetService$CalendarFactory filter cd004ff
+          Action: "com.android.calendar.APPWIDGET_SCHEDULED_UPDATE"
+          Scheme: "content"
+          Authority: "com.android.calendar": -1
+          StaticType: "vnd.android.data/update"
+
+  Non-Data Actions:
+      androidx.profileinstaller.action.SAVE_PROFILE:
+        6027fb8 ws.xsoh.etar/androidx.profileinstaller.ProfileInstallReceiver filter 96b94f7
+          Action: "androidx.profileinstaller.action.SAVE_PROFILE"
+      android.intent.action.LOCALE_CHANGED:
+        90aa82b ws.xsoh.etar/com.android.calendar.alerts.AlertReceiver filter 39aee21
+          Action: "android.intent.action.LOCALE_CHANGED"
+        3bdbca0 ws.xsoh.etar/com.android.calendar.widget.CalendarAppWidgetService$CalendarFactory filter b024059
+          Action: "android.intent.action.TIMEZONE_CHANGED"
+          Action: "android.intent.action.DATE_CHANGED"
+          Action: "android.intent.action.TIME_SET"
+          Action: "android.intent.action.LOCALE_CHANGED"
+      androidx.profileinstaller.action.INSTALL_PROFILE:
+        6027fb8 ws.xsoh.etar/androidx.profileinstaller.ProfileInstallReceiver filter 24aa191
+          Action: "androidx.profileinstaller.action.INSTALL_PROFILE"
+      android.intent.action.TIMEZONE_CHANGED:
+        3bdbca0 ws.xsoh.etar/com.android.calendar.widget.CalendarAppWidgetService$CalendarFactory filter b024059
+          Action: "android.intent.action.TIMEZONE_CHANGED"
+          Action: "android.intent.action.DATE_CHANGED"
+          Action: "android.intent.action.TIME_SET"
+          Action: "android.intent.action.LOCALE_CHANGED"
+      android.intent.action.TIME_SET:
+        3bdbca0 ws.xsoh.etar/com.android.calendar.widget.CalendarAppWidgetService$CalendarFactory filter b024059
+          Action: "android.intent.action.TIMEZONE_CHANGED"
+          Action: "android.intent.action.DATE_CHANGED"
+          Action: "android.intent.action.TIME_SET"
+          Action: "android.intent.action.LOCALE_CHANGED"
+      androidx.profileinstaller.action.SKIP_FILE:
+        6027fb8 ws.xsoh.etar/androidx.profileinstaller.ProfileInstallReceiver filter e2728f6
+          Action: "androidx.profileinstaller.action.SKIP_FILE"
+      androidx.profileinstaller.action.BENCHMARK_OPERATION:
+        6027fb8 ws.xsoh.etar/androidx.profileinstaller.ProfileInstallReceiver filter 83bdf64
+          Action: "androidx.profileinstaller.action.BENCHMARK_OPERATION"
+      android.intent.action.BOOT_COMPLETED:
+        4899c07 ws.xsoh.etar/com.android.calendar.UpgradeReceiver filter 8bc134
+          Action: "android.intent.action.BOOT_COMPLETED"
+          Category: "android.intent.category.DEFAULT"
+        25202cc ws.xsoh.etar/androidx.work.impl.background.systemalarm.RescheduleReceiver filter f8d8915
+          Action: "android.intent.action.BOOT_COMPLETED"
+      android.intent.action.DATE_CHANGED:
+        3bdbca0 ws.xsoh.etar/com.android.calendar.widget.CalendarAppWidgetService$CalendarFactory filter b024059
+          Action: "android.intent.action.TIMEZONE_CHANGED"
+          Action: "android.intent.action.DATE_CHANGED"
+          Action: "android.intent.action.TIME_SET"
+          Action: "android.intent.action.LOCALE_CHANGED"
+      android.appwidget.action.APPWIDGET_UPDATE:
+        a4f9cd2 ws.xsoh.etar/com.android.calendar.widget.CalendarAppWidgetProvider filter 219f1a3
+          Action: "android.appwidget.action.APPWIDGET_UPDATE"
+          Action: "com.android.calendar.APPWIDGET_UPDATE"
+      androidx.work.diagnostics.REQUEST_DIAGNOSTICS:
+        a45f42a ws.xsoh.etar/androidx.work.impl.diagnostics.DiagnosticsReceiver filter 2a9f21b
+          Action: "androidx.work.diagnostics.REQUEST_DIAGNOSTICS"
+      android.intent.action.MY_PACKAGE_REPLACED:
+        4899c07 ws.xsoh.etar/com.android.calendar.UpgradeReceiver filter 2974b5d
+          Action: "android.intent.action.MY_PACKAGE_REPLACED"
+      com.android.calendar.APPWIDGET_UPDATE:
+        a4f9cd2 ws.xsoh.etar/com.android.calendar.widget.CalendarAppWidgetProvider filter 219f1a3
+          Action: "android.appwidget.action.APPWIDGET_UPDATE"
+          Action: "com.android.calendar.APPWIDGET_UPDATE"
+
+  MIME Typed Actions:
+      com.android.calendar.APPWIDGET_SCHEDULED_UPDATE:
+        3bdbca0 ws.xsoh.etar/com.android.calendar.widget.CalendarAppWidgetService$CalendarFactory filter cd004ff
+          Action: "com.android.calendar.APPWIDGET_SCHEDULED_UPDATE"
+          Scheme: "content"
+          Authority: "com.android.calendar": -1
+          StaticType: "vnd.android.data/update"
+
+Domain verification status:
+    User all:
+      Verification link handling allowed: true
+      Selection state:
+        Disabled:
+          www.google.com
+
+Permissions:
+  Permission [ws.xsoh.etar.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION] (f57259b):
+    sourcePackage=ws.xsoh.etar
+    uid=10177 gids=[] type=0 prot=signature
+    perm=PermissionInfo{6726d38 ws.xsoh.etar.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION}
+
+Registered ContentProviders:
+  ws.xsoh.etar/com.android.calendar.CalendarRecentSuggestionsProvider:
+    Provider{d4fc111 ws.xsoh.etar/com.android.calendar.CalendarRecentSuggestionsProvider}
+  ws.xsoh.etar/androidx.startup.InitializationProvider:
+    Provider{bee9276 ws.xsoh.etar/androidx.startup.InitializationProvider}
+  ws.xsoh.etar/androidx.core.content.FileProvider:
+    Provider{2788077 ws.xsoh.etar/androidx.core.content.FileProvider}
+
+ContentProvider Authorities:
+  [ws.xsoh.etar.CalendarRecentSuggestionsProvider]:
+    Provider{d4fc111 ws.xsoh.etar/com.android.calendar.CalendarRecentSuggestionsProvider}
+      applicationInfo=ApplicationInfo{77d24e4 ws.xsoh.etar}
+  [ws.xsoh.etar.androidx-startup]:
+    Provider{bee9276 ws.xsoh.etar/androidx.startup.InitializationProvider}
+      applicationInfo=ApplicationInfo{dde5d4d ws.xsoh.etar}
+  [ws.xsoh.etar.provider]:
+    Provider{2788077 ws.xsoh.etar/androidx.core.content.FileProvider}
+      applicationInfo=ApplicationInfo{ea96002 ws.xsoh.etar}
+
+Key Set Manager:
+  [ws.xsoh.etar]
+      Signing KeySets: 56
+
+Packages:
+  Package [ws.xsoh.etar] (59ab50):
+    userId=10177
+    pkg=Package{8408149 ws.xsoh.etar}
+    codePath=/data/app/~~m9tSMyEuzEVfmKpafnB4Vw==/ws.xsoh.etar-T49tPQmV247EClSf0X2wYA==
+    resourcePath=/data/app/~~m9tSMyEuzEVfmKpafnB4Vw==/ws.xsoh.etar-T49tPQmV247EClSf0X2wYA==
+    legacyNativeLibraryDir=/data/app/~~m9tSMyEuzEVfmKpafnB4Vw==/ws.xsoh.etar-T49tPQmV247EClSf0X2wYA==/lib
+    extractNativeLibs=false
+    primaryCpuAbi=null
+    secondaryCpuAbi=null
+    cpuAbiOverride=null
+    versionCode=57 minSdk=23 targetSdk=37
+    minExtensionVersions=[]
+    versionName=1.0.57
+    usesNonSdkApi=false
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE HAS_DOMAIN_URLS PARTIALLY_DIRECT_BOOT_AWARE PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    queriesIntents=[Intent { act=android.content.SyncAdapter }, Intent { act=android.intent.action.VIEW cat=[android.intent.category.BROWSABLE] dat=http:/... }, Intent { act=android.intent.action.VIEW cat=[android.intent.category.BROWSABLE] dat=https:/... }]
+    dataDir=/data/user/0/ws.xsoh.etar
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    usesOptionalLibraries:
+      androidx.window.extensions
+      androidx.window.sidecar
+    usesLibraryFiles:
+      /system_ext/framework/androidx.window.extensions.jar
+      /system_ext/framework/androidx.window.sidecar.jar
+    timeStamp=2026-11-08 13:46:51
+    lastUpdateTime=2026-11-08 13:46:53
+    packageSource=0
+    signatures=PackageSignatures{886e905 version:3, signatures:[56302aa4], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP ]
+    declared permissions:
+      ws.xsoh.etar.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION: prot=signature, INSTALLED
+    requested permissions:
+      android.permission.GET_ACCOUNTS
+      android.permission.VIBRATE
+      android.permission.READ_CONTACTS
+      android.permission.READ_CALENDAR
+      android.permission.WRITE_CALENDAR
+      android.permission.WAKE_LOCK
+      android.permission.READ_SYNC_SETTINGS
+      android.permission.FOREGROUND_SERVICE
+      android.permission.FOREGROUND_SERVICE_SYSTEM_EXEMPTED
+      android.permission.SCHEDULE_EXACT_ALARM
+      android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+      android.permission.POST_NOTIFICATIONS
+      android.permission.ACCESS_NETWORK_STATE
+      android.permission.RECEIVE_BOOT_COMPLETED
+      ws.xsoh.etar.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+    install permissions:
+      android.permission.FOREGROUND_SERVICE: granted=true
+      android.permission.RECEIVE_BOOT_COMPLETED: granted=true
+      android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS: granted=true
+      android.permission.ACCESS_NETWORK_STATE: granted=true
+      android.permission.SCHEDULE_EXACT_ALARM: granted=true
+      android.permission.READ_SYNC_SETTINGS: granted=true
+      android.permission.VIBRATE: granted=true
+      ws.xsoh.etar.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION: granted=true
+      android.permission.WAKE_LOCK: granted=true
+    User 0: ceDataInode=139405 installed=true hidden=false suspended=false distractionFlags=0 stopped=true notLaunched=true enabled=0 instant=false virtual=false
+      installReason=0
+      firstInstallTime=2026-11-08 13:46:53
+      uninstallReason=0
+      runtime permissions:
+        android.permission.READ_CALENDAR: granted=true
+        android.permission.POST_NOTIFICATIONS: granted=true
+        android.permission.WRITE_CALENDAR: granted=true
+        android.permission.GET_ACCOUNTS: granted=true
+        android.permission.READ_CONTACTS: granted=true
+
+Queries:
+  system apps queryable: false
+  queries via forceQueryable:
+  queries via package name:
+  queries via component:
+    com.google.android.settings.intelligence:
+      ws.xsoh.etar
+    com.google.android.apps.messaging:
+      ws.xsoh.etar
+    com.google.android.contacts:
+      ws.xsoh.etar
+    com.google.android.apps.docs:
+      ws.xsoh.etar
+    com.android.vending:
+      ws.xsoh.etar
+    com.google.android.calendar:
+      ws.xsoh.etar
+    com.google.android.youtube:
+      ws.xsoh.etar
+    com.google.android.gm:
+      ws.xsoh.etar
+    com.google.android.sdksetup:
+      ws.xsoh.etar
+    im.vector.app:
+      ws.xsoh.etar
+    com.fsck.k9:
+      ws.xsoh.etar
+    at.bitfire.davdroid:
+      ws.xsoh.etar
+    ws.xsoh.etar:
+      com.google.android.setupwizard
+      com.google.android.apps.docs
+      com.android.chrome
+      com.google.android.gm
+      at.bitfire.davdroid
+  queryable via interaction:
+    User 0:
+  queryable via uses-library:
+
+Dexopt state:
+  [ws.xsoh.etar]
+    path: /data/app/~~m9tSMyEuzEVfmKpafnB4Vw==/ws.xsoh.etar-T49tPQmV247EClSf0X2wYA==/base.apk
+      x86_64: [status=verify] [reason=install]
+  BgDexopt state:
+    enabled:true
+    mDexOptThread:null
+    mDexOptCancellingThread:null
+    mFinishedPostBootUpdate:false
+    mLastExecutionStatus:0
+    mLastExecutionStartTimeMs:0
+    mLastExecutionDurationIncludingSleepMs:0
+    mLastExecutionStartUptimeMs:0
+    mLastExecutionDurationMs:0
+    now:168413
+    mLastCancelledPackages:
+    mFailedPackageNamesPrimary:
+    mFailedPackageNamesSecondary:
+
+Compiler stats:
+  [ws.xsoh.etar]
+     base.apk - 14431

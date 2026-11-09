@@ -1,0 +1,18 @@
+{
+  "frozen": false,
+  "profile_id": "UNCONFIGURED-NOT-ACTUAL-APP-IDS",
+  "package": "im.vector.app",
+  "activity": null,
+  "max_capture_seconds": 15,
+  "account": null,
+  "title": null,
+  "anchor": null,
+  "timeline": null,
+  "row": null,
+  "outgoing": null,
+  "acknowledged": null,
+  "exclude": [],
+  "latest_swipe": null,
+  "prepare_actions": [],
+  "history_actions": []
+}

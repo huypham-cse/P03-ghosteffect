@@ -1,0 +1,7 @@
+{
+  "exit_code": 0,
+  "tests": 3,
+  "started_utc_ns": 1794124029687309300,
+  "log_sha256": "27fee4ba82c0ffd76eafe603332057f0c9f2ffe877b25d4353f292d552e0444f",
+  "scope": "pinned native modules/config/reconnect factory; no Android/model episode"
+}

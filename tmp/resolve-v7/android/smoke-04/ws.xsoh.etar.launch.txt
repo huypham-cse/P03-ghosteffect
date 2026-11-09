@@ -1,0 +1,7 @@
+Starting: Intent { cmp=ws.xsoh.etar/com.android.calendar.AllInOneActivity }
+Status: ok
+LaunchState: COLD
+Activity: ws.xsoh.etar/com.android.calendar.AllInOneActivity
+TotalTime: 11358
+WaitTime: 11688
+Complete

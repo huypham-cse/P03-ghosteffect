@@ -1,0 +1,23 @@
+\begin{table}[!htbp]
+\centering
+\caption{Campaign 1 (superseded for lags and family errors by Table~\ref{tab:real}): hop-2 behaviour of Element~1.6.62 and K-9~Mail~24.0, pooled over no kill,
+background + kill and force-stop; 45\,s window. Re-sent: the client sent the request again (Element: always with the same txnId). Once: one server copy at the end of the
+window; Later: after the run (K-9: after ``Sync account''). Unsent: shown as unsent at the end. No duplicate. This reader had no screen check; its five late-read
+``co-failures'' are re-scored as no-observation (\S\ref{sec:eval-real}).}
+\label{tab:realcone}
+\footnotesize
+\setlength{\tabcolsep}{2.4pt}
+\begin{tabular}{@{}l ccccc@{}}
+\toprule
+App, condition & $n$ & Re-sent & Once & Later & Unsent \\
+\midrule
+Element, response lost after commit & 14 & 14 & 14 & 14 & 0 \\
+\quad offline before send & 14 & 0 & 13 & 14 & 0 \\
+\quad SIGKILL 300\,ms after \emph{Send} & 5 & 0 & 5 & 5 & 0 \\
+\quad acknowledged, then kill & 4 & 0 & 4 & 4 & 0 \\
+K-9, response lost after commit & 15 & 0 & 15 & 15 & 15 \\
+\quad offline before send & 15 & 0 & 2 & 15 & 13 \\
+\quad acknowledged, then kill & 5 & 0 & 5 & 5 & 0 \\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -1,0 +1,24 @@
+{
+  "host": "linux",
+  "command": [
+    "wsl",
+    "-d",
+    "Ubuntu",
+    "--cd",
+    "/mnt/d/NCKH/mobisys/P03-ghosteffect",
+    "--",
+    "python3",
+    "-B",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "testbed/tests",
+    "-v"
+  ],
+  "started_utc_ns": 1794123118749452100,
+  "finished_utc_ns": 1794123139084389800,
+  "exit_code": 0,
+  "scope": "component/synthetic fixtures; not agent/Android/calibration trials",
+  "log_sha256": "d49e61b9b5cbe296b0d777da902e00535745f934531c9a0dcf849c838ab698af"
+}

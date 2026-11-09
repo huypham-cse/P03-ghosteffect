@@ -1,0 +1,17 @@
+{
+  "kind": "new Windows/x86_64 replication asset; historical ARM64 lock retained",
+  "source": "https://f-droid.org/packages/im.vector.app/",
+  "assets": [
+    {
+      "file": "im.vector.app_40106624.apk",
+      "version": "Element Classic 1.6.62",
+      "version_code": 40106624,
+      "abi": "x86_64",
+      "sha256": "6ce8ee6c3a5a76ab2928f3f3b6e3934c352a3fd6bf76b7ff3dc291c6cbd928de",
+      "certificate_sha256": "b15d9b673b55b9fe656190794d872e59ec5b85b3bfb8a76b9442f17eae2887c9",
+      "certificate_note": "apksigner verifies; same signer certificate as historical ARM64 APK, not a historical binary hash",
+      "license": "AGPL-3.0-or-later; upstream F-Droid metadata",
+      "urls": ["https://f-droid.org/repo/im.vector.app_40106624.apk", "https://f-droid.org/archive/im.vector.app_40106624.apk"]
+    }
+  ]
+}

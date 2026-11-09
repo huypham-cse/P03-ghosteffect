@@ -61,15 +61,30 @@ def latency(fullfsync, n=2000):
 
 
 def crash_trials(k=300, seed=7):
+    if os.name != 'posix' or not hasattr(signal, 'SIGKILL'):
+        raise RuntimeError('SIGKILL write-ordering tests require a POSIX host (Linux/WSL/macOS)')
     rng = random.Random(seed)
     viol = taps = cand = 0
     for _ in range(k):
         d = tempfile.mkdtemp()
         db, tl = os.path.join(d, 'l.db'), os.path.join(d, 'tap.log')
         pr = subprocess.Popen([sys.executable, '-I', os.path.abspath(__file__), '--child', db, tl])
+        # Start the randomized kill window only after this child has actually
+        # dispatched. Interpreter startup on WSL/slow storage must not turn most
+        # of the 300 trials into vacuous kills before the writer loop starts.
+        deadline = time.monotonic() + 15
+        while not os.path.exists(tl) or os.path.getsize(tl) == 0:
+            if pr.poll() is not None:
+                raise RuntimeError('ledger writer exited before its first tap')
+            if time.monotonic() >= deadline:
+                pr.kill()
+                pr.wait()
+                raise RuntimeError('ledger writer did not become active within 15 seconds')
+            time.sleep(0.005)
         time.sleep(rng.uniform(0.05, 0.25))
         pr.send_signal(signal.SIGKILL)
-        pr.wait()
+        if pr.wait() != -signal.SIGKILL:
+            raise RuntimeError('writer did not terminate by SIGKILL')
         if not os.path.exists(db):
             continue
         lg = Ledger(db)
@@ -84,17 +99,27 @@ def crash_trials(k=300, seed=7):
 
 
 def main():
+    if os.name != 'posix':
+        raise RuntimeError('host crash benchmark requires POSIX; do not relabel Windows termination as SIGKILL')
     p50, p95, bpe = latency(False)
-    f50, f95, _ = latency(True, n=500)
+    if sys.platform == 'darwin':
+        f50, f95, _ = latency(True, n=500)
+    else:
+        f50 = f95 = float('nan')  # SQLite fullfsync is a macOS facility, not a Linux measurement.
     k, taps, viol, cand = crash_trials()
+    if not taps:
+        raise RuntimeError('no taps were observed; the crash test cannot validate write ordering')
     row = dict(issue_p50_ms=round(p50, 2), issue_p95_ms=round(p95, 2), fullfsync_p50_ms=round(f50, 2),
                fullfsync_p95_ms=round(f95, 2), bytes_per_effect=round(bpe), kill_trials=k, taps_checked=taps,
-               invariant_violations=viol, ghost_candidates=cand)
+               invariant_violations=viol, ghost_candidates=cand, fullfsync_supported=sys.platform == 'darwin',
+               kill_window_origin='first_observed_tap')
     print(row)
     with open(os.path.join(RES, 'ledger_bench.csv'), 'w', newline='') as f:
         w = csv.DictWriter(f, fieldnames=list(row))
         w.writeheader()
         w.writerow(row)
+    if viol:
+        raise RuntimeError('write-ahead invariant violated in %s tapped effects; see ledger_bench.csv' % viol)
 
 
 if __name__ == '__main__':

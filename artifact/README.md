@@ -1,7 +1,10 @@
 # GhostEffect artifact
 
-Everything here is **stdlib-only Python 3** (sqlite3 included) and **seeded**. `./run_all.sh` regenerates every result and every
-table/figure/macro the paper inputs (`../manuscript/generated/`); `../manuscript/build.sh` compiles. Nothing in the paper is hand-typed data.
+Experiment runtime is **stdlib-only Python 3** (sqlite3 included) and simulations are **seeded**. On Linux/WSL, run
+`python3 artifact/run_all.py --output-dir /absolute/path/to/fresh-run --jobs 2` from the project root; `artifact/run_all.sh` is a thin wrapper.
+The runner copies inputs/scripts into a fresh workspace, records hashes/exits/CSV structure, runs REAL4 and publishes generated fragments there.
+Archived results and the original manuscript are not overwritten. The full suite includes POSIX SIGKILL and rejects native Windows.
+Compile a reviewed generated workspace with `manuscript/build.sh`; LaTeX/BibTeX failures now propagate.
 An anonymized copy of this artifact will be provided to reviewers (paper §8, "Data and artifact availability").
 
 | Script | Paper element | Kind |
@@ -32,12 +35,13 @@ An anonymized copy of this artifact will be provided to reviewers (paper §8, "D
   failed entries are handed to the end-to-end path with the wait measured from t0. The Monitor is fallible; a hop-1 "committed" verdict enters the declare-side bound
   and is corroborated end to end after acknowledgement unless it certifies alone.
 - Calibration: 2,000 whole effects per app and outcome, every family read once per view on each; `cal_pop='passive'` (uninterrupted effects) or `'fault'`
-  (fault-injected, interrupted population). δ = α/(10K) with K = 11 (product), 8 (source), 5 (joint). Lag tables: 20,000 samples.
+  (fault-injected, interrupted population). δ = min(α,β)/(10K), including fault-class multiplicity when keyed, with K = 11(product),8(source),5(joint). Lag tables:20,000 generated samples, not unique real measurements.
 - Parts (run in parallel by `run_all.sh`): `main`, `stress0/6`..`stress5/6`, `sweep`, `user`, `sens`, `ncal` (calibration size and version drift with/without a
   200-effect shift test), `decomp` (over-delivery decomposition), `share` (which families certify), `real` (re-run with measured parameters if present).
 
 ## Emulator measurements (`results/real/`)
-`results/real/` (raw per-trial CSVs, logs, SUMMARY.md) is written by the separate emulator testbed (`papers/shared-android/`) and is **read-only** here.
+`results/real/` (raw per-trial CSVs, logs, SUMMARY.md) was written by the separate emulator testbed (`papers/shared-android/`) and is **read-only** here.
+That original rig is unavailable. A labelled reconstruction is in [`../testbed/`](../testbed/README.md); it has not reproduced the historical Android campaigns.
 Round 3 uses **campaign 2** (`results/real/campaign2/`: screen-validating reader, Element 101 trials + 6 timeout cells, K-9 with and without an IMAP Sent folder,
 Etar+DAVx5+Radicale, Synapse txnId horizon). Campaign 1 (`results/real/*.csv`) supplies the appendix table, kill semantics and the ledger test.
 * `real_params.py` recomputes the simulator's measured parameters from the campaign-2 CSVs (per-fault-class lag samples with lag-blind first reads, late
@@ -65,4 +69,5 @@ Etar+DAVx5+Radicale, Synapse txnId horizon). Campaign 1 (`results/real/*.csv`) s
 - PRISM/Storm on `prism/ghosteffect.pm` (no install in the build environment).
 - Device harness (AndroidWorld fault injector, on-device controller), power-loss ledger test on a device: see paper §6 and §7.
 
-Reproducibility: `bench_ledger.py` timing columns change from run to run; every other CSV and every generated `.tex` file is byte-identical across runs.
+Verification: `python -m unittest discover -s artifact/tests -v`; SciPy is an optional independent test reference, not a runtime dependency.
+The 2026-11-08 isolated25-job run passed, including16REAL4tags. Do not claim byte-identical reproduction of the archive: unmodified bundled source already differs from stored `ghost-src` outputs on both Windows and Linux, and floating CI/host timings also vary. See [`../codex/code-fixes.md`](../codex/code-fixes.md) for evidence, fixes and remaining gates. No archived CSV was replaced to hide differences.

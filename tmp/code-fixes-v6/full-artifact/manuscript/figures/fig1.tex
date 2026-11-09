@@ -1,0 +1,47 @@
+% Figure 1: concrete scenario grounded in the emulator measurements (K-9 Mail + GreenMail, Element + Synapse; Sec. 7.7).
+% Icons: Twemoji (CC-BY 4.0), copied into figures/icons/; the envelope is drawn in TikZ. All text is \footnotesize (= 7pt in sigconf).
+\newcommand{\ico}[2][0.5cm]{\includegraphics[height=#1]{figures/icons/#2.pdf}}
+\newcommand{\envl}{\tikz[baseline=0pt]{\draw[line width=0.6pt, fill=yellow!20] (0,0) rectangle (0.62,0.42); \draw[line width=0.6pt] (0,0.42) -- (0.31,0.17) -- (0.62,0.42);}}
+\newcommand{\meas}{\,\textsuperscript{\textsf{m}}}
+\begin{figure*}[t]
+\centering
+\begin{tikzpicture}[
+  font=\footnotesize,
+  step/.style={draw=#1!60!black, fill=#1!6, rounded corners=3pt, minimum width=2.66cm, minimum height=1.78cm,
+               text width=2.52cm, align=center, inner sep=1.5pt},
+  arr/.style={-{Stealth[length=2.2mm]}, thick, gray!70!black},
+  hdr/.style={font=\small\bfseries, anchor=west}
+]
+% ------------------------------------------------------------------ row (a)
+\node[hdr] at (-1.33,1.08) {(a) Today: a mail the server accepted is shown as unsent, and redoing the step sends it again};
+\node[step=red] (a1) at (0,0) {\ico{person}\,\envl\\[1pt] ``Email the signed lease to Alex.''};
+\node[step=red, right=0.29cm of a1] (a2) {\ico{robot}\,\ico{phone}\\[1pt] Agent writes the mail in K-9 and taps \textbf{Send}.};
+\node[step=red, right=0.29cm of a2] (a3) {\ico{bolt}\,\ico{nosignal}\\[1pt] Server accepts the mail; the reply is lost.\meas};
+\node[step=red, right=0.29cm of a3] (a4) {\ico{robot}\,\ico{warning}\\[1pt] Resume. K-9 marks the send failed for good; the mail stays in its Outbox.\meas};
+\node[step=red, right=0.29cm of a4] (a5) {\ico{repeat}\\[1pt] Agent trusts the screen, recomposes the mail and taps \textbf{Send}.\meas};
+\node[step=red, right=0.29cm of a5, fill=red!14] (a6) {\envl\,\envl\,\ico{ghost}\\[1pt] Alex gets the mail \textbf{twice}.\meas{} Agent reports success.};
+\foreach \i/\j in {a1/a2,a2/a3,a3/a4,a4/a5,a5/a6} \draw[arr] (\i) -- (\j);
+% ------------------------------------------------------------------ row (b)
+\node[hdr] at (-1.33,-1.42) {(b) \sys on the same send: ledger + nonce + calibrated hop-1 and end-to-end evidence};
+\node[step=teal] (b1) at (0,-2.5) {\ico{receipt}\,\ico{lock}\\[1pt] Ledger marks the send \textsf{ISSUED} at $t_0$, \emph{before} the tap.};
+\node[step=teal, right=0.29cm of b1] (b2) {\ico{label}\\[1pt] Nonce \texttt{gx:7K2Q9F} typed into the subject; \textbf{Send}.};
+\node[step=teal, right=0.29cm of b2] (b3) {\ico{bolt}\,\ico{nosignal}\\[1pt] Same lost reply. The ledger entry survives.};
+\node[step=teal, right=0.29cm of b3] (b4) {\ico{magnifier}\,\ico{phone}\\[1pt] Hop~1: a \emph{failed} entry of a non-G2 app is ambiguous end to end (Thm.~\ref{thm:twohop}).};
+\node[step=teal, right=0.29cm of b4] (b5) {\ico{eye}\,\ico{hourglass}\\[1pt] No end-to-end family certifies (K-9's Sent folder never shows it).\meas};
+\node[step=teal, right=0.29cm of b5, fill=teal!16] (b6) {\ico{person}\,\ico{shield}\\[1pt] \textbf{Ask}: ``Did Alex get \emph{Lease} (\texttt{gx:7K2Q9F})?'' Sent \textbf{once}.};
+\foreach \i/\j in {b1/b2,b2/b3,b3/b4,b4/b5,b5/b6} \draw[arr] (\i) -- (\j);
+% G2 branch (Element + Synapse)
+\node[draw=orange!70!black, fill=orange!8, rounded corners=3pt, align=left, text width=6.2cm, inner sep=2.5pt,
+      anchor=north west] (g2) at ($(b4.south west)+(0,-0.2)$)
+      {\ico[0.42cm]{check}\hspace{3pt}\parbox[c]{5.6cm}{G2 app (Element + Synapse): the app re-sends the same transaction id or reconciles via \texttt{/sync}, one copy (same device, ${<}24$\,h);\meas{} after a certified wait the row reads \emph{Sent} $\Rightarrow$ committed, no ask.}};
+\draw[arr, orange!70!black] (b3.south) |- (g2.west);
+\end{tikzpicture}
+\vspace{-2pt}
+\caption{A ghost effect and how \sys resolves it, grounded in our emulator measurements (\S\ref{sec:eval-real}; steps marked $^{\textsf{m}}$ were observed in every
+trial: K-9 \RealKRd/\RealKRd, redo \RealKRecDup/\RealKRecN, Element \RealElemRL/\RealElemRL). (a) The SMTP server accepts the mail but the reply is lost; K-9 records a permanent
+failure, never re-sends, and keeps the mail in its Outbox. Redoing the step (a scripted agent, not an LLM) sends a second mail with a new Message-ID, which SMTP accepts.
+(b) \sys records the send before the tap and tags it with a nonce. K-9 is not G2 and its entry failed, so hop~1 says nothing about the server, and the Sent folder is written
+by the same client; with no family that can certify, \sys asks instead of resending. For a G2 app such as Element the end-to-end row certifies ``committed'' after a short
+certified wait. Icons: Twemoji (CC-BY 4.0).}
+\label{fig:teaser}
+\end{figure*}

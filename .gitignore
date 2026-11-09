@@ -13,3 +13,16 @@
 __pycache__/
 *.pyc
 .DS_Store
+
+# Project-local experiment assets/state. Do not commit credentials or traces.
+/runtime/
+/.env
+/testbed/runs/
+/codex/runs/
+/testbed/*.local.json
+real.env
+*.secrets.env
+*.signing.key
+/tmp/resolve-v7/*-integration/homeserver.yaml
+/tmp/resolve-v7/*-integration/homeserver.db*
+/tmp/resolve-v7/*-integration/users

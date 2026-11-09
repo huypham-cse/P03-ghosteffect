@@ -1,0 +1,7 @@
+Starting: Intent { cmp=net.cozic.joplin/.MainActivity }
+Status: ok
+LaunchState: COLD
+Activity: net.cozic.joplin/.MainActivity
+TotalTime: 6609
+WaitTime: 6709
+Complete

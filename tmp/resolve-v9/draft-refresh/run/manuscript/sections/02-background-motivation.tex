@@ -1,0 +1,40 @@
+\section{Background and Motivation}
+\label{sec:background}
+
+\subsection{GUI effects and mobile interruptions}
+\label{sec:bg-effects}
+A GUI agent observes the screen through screenshots and the accessibility tree, and acts by injecting taps, text and gestures,
+typically in a ReAct-style loop driven by an LLM or VLM~\cite{yao2023react,rawles2025androidworld,qin2025uitars}. Most actions only navigate.
+A few cross a \emph{commit point}: after \emph{Send}, \emph{Pay}, \emph{Save} or \emph{Post} the world has changed whether or not the agent sees the
+confirmation. We call the action sequence that ends at a commit point an \emph{effect}, and target effects whose only interface is the GUI.
+
+Research agents (M3A, T3A, UI-TARS, Mobile-Agent) are host processes that drive a phone over adb~\cite{rawles2025androidworld}; on-device agents are apps with an
+accessibility service~\cite{wen2024autodroid}. Interruptions are of four kinds. (1)~\emph{Agent death}: a host agent crashes, or the low-memory killer reaps an on-device
+agent~\cite{android_lmkd}. (2)~\emph{App death}: the foreground app is essentially never reaped, so the realistic case is \emph{background-then-kill}, which keeps scheduled
+WorkManager jobs; a crash or force-stop cancels alarms and jobs~\cite{android_workmanager}, and unpreserved state is lost~\cite{farooq2020livedroid}. (3)~\emph{Deferral}:
+App Standby, background restrictions and Doze batch network access and defer jobs~\cite{android_doze,android_standby}. (4)~\emph{Connectivity loss}~\cite{sentosa2025cellreplay}:
+an app may send a request and lose the acknowledgement. Each can leave the effect absent, committed, or still in flight.
+
+\subsection{Why API-level recovery does not transfer}
+\label{sec:bg-gap}
+Table~\ref{tab:position} (appendix) summarizes recent recovery work. Three gaps matter.
+
+\para{No key.} Idempotency keys~\cite{stripe_idempotency,helland2012idempotence} let a server collapse retries, and agents use them when they exist~\cite{li2026exactlyonce}.
+A GUI \emph{Send} button takes no key from the agent; the app may attach its own request id (\S\ref{sec:twohop}), but a GUI redo creates a new request with a new id.
+
+\para{Perceptual read-back.} LIMBO's read paths are exact, eventually consistent, or missing~\cite{li2026exactlyonce}; verified tool calls~\cite{mansoor2026verified},
+RetryBench~\cite{liu2026retrybench}, explicit effect semantics~\cite{wang2026callability} and evidence-guided recovery~\cite{zhu2026evidence} reason over exact, possibly partial
+evidence and keep unknown outcomes explicit. A GUI read-back is a perception that can be wrong, tends to repeat its error on a re-read, and is defeated by look-alikes;
+VeriGUI trains an action-effect verifier for this setting~\cite{zhang2026verigui} without an error guarantee.
+
+\para{Death of the agent and late commits.} Li injects faults at the service boundary~\cite{li2026exactlyonce}; on a phone the agent itself may die. Atomix keeps progress
+in its runtime~\cite{mohammadi2026atomix}; LangGraph is at-least-once across crashes~\cite{khan2026resume}. Agent libOS and Cordon stage effects behind durable intent
+(prepare--dispatch--settle)~\cite{zhang2026agentlibos,chen2026cordon}; our ledger follows that discipline, but settlement must be decided from perception.
+
+\subsection{How often do agents create ghost effects?}
+\label{sec:measure-teaser}
+No published study measures duplicate side effects of mobile GUI agents under interruption. D-GARA evaluates Android agents under anomalies such as permission dialogs and
+update prompts and reports degraded task success~\cite{chen2025dgara}; for tool agents, Li reports 56--74\% duplicates when a read-back cannot reveal the outcome~\cite{li2026exactlyonce},
+and UndoBench 53.33\% for naive retry~\cite{sah2026undobench}. Our emulator measurements (\S\ref{sec:eval-real}) do not run an LLM agent either, but they measure the trap and its outcome: after a lost reply K-9~Mail showed every
+accepted mail as unsent, and a scripted redo of the step (recompose, send) duplicated \RealGuiDup/\RealGuiN{} mail and calendar effects. This is the client-side face of the
+SMTP duplicate problem known since 1988~\cite{rfc1047}. How often LLM agents take that step is what the planned device study measures (\S\ref{sec:device-plan}).

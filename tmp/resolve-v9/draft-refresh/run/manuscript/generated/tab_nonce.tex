@@ -1,0 +1,25 @@
+\begin{table}[!htbp]
+\centering
+\caption{Content-carried nonce (Lemma~\ref{lem:nonce}; simulated OCR with substitutions, insertions and deletions; edit-distance matching).
+OCR symbol error $e_c$; false-match bound $\epsilon_0$; miss rate $\epsilon_1$ analytic bound (MC, 40{,}000 screens), of which $\eta{=}1\%$
+is a \emph{persistent} hidden field; $\mathrm{KL}(p_0\|p_1)$; mean reads at $\alpha{=}\beta{=}10^{-3}$ \emph{if} re-reads were independent.
+With persistent misses no number of nonce reads certifies ``absent'' below $\eta$ (Lemma~\ref{lem:floor}).}
+\label{tab:nonce}
+\footnotesize
+\setlength{\tabcolsep}{2.4pt}
+\begin{tabular}{@{}l c c c c c@{}}
+\toprule
+Probe & $e_c$ & $\epsilon_0$ & $\epsilon_1$ & KL$_0$ & $\bar N$ \\
+\midrule
+VLM, no look-alike & -- & 0.12 & 0.08 & 1.87 & 4.4 \\
+VLM, look-alike & -- & \multicolumn{2}{c}{uninformative} & 0 & $\infty$ \\
+\midrule
+nonce $k{=}4$, $t{=}0$ & 2\% & \ensuremath{3.8{\times}10^{-5}} & 0.087 (0.088) & 2.44 & 2.1 \\
+nonce $k{=}4$, $t{=}0$ & 5\% & \ensuremath{3.8{\times}10^{-5}} & 0.194 (0.187) & 1.64 & 3.1 \\
+nonce $k{=}6$, $t{=}1$ & 2\% & \ensuremath{7.2{\times}10^{-6}} & 0.016 (0.015) & 4.16 & 1.5 \\
+nonce $k{=}6$, $t{=}1$ & 5\% & \ensuremath{7.2{\times}10^{-6}} & 0.042 (0.040) & 3.16 & 2.0 \\
+nonce $k{=}8$, $t{=}1$ & 2\% & \ensuremath{9.3{\times}10^{-9}} & 0.020 (0.020) & 3.90 & 1.5 \\
+nonce $k{=}8$, $t{=}1$ & 5\% & \ensuremath{9.3{\times}10^{-9}} & 0.067 (0.066) & 2.71 & 2.0 \\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -1,0 +1,59 @@
+\begin{table*}[t]
+\centering
+\caption{Emulator measurements, campaign 2 (Android~13 emulators, self-hosted servers, scripted driver; ground truth = server copies). (a)~After a commit whose reply was
+lost (TCP reset after the server committed), under no fault, background + \texttt{kill -9}, force-stop or a 20\,s network cut. App re-send: how the app resolved it; GUI redo:
+a scripted agent recomposes and re-sends the same content. (b)~Element's recovery-to-visible lag (s; upper end of a one-dump $\approx$2\,s interval; no trial censored,
+window $\ge$120\,s). Sticky: every reply dropped until the fault. (c)~Family errors against the server, wrong/observed, with no-observation ($\bot$, wrong screen) separated;
+Element's send-state indicator appears in the same dump as the row in \RealElemN/\RealElemN{} trials, so the two are one reading.}
+\label{tab:real}
+\footnotesize
+\setlength{\tabcolsep}{2.2pt}
+\begin{minipage}[t]{0.47\textwidth}\vspace{0pt}
+\begin{tabular}{@{}l c l c l c@{}}
+\toprule
+\multicolumn{6}{@{}l}{(a) Hop-2 behaviour after a lost reply} \\
+App & $n$ & App re-send & Once & Shows & GUI redo \\
+\midrule
+Element & \RealElemRL & txnId \RealElemSameTxn, /sync \RealElemSyncOnly & \RealElemRL & \emph{Sent} & new txnId \\
+Etar+DAVx5 & \RealCalN & URL $\to$ 412 & \RealCalOnce & saved & \RealCalRecDup/\RealCalRecN{} dup \\
+K-9 & \RealKRdNosent & none (error) & \RealKRdNosent & Outbox & dup \\
+K-9 + Sent & \RealKRdSent & none (error) & \RealKRdSent & Outbox only & dup \\
+\multicolumn{4}{@{}l}{\quad K-9 redo, both configurations} & & \RealKRecDup/\RealKRecN{} dup \\
+\bottomrule
+\end{tabular}\\[3pt]
+\begin{tabular}{@{}l cccc@{}}
+\toprule
+\multicolumn{5}{@{}l}{(b) Element lag by fault class (s)} \\
+Fault & $n$ & p50 & p90 & max \\
+\midrule
+none (reader floor; from \emph{Send}) & \RealLagNofaultN & \RealLagNofaultMed & \RealLagNofaultNinety & \RealLagNofaultMax \\
+background + \texttt{kill -9} & \RealLagKillN & \RealLagKillMed & \RealLagKillNinety & \RealLagKillMax \\
+force-stop (relaunch lands off the room) & \RealLagFsN & \RealLagFsMed & \RealLagFsNinety & \RealLagFsMax \\
+network cut, app in foreground & \RealLagNetN & \RealLagNetMed & \RealLagNetNinety & \RealLagNetMax \\
+sticky + \texttt{kill -9} & \RealLagSKillN & \RealLagSKillMed & \RealLagSKillNinety & \RealLagSKillMax \\
+sticky + force-stop & \RealLagSFsN & \RealLagSFsMed & \RealLagSFsNinety & \RealLagSFsMax \\
+\bottomrule
+\end{tabular}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.50\textwidth}\vspace{0pt}
+\begin{tabular}{@{}l l c c@{}}
+\toprule
+\multicolumn{4}{@{}l}{(c) Evidence families (truth: server)} \\
+App & Family, read & wrong/obs. & $\bot$ \\
+\midrule
+Element & row = indicator, first read & \RealFirstWrong/\RealFirstObs$^{\ddagger}$ & \RealFirstBot \\
+ & row = indicator, first non-$\bot$ read & \RealEarlyWrong/\RealElemN$^{\ddagger}$ & 0 \\
+ & row = indicator, late & 0/\RealLateObs & \RealLateBot \\
+ & room-list digest, late & 0/\RealLateObs & \RealLateBot \\
+ & any two families wrong together, late & 0/\RealCoN{} (CI 0--\RealLateHi\%) & \RealCoBot \\
+K-9 & Outbox lists it (``unsent''), lost reply & \RealKOutWrong/\RealKRd & 0 \\
+ & failure notification, lost reply & \RealKNotifWrong/\RealKRd$^{\S}$ & 0 \\
+ & Sent folder lacks it, lost reply & \RealKSentWrong/\RealKSentN & 0 \\
+ & \quad together with the Outbox & \RealKSentWrong/\RealKSentN & 0 \\
+ & any family, acknowledged send & 0/\RealKAckedN & 0 \\
+\bottomrule
+\end{tabular}\\[2pt]
+{\scriptsize $^{\ddagger}$All lag-blind: verified screen, scrolled to the bottom, message not yet in the restored timeline (visible at \RealBlindLagLo--\RealBlindLagHi\,s).
+$^{\S}$Force-stop clears the app's notifications. The shade was cleared between trials.}
+\end{minipage}
+\end{table*}

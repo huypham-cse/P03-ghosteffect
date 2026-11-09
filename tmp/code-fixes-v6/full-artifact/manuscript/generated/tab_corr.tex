@@ -1,0 +1,23 @@
+\begin{table}[!htbp]
+\centering
+\caption{Correlated reads (model-based simulation; VLM family with 3 views, $\epsilon{=}0.10$, $\alpha{=}1\%$, 30{,}000 committed effects per cell):
+$P(\mathrm{dup}\mid X{=}1)$ in \%. \emph{Within-view}: re-reads of a view share one error with probability $\rho$.
+\emph{Cross-view}: views share a latent error rate with intraclass correlation $\rho$. naive: SPRT re-reading one view; re-read: our earlier design
+(re-reads of rotated views, AR(1) shrinkage); view: one read per view, SPRT over views (assumes independent views); certified: family verdict with calibrated bound (Prop.~\ref{prop:family}),
+escalations (\%) in parentheses; bound: Lemma~\ref{lem:floor}, worst case of all 3 views wrong.}
+\label{tab:corr}
+\footnotesize
+\setlength{\tabcolsep}{2pt}
+\begin{tabular}{@{}c ccc cccc@{}}
+\toprule
+ & \multicolumn{3}{c}{Within-view $\rho$} & \multicolumn{4}{c}{Cross-view $\rho$} \\
+\cmidrule(lr){2-4}\cmidrule(l){5-8}
+$\rho$ & naive & re-read & view & re-read & view & certified & bound \\
+\midrule
+0.0 & 0.12 & 0.16 & 0.11 & 0.13 & 0.11 & 0.06 (27) & 0.1 \\
+0.2 & 2.13 & 0.36 & 0.09 & 3.19 & 1.13 & 0.00 (100) & 2.2 \\
+0.6 & 5.95 & 0.99 & 0.09 & 8.42 & 5.03 & 0.00 (100) & 6.3 \\
+1.0 & 9.63 & 1.89 & 0.11 & 10.21 & 10.39 & 0.00 (100) & 10.0 \\
+\bottomrule
+\end{tabular}
+\end{table}

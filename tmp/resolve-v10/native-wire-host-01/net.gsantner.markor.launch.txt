@@ -1,0 +1,7 @@
+Starting: Intent { cmp=net.gsantner.markor/.activity.MainActivity }
+Status: ok
+LaunchState: COLD
+Activity: net.gsantner.markor/.activity.IntroActivity
+TotalTime: 7676
+WaitTime: 7689
+Complete

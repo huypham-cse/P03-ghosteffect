@@ -8,24 +8,76 @@ written by a seeded script (or, for the ledger benchmark, a host measurement).
 import csv
 import math
 import os
+import argparse
+from pathlib import Path
+import runpy
+import shutil
+import tempfile
+
+
+def main():
+    """Generate/validate a full staging directory before replacing any old output.
+
+    The worker is this same script with explicit paths. A failed CSV read, parse
+    or assertion leaves the previously generated directory untouched. Publication
+    restores the old directory if the final rename fails.
+    """
+    here = Path(__file__).resolve().parent
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--results-dir', type=Path, default=here.parent / 'results')
+    parser.add_argument('--output-dir', type=Path, default=here.parent.parent / 'manuscript' / 'generated')
+    args = parser.parse_args()
+    results, destination = args.results_dir.resolve(), args.output_dir.resolve()
+    if not results.is_dir():
+        raise FileNotFoundError(results)
+    if destination == results or results in destination.parents or destination in results.parents:
+        raise ValueError('input and output directories must not contain one another')
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    with tempfile.TemporaryDirectory(prefix='.render-', dir=destination.parent) as temp:
+        staging, previous = Path(temp) / 'generated', Path(temp) / 'previous'
+        staging.mkdir()
+        if destination.exists():
+            # The renderer owns .tex fragments, not unrelated notes/assets.
+            for item in destination.iterdir():
+                if item.suffix != '.tex':
+                    if item.is_dir():
+                        shutil.copytree(item, staging / item.name, symlinks=True)
+                    else:
+                        shutil.copy2(item, staging / item.name)
+        runpy.run_path(str(here / 'render.py'), run_name='__main__', init_globals={
+            '_RENDER_STAGED': True, '_RENDER_RESULTS': str(results), '_RENDER_OUTPUT': str(staging)})
+        if not (staging / 'macros.tex').is_file():
+            raise RuntimeError('generation did not produce macros.tex')
+        had_previous = destination.exists()
+        if had_previous:
+            os.replace(destination, previous)
+        try:
+            os.replace(staging, destination)
+        except BaseException:
+            if had_previous:
+                os.replace(previous, destination)
+            raise
+    print('published generated fragments to', destination)
+
+
+if __name__ == '__main__' and not globals().get('_RENDER_STAGED'):
+    main()
+    raise SystemExit(0)
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-RES = os.path.join(HERE, '..', 'results')
-OUT = os.path.join(HERE, '..', '..', 'manuscript', 'generated')
+RES = globals().get('_RENDER_RESULTS', os.path.join(HERE, '..', 'results'))
+OUT = globals().get('_RENDER_OUTPUT', os.path.join(HERE, '..', '..', 'manuscript', 'generated'))
 os.makedirs(OUT, exist_ok=True)
-for fn in os.listdir(OUT):                     # stale fragments must not survive a regeneration
-    if fn.endswith('.tex'):
-        os.remove(os.path.join(OUT, fn))
 MACROS = {}
 
 
 def rd(name):
-    with open(os.path.join(RES, name), newline='') as f:
+    with open(os.path.join(RES, name), newline='', encoding='utf-8-sig') as f:
         return list(csv.DictReader(f))
 
 
 def W(name, text):
-    with open(os.path.join(OUT, name), 'w') as f:
+    with open(os.path.join(OUT, name), 'w', encoding='utf-8') as f:
         f.write(text)
 
 
@@ -35,6 +87,8 @@ def M(name, val):
 
 def sci(x, d=1):
     x = float(x)
+    if not math.isfinite(x):
+        return '--'
     if x == 0:
         return '\\ensuremath{0}'
     e = int(math.floor(math.log10(abs(x))))
@@ -50,6 +104,8 @@ def sci(x, d=1):
 def _half_up(x, d):
     """Round half up on the decimal text of x (R1 round-4 m2: one rounding rule, e.g. 11.95 -> 12.0)."""
     from decimal import Decimal, ROUND_HALF_UP
+    if not math.isfinite(float(x)):
+        return '--'
     return str(Decimal(repr(float(x))).quantize(Decimal(1).scaleb(-d), rounding=ROUND_HALF_UP))
 
 
@@ -758,7 +814,7 @@ REAL = os.path.join(RES, 'real')
 real_csvs = sorted(f for f in os.listdir(REAL) if f.endswith('.csv')) if os.path.isdir(REAL) else []
 # measurements count as reportable only once the testbed agent has written its SUMMARY.md (provenance)
 if real_csvs and os.path.exists(os.path.join(REAL, 'SUMMARY.md')):
-    exec(open(os.path.join(HERE, 'render_real.py')).read())
+    exec(open(os.path.join(HERE, 'render_real.py'), encoding='utf-8').read())
 else:
     M('RealDataLimitation', r'No simulator parameter is yet measured on a device or emulator.')
     M('RealPresent', 'no')

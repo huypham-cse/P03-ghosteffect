@@ -18,7 +18,7 @@ C2 = os.path.join(REAL, 'campaign2')
 
 
 def rd(path):
-    with open(path, newline='') as f:
+    with open(path, newline='', encoding='utf-8-sig') as f:
         return list(csv.DictReader(f))
 
 
@@ -82,8 +82,9 @@ def main():
         P(name, 0.0, f'Element committed side: 0 wrong late reads among 99 observed (c2_element_families.csv); '
           'bounds still come from CP on simulated labels')
     tail = 1 - 0.05 ** (1 / n_all)
-    P('elem_tail_ub', tail, f'one-sided 95% CP upper bound on P(not visible within the window) from 0/{n_all} censored '
-      '(used only for the lag-tail sensitivity rows; not a measurement)')
+    P('elem_tail_ub', tail, f'one-sided 95% zero-exceedance/order-statistic reference from {n_all} recorded '
+      'first-visibility endpoints (not a common follow-up window; missing attempts not characterized); '
+      'used only for lag-tail sensitivity under the sampling assumptions, not a measured tail rate')
 
     # ------------------------------------------------------------ K-9: failed state (campaign 2), queued delivery (campaign 1)
     ks = rd(os.path.join(C2, 'c2_k9_summary.csv'))
@@ -91,8 +92,15 @@ def main():
     n_rdk = sum(int(r['n']) for r in rdk)
     assert all(r['app_state_late'] == 'Outbox:error' and r['app_state_after_sync'] == 'Outbox:error'
                and r['sync_new_DATA'] == '0' and r['sendmsgs_new_DATA'] == '0' for r in rdk)
-    P('k9_failed_commit', 1.0, f'K-9 (campaign 2): after a lost SMTP reply the mail stays in the Outbox with '
-      f'send_state=error, 0 new DATA on Sync or Send-messages, in {n_rdk}/{n_rdk} (c2_k9_summary.csv)')
+    raw_k9 = [r for name in ('c2_k9_nosent_trials.csv', 'c2_k9_sent_trials.csv')
+              for r in rd(os.path.join(C2, name)) if r['timing'] == 'respdrop']
+    assert len(raw_k9) == n_rdk
+    send_verified = sum(r['sendmsgs_tapped'] == '1' for r in raw_k9)
+    sync_verified = sum(r['sync_tapped'] == '1' for r in raw_k9)
+    P('k9_failed_commit', 1.0, f'K-9 campaign-2 plug-in: Outbox:error persists over the observed windows in '
+      f'{n_rdk}/{n_rdk} lost-reply cases, with no new DATA observed. Sync tap recorded {sync_verified}/{n_rdk}; '
+      f'explicit Send-messages tap recorded {send_verified}/{n_rdk}, not verified for the remaining cases '
+      '(per-trial CSVs). Unattended permanent failure was not measured.')
     out1 = rd(os.path.join(REAL, 'e4_outcomes.csv'))
     np_k = [r for r in out1 if r['app'] == 'k9' and r['timing'] == 'net_pre']
     n_nk = sum(int(r['n']) for r in np_k)

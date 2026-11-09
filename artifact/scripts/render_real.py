@@ -10,7 +10,7 @@ C2 = os.path.join(REAL, 'campaign2')
 
 
 def _rr(name, base=None):
-    with open(os.path.join(base or REAL, name), newline='') as f:
+    with open(os.path.join(base or REAL, name), newline='', encoding='utf-8-sig') as f:
         return list(csv.DictReader(f))
 
 
@@ -215,8 +215,9 @@ W('tab_real.tex', r'''\begin{table*}[t]
 \centering
 \caption{Emulator measurements, campaign 2 (Android~13 emulators, self-hosted servers, scripted driver; ground truth = server copies). (a)~After a commit whose reply was
 lost (TCP reset after the server committed), under no fault, background + \texttt{kill -9}, force-stop or a 20\,s network cut. App re-send: how the app resolved it; GUI redo:
-a scripted agent recomposes and re-sends the same content. (b)~Element's recovery-to-visible lag (s; upper end of a one-dump $\approx$2\,s interval; no trial censored,
-window $\ge$120\,s). Sticky: every reply dropped until the fault. (c)~Family errors against the server, wrong/observed, with no-observation ($\bot$, wrong screen) separated;
+a scripted agent recomposes and re-sends the same content. (b)~Element's recovery-to-visible lag (s; upper end of a one-dump $\approx$2\,s interval; first visibility was observed
+in all recorded trials, with trial-specific follow-up windows). This is not a uniform late-duplicate follow-up. Sticky: every reply dropped until the fault.
+(c)~Family errors against the server, wrong/observed, with no-observation ($\bot$, wrong screen) separated;
 Element's send-state indicator appears in the same dump as the row in \RealElemN/\RealElemN{} trials, so the two are one reading.}
 \label{tab:real}
 \footnotesize
@@ -365,3 +366,37 @@ M('RealDataLimitation', r'Emulator measurements (\S\ref{sec:eval-real}) cover th
 M('RealPresent', 'yes')
 W('real_section.tex', '% emulator measurements present (artifact/results/real/SUMMARY.md): prose in sections/07-real.tex\n'
   '\\input{sections/07-real}\n')
+
+# REAL4 stays separate: this renders the review evidence without rewriting the
+# draft to include it. These remain measured-parameter simulations, not new
+# emulator/agent measurements.
+_four_lines = []
+for _path in sorted(_glob.glob(os.path.join(RES, 'planner_real4_*.csv'))):
+    _tag = os.path.basename(_path)[len('planner_real4_'):-4]
+    _rows = rd(os.path.basename(_path))
+    if not _rows:
+        raise ValueError('empty REAL4 output: ' + _path)
+    for _r in _rows:
+        if _r['tag'] != _tag:
+            raise ValueError('REAL4 tag/filename mismatch: ' + _path)
+        _four_lines.append(' & '.join([
+            _tag, _r['app'], _r['policy'], _r['ncal'], _r['nlag'],
+            _r['clock'] + '/' + _r['downtime'], f2(_r['cdup']),
+            f2(_r['cdup_hi']), f1(_r['ask'])]) + r' \\')
+if _four_lines:
+    W('tab_real4.tex', r'''\begin{table*}[!htbp]
+\centering
+\caption{REAL4 sensitivities: measured-parameter simulations, not fresh device or agent runs.
+Calibration labels and lag entries are generated; clock/downtime are explicit.
+$P_{\mathrm v}$, its CP upper bound and ASK are percentages.}
+\label{tab:real4}
+\scriptsize
+\begin{tabular}{@{}llllllrrr@{}}
+\toprule
+Case & App & Policy & Labels & Lags & Clock/down(s) & $P_{\mathrm v}$ & CP hi & ASK \\
+\midrule
+''' + '\n'.join(_four_lines) + r'''
+\bottomrule
+\end{tabular}
+\end{table*}
+''')

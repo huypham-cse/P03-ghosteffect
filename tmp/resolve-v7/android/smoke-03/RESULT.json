@@ -1,0 +1,36 @@
+{
+  "kind": "actual Android boot/install/first-run UI smoke",
+  "status": "FAILED",
+  "study_result": false,
+  "abi_stratum": "Windows x86_64 API33/r17",
+  "source_sha256": "607aafa1d1b85451acbc8072af7a8a229f6a62e818aa94eb106715b7eefa48dd",
+  "apks": [
+    {
+      "file": "im.vector.app_40106624.apk",
+      "sha256": "6ce8ee6c3a5a76ab2928f3f3b6e3934c352a3fd6bf76b7ff3dc291c6cbd928de",
+      "installed": true,
+      "launcher": "im.vector.app/im.vector.application.features.Alias",
+      "foreground": "com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity",
+      "installed_apk_sha256": "6ce8ee6c3a5a76ab2928f3f3b6e3934c352a3fd6bf76b7ff3dc291c6cbd928de",
+      "reused_exact_installed_apk": true,
+      "expected_foreground": false,
+      "stable_tree": false,
+      "account_configured": false
+    }
+  ],
+  "verification_sha256": "158ebd4afe94913be1401ad4c9a6349d4ebcde95a3ca0e4da608d471013a65c3",
+  "started_utc_ns": 1794120086244513300,
+  "acceleration": "accel:\n0\nWHPX(10.0.19045) is installed and usable.\naccel\n",
+  "owned_emulator_pid": 22708,
+  "boot_seconds": 51.51499999999942,
+  "properties": {
+    "ro.build.fingerprint": "google/sdk_gphone64_x86_64/emu64x:13/TE1A.240213.009/12342917:userdebug/dev-keys",
+    "ro.build.version.sdk": "33",
+    "ro.product.cpu.abi": "x86_64",
+    "persist.sys.locale": "",
+    "persist.sys.timezone": "Asia/Bangkok"
+  },
+  "error_type": "RuntimeError",
+  "reason": "adb -s failed: ",
+  "owned_emulator_stopped": true
+}

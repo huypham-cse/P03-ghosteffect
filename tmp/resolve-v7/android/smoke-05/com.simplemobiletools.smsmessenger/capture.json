@@ -1,0 +1,13 @@
+{
+  "kind": "adb-sequential-bracketed-capture",
+  "serial": "emulator-5580",
+  "mono_start_ns": 58822218000000,
+  "mono_end_ns": 58833984000000,
+  "utc_ns": 1794120882332289000,
+  "foreground_before": "com.google.android.permissioncontroller/com.android.permissioncontroller.role.ui.RequestRoleActivity",
+  "foreground_after": "com.google.android.permissioncontroller/com.android.permissioncontroller.role.ui.RequestRoleActivity",
+  "stable_tree": true,
+  "same_foreground": true,
+  "tree_sha256": "c38f33a571ed7d8c898491cdfc5ed3b05f16bdbee413532abf8b636df5728bcd",
+  "png_sha256": "e7379fef595317661c1fe0eac35064a97615c29c79679faaf90ba9606e57b6f6"
+}

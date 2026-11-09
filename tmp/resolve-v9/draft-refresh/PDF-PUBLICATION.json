@@ -1,0 +1,15 @@
+{
+  "status": "PASS",
+  "utc_ns": 1794124275735704100,
+  "file": "manuscript/main.pdf",
+  "before_sha256": "121ae325daceee68a2e89951c0d24fe935a77ae7fdd8265ab1cf73cc6750a6c9",
+  "after_sha256": "d9e7958a92af861825c7679a5b618bd679edb5308206fef9eb3276c62328ad59",
+  "pages": 20,
+  "compiler": "bundled Tectonic0.16.9",
+  "qa": "rendered page9 checked at150%; all20pages contact sheet reviewed",
+  "prose_modified": false,
+  "raw_measurements_modified": false,
+  "scope": "draft numerical refresh only; existing hypotheses remain unverified",
+  "previous_pdf": "tmp\\resolve-v9\\draft-refresh\\previous\\manuscript\\main.pdf",
+  "compile_receipt": "tmp/resolve-v9/draft-refresh/compile-result-02.json"
+}

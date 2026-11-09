@@ -1,0 +1,7 @@
+Starting: Intent { cmp=com.arduia.expense/.ui.MainActivity }
+Status: ok
+LaunchState: COLD
+Activity: com.arduia.expense/.ui.MainActivity
+TotalTime: 1482
+WaitTime: 1499
+Complete

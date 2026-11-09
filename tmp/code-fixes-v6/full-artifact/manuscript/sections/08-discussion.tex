@@ -1,0 +1,32 @@
+\section{Discussion}
+\label{sec:discussion}
+
+\para{Limitations.}
+(1)~\emph{Evidence.} The decision results come from simulation, model-based or with measured parameters; the generative model departs from the planner's assumptions on purpose,
+but it is ours. \RealDataLimitation{} Labels in the measured runs are simulated draws from laws estimated from 8--101 trials, so a tail beyond what we saw (up to 2.9\% on
+Element) cannot be excluded, and it would either break the budget or make \sys ask.
+(2)~\emph{Cross-family dependence.} Product certification assumes A2. A stale history violates it in the model (\S\ref{sec:eval-pop}); on Element no two families were wrong
+together in \RealCoN{} trials, which bounds co-failure only at a few percent. Joint certification removes the assumption but needs about $\ln(1/\delta)/\alpha_{\mathrm{test}}$ labels
+per stratum and fault class, which only pooling provides.
+(3)~\emph{Calibration population.} Bounds hold only for labels from interrupted effects: passive labels, an unlogged lag tail or an undetected delayed recovery in Doze break the
+budget (Tables~\ref{tab:realsim},~\ref{tab:stress}); drift within a version is not detected.
+(4)~\emph{Escalations.} Joint certification escalates two thirds of interrupted workflows at 2{,}000 labels in the model and every interrupted K-9 send; each ask interrupts a
+user who delegated the task. We have not run a user study of the prompt (it needs IRB approval).
+(5)~\emph{Effects.} A missed commit point is invisible to \sys, and an app that commits half a batch needs app-specific probes.
+
+\para{Android realism.}
+Payment apps resist exactly this agent: \texttt{FLAG\_SECURE} blocks screenshots; since Android~14, \texttt{accessibility\-Data\-Sensitive} views are hidden from services that do
+not declare \texttt{isAccessibilityTool}~\cite{android_a11ysensitive}, which Google Play reserves for assistive tools~\cite{googleplay_a11ypolicy}; banking apps may detect
+accessibility services and gate the commit behind BiometricPrompt. Hence our measurements use open-source apps with self-hosted servers, and payments need MockBank, a test app we
+plan to build. Element, Simple SMS and Thunderbird offer only counterparty-visible nonce fields (Table~\ref{tab:apps}); our Element runs opted in. Physical phones kill and defer
+more aggressively, so we expect lag tails beyond the 13.6\,s we measured (Table~\ref{tab:lag} prices them). A withheld reply took another code path in Element (sync echo, 70\,s
+timeout) and stayed exactly once in \RealTimeoutClean{} clean trials; end-to-end encrypted rooms, Element's default for direct messages, are untested.
+
+\para{Ethics and threat model.}
+A nonce writes agent text into user content, so \sys uses user-only fields by default, requires opt-in for counterparty-visible ones, and never uses invisible characters. We assume
+a benign agent and apps and an untrusted co-installed app that may race for the foreground or render look-alikes; foreground re-verification narrows, but does not close, the
+rebinding window~\cite{qian2026rebinding}, and only outgoing items of the verified account count as nonce matches. The model applies to desktop and web agents~\cite{xie2024osworld,zhou2024webarena}; the two-hop reduction is where phones differ.
+
+\para{Data and artifact availability.}
+Every table, figure and inline number is generated from the artifact's CSVs by a standard-library Python generator: the seeded simulator, calibration, ledger benchmark, and the
+emulator measurements with per-trial CSVs and logs, plus the rig (AVD configuration, APK hashes, fault proxy, driver, reader). An anonymized copy will be provided to reviewers.

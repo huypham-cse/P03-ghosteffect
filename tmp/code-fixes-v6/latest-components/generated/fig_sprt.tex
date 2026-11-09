@@ -1,0 +1,22 @@
+\begin{figure}[!htbp]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=\linewidth,height=3.9cm,xlabel={$\log_{10}(1/\alpha)$ \ ($\beta{=}\alpha$)},
+  ylabel={mean reads $\bar N$},xtick={1,2,3,4},ymin=0,
+  legend style={at={(0.02,0.98)},anchor=north west,font=\footnotesize,draw=none,fill=none},
+  ymajorgrids,grid style={dashed,gray!30},tick label style={font=\footnotesize},label style={font=\footnotesize}]
+\addplot[color=blue!70!black,mark=*,mark size=1.6pt,thick] coordinates {(1,1.000) (2,2.210) (3,3.332) (4,4.444)};
+\addlegendentry{$\epsilon{=}0.05$}
+\addplot[color=blue!70!black,dashed,thick,forget plot] coordinates {(1,0.663) (2,1.699) (3,2.601) (4,3.475)};
+\addplot[color=orange!85!black,mark=*,mark size=1.6pt,thick] coordinates {(1,2.685) (2,4.239) (3,5.703) (4,8.571)};
+\addlegendentry{$\epsilon{=}0.15$}
+\addplot[color=orange!85!black,dashed,thick,forget plot] coordinates {(1,1.448) (2,3.709) (3,5.677) (4,7.584)};
+\addplot[color=red!70!black,mark=*,mark size=1.6pt,thick] coordinates {(1,6.405) (2,14.815) (3,22.478) (4,27.495)};
+\addlegendentry{$\epsilon{=}0.30$}
+\addplot[color=red!70!black,dashed,thick,forget plot] coordinates {(1,5.186) (2,13.287) (3,20.338) (4,27.170)};
+\end{axis}
+\end{tikzpicture}
+\caption{The price of a duplicate budget for an i.i.d.\ probe (exact). Solid: SPRT; dashed: lower bound~\eqref{eq:lb}.
+Cost grows as $\log(1/\alpha)/\mathrm{KL}$; the gap is at most 2.4 reads over all 24 cells (Table~\ref{tab:sprt}).}
+\label{fig:sprt}
+\end{figure}

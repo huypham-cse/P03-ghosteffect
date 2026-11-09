@@ -1,0 +1,409 @@
+Activity Resolver Table:
+  Full MIME Types:
+      */*:
+        aa7045c com.simplemobiletools.smsmessenger/.activities.NewConversationActivity filter 534383a
+          Action: "android.intent.action.SEND"
+          Category: "android.intent.category.DEFAULT"
+          StaticType: "*"
+          mPriority=0, mOrder=0, mHasStaticPartialTypes=true, mHasDynamicPartialTypes=false
+        aa7045c com.simplemobiletools.smsmessenger/.activities.NewConversationActivity filter 739cceb
+          Action: "android.intent.action.SEND_MULTIPLE"
+          Category: "android.intent.category.DEFAULT"
+          StaticType: "*"
+          mPriority=0, mOrder=0, mHasStaticPartialTypes=true, mHasDynamicPartialTypes=false
+
+  Wild MIME Types:
+      *:
+        aa7045c com.simplemobiletools.smsmessenger/.activities.NewConversationActivity filter 534383a
+          Action: "android.intent.action.SEND"
+          Category: "android.intent.category.DEFAULT"
+          StaticType: "*"
+          mPriority=0, mOrder=0, mHasStaticPartialTypes=true, mHasDynamicPartialTypes=false
+        aa7045c com.simplemobiletools.smsmessenger/.activities.NewConversationActivity filter 739cceb
+          Action: "android.intent.action.SEND_MULTIPLE"
+          Category: "android.intent.category.DEFAULT"
+          StaticType: "*"
+          mPriority=0, mOrder=0, mHasStaticPartialTypes=true, mHasDynamicPartialTypes=false
+
+  Schemes:
+      mms:
+        aa7045c com.simplemobiletools.smsmessenger/.activities.NewConversationActivity filter 7991365
+          Action: "android.intent.action.SEND"
+          Action: "android.intent.action.SENDTO"
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          Category: "android.intent.category.BROWSABLE"
+          Scheme: "sms"
+          Scheme: "smsto"
+          Scheme: "mms"
+          Scheme: "mmsto"
+      sms:
+        aa7045c com.simplemobiletools.smsmessenger/.activities.NewConversationActivity filter 7991365
+          Action: "android.intent.action.SEND"
+          Action: "android.intent.action.SENDTO"
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          Category: "android.intent.category.BROWSABLE"
+          Scheme: "sms"
+          Scheme: "smsto"
+          Scheme: "mms"
+          Scheme: "mmsto"
+      mmsto:
+        aa7045c com.simplemobiletools.smsmessenger/.activities.NewConversationActivity filter 7991365
+          Action: "android.intent.action.SEND"
+          Action: "android.intent.action.SENDTO"
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          Category: "android.intent.category.BROWSABLE"
+          Scheme: "sms"
+          Scheme: "smsto"
+          Scheme: "mms"
+          Scheme: "mmsto"
+      smsto:
+        aa7045c com.simplemobiletools.smsmessenger/.activities.NewConversationActivity filter 7991365
+          Action: "android.intent.action.SEND"
+          Action: "android.intent.action.SENDTO"
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          Category: "android.intent.category.BROWSABLE"
+          Scheme: "sms"
+          Scheme: "smsto"
+          Scheme: "mms"
+          Scheme: "mmsto"
+
+  Non-Data Actions:
+      android.intent.action.MAIN:
+        96e4782 com.simplemobiletools.smsmessenger/.activities.SplashActivity.Grey_black filter e4a3e93
+          Action: "android.intent.action.MAIN"
+          Category: "android.intent.category.LAUNCHER"
+        d5f9ed0 com.simplemobiletools.smsmessenger/.activities.SplashActivity.Blue_grey filter 8fa2ec9
+          Action: "android.intent.action.MAIN"
+          Category: "android.intent.category.LAUNCHER"
+        53d59ce com.simplemobiletools.smsmessenger/.activities.SplashActivity.Brown filter fd030ef
+          Action: "android.intent.action.MAIN"
+          Category: "android.intent.category.LAUNCHER"
+        267d7fc com.simplemobiletools.smsmessenger/.activities.SplashActivity.Deep_orange filter 2edee85
+          Action: "android.intent.action.MAIN"
+          Category: "android.intent.category.LAUNCHER"
+        dd944da com.simplemobiletools.smsmessenger/.activities.SplashActivity.Orange filter 318ed0b
+          Action: "android.intent.action.MAIN"
+          Category: "android.intent.category.LAUNCHER"
+        b5877e8 com.simplemobiletools.smsmessenger/.activities.SplashActivity.Amber filter ea3ee01
+          Action: "android.intent.action.MAIN"
+          Category: "android.intent.category.LAUNCHER"
+        416d4a6 com.simplemobiletools.smsmessenger/.activities.SplashActivity.Yellow filter e74ee7
+          Action: "android.intent.action.MAIN"
+          Category: "android.intent.category.LAUNCHER"
+        a312a94 com.simplemobiletools.smsmessenger/.activities.SplashActivity.Lime filter 460693d
+          Action: "android.intent.action.MAIN"
+          Category: "android.intent.category.LAUNCHER"
+        f4b9532 com.simplemobiletools.smsmessenger/.activities.SplashActivity.Light_green filter 14ff283
+          Action: "android.intent.action.MAIN"
+          Category: "android.intent.category.LAUNCHER"
+        f405c00 com.simplemobiletools.smsmessenger/.activities.SplashActivity.Green filter 26f5c39
+          Action: "android.intent.action.MAIN"
+          Category: "android.intent.category.LAUNCHER"
+        499d27e com.simplemobiletools.smsmessenger/.activities.SplashActivity.Teal filter f1533df
+          Action: "android.intent.action.MAIN"
+          Category: "android.intent.category.LAUNCHER"
+        f4f382c com.simplemobiletools.smsmessenger/.activities.SplashActivity.Cyan filter 5e082f5
+          Action: "android.intent.action.MAIN"
+          Category: "android.intent.category.LAUNCHER"
+        6fc988a com.simplemobiletools.smsmessenger/.activities.SplashActivity.Light_blue filter 4c32efb
+          Action: "android.intent.action.MAIN"
+          Category: "android.intent.category.LAUNCHER"
+        8dab18 com.simplemobiletools.smsmessenger/.activities.SplashActivity.Blue filter 3035971
+          Action: "android.intent.action.MAIN"
+          Category: "android.intent.category.LAUNCHER"
+        c13b356 com.simplemobiletools.smsmessenger/.activities.SplashActivity.Indigo filter f8bbfd7
+          Action: "android.intent.action.MAIN"
+          Category: "android.intent.category.LAUNCHER"
+        a3e60c4 com.simplemobiletools.smsmessenger/.activities.SplashActivity.Deep_purple filter 9a31bad
+          Action: "android.intent.action.MAIN"
+          Category: "android.intent.category.LAUNCHER"
+        1afaee2 com.simplemobiletools.smsmessenger/.activities.SplashActivity.Purple filter 3e28273
+          Action: "android.intent.action.MAIN"
+          Category: "android.intent.category.LAUNCHER"
+        322c530 com.simplemobiletools.smsmessenger/.activities.SplashActivity.Pink filter 102c5a9
+          Action: "android.intent.action.MAIN"
+          Category: "android.intent.category.LAUNCHER"
+        1dd72e com.simplemobiletools.smsmessenger/.activities.SplashActivity.Red filter fd8d2cf
+          Action: "android.intent.action.MAIN"
+          Category: "android.intent.category.LAUNCHER"
+      android.intent.action.APPLICATION_PREFERENCES:
+        8ce0a48 com.simplemobiletools.smsmessenger/.activities.SettingsActivity filter 28c80e1
+          Action: "android.intent.action.APPLICATION_PREFERENCES"
+          Category: "android.intent.category.DEFAULT"
+
+  MIME Typed Actions:
+      android.intent.action.SEND:
+        aa7045c com.simplemobiletools.smsmessenger/.activities.NewConversationActivity filter 534383a
+          Action: "android.intent.action.SEND"
+          Category: "android.intent.category.DEFAULT"
+          StaticType: "*"
+          mPriority=0, mOrder=0, mHasStaticPartialTypes=true, mHasDynamicPartialTypes=false
+      android.intent.action.SEND_MULTIPLE:
+        aa7045c com.simplemobiletools.smsmessenger/.activities.NewConversationActivity filter 739cceb
+          Action: "android.intent.action.SEND_MULTIPLE"
+          Category: "android.intent.category.DEFAULT"
+          StaticType: "*"
+          mPriority=0, mOrder=0, mHasStaticPartialTypes=true, mHasDynamicPartialTypes=false
+
+Receiver Resolver Table:
+  Full MIME Types:
+      application/vnd.wap.mms-message:
+        dd82f4 com.simplemobiletools.smsmessenger/com.android.mms.transaction.PushReceiver filter 8ef4a1d
+          Action: "android.provider.Telephony.WAP_PUSH_DELIVER"
+          StaticType: "application/vnd.wap.mms-message"
+          StaticType: "application/vnd.wap.sic"
+      application/vnd.wap.sic:
+        dd82f4 com.simplemobiletools.smsmessenger/com.android.mms.transaction.PushReceiver filter 8ef4a1d
+          Action: "android.provider.Telephony.WAP_PUSH_DELIVER"
+          StaticType: "application/vnd.wap.mms-message"
+          StaticType: "application/vnd.wap.sic"
+
+  Base MIME Types:
+      application:
+        dd82f4 com.simplemobiletools.smsmessenger/com.android.mms.transaction.PushReceiver filter 8ef4a1d
+          Action: "android.provider.Telephony.WAP_PUSH_DELIVER"
+          StaticType: "application/vnd.wap.mms-message"
+          StaticType: "application/vnd.wap.sic"
+        dd82f4 com.simplemobiletools.smsmessenger/com.android.mms.transaction.PushReceiver filter 8ef4a1d
+          Action: "android.provider.Telephony.WAP_PUSH_DELIVER"
+          StaticType: "application/vnd.wap.mms-message"
+          StaticType: "application/vnd.wap.sic"
+
+  Non-Data Actions:
+      androidx.profileinstaller.action.SAVE_PROFILE:
+        c2b23ea com.simplemobiletools.smsmessenger/androidx.profileinstaller.ProfileInstallReceiver filter 9266451
+          Action: "androidx.profileinstaller.action.SAVE_PROFILE"
+      com.simplemobiletools.smsmessenger.action.delete:
+        6c467de com.simplemobiletools.smsmessenger/.receivers.DeleteSmsReceiver filter cfa0dbf
+          Action: "com.simplemobiletools.smsmessenger.action.delete"
+      com.simplemobiletools.smsmessenger.action.mark_as_read:
+        5e59492 com.simplemobiletools.smsmessenger/.receivers.MarkAsReadReceiver filter f0ee63
+          Action: "com.simplemobiletools.smsmessenger.action.mark_as_read"
+      android.provider.Telephony.SMS_DELIVER:
+        41d9e06 com.simplemobiletools.smsmessenger/.receivers.SmsReceiver filter 5664cc7
+          Action: "android.provider.Telephony.SMS_DELIVER"
+      com.simplemobiletools.smsmessenger.action.reply:
+        2c9da60 com.simplemobiletools.smsmessenger/.receivers.DirectReplyReceiver filter 6bb6b19
+          Action: "com.simplemobiletools.smsmessenger.action.reply"
+      androidx.profileinstaller.action.INSTALL_PROFILE:
+        c2b23ea com.simplemobiletools.smsmessenger/androidx.profileinstaller.ProfileInstallReceiver filter 44bc6db
+          Action: "androidx.profileinstaller.action.INSTALL_PROFILE"
+      com.simplemobiletools.commons.SHARED_THEME_ACTIVATED:
+        7623c8c com.simplemobiletools.smsmessenger/com.simplemobiletools.commons.receivers.SharedThemeReceiver filter 38e9fd5
+          Action: "com.simplemobiletools.commons.SHARED_THEME_ACTIVATED"
+          Action: "com.simplemobiletools.commons.SHARED_THEME_UPDATED"
+      androidx.profileinstaller.action.SKIP_FILE:
+        c2b23ea com.simplemobiletools.smsmessenger/androidx.profileinstaller.ProfileInstallReceiver filter 33c9578
+          Action: "androidx.profileinstaller.action.SKIP_FILE"
+      androidx.profileinstaller.action.BENCHMARK_OPERATION:
+        c2b23ea com.simplemobiletools.smsmessenger/androidx.profileinstaller.ProfileInstallReceiver filter f8f94b6
+          Action: "androidx.profileinstaller.action.BENCHMARK_OPERATION"
+      com.simplemobiletools.commons.SHARED_THEME_UPDATED:
+        7623c8c com.simplemobiletools.smsmessenger/com.simplemobiletools.commons.receivers.SharedThemeReceiver filter 38e9fd5
+          Action: "com.simplemobiletools.commons.SHARED_THEME_ACTIVATED"
+          Action: "com.simplemobiletools.commons.SHARED_THEME_UPDATED"
+
+  MIME Typed Actions:
+      android.provider.Telephony.WAP_PUSH_DELIVER:
+        dd82f4 com.simplemobiletools.smsmessenger/com.android.mms.transaction.PushReceiver filter 8ef4a1d
+          Action: "android.provider.Telephony.WAP_PUSH_DELIVER"
+          StaticType: "application/vnd.wap.mms-message"
+          StaticType: "application/vnd.wap.sic"
+
+Service Resolver Table:
+  Schemes:
+      mms:
+        a35f5b7 com.simplemobiletools.smsmessenger/.services.HeadlessSmsSendService filter c619124 permission android.permission.SEND_RESPOND_VIA_MESSAGE
+          Action: "android.intent.action.RESPOND_VIA_MESSAGE"
+          Category: "android.intent.category.DEFAULT"
+          Scheme: "sms"
+          Scheme: "smsto"
+          Scheme: "mms"
+          Scheme: "mmsto"
+      sms:
+        a35f5b7 com.simplemobiletools.smsmessenger/.services.HeadlessSmsSendService filter c619124 permission android.permission.SEND_RESPOND_VIA_MESSAGE
+          Action: "android.intent.action.RESPOND_VIA_MESSAGE"
+          Category: "android.intent.category.DEFAULT"
+          Scheme: "sms"
+          Scheme: "smsto"
+          Scheme: "mms"
+          Scheme: "mmsto"
+      mmsto:
+        a35f5b7 com.simplemobiletools.smsmessenger/.services.HeadlessSmsSendService filter c619124 permission android.permission.SEND_RESPOND_VIA_MESSAGE
+          Action: "android.intent.action.RESPOND_VIA_MESSAGE"
+          Category: "android.intent.category.DEFAULT"
+          Scheme: "sms"
+          Scheme: "smsto"
+          Scheme: "mms"
+          Scheme: "mmsto"
+      smsto:
+        a35f5b7 com.simplemobiletools.smsmessenger/.services.HeadlessSmsSendService filter c619124 permission android.permission.SEND_RESPOND_VIA_MESSAGE
+          Action: "android.intent.action.RESPOND_VIA_MESSAGE"
+          Category: "android.intent.category.DEFAULT"
+          Scheme: "sms"
+          Scheme: "smsto"
+          Scheme: "mms"
+          Scheme: "mmsto"
+
+Domain verification status:
+
+Permissions:
+  Permission [com.simplemobiletools.smsmessenger.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION] (108410f):
+    sourcePackage=com.simplemobiletools.smsmessenger
+    uid=10181 gids=[] type=0 prot=signature
+    perm=PermissionInfo{4f0759c com.simplemobiletools.smsmessenger.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION}
+
+Registered ContentProviders:
+  com.simplemobiletools.smsmessenger/androidx.startup.InitializationProvider:
+    Provider{dfcba5 com.simplemobiletools.smsmessenger/androidx.startup.InitializationProvider}
+  com.simplemobiletools.smsmessenger/com.klinker.android.send_message.MmsFileProvider:
+    Provider{5f42b7a com.simplemobiletools.smsmessenger/com.klinker.android.send_message.MmsFileProvider}
+  com.simplemobiletools.smsmessenger/androidx.core.content.FileProvider:
+    Provider{891df2b com.simplemobiletools.smsmessenger/androidx.core.content.FileProvider}
+
+ContentProvider Authorities:
+  [com.simplemobiletools.smsmessenger.MmsFileProvider]:
+    Provider{5f42b7a com.simplemobiletools.smsmessenger/com.klinker.android.send_message.MmsFileProvider}
+      applicationInfo=ApplicationInfo{e5d4f88 com.simplemobiletools.smsmessenger}
+  [com.simplemobiletools.smsmessenger.androidx-startup]:
+    Provider{dfcba5 com.simplemobiletools.smsmessenger/androidx.startup.InitializationProvider}
+      applicationInfo=ApplicationInfo{e098546 com.simplemobiletools.smsmessenger}
+  [com.simplemobiletools.smsmessenger.provider]:
+    Provider{891df2b com.simplemobiletools.smsmessenger/androidx.core.content.FileProvider}
+      applicationInfo=ApplicationInfo{acd4307 com.simplemobiletools.smsmessenger}
+
+Key Set Manager:
+  [com.simplemobiletools.smsmessenger]
+      Signing KeySets: 60
+
+Packages:
+  Package [com.simplemobiletools.smsmessenger] (23bdc34):
+    userId=10181
+    pkg=Package{4ccca5d com.simplemobiletools.smsmessenger}
+    codePath=/data/app/~~IEe18yoYqMvh5a7SN9HwAQ==/com.simplemobiletools.smsmessenger-Sm3pmHBSMg1MJRikRCRrVw==
+    resourcePath=/data/app/~~IEe18yoYqMvh5a7SN9HwAQ==/com.simplemobiletools.smsmessenger-Sm3pmHBSMg1MJRikRCRrVw==
+    legacyNativeLibraryDir=/data/app/~~IEe18yoYqMvh5a7SN9HwAQ==/com.simplemobiletools.smsmessenger-Sm3pmHBSMg1MJRikRCRrVw==/lib
+    extractNativeLibs=false
+    primaryCpuAbi=null
+    secondaryCpuAbi=null
+    cpuAbiOverride=null
+    versionCode=85 minSdk=23 targetSdk=34
+    minExtensionVersions=[]
+    versionName=5.19.3
+    usesNonSdkApi=false
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PARTIALLY_DIRECT_BOOT_AWARE PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    queriesPackages=[com.simplemobiletools.contacts.pro.debug, com.simplemobiletools.contacts.pro, com.simplemobiletools.thankyou.debug, com.simplemobiletools.thankyou]
+    dataDir=/data/user/0/com.simplemobiletools.smsmessenger
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    usesOptionalLibraries:
+      org.apache.http.legacy
+    usesLibraryFiles:
+      /system/framework/org.apache.http.legacy.jar
+    timeStamp=2026-11-08 13:53:38
+    lastUpdateTime=2026-11-08 13:53:40
+    packageSource=0
+    signatures=PackageSignatures{1c8afd2 version:3, signatures:[f807c42b], past signatures:[]}
+    installPermissionsFixed=true
+    pkgFlags=[ HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP ]
+    declared permissions:
+      com.simplemobiletools.smsmessenger.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION: prot=signature, INSTALLED
+    requested permissions:
+      android.permission.READ_SMS
+      android.permission.WRITE_SMS
+      android.permission.SEND_SMS
+      android.permission.RECEIVE_SMS
+      android.permission.RECEIVE_MMS
+      android.provider.Telephony.SMS_RECEIVED
+      android.permission.WAKE_LOCK
+      android.permission.SCHEDULE_EXACT_ALARM
+      android.permission.READ_PHONE_STATE
+      android.permission.POST_NOTIFICATIONS
+      android.permission.READ_SYNC_SETTINGS
+      android.permission.READ_CONTACTS
+      android.permission.USE_FINGERPRINT
+      com.sec.android.provider.badge.permission.READ
+      com.sec.android.provider.badge.permission.WRITE
+      com.htc.launcher.permission.READ_SETTINGS
+      com.htc.launcher.permission.UPDATE_SHORTCUT
+      com.sonyericsson.home.permission.BROADCAST_BADGE
+      com.sonymobile.home.permission.PROVIDER_INSERT_BADGE
+      com.anddoes.launcher.permission.UPDATE_COUNT
+      com.majeur.launcher.permission.UPDATE_BADGE
+      com.huawei.android.launcher.permission.CHANGE_BADGE
+      com.huawei.android.launcher.permission.READ_SETTINGS
+      com.huawei.android.launcher.permission.WRITE_SETTINGS
+      android.permission.READ_APP_BADGE
+      com.oppo.launcher.permission.READ_SETTINGS
+      com.oppo.launcher.permission.WRITE_SETTINGS
+      me.everything.badger.permission.BADGE_COUNT_READ
+      me.everything.badger.permission.BADGE_COUNT_WRITE
+    install permissions:
+      android.permission.WRITE_SMS: granted=true
+      android.permission.USE_FINGERPRINT: granted=true
+      android.permission.SCHEDULE_EXACT_ALARM: granted=true
+      android.permission.READ_SYNC_SETTINGS: granted=true
+      android.permission.WAKE_LOCK: granted=true
+    User 0: ceDataInode=139742 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false
+      installReason=0
+      firstInstallTime=2026-11-08 13:53:40
+      uninstallReason=0
+      overlay paths:
+        /product/overlay/EmulationPixel6/EmulationPixel6Overlay.apk
+        /product/overlay/NavigationBarModeGestural/NavigationBarModeGesturalOverlay.apk
+      legacy overlay paths:
+        /product/overlay/EmulationPixel6/EmulationPixel6Overlay.apk
+        /product/overlay/NavigationBarModeGestural/NavigationBarModeGesturalOverlay.apk
+      runtime permissions:
+        android.permission.READ_SMS: granted=false, flags=[ RESTRICTION_UPGRADE_EXEMPT]
+        android.permission.POST_NOTIFICATIONS: granted=false
+        android.permission.RECEIVE_MMS: granted=false, flags=[ RESTRICTION_UPGRADE_EXEMPT]
+        android.permission.RECEIVE_SMS: granted=false, flags=[ RESTRICTION_UPGRADE_EXEMPT]
+        android.permission.READ_PHONE_STATE: granted=false
+        android.permission.SEND_SMS: granted=false, flags=[ RESTRICTION_UPGRADE_EXEMPT]
+        android.permission.READ_CONTACTS: granted=false
+
+Queries:
+  system apps queryable: false
+  queries via forceQueryable:
+  queries via package name:
+  queries via component:
+    com.google.android.settings.intelligence:
+      com.simplemobiletools.smsmessenger
+    com.google.android.apps.youtube.music:
+      com.simplemobiletools.smsmessenger
+    com.google.android.apps.photos:
+      com.simplemobiletools.smsmessenger
+  queryable via interaction:
+    User 0:
+  queryable via uses-library:
+
+Dexopt state:
+  [com.simplemobiletools.smsmessenger]
+    path: /data/app/~~IEe18yoYqMvh5a7SN9HwAQ==/com.simplemobiletools.smsmessenger-Sm3pmHBSMg1MJRikRCRrVw==/base.apk
+      x86_64: [status=verify] [reason=install]
+  BgDexopt state:
+    enabled:true
+    mDexOptThread:null
+    mDexOptCancellingThread:null
+    mFinishedPostBootUpdate:false
+    mLastExecutionStatus:0
+    mLastExecutionStartTimeMs:0
+    mLastExecutionDurationIncludingSleepMs:0
+    mLastExecutionStartUptimeMs:0
+    mLastExecutionDurationMs:0
+    now:38827
+    mLastCancelledPackages:
+    mFailedPackageNamesPrimary:
+    mFailedPackageNamesSecondary:
+
+Compiler stats:
+  [com.simplemobiletools.smsmessenger]
+    (No recorded stats)

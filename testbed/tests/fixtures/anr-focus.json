@@ -1,0 +1,9 @@
+{
+  "kind": "SYNTHETIC regression combination of real sequential API33 diagnostics; not an atomic capture or calibration effect",
+  "display_dump": "  mCurrentFocus=Window{bd84a9b u0 com.google.android.permissioncontroller/com.android.permissioncontroller.role.ui.RequestRoleActivity}",
+  "input_dump": "  DispatchEnabled: true\n  DispatchFrozen: false\n  FocusedDisplayId: 0\n  FocusedWindows:\n    displayId=0, name='dd5feff Application Not Responding: com.android.systemui'\n  FocusRequests:\n",
+  "source_sha256": {
+    "display-after-wait.txt": "23b038959337975d336b342c77e167cccbe59493819d72bf6536a36f586b774c",
+    "input.txt": "cc0d384181f4faf4633a763f77444404212c302909a7bf5bfc36b6ded4a7d231"
+  }
+}
