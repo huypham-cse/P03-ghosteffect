@@ -26,6 +26,7 @@
 | Cần máy | Laptop, LaTeX, Python 3.10+ | Máy có emulator (WHPX hoặc KVM) và GPU Linux từ 24 GB, hoặc API | Linux/WSL để chạy `run_all.py` (khoảng 25 đến 30 phút) |
 | Hợp với | Người mạnh toán, thống kê | Người rành Android, có GPU | Trưởng nhóm hoặc người viết tốt nhất |
 | Nhánh | `a/theory` | `b/measure` | `c/eval` |
+| Người làm | Gia Huy | Trung Nguyên (trưởng nhóm) | Bá Nguyên |
 
 **Đọc trước (ngày đầu, cả ba phần):** `manuscript/main.pdf`, `STATUS.md`, `review.md` (bản phản biện nội bộ và checklist cho tác giả), `resolve.md` (quyết định cho từng điểm review, đánh số R01 đến R32). Phần B đọc thêm `testbed/README.md` và `artifact/results/real/SUMMARY.md`; phần C đọc thêm `artifact/README.md`.
 
@@ -147,7 +148,7 @@
 - **Dữ liệu thô** trong `artifact/results/real/**` chỉ được thêm.
 - **Không commit** `runtime/`, `testbed/runs/`, `*.local.json`, `.env`, khóa API.
 - **Nhánh và PR**: `a/...`, `b/...`, `c/...`; tiêu đề PR `[A-xx]`, `[B-xx]`, `[C-xx]`; trưởng nhóm merge; rebase lên `main` trước mỗi PR.
-- **Họp**: tối Chủ nhật, 30 phút. Việc bị chặn thì báo ngay trên nhóm chat.
+- **Báo cáo tiến độ**: bắt buộc, theo `team/RULES.md` mục 1.8 (nhật ký `team/a-log.md`, `b-log.md`, `c-log.md`). Việc bị chặn thì báo ngay trên nhóm chat.
 
 ## 6. Lịch
 
@@ -253,7 +254,7 @@ C điều phối (C-13), trưởng nhóm nghiệm thu. Ngày 22/11 cả ba vai t
 
 ## 8. Cần trưởng nhóm quyết
 
-1. Giao người cho A, B, C và chỉ định người nghiệm thu cho từng phần (cách chia đã duyệt ngày 09/11/2026).
+1. Chỉ định người nghiệm thu cho từng phần (cách chia đã duyệt ngày 09/11/2026; người làm A, B, C ghi ở §2). Người nghiệm thu phần B phải là Gia Huy hoặc Bá Nguyên, vì trưởng nhóm cũng là chủ phần B.
 2. Xác nhận nhóm **được sửa paper**: `resolve.md` còn ghi quyết định cũ "không chỉnh paper, paper để sau".
 3. Đường model cho B: máy GPU Linux hay API (kèm ngân sách).
 4. Mode khuyến nghị cuối cùng (mặc định theo `resolve.md` R06).
