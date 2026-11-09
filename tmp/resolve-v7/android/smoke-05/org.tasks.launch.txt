@@ -1,7 +1,0 @@
-Starting: Intent { cmp=org.tasks/com.todoroo.astrid.activity.TaskListActivity }
-Status: ok
-LaunchState: COLD
-Activity: org.tasks/com.todoroo.astrid.activity.MainActivity
-TotalTime: 13741
-WaitTime: 13900
-Complete

@@ -1,3 +1,0 @@
-Performing Push Install
-Success
-D:\NCKH\mobisys\P03-ghosteffect\runtime\assets\ws.xsoh.etar_57.apk: 1 file pushed, 0 skipped. 109.3 MB/s (9226697 bytes in 0.081s)

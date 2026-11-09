@@ -1,3 +1,0 @@
-Performing Push Install
-Success
-D:\NCKH\mobisys\P03-ghosteffect\runtime\assets\net.cozic.joplin_2097740.apk: 1 file pushed, 0 skipped. 68.1 MB/s (43472265 bytes in 0.609s)

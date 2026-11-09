@@ -23,6 +23,4 @@ __pycache__/
 real.env
 *.secrets.env
 *.signing.key
-/tmp/resolve-v7/*-integration/homeserver.yaml
-/tmp/resolve-v7/*-integration/homeserver.db*
-/tmp/resolve-v7/*-integration/users
+/tmp/

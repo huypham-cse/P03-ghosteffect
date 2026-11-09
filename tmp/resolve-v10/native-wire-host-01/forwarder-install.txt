@@ -1,3 +1,0 @@
-Performing Push Install
-Success
-D:\NCKH\mobisys\P03-ghosteffect\runtime\assets\2024.05.13-accessibility_forwarder.apk: 1 file pushed, 0 skipped. 114.5 MB/s (4490495 bytes in 0.037s)

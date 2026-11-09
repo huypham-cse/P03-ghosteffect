@@ -1,2 +1,0 @@
-issue_p50_ms,issue_p95_ms,fullfsync_p50_ms,fullfsync_p95_ms,bytes_per_effect,kill_trials,taps_checked,invariant_violations,ghost_candidates,fullfsync_supported,kill_window_origin
-1.7,4.05,nan,nan,205,300,3264,0,91,False,first_observed_tap

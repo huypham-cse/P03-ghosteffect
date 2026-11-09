@@ -1,7 +1,0 @@
-Starting: Intent { cmp=at.bitfire.davdroid/.ui.AccountsActivity }
-Status: ok
-LaunchState: COLD
-Activity: at.bitfire.davdroid/.ui.AccountsActivity
-TotalTime: 6634
-WaitTime: 6777
-Complete
