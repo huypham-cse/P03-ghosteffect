@@ -1,3 +1,0 @@
-Performing Push Install
-Success
-D:\NCKH\mobisys\P03-ghosteffect\runtime\assets\com.arduia.expense_11.apk: 1 file pushed, 0 skipped. 106.8 MB/s (3020823 bytes in 0.027s)

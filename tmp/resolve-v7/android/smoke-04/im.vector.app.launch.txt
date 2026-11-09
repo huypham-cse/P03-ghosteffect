@@ -1,7 +1,0 @@
-Starting: Intent { cmp=im.vector.app/im.vector.application.features.Alias }
-Status: ok
-LaunchState: COLD
-Activity: im.vector.app/.features.onboarding.OnboardingActivity
-TotalTime: 11977
-WaitTime: 12027
-Complete

@@ -1,7 +1,0 @@
-Starting: Intent { cmp=com.simplemobiletools.smsmessenger/.activities.SplashActivity.Orange }
-Status: ok
-LaunchState: COLD
-Activity: com.simplemobiletools.smsmessenger/.activities.MainActivity
-TotalTime: 6594
-WaitTime: 7026
-Complete

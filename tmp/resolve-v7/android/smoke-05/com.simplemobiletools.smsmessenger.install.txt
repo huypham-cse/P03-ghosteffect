@@ -1,3 +1,0 @@
-Performing Push Install
-Success
-D:\NCKH\mobisys\P03-ghosteffect\runtime\assets\com.simplemobiletools.smsmessenger_85.apk: 1 file pushed, 0 skipped. 100.9 MB/s (9938539 bytes in 0.094s)
