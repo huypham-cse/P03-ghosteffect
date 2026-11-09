@@ -1,28 +1,20 @@
-# Phân chia công việc theo phần (đề xuất thay cho cách chia trong CONTRIBUTOR_1..3)
+# Phân chia công việc: ba phần độc lập
 
 > **Dự án:** GhostEffect: Budgeted Exactly-Once Recovery of GUI-Only Effects for Mobile Agents (MobiSys 2027)
 > **Mốc cứng:** đăng ký abstract **27/11/2026**, chốt số liệu **1/12**, nộp HotCRP **3/12** (4/12 chỉ để dự phòng).
-> **Trạng thái:** bản đề xuất, chờ trưởng nhóm duyệt. Khi được duyệt, file này thay cho phần phân việc và tracker trong `CONTRIBUTOR_1.md`, `CONTRIBUTOR_2.md`, `CONTRIBUTOR_3.md`. Phần "đọc trước", hướng dẫn cài đặt và quy tắc số liệu trong ba file đó vẫn dùng được.
+> **Trạng thái:** bản đề xuất, chờ trưởng nhóm duyệt.
 
 ---
 
-## 1. Vì sao chia lại
-
-Cách chia cũ theo **loại việc**: C1 viết, C2 làm số, C3 đo. Vì vậy gần như mục review nào cũng bị cắt đôi: C2 render bảng, C1 viết câu. 9 trên 20 task chính của C1 có cột "Dep", và không ai làm chủ trọn một phần nội dung.
-
-Khi đối chiếu với code, phần lớn mục số liệu mà review đòi **đã có CSV sẵn** (`planner_real4_*.csv`, các cột `q1`/`q0` trong mọi CSV planner, macro `\StressNover`). Việc còn lại chủ yếu là render và viết. Cắt đôi một việc như vậy giữa hai người chỉ làm tăng phối hợp.
-
-Một số task cũ đã xong hoặc sai tiền đề (xem §8).
-
-## 2. Nguyên tắc
+## 1. Nguyên tắc
 
 1. **Mỗi người làm chủ trọn một câu hỏi của bài**: dữ liệu, code, render, bảng và văn bản của phần đó.
-2. **Mỗi file chỉ có một chủ** (§6). Muốn đổi file của người khác thì nhờ chủ file.
-3. **Giao tiếp qua hợp đồng chốt trước 11/11** (§5): tên macro và schema CSV. Ai dùng số của người khác thì viết ngay bằng macro với giá trị tạm `??`, không chờ.
+2. **Mỗi file chỉ có một chủ** (§2). Muốn đổi file của người khác thì nhờ chủ file.
+3. **Giao tiếp qua hợp đồng chốt trước 11/11** (§4): tên macro và schema dữ liệu. Ai dùng số của người khác thì viết ngay bằng macro với giá trị tạm `??`, không chờ.
 4. **Chỉ có một bước nối tiếp cứng**: C chạy lại pipeline và tách file macro, xong trước **12/11**. Trong lúc đó A viết lý thuyết, B dựng rig.
 5. Ba phần chạy **song song**. Phụ thuộc còn lại đều là phụ thuộc mềm qua macro: thiếu số thì bản build vẫn chạy, chỉ hiện `??`.
 
-## 3. Ba phần
+## 2. Ba phần
 
 | | Phần A | Phần B | Phần C |
 |---|---|---|---|
@@ -32,25 +24,29 @@ Một số task cũ đã xong hoặc sai tiền đề (xem §8).
 | Hợp với | Người mạnh toán, thống kê | Người rành Android, có GPU | Trưởng nhóm hoặc người viết tốt nhất |
 | Nhánh | `a/theory` | `b/measure` | `c/eval` |
 
+**Đọc trước (ngày đầu, cả ba phần):** `manuscript/main.pdf`, `STATUS.md`, `review.md` (bản phản biện nội bộ và checklist cho tác giả), `resolve.md` (quyết định cho từng điểm review, đánh số R01 đến R32). Phần B đọc thêm `testbed/README.md` và `artifact/results/real/SUMMARY.md`; phần C đọc thêm `artifact/README.md`.
+
 ### Phần A: Lý thuyết, bảo đảm và hiệu chuẩn
 
 **Sở hữu:** `manuscript/sections/03-model.tex`, `04-theory.tex`, `05-design.tex`, `appendix-proofs.tex` (phần chứng minh); `artifact/scripts/sample_size.py`; trong `planner_sim.py` các hàm hiệu chuẩn và chứng nhận (`calibration_deltas`, `certified_wait`, `lag_tables`, `lag_tables_measured`, `lag_wait`, `joint_calibration`, `src_calibration`, `cpu`) và các tag REAL4 về clock, lag, tail; file mới `artifact/scripts/render_guarantee.py` xuất ra `manuscript/generated/macros_guarantee.tex` và các bảng của phần A. Tiền tố macro: `\Cert*`.
 
-| ID | Việc | Nguồn review | Hạn | Xong khi |
+| ID | Việc | Nguồn | Hạn | Xong khi |
 |---|---|---|---|---|
-| A-01 | **Mốc thời gian `r_e` theo lớp lỗi.** Định nghĩa `T_c = max(0, t_visible − r_e)` và `G_c(w)`; deadline `r_e + w_c`; lớp hoặc mốc không biết thì lấy max hoặc ASK. Sửa §3, Eq. 2, Alg. 1, chứng minh. Bảng nhỏ mốc đúng (`down5`, `down15`) so với mốc sai (`t0down5`, `t0down15`); CSV đã có. | R03, meta bắt buộc 1 | 20/11 | Văn bản, thuật toán và chứng minh khớp nhau; bảng render từ CSV |
-| A-02 | **Kế toán nhãn.** Tách bốn con số: số đo thật, số nhãn, pilot và holdout (500 + 4.500 ở mốc "5.000"), số mẫu lag (`N_LAG = 20000` là mẫu bootstrap). Thêm dòng tied (`lag2k`, `lag5k`); `lag10k`, `lag20k`, `boot10k` vào phụ lục. | R04, meta bắt buộc 2 | 19/11 | Không câu nào ngụ ý 5.000 nhãn một mình cho ra 12,7% |
-| A-03 | **Đuôi trễ ở mốc 5k** (`tail5`, `tail5tied`). Báo cả dòng bất lợi: product ở dòng tied vượt ngân sách (cận CP 1,21%). Viết lại "joint vẫn giữ ngân sách" thành "joint chỉ giữ khi còn hỏi đủ nhiều". | R05, meta bắt buộc 3 | 19/11 | Câu khớp `planner_real4_tail5*.csv` |
-| A-04 | **Cận tổng hợp dup/loss.** `P(dup∣X=1) ≤ min(1, α + q1·ε1 + r1)`, `P(loss∣X=0) ≤ min(1, β + q0·ε0 + r0)`. Dùng cột `q1`, `q0` đã có; mẫu số 0 ghi N/A. Tính cho các dòng product và joint của Table 4; nói người triển khai nên đọc đại lượng nào. | R10, meta bắt buộc 9 | 21/11 | Bảng hoặc macro `\Cert*`; không dùng con số minh họa `0.05 × 72.9%` |
+| A-01 | **Mốc thời gian `r_e` theo lớp lỗi.** Định nghĩa `T_c = max(0, t_visible − r_e)` và `G_c(w)`; deadline `r_e + w_c`; lớp hoặc mốc không biết thì lấy max hoặc ASK. Sửa §3, Eq. 2, Alg. 1, chứng minh. Bảng nhỏ mốc đúng (`down5`, `down15`) so với mốc sai (`t0down5`, `t0down15`); CSV đã có. | R03 | 20/11 | Văn bản, thuật toán và chứng minh khớp nhau; bảng render từ CSV |
+| A-02 | **Kế toán nhãn.** Tách bốn con số: số đo thật, số nhãn, pilot và holdout (500 + 4.500 ở mốc "5.000"), số mẫu lag (`N_LAG = 20000` là mẫu bootstrap). Thêm dòng tied (`lag2k`, `lag5k`); `lag10k`, `lag20k`, `boot10k` vào phụ lục. | R04 | 19/11 | Không câu nào ngụ ý 5.000 nhãn một mình cho ra 12,7% |
+| A-03 | **Đuôi trễ ở mốc 5k** (`tail5`, `tail5tied`). Báo cả dòng bất lợi: product ở dòng tied vượt ngân sách (cận CP 1,21%). Viết lại "joint vẫn giữ ngân sách" thành "joint chỉ giữ khi còn hỏi đủ nhiều". | R05 | 19/11 | Câu khớp `planner_real4_tail5*.csv` |
+| A-04 | **Cận tổng hợp dup/loss.** `P(dup∣X=1) ≤ min(1, α + q1·ε1 + r1)`, `P(loss∣X=0) ≤ min(1, β + q0·ε0 + r0)`. Dùng cột `q1`, `q0` đã có trong mọi CSV planner; mẫu số 0 ghi N/A. Tính cho các dòng product và joint của Table 4; nói người triển khai nên đọc đại lượng nào. | R10 | 21/11 | Bảng hoặc macro `\Cert*`; không dùng con số minh họa `0.05 × 72.9%` |
 | A-05 | **δ và lớp không biết.** Code đã chia theo số lớp khi `keyed='all'` (có test). Sửa δ dùng `min(α, β)` thay vì chỉ `α`, thêm test β < α. Viết rõ ở §4.3. Nếu `testbed/calibration.py` cần sửa thì nhờ B. | R11 | 18/11 | Test qua; §4.3 nêu đúng công thức |
-| A-06 | **Chi tiết lý thuyết:** hand-over đặt lại `P` đúng một lần và `R(τ)` gồm phân bổ sau hand-over (R12); A1 nêu `T` độc lập với lượt đọc khi biết `X`; H3 ghi Element không có hop 1 (cửa sổ 20 đến 100 ms ngắn hơn một lần dump); cỡ pilot của Prop 4.4; Prop A.1 là an toàn theo union bound chứ không tối ưu; đổi tên `D` (ví dụ `H_dedup`); đường echo `/sync` của Element có thuộc A1 không. | R12, R13, R22, R27; C1-18, C1-24, C1-27 đến C1-30 cũ | 18/11 | Mỗi mục một câu hoặc một đoạn trong §3, §4 hoặc App. A |
-| A-07 | **Rút §4 còn khoảng 1,5 trang.** Thm 4.1 ba dòng; giữ Prop 4.4 và Thm 4.8; chuyển Prop 4.3, Lemma 4.5, Lemma 4.6(iii), Lemma 4.7, saga xuống App. A. Dùng chỗ trống cho walk-through Alg. 1 (một lượt K-9, một lượt Element) ở §5.4. | R29; C1-13 cũ | 22/11 | §4 khoảng 1,5 trang |
-| A-08 | **§5.3:** hop 1 đọc màn hình Outbox qua cây accessibility, không đọc DB của app; thay "khoảng 15 s mỗi nhãn" bằng macro thời gian đo của B và tính device-hours cho 5.000 nhãn × lớp × kết quả; chuyển Table 1 (cỡ mẫu) xuống phụ lục. | R15; C1-14, C1-19 (Table 1), C1-21 cũ | 28/11 | Dùng `\LabelTrial*` của B |
+| A-06 | **Chi tiết lý thuyết:** hand-over đặt lại `P` đúng một lần và `R(τ)` gồm phân bổ sau hand-over; A1 nêu `T` độc lập với lượt đọc khi biết `X`; H3 ghi Element không có hop 1 (cửa sổ 20 đến 100 ms ngắn hơn một lần dump); cỡ pilot của Prop 4.4; Prop A.1 là an toàn theo union bound chứ không tối ưu; đổi tên `D` (ví dụ `H_dedup`); đường echo `/sync` của Element có thuộc A1 không. | R12, R13, R22, R27 | 18/11 | Mỗi mục một câu hoặc một đoạn trong §3, §4 hoặc App. A |
+| A-07 | **Rút §4 còn khoảng 1,5 trang.** Thm 4.1 ba dòng; giữ Prop 4.4 và Thm 4.8; chuyển Prop 4.3, Lemma 4.5, Lemma 4.6(iii), Lemma 4.7, saga xuống App. A. Dùng chỗ trống cho walk-through Alg. 1 (một lượt K-9, một lượt Element) ở §5.4. | R29 | 22/11 | §4 khoảng 1,5 trang |
+| A-08 | **§5.3:** hop 1 đọc màn hình Outbox qua cây accessibility, không đọc DB của app; thay "khoảng 15 s mỗi nhãn" bằng macro thời gian đo của B và tính device-hours cho 5.000 nhãn × lớp × kết quả; chuyển Table 1 (cỡ mẫu) xuống phụ lục. | R15 | 28/11 | Dùng `\LabelTrial*` của B |
 | A-09 | **Render riêng.** `render_guarantee.py` chỉ đọc CSV, viết `macros_guarantee.tex` và bảng của A. Gửi danh sách tên macro cho C trước 11/11. | | 11/11 (tên), 22/11 (giá trị) | Build chạy với file macro riêng |
 
 ### Phần B: Đo đạc thực tế và thí nghiệm LLM agent
 
 **Sở hữu:** `testbed/**`; `artifact/results/real/**` (dữ liệu thô chỉ thêm, không sửa); `artifact/scripts/real_params.py` (sinh `params.csv`); phần đo đạc của `render_real.py` (Table 3, macro `\Real*`); file mới `render_agent.py`; `bench_ledger.py`; tất cả xuất ra `manuscript/generated/macros_real.tex`. Văn bản: §2 (trọng tâm §2.3), §6, các đoạn đo đạc của §7 (Setup, G2 theo app, Evidence families and lag) và mục agent mới, `figures/fig1.tex`, `sections/tab-apps.tex`. Tiền tố macro: `\Real*`, `\Agent*`, `\Ledger*`, `\LabelTrial*`.
+
+**Phạm vi thí nghiệm agent:** M3A từ AndroidWorld (commit pin `55ddaf5edc6f6c25673aed343907d5b9dca66f84`, giữ nguyên prompt, history và reflection) trên K-9 Mail 24.0 + GreenMail 2.1.2 qua `testbed/faultproxy.py`, hai cấu hình không Sent và có Sent. Lỗi: proxy chuyển DATA, server trả 250 (đã commit), proxy bỏ phản hồi, rồi force-stop và mở lại K-9. Agent bị kill tại lúc lỗi và chạy lại với cùng task trên GUI mới, không được gợi ý gì. Chỉ backend (số bản và Message-ID ở GreenMail) quyết định có trùng hay không. Mỗi episode thuộc đúng một nhóm: `RESENT_DUPLICATE`, `RESENT_BUT_NO_DUP`, `DECLARED_DONE_NO_RESEND`, `ASKED_OR_STOPPED`, `TASK_FAILURE`, `INVALID`. Chỉ dùng nội dung giả trên tài khoản thử.
 
 | ID | Việc | Hạn | Xong khi |
 |---|---|---|---|
@@ -58,23 +54,23 @@ Một số task cũ đã xong hoặc sai tiền đề (xem §8).
 | B-02 | `testbed/setup_agents.py`: clone 4 repo ở commit pin (`codex/models.md`), venv Python 3.11.8, kiểm `import android_world.agents.m3a`. | 13/11 | Clone mới chạy script là import được |
 | B-03 | Profile K-9 (không Sent, có Sent) và cách reset trạng thái (campaign 2 dọn Outbox bằng root). | 14/11 | Reset 3/3 lần ra cùng trạng thái |
 | B-04 | Tái hiện lỗi K-9 bằng `run_case.py` (commit, bỏ phản hồi, force-stop, mở lại). | 15/11 | 3/3 lượt ra trạng thái lỗi K-9, backend có đúng 1 bản |
-| B-05 | **Cổng model G1.** Ưu tiên Qwen2.5-VL-7B BF16 trên vLLM, máy Linux GPU từ 24 GB, nối với AVD qua SSH tunnel. Phương án API: `local_model.py` chỉ nhận endpoint loopback và `codex/` cấm API trả phí, nên phải viết binding mới và trưởng nhóm duyệt cả ngân sách lẫn thay đổi chính sách. | 14/11 | Quyết định ghi vào log |
-| B-06 | **Harness episode**: mở rộng `testbed/native_episode.py` có sẵn (không viết file mới). Reset, chạy M3A, bắt lúc Send, để commit rồi bỏ phản hồi, kill agent và force-stop K-9, mở lại, chạy lại M3A cùng task, quan sát `H_eval = 300 s`, chấm bằng backend, ghi receipt JSON. | 18/11 | Chạy thử 2 episode ra receipt đầy đủ |
-| B-07 | A-dev: 10 episode không lỗi (5 mỗi cấu hình). | 19/11 | Thành công từ 6/10, không thì báo trưởng nhóm |
+| B-05 | **Cổng model.** Ưu tiên Qwen2.5-VL-7B BF16 trên vLLM 0.11.0, máy Linux GPU từ 24 GB, nối với AVD qua SSH tunnel. Phương án API: `local_model.py` chỉ nhận endpoint loopback và `codex/` cấm API trả phí, nên phải viết binding mới và trưởng nhóm duyệt cả ngân sách lẫn thay đổi chính sách. Khóa API chỉ để trong `.env` (đã git-ignore). | 14/11 | Quyết định ghi vào log |
+| B-06 | **Harness episode**: mở rộng `testbed/native_episode.py` có sẵn. Reset, chạy M3A, bắt lúc Send, để commit rồi bỏ phản hồi, kill agent và force-stop K-9, mở lại, chạy lại M3A cùng task, quan sát `H_eval = 300 s`, chấm bằng backend, ghi receipt JSON. | 18/11 | Chạy thử 2 episode ra receipt đầy đủ |
+| B-07 | A-dev: 10 episode không lỗi (5 mỗi cấu hình), chỉ để gỡ lỗi, không báo cáo làm kết quả. | 19/11 | Thành công từ 6/10, không thì báo trưởng nhóm |
 | B-08 | Freeze: `testbed/agent_study.freeze.json` (model, decoding, hash prompt, task, hash APK/AVD, horizon, luật kết quả, thứ tự episode). | 19/11 | Merge trước lượt chính thức đầu tiên |
-| B-09 | A-native: 20 episode chính thức (10 không Sent, 10 có Sent, xen kẽ); mỗi episode tối đa một lần chạy lại vì lỗi đo; giữ mọi lần chạy. | 24/11 | Từ 10 episode hợp lệ trở lên |
-| B-10 | **Giao dữ liệu và tự viết phần agent.** `artifact/results/real/agent/` (schema ở `CONTRIBUTOR_3.md` §4), `render_agent.py` sinh `tab_agent.tex` và `\Agent*` (Wilson CI 95%). Viết mục agent ở §7 (khoảng 0,3 trang) và khung lại §2.3 theo kết quả, kể cả khi agent không gửi lại lần nào. | 26/11 (số), 29/11 (văn bản) | Mọi số trong mục agent là macro |
+| B-09 | A-native: 20 episode chính thức (10 không Sent, 10 có Sent, xen kẽ); mỗi episode tối đa một lần chạy lại vì lỗi đo; giữ mọi lần chạy. "Hợp lệ" nghĩa là backend xác nhận thư gốc đã commit và có biên nhận lỗi. | 24/11 | Từ 10 episode hợp lệ trở lên |
+| B-10 | **Giao dữ liệu và tự viết phần agent.** `artifact/results/real/agent/` gồm `episodes.csv` (schema §4), `freeze.json`, `receipts/<episode_id>.json`, `SUMMARY.md`. `render_agent.py` sinh `tab_agent.tex` và `\Agent*` (Wilson CI 95%). Viết mục agent ở §7 (khoảng 0,3 trang) và khung lại §2.3 theo kết quả, kể cả khi agent không gửi lại lần nào. | 26/11 (số), 29/11 (văn bản) | Mọi số trong mục agent là macro |
 | B-11 | **Chi phí nhãn đo thật**: thời gian một lượt tiêm lỗi chia theo reset, soạn, lỗi, mở lại, quan sát, chấm; min, median, max thành macro `\LabelTrial*` cho A. | 26/11 | Macro có giá trị |
-| B-12 | **Audit thao tác K-9** (R19). SUMMARY ghi "Send messages 0/12" cho cấu hình không Sent, nhưng `c2_k9_nosent_trials.csv` có `sendmsgs_tapped=0` ở cả 12 dòng đó. Tách Sync / Send messages / không thao tác / soạn lại; sửa câu trong §7 cho đúng. | 24/11 | Câu trong bài khớp dữ liệu |
-| B-13 | **Trình bày dữ liệu đo:** Table 3b đổi p90 (n = 20) thành min/median/max hoặc dot plot; stale-screen (digest cũ đếm được 1/3 lượt pilot; forwarder trả cây cũ chỉ nêu định tính vì log không còn); lượt mất do ANR coi là quan sát censored; ghi load host (16 đến 38) và thời gian dump khoảng 2 s; câu ở §2.1 về app foreground. | 22/11 | C1-16, C1-17, C1-22, C1-23, C1-26 cũ được xử lý |
+| B-12 | **Audit thao tác K-9** (R19). `SUMMARY.md` ghi "Send messages 0/12" cho cấu hình không Sent, nhưng `c2_k9_nosent_trials.csv` có `sendmsgs_tapped=0` ở cả 12 dòng đó. Tách Sync / Send messages / không thao tác / soạn lại; sửa câu trong §7 cho đúng. | 24/11 | Câu trong bài khớp dữ liệu |
+| B-13 | **Trình bày dữ liệu đo:** Table 3b đổi p90 (n = 20) thành min/median/max hoặc dot plot; stale-screen (digest cũ đếm được 1/3 lượt pilot; forwarder trả cây cũ chỉ nêu định tính vì log không còn); lượt mất do ANR coi là quan sát censored; ghi load host (16 đến 38) và thời gian dump khoảng 2 s; câu ở §2.1 về app foreground. | 22/11 | Các câu và bảng khớp dữ liệu |
 | B-14 | **Nonce, Fig. 1, tab-apps:** K-9 dùng subject (người nhận thấy được) trên tài khoản thử có opt-in; sửa Fig. 1(b) và `tab-apps.tex`; thêm cột measured/planned; nhánh G2 của Fig. 1 ghi theo mode khuyến nghị chung. | 15/11 | Không còn mâu thuẫn với §5.2 |
-| B-15 | Chạy lại `bench_ledger.py` trên host POSIX mới; viết lại đoạn "laptop running macOS" ở §6 (bản render mới cho `\LedgerFull*` là "--" trên WSL). | 20/11 | §6 khớp số mới |
+| B-15 | Chạy lại `bench_ledger.py` trên host POSIX mới; viết lại đoạn "laptop running macOS" ở §6 (trên WSL, `\LedgerFull*` render ra "--"). | 20/11 | §6 khớp số mới |
 | B-16 | Làm sạch `testbed/` để đóng gói (không `runtime/`, `runs/`, `*.local.json`, `.env`), qua scrub check của C. | 30/11 | Giao cho C |
 | B-17 | (Chỉ khi trưởng nhóm duyệt và B-09 xong trước 22/11) Đo độ trễ Element độc lập; cần thêm kill -9 và netcut vào `run_case.py` và một bộ phân tích ra schema `c2_element_first_visible.csv`. | 28/11 | |
 
 ### Phần C: Đánh giá so sánh và câu chuyện của bài
 
-**Sở hữu:** `artifact/run_all.py`, `artifact/run_all.sh`, `artifact/scripts/render.py`, phần Table 4 của `render_real.py` (macro `\Rsim*`, `tab_realsim.tex`); trong `planner_sim.py` phần chính sách, baseline và part (`resolve_rules`, `resolve_baseline`, `vetting`, `run`, `summarize`, định nghĩa part và tag không thuộc A); `manuscript/generated/macros.tex`; `manuscript/main.tex`, `references.bib`; section 00, 01, 07-evaluation (khung chung và phần mô phỏng), 08, 09, 10, `tab-position.tex`; `others/notes.md`; `manuscript/build.sh`. Tiền tố macro: `\Sim*`, `\Rsim*` và các tiền tố cũ khác.
+**Sở hữu:** `artifact/run_all.py`, `artifact/run_all.sh`, `artifact/scripts/render.py`, phần Table 4 của `render_real.py` (macro `\Rsim*`, `tab_realsim.tex`); trong `planner_sim.py` phần chính sách, baseline và part (`resolve_rules`, `resolve_baseline`, `vetting`, `run`, `summarize`, định nghĩa part và tag không thuộc A); `manuscript/generated/macros.tex`; `manuscript/main.tex`, `references.bib`, `build.sh`; section 00, 01, 07-evaluation (khung chung và phần mô phỏng), 08, 09, 10, `tab-position.tex`; `others/notes.md`. Tiền tố macro: `\Sim*`, `\Rsim*` và các tiền tố cũ khác.
 
 | ID | Việc | Hạn | Xong khi |
 |---|---|---|---|
@@ -91,7 +87,7 @@ Một số task cũ đã xong hoặc sai tiền đề (xem §8).
 | C-11 | **Artifact ẩn danh:** đóng gói `artifact/` và `testbed/` của B, loại `tmp/`, `codex/`, `review.md`, `resolve.md`, `report.md`, `runtime/`, `.git`; `team/scrub_check.sh`; README tiếng Anh; đoạn availability ở §8 kèm link. | 1/12 | Link mở được từ cửa sổ ẩn danh |
 | C-12 | **Chốt và nộp:** lần chạy sạch cuối từ `main` (freeze 1/12); thân bài hết trang 12; 0 lỗi LaTeX và ref; ẩn danh (cả PDF metadata); citation đã kiểm; nộp HotCRP. | 3/12 | Đã nộp |
 
-## 4. Phụ thuộc giữa các phần (đều là phụ thuộc mềm)
+## 3. Phụ thuộc giữa các phần (đều là phụ thuộc mềm)
 
 | Ai cần | Cần gì | Từ ai | Khi chưa có thì |
 |---|---|---|---|
@@ -102,23 +98,35 @@ Một số task cũ đã xong hoặc sai tiền đề (xem §8).
 | B | Mode khuyến nghị để ghi nhãn Fig. 1 | C (C-02) | Đã chốt sẵn theo R06 |
 | C | Công thức δ cuối cùng cho dòng setup ở §7 | A (A-05) | Sửa một dòng khi A xong |
 
-## 5. Hợp đồng chốt trước 11/11
+## 4. Hợp đồng chốt trước 11/11
 
 - **Tên macro**: mỗi phần gửi danh sách tên macro mà phần khác sẽ dùng, kèm nghĩa và định dạng. Ví dụ phía B: `\AgentScheduledN`, `\AgentValidN`, `\AgentResentN`, `\AgentDupN`, `\AgentAskedN`, `\LabelTrialMedS`. Giá trị tạm là `??`.
-- **Schema dữ liệu**: `artifact/results/real/params.csv` giữ nguyên (`name,value,provenance`); `artifact/results/real/agent/episodes.csv` theo `CONTRIBUTOR_3.md` §4.
+- **`artifact/results/real/params.csv`** giữ nguyên schema `name,value,provenance`.
+- **`artifact/results/real/agent/episodes.csv`**, một dòng mỗi lần chạy (kể cả lần không hợp lệ và lần chạy lại):
+
+  ```
+  episode_id, scheduled_index, config(nosent|sent), attempt(1|2), agent(m3a), model_id, phase(dev|scheduled),
+  t_issue_utc, t_data_250_utc, t_fault_utc, t_relaunch_utc, t_agent_restart_utc, t_end_utc,
+  backend_copies_at_horizon, distinct_message_ids, original_committed(0|1), fault_receipt(0|1),
+  agent_tapped_send_after_restart(0|1), agent_final_status(done|infeasible|asked|error|timeout),
+  outcome(RESENT_DUPLICATE|RESENT_BUT_NO_DUP|DECLARED_DONE_NO_RESEND|ASKED_OR_STOPPED|TASK_FAILURE|INVALID),
+  invalid_reason, steps_before_fault, steps_after_restart, prompt_tokens, completion_tokens,
+  wall_clock_s, reset_s, observation_s, notes
+  ```
 - **Mode khuyến nghị và bảng thuật ngữ**: C phát (C-02).
 
-## 6. Quy tắc làm việc
+## 5. Quy tắc làm việc
 
-- **File**: chỉ sửa file mình sở hữu (§3). `planner_sim.py` là file duy nhất có hai chủ: A sở hữu các hàm hiệu chuẩn và chứng nhận, C sở hữu phần còn lại. Cần thêm gì thì thêm hàm hoặc tag mới, không sửa hàm của người kia.
+- **File**: chỉ sửa file mình sở hữu (§2). `planner_sim.py` là file duy nhất có hai chủ: A sở hữu các hàm hiệu chuẩn và chứng nhận, C sở hữu phần còn lại. Cần thêm gì thì thêm hàm hoặc tag mới, không sửa hàm của người kia.
 - **Macro**: mỗi phần render vào file macro của mình; không sửa tay `manuscript/generated/*`.
 - **Số liệu**: không gõ tay số kết quả vào `.tex`; mỗi số nói rõ loại (đo trên emulator, mô phỏng theo mô hình, mô phỏng với tham số đo, tính chính xác, chạy LLM agent).
 - **Không chỉnh kết quả theo ý muốn**: không đổi seed, họ luật hay ngân sách nhãn sau khi thấy kết quả. Dòng bất lợi vẫn vào bài.
 - **Dữ liệu thô** trong `artifact/results/real/**` chỉ được thêm.
+- **Không commit** `runtime/`, `testbed/runs/`, `*.local.json`, `.env`, khóa API.
 - **Nhánh và PR**: `a/...`, `b/...`, `c/...`; tiêu đề PR `[A-xx]`, `[B-xx]`, `[C-xx]`; trưởng nhóm merge; rebase lên `main` trước mỗi PR.
 - **Họp**: tối Chủ nhật, 30 phút. Việc bị chặn thì báo ngay trên nhóm chat.
 
-## 7. Lịch
+## 6. Lịch
 
 | Tuần | A | B | C |
 |---|---|---|---|
@@ -129,19 +137,7 @@ Một số task cũ đã xong hoặc sai tiền đề (xem §8).
 
 **Báo ngay cho trưởng nhóm nếu:** emulator chưa chạy ổn trước 13/11; chưa có model trước 14/11; A-dev dưới 6/10 vào 19/11; chưa đủ 10 episode hợp lệ vào 23/11; build đỏ quá một ngày.
 
-## 8. Điều chỉnh so với các brief cũ
-
-| Task cũ | Thực tế khi đối chiếu code | Xử lý |
-|---|---|---|
-| C2-07 (thêm q1/q0) | Cột `n1, n0, ask1, ask0, q1, q0` đã có trong mọi CSV planner | Gộp vào A-04, chỉ còn tính và render |
-| C2-08 (δ theo lớp) | `calibration_deltas` đã chia theo số lớp, có test | A-05 chỉ còn sửa `min(α, β)` và viết rõ |
-| C2-15 (đếm stress) | Macro `\StressNover` đã có | C dùng ngay (C-06) |
-| C2-09(a) (forwarder trả cây cũ) | Log nằm ở `shared-android/logs`, không có trong repo | B-13 chỉ nêu định tính |
-| C2-06 (vetted cùng dữ liệu) | Chưa thật sự cùng dữ liệu (n mẫu lag so với 20.000) | C-03 làm lại và báo cả dòng bất lợi |
-| C3-06 (`agent_episode.py` mới) | `testbed/native_episode.py` đã có, chưa được nhắc trong README | B-06 mở rộng file có sẵn |
-| C3 phương án API | `local_model.py` chỉ nhận endpoint loopback | B-05 cần binding mới và trưởng nhóm duyệt |
-
-## 9. Cần trưởng nhóm quyết
+## 7. Cần trưởng nhóm quyết
 
 1. Duyệt cách chia này và giao người cho A, B, C.
 2. Xác nhận nhóm **được sửa paper**: `resolve.md` và `report.md` còn ghi quyết định cũ "không chỉnh paper, paper để sau".
