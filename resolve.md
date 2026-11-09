@@ -1,6 +1,6 @@
 # Quyết định xử lý review và hướng thí nghiệm GhostEffect
 
-> **Ghi chú (09/11/2026):** đợt nộp này làm theo phạm vi và lịch trong `team/PHAN_CHIA_CONG_VIEC.md`; các phần về H100, P40 và C-guard bên dưới không áp dụng. Các file được dẫn tới `report.md`, `codex/plan.md`, `codex/checklist.md`, `codex/review-loop.md`, `codex/study-matrix.md`, `codex/paper-alignment.md` và `codex/structure.md` đã bị xóa khỏi repo; cần thì xem lịch sử git.
+> **Ghi chú (09/11/2026):** đợt nộp này làm theo phạm vi và lịch trong `team/CONTRIBUTOR_FIXED.md`; các phần về H100, P40 và C-guard bên dưới không áp dụng. Các file được dẫn tới `report.md`, `codex/plan.md`, `codex/checklist.md`, `codex/review-loop.md`, `codex/study-matrix.md`, `codex/paper-alignment.md` và `codex/structure.md` đã bị xóa khỏi repo; cần thì xem lịch sử git.
 
 ## Material Passport
 
