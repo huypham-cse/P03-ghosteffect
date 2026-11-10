@@ -176,7 +176,7 @@ runtime/agent-venv/Scripts/python.exe testbed/agent_episode.py --framework m3a -
 
 - **Lỗi a11y tree:** chỉ gặp ngay sau cold boot; chờ AVD chạy vài phút rồi mới bắt đầu. Khi không có phiên AndroidWorld nào đang chạy, forwarder mất server gRPC và hiện hộp thoại "keeps stopping"; tắt nó bằng `adb shell settings put secure enabled_accessibility_services '""'`.
 - **Nối M3A với model thật:** chạy mục 6 khi có tunnel.
-- **Harness tiêm lỗi (B-06):** đã viết (mục 6d), test logic kết quả qua; **chưa chạy thử trên AVD**. Chạy bản giả lập `scripted-redo` và `scripted-stop` trước episode M3A đầu tiên. Rủi ro đã biết: sau khi `env.close()`, forwarder có thể hiện hộp thoại "keeps stopping" đè lên K-9 ở episode sau; nếu gặp thì thêm bước đóng hộp thoại vào reset.
+- **Harness tiêm lỗi (B-06):** đã viết (mục 6d) và chạy thử trên AVD bằng agent giả lập ngày 10/11, 4/4 đúng kỳ vọng (`testbed/runs/b06/dry-01` đến `dry-04`). Phần chưa thử được là với M3A thật: chặn ở lệnh gọi model (giả lập chỉ thử chặn ở thao tác), đếm token, thời gian mỗi bước. Episode M3A đầu tiên nên là A-dev.
 - **Checker dữ liệu `testbed/check_agent_data.py` và test của nó** (YC-B4).
 
 ## 8. Cuối mỗi ngày

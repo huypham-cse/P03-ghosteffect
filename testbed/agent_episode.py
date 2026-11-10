@@ -99,7 +99,7 @@ class ScriptedK9:
         from android_world.env import json_action
         self.env, self.adb, self.json_action = env, adb, json_action
         taps = [SEND] + ([SEND_AND_DELETE] if config == 'nosent' else [])
-        self.queue = (['compose'] + taps if script in ('send', 'redo') else []) + ['done']
+        self.queue = (['compose'] + taps + ['wait'] if script in ('send', 'redo') else []) + ['done']
         self.tag = tag
 
     def reset(self, go_home=False):
@@ -113,6 +113,9 @@ class ScriptedK9:
         item = self.queue.pop(0)
         if item == 'done':
             return AgentInteractionResult(True, {'fixture_action': {'action_type': 'status', 'goal_status': 'complete'}})
+        if item == 'wait':
+            self.env.execute_action(self.json_action.JSONAction(action_type='wait'))
+            return AgentInteractionResult(False, {'fixture_action': {'action_type': 'wait'}})
         if item == 'compose':
             self.env.execute_action(self.json_action.JSONAction(action_type='wait'))
             subprocess.run(self.adb + ['shell', f"am start -W -a android.intent.action.SENDTO -d "
@@ -249,6 +252,7 @@ def worker(args):
             threading.Thread(target=watch, daemon=True).start()
         t_compose, t_compose_utc = time.monotonic(), time.time_ns()
         phase1_stop = run_phase('send', 'steps_before_fault')
+        receipt['phase1_stopped_by'] = phase1_stop
         if arm:
             deadline = time.monotonic() + 30          # the send may reach the server after the agent stopped
             while not stop.is_set() and time.monotonic() < deadline:
@@ -288,6 +292,7 @@ def worker(args):
             gate_state.update(reason='', deadline=horizon, phase='phase2')
             row['t_agent_restart_utc'] = time.time_ns()
             phase2_stop = run_phase('redo' if args.framework == 'scripted-redo' else 'stop', 'steps_after_restart')
+            receipt['phase2_stopped_by'] = phase2_stop
             row['agent_final_status'] = final_status(phase_actions['phase2'], phase2_stop)
             while time.monotonic() < horizon:
                 time.sleep(.5)
