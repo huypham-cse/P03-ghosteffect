@@ -338,3 +338,29 @@ hoặc mã đăng nhập vào repo.
 Mô tả cho bốn PR đã chuẩn bị ở tmp/pr-bodies/ (git-ignore), nêu đúng test,
 manifest, kết quả bất lợi và các điểm review còn mở. Khi xác thực xong,
 push các nhánh và tạo PR nối tiếp theo từng task; chỉ trưởng nhóm merge.
+
+## 10/11/2026 — Push và mở bốn PR thành công
+
+Người dùng đã hoàn tất đăng nhập CLI trực tiếp trong Terminal. Đã xác minh
+account GitHub LeNguyenBaNguyen có quyền push repo huypham-cse/P03-ghosteffect.
+Đã push bốn nhánh và kiểm tra lại các PR trên GitHub:
+
+| Task | Nhánh | PR | Base |
+|---|---|---|---|
+| C-01 | c/01-pipeline | https://github.com/huypham-cse/P03-ghosteffect/pull/10 | main |
+| C-02 | c/02-conventions | https://github.com/huypham-cse/P03-ghosteffect/pull/11 | c/01-pipeline |
+| C-10 | c/10-checks | https://github.com/huypham-cse/P03-ghosteffect/pull/12 | c/02-conventions |
+| C-03 | c/03-matched | https://github.com/huypham-cse/P03-ghosteffect/pull/13 | c/10-checks |
+
+Tất cả ở trạng thái draft. Các PR nối tiếp để mỗi diff chỉ chứa đúng task;
+sau khi trưởng nhóm squash/merge PR trước, cần rebase và retarget PR sau
+lên main tương ứng trước khi merge tiếp. Không tự merge, không yêu cầu
+review/nhắn người khác bằng công cụ, không nhận thay xác nhận A/B.
+
+Các mô tả PR có test/manifest và ghi rõ điểm còn mở: provenance do B sở hữu,
+đề xuất C-02 chưa được nhóm duyệt, phần body vẫn kết thúc trang 13 và chưa
+đạt cổng nộp cuối. C-03 giữ đầy đủ kết quả bất lợi cho joint.
+
+Tiếp theo: nhóm review C-01 trước để gỡ chờ A/B; phía C tiếp tục C-04
+(chú thích và nguồn số của Table 4), C-05 (variance theo seed), C-06
+(cấu trúc evaluation và rút độ dài). Đăng nhập không còn là blocker.

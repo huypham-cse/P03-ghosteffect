@@ -37,9 +37,10 @@ with and without Sent. These are fitted-law simulations, not new GUI runs.
 The table and prose retain the adverse comparison and distinguish unvetted
 fixed-wait rules from the stronger vetted baseline. The artifact passes 46
 tests; the PDF builds to 20 pages with the conclusion still on page 13.
-Evidence: `artifact/runs/2026-11-10/C03-MANIFEST.json`. The C-01, C-02 and
-C-10 changes have separate local commits/branches; publication still requires
-GitHub authentication. Team approval and the later editorial tasks remain open.
+Evidence: `artifact/runs/2026-11-10/C03-MANIFEST.json`. C-01, C-02, C-10 and
+C-03 are now published as separate draft PRs #10, #11, #12 and #13, respectively.
+The PRs are stacked in that order to keep each diff scoped to one task.
+Team approval, merging by the lead and the later editorial tasks remain open.
 
 ## 2026-11-09: Part C preparation (unmerged branch `c/eval`)
 
