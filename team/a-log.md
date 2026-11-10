@@ -93,3 +93,21 @@ Tổng 105 macro (24 + 12 + 16 + 18 + 7 + 24 + 2 + 2). Phần A không dùng mac
 **Lưu ý cho C:** dòng setup ở `07-evaluation.tex` (dòng 16) còn ghi `δ = α/(10K)`, cần đổi thành `min(α, β)/(10 · K · n_cls)` theo phụ thuộc số 5 của `CONTRIBUTOR_FIXED.md` §3.
 
 **Tiếp theo:** nháp A-06 (đổi `D` thành `H_dedup`, các chi tiết lý thuyết), rồi A-01 trên §3 và §5.
+
+## 10/11/2026 (khuya)
+
+**Đã làm:** A-06, đủ bảy mục, sửa trong `03-model.tex`, `04-theory.tex`, `05-design.tex`, `appendix-proofs.tex`:
+1. Hand-over (R12): Prop 4.3 nói hand-over đặt lại `P = 1` đúng một lần mỗi effect, và `R(τ)` gồm các phân bổ bắt đầu sau hand-over (bỏ qua hop 1). Thêm đoạn chứng minh trong App. A. Alg. 1 ghi "hand over, once". §5.4 nói hop-1 reads vẫn giữ trong audit log.
+2. A1 (R13): ghi rõ `T` độc lập với lỗi của reader khi biết `X`, vì một lượt đọc chỉ phụ thuộc `T` qua việc effect đã hiện hay chưa.
+3. H3: ghi cạnh Thm 4.8 rằng cửa sổ dương là tính chất của app, và Element không có hop 1 vì truyền lần đầu nhanh hơn một lần đọc accessibility. Không ghi số (20–100 ms, 2 s là số đo của B, phải là macro), chỉ dẫn sang §7.
+4. Cỡ pilot của Prop 4.4: pilot tách khỏi `n` effect kiểm; pilot là một phần mười đầu của mỗi kết quả (khớp `joint_calibration`), `n` chỉ đếm chín phần mười còn lại.
+5. Prop A.1 (R27): phần bảo đảm là union bound và là lý do có tầng saga; phần phân bổ KKT không tối ưu theo chi phí thật. Bỏ câu về phân bổ theo `π` (rút gọn theo review). §4 đoạn "Budgets across a saga" sửa theo cùng ý.
+6. Đổi `D` (dedup horizon) thành `H_dedup` ở §4, §5 và App. A. `grep -nE 'horizon[^.]*\$D\$|within \$D\$' manuscript/sections/*.tex` rỗng.
+7. Đường echo `/sync` của Element: ghi trong §3 rằng echo là view đầu-cuối theo A1, vì đó là event server đã áp dụng, chỉ hiện sau commit, và lúc nó đến là lúc `T` kết thúc.
+- Ngoài ra "escalating" ở §4.4 đổi thành "handing it over to the end-to-end path" (đúng với Alg. 1).
+
+**Kiểm:** build thoát 0, 20 trang, overfull lớn nhất 7,89 pt. `readability_count.py` (lấy từ nhánh `c/10-checks`) trên bốn file của A: trước `para 21, emph 50, câu dài 21, đoạn có dấu chấm phẩy 22`; sau `21, 50, 20, 21`. Không thêm vi phạm nào; phần còn lại sửa ở lượt đọc YC-12 sau A-07.
+
+**Trạng thái task:** A-06 xong, chờ nghiệm thu. A-05 chờ PR #17, A-09 tên chờ PR #9.
+
+**Tiếp theo:** A-01 (mốc `r_e` ở §3, Eq. 2, Alg. 1; chứng minh trong App. A).

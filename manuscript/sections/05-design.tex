@@ -83,7 +83,7 @@ false-match bound is analytic. Pooling across devices assumes the devices are ex
   \If{$s=$ com $\wedge$ (G2 $\vee$ local)} $P\gets q^{\mathrm{com}}_{\text{hop1}}(r)$; $d\gets$ com
     \State $o\gets$ acked; \textbf{if} G2: $o\gets$ \Call{Monitor}{$e$} \Comment{bkgd., fallible}
     \State \textbf{if} $o=$ acked $\wedge\,P\le\tau_c$: \Return \Call{Mark}{$e$, \textsf{COMMITTED}}
-    \State \textbf{if} $o\in\{$failed, stuck$\}$: $P\gets1$; $d\gets\bot$ \Comment{hand over}
+    \State \textbf{if} $o\in\{$failed, stuck$\}$: $P\gets1$; $d\gets\bot$ \Comment{hand over, once}
   \ElsIf{$s=$ abs} $P\gets q^{\mathrm{abs}}_{\text{hop1}}(r)$; $d\gets$ abs; \textbf{if} $P\le\tau_a$ \Return \Call{Retry}{$e$}
   \EndIf
 \EndIf
@@ -111,7 +111,7 @@ its argument; a logged effect that never became visible counts as an exceedance 
 (its bound enters $B_{\mathrm{com}}$), and a hop-1 ``absent'' verdict relaxes its own wait $w_1$, with half of the lag share (Eq.~\eqref{eq:lagsplit}). For a G2 app with an outbox entry,
 \textsc{Monitor} marks the record \textsf{PENDING} and lets the agent continue; the controller re-reads hop~1 in the background until a terminal state. Its reads are fallible, so an
 ``acknowledged'' entry whose hop-1 bound alone does not certify is corroborated by the end-to-end families, read in the background once the entry is acknowledged (and visible).
-A failed entry, or one pending longer than a stuck limit (120\,s) or close to the server's dedup horizon $D$ (Theorem~\ref{thm:twohop}), goes to the end-to-end path; there the wait is still measured from $t_0$, with $w_0$ certified from the
+A failed entry, or one pending longer than a stuck limit (120\,s) or close to the server's dedup horizon $H_{\mathrm{dedup}}$ (Theorem~\ref{thm:twohop}), is handed over to the end-to-end path. The hand-over resets the product once and keeps the hop-1 reads in the audit log. On that path the wait is still measured from $t_0$, with $w_0$ certified from the
 unconditional lag table, which is what the proof of Eq.~\eqref{eq:lagsplit} needs. Two entries mean a duplicate, which is compensated or asked about.
 
 \para{Waiting.} The wait is the price of the lag share (Theorem~\ref{thm:main}(a,b)). If the certified wait exceeds $W_{\max}$ (120\,s), or recovery was delayed while the device

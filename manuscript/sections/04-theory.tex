@@ -66,6 +66,8 @@ $q^{\mathrm{abs}}$ terms is at most $\tau$, and ask on a contradiction. Under A2
 \]
 where $\mathcal R(\tau)$ is the set of ordered assignments $A$ (each family skipped or at a level $r$) with $\prod_A q\le\tau$ and $\prod_{A\setminus\mathrm{last}(A)}q>\tau$.
 The same holds for declaring with $q^{\mathrm{com}}$. No assumption is made about dependence among the views of a family.
+If a hop-1 entry ends failed or stuck, the planner hands over: it resets the product to $1$ exactly once per effect and continues on the end-to-end families.
+$\mathcal R(\tau)$ includes the assignments that start after the hand-over, which skip hop~1, so the bound covers this path.
 \end{proposition}
 (Proof in Appendix~\ref{app:proofs}: every retry stops at an assignment in $\mathcal R(\tau)$; A2 and a union bound finish.)
 The planner picks the largest $\tau$ with $B(\tau)\le\alpha_{\mathrm{test}}$. The lag adds two terms. Let $w_1$ be the wait after a hop-1 ``absent'' verdict and $w_0$ the
@@ -89,6 +91,7 @@ $\tau_j$ such that, for all $i\le j$, the one-sided $(1-\delta)$ CP bound on $\P
 $\PP(\text{retry}\mid X{=}1,\text{visible})\le\alpha_{\mathrm{test}}$, whatever the dependence across families. Certifying needs about $n\ge\ln(1/\delta)/\alpha_{\mathrm{test}}$ effects.
 \end{proposition}
 The regions are nested, so the guarantee fails only if the CP bound of the first $\tau$ whose true risk exceeds $\alpha_{\mathrm{test}}$ undercovers (fixed-sequence testing).
+The pilot that fixes the score is disjoint from the $n$ test effects. \sys uses the first tenth of each outcome's calibration effects as the pilot and tests on the other nine tenths, so $n$ counts only the latter.
 An intermediate choice keeps A2 only between \emph{evidence sources}: hop~1 reads the app's local outbox, the other three read the server-rendered history. It is available
 only when hop~1 is read from a store distinct from the rendered history, which we check per app by testing hop-1 readings against $T$ on fault-injected trials (Element fails
 the check). Merging the history readers into one jointly calibrated family gives $B(\tau)=q_h\,Q(\tau/q_h)+Q(\tau)$, with $Q(t)$ a CP bound on the history family reaching
@@ -152,15 +155,17 @@ Let hop~1 create $n_1$ entries in the app's local outbox and hop~2 transmit entr
 has an app-assigned id, unique per entry, persisted with it and reused by every retransmission from the same device, also after restarts; and (H3) admissible fault schedules
 have finitely many agent kills, app kills that do not cancel the app's scheduled work, transmissions lost before the server applies them, and acknowledgements lost after;
 every entry is transmitted at least once on the fault-free schedule, a positive window separates an entry's creation from its first transmission, and every retransmission
-happens within the server's \emph{dedup horizon} $D$ of the first application.
-Let \textbf{G2} mean: entries are durable, each is retransmitted until acknowledged, and the server applies each (device, id) at most once within $D$. Then $C_e=1$ under every admissible
+happens within the server's \emph{dedup horizon} $H_{\mathrm{dedup}}$ of the first application.
+Let \textbf{G2} mean: entries are durable, each is retransmitted until acknowledged, and the server applies each (device, id) at most once within $H_{\mathrm{dedup}}$. Then $C_e=1$ under every admissible
 schedule if and only if $n_1=1$ and G2 holds. If retransmission may instead stop in a failed state shown by the app (\textbf{G2$'$}), then $n_1=1$ implies $C_e\le1$ under
 every admissible schedule, and $C_e=0$ only if the entry ends failed.
 \end{theorem}
+The positive window in H3 is a property of the app. Element sends its first transmission within a fraction of a second, faster than one accessibility read, so Element has
+no hop-1 family (\S\ref{sec:eval-real}).
 ($\Leftarrow$) is at-least-once delivery plus idempotent application~\cite{helland2012idempotence,birrell1984rpc,wang2021kafka}. What the agent gains is that hop~1 is
 \emph{observable on the device} within seconds, so for a G2 app the late-commit regime of Theorem~\ref{thm:main}(b) becomes a local check. The planner therefore counts hop-1
 entries created after $t_0$ (two entries mean a duplicate), treats ``absent'' as absent from both outbox and sent list, and monitors a pending entry until it is acknowledged,
-escalating it before its age approaches $D$. ``Retrying is safe'' thus means the \emph{app's own} retry, on the same device, within $D$: an agent that redoes the step
+handing it over to the end-to-end path before its age approaches $H_{\mathrm{dedup}}$. ``Retrying is safe'' thus means the \emph{app's own} retry, on the same device, within $H_{\mathrm{dedup}}$: an agent that redoes the step
 through the GUI creates a new entry with a new id ($n_1{=}2$), which no server merges, and a re-login creates a new device. Synapse keeps transaction ids per device in a
 30--60\,min cache and a 24\,h table~\cite{synapse_txn,matrix_spec}; we measured both scopes (\S\ref{sec:eval-real}). A failed entry is ambiguous end to end, because the server
 may have applied it before the app gave up, so it goes to the end-to-end path; K-9~Mail enters this state by design after every lost SMTP reply, the client-side face of
@@ -169,5 +174,6 @@ terminal state (Element and DAVx5 nevertheless resolved every force-stop by rela
 retransmission idempotent~\cite{matrix_spec}; CalDAV creates resources at a client-chosen URL with a conditional \texttt{PUT}~\cite{rfc4791,rfc9110}; SMTP has no end-to-end
 dedup~\cite{rfc5321}.
 
-\para{Budgets across a saga.} Per-step guarantees compose by a union bound under any dependence, so a workflow splits its budget, $\sum_i\alpha_i\le\alpha$, by the KKT
-split of Proposition~\ref{prop:saga} (appendix); giving every step the full $\alpha$ multiplies the duplicate probability by up to $k$. An ambiguous compensation is asked about.
+\para{Budgets across a saga.} Per-step guarantees compose by a union bound under any dependence, so a workflow splits its budget, $\sum_i\alpha_i\le\alpha$.
+Giving every step the full $\alpha$ multiplies the duplicate probability by up to $k$. The split is safe because of the union bound, not because it is optimal.
+\sys uses the KKT split of Proposition~\ref{prop:saga} (appendix), which optimizes a surrogate cost and is sometimes worse than a uniform split. An ambiguous compensation is asked about.

@@ -45,6 +45,9 @@ $f_1,\dots,f_j$ (the others tied, i.e.\ skipped) and no com-verdict (a com-verdi
 $E_A=\bigcap_{(f,r)\in A}\{\text{at least $r$ views of $f$ read absent}\}$. Under $X{=}1$ with the effect visible, A2 makes the events in $E_A$ independent, so
 $\PP(E_A)\le\prod_{(f,r)\in A}q^{\mathrm{abs}}_f(r)$. A union bound over $\mathcal R(\tau)$ gives $B(\tau)$. Nothing is assumed about the joint law of views within a family,
 because each $q$ bounds the family's verdict event directly.
+For the hand-over: if hop~1 ends failed or stuck, the planner sets the product to $1$ once and does not use the hop-1 verdict again. A run that then retries stops after an ordered
+list of end-to-end verdicts that skips hop~1. That list satisfies the two conditions above, so it is in $\mathcal R(\tau)$ and the same union bound covers it. The reset happens at most
+once per effect, so no run is counted under two lists.
 
 \emph{Lag, Eq.~\eqref{eq:lagsplit}.} Partition retrying runs by path: $\Pi_1$, hop~1 read ``absent'' (end-to-end reads from $t_0+w_1$ on); $\Pi_0$, every other path (end-to-end reads
 from $t_0+w_0$ on, measured from $t_0$ also after a stuck or failed hand-over). On $\{T\le w_1\}\cap\Pi_1$ or $\{T\le w_0\}\cap\Pi_0$ every end-to-end read is post-visibility, and the run
@@ -100,7 +103,7 @@ faults, ends with an applied, acknowledged transmission, so $C_e\ge1$. By H2 eve
 $C_e\ge2$ on the fault-free schedule. If $n_1{=}1$ and G2 fails: without durability, ``app kill after hop~1, before the first transmission'' gives $C_e=0$; without retransmission,
 ``first transmission lost before apply'' gives $C_e=0$; without dedup, ``first transmission applied, acknowledgement lost, retransmission applied'' gives $C_e=2$. Each schedule is admissible.
 Under G2$'$, dedup still gives $C_e\le1$; retransmission stops before an acknowledgement only in the failed state, so $C_e=0$ implies the entry ended failed.
-\emph{Horizon.} If a retransmission may come later than $D$ after the first application, ``first transmission applied, acknowledgement lost, retransmission after $D$'' gives $C_e=2$,
+\emph{Horizon.} If a retransmission may come later than $H_{\mathrm{dedup}}$ after the first application, ``first transmission applied, acknowledgement lost, retransmission after $H_{\mathrm{dedup}}$'' gives $C_e=2$,
 so the horizon condition in H3 is necessary; Synapse showed exactly this after we aged a transaction-id row past 24\,h (\S\ref{sec:eval-real}).
 
 \subsection{Proposition~\ref{prop:saga}}
@@ -119,9 +122,9 @@ is strictly convex, and subject to $\sum\alpha_i\le\alpha$, $\sum\beta_i\le\beta
 \end{equation}
 saving $W\,\KL(\hat w\|u_k)+V\,\KL(\hat v\|u_k)$ over the uniform split ($W=\sum w_i$, $\hat w=w/W$, $u_k$ uniform; $V,\hat v$ likewise).
 \end{proposition}
-The allocation optimizes the surrogate $J$, needs priors $\pi_i$ (the per-step guarantee does not), and in exact cost is sometimes worse than uniform (Appendix, Table~\ref{tab:saga}).
-Since it uses priors anyway, it could optimize under the constraint the guarantee implies, $\sum_i\pi_i\alpha_i\le\alpha$, which gives $\alpha_i\propto w_i/\pi_i$ and is cheaper.
-Its main role is safety: giving every step the full $\alpha$, the natural per-call default, multiplies the end-to-end duplicate probability by up to $k$.
+The guarantee part is a union bound, and it is what the saga layer is for: giving every step the full $\alpha$, the natural per-call default, multiplies the end-to-end
+duplicate probability by up to $k$. The allocation part is not optimal in exact cost. It optimizes the surrogate $J$, needs priors $\pi_i$ (the per-step guarantee does not),
+and is sometimes worse than uniform (Table~\ref{tab:saga}).
 
 \noindent\emph{Proof.}
 \emph{Guarantee.} $\PP(\dup_i)=\pi_i\PP(\dup_i\mid X_i{=}1)\le\pi_i\alpha_i$, so $\PP(\bigcup_i\dup_i)\le\sum_i\pi_i\alpha_i$ for any joint law; losses are analogous with $1-\pi_i$.

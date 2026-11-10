@@ -16,6 +16,8 @@ We assume:
 \item[\textbf{A1}] (\emph{lag}) A read of an end-to-end view at time $t$ has law $p^v_1$ if $X{=}1$ and $T\le t-t_0$, and $p^v_0$ otherwise:
 an effect that is not yet visible looks absent. Hop-1 views observe the outbox entry, which exists from the tap on; a view qualifies as hop~1 only if its content
 does not depend on rendering the end-to-end state (Element's send-state indicator does not qualify: it is drawn with the lagged timeline row, \S\ref{sec:eval-real}).
+Given $X$, the lag $T$ is independent of the readers' errors: a read depends on $T$ only through whether the effect is visible at $t$.
+Element's \texttt{/sync} echo, which can show ``Sent'' before the app's own request returns, is an end-to-end view under A1. The echo is the event the server applied, so it appears only after the commit, and its arrival is when $T$ ends.
 \item[\textbf{A2}] (\emph{independence across families}) Given $X$ and visibility, readings of different families are independent.
 Readings of views \emph{within} a family may be arbitrarily dependent, and the planner reads each view at most once. Only product certification
 (Proposition~\ref{prop:family}) uses A2; joint certification (Proposition~\ref{prop:joint}) does not.
