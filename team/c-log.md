@@ -319,3 +319,22 @@ trên manuscript, code/test artifact và receipts. Conclusion vẫn trang 13;
 Trạng thái C-03: triển khai/thí nghiệm/bảng/văn bản xong để review; chưa
 nghiệm thu. C-01/C-02/C-10 có nhánh/commit riêng; vẫn chờ người dùng hoàn
 thành GitHub device login để push và tạo các PR nối tiếp, không tự merge.
+
+## 10/11/2026 — Trạng thái publish sau C-03
+
+Đã commit C-01 (84aa339), C-02 (d901d5b), C-10 (afb023a), thiết kế C-03
+(d87fb23) và kết quả C-03 (c3e6ab5). Các nhánh c/01-pipeline,
+c/02-conventions, c/10-checks, c/03-matched đã có; c/eval giữ toàn bộ chuỗi
+phát triển. Working tree sạch sau các commit, chưa push hoặc mở PR.
+
+Đã cài GitHub CLI portable từ release chính thức, kiểm SHA-256. GitHub
+plugin được khai báo installed nhưng không có tool repo khả dụng trong phiên
+này, nên dùng CLI. Device login đầu tiên hết thời gian chờ mà chưa được
+xác nhận. Lệnh tự mở trình duyệt bị automatic approval review từ chối với
+lý do 'blocked by policy'; không thử cách khác để vượt chặn đó. Người dùng
+cần tự mở trang GitHub device login để hoàn tất xác thực. Không ghi token
+hoặc mã đăng nhập vào repo.
+
+Mô tả cho bốn PR đã chuẩn bị ở tmp/pr-bodies/ (git-ignore), nêu đúng test,
+manifest, kết quả bất lợi và các điểm review còn mở. Khi xác thực xong,
+push các nhánh và tạo PR nối tiếp theo từng task; chỉ trưởng nhóm merge.
