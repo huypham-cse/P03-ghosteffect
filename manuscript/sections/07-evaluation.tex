@@ -57,8 +57,8 @@ more; the lenient variant retries \SimRulesLenPv\% (over budget). Tuning the rul
 nominal $\alpha{=}0.1$ (a 10\% guarantee, not 0.5\%), escalates \SweepTenAsk\% against \RuleBestTenAsk\% for the best rule, and joint certification \SweepJointTenAsk\% at
 $P_{\mathrm{v}}{=}\SweepJointTenPv\%$; no rule goes below \RuleMinAsk\% escalations. At $\alpha{=}0.03$ joint certification escalates \SweepJointThreeAsk\% at \SweepJointThreePv\%,
 more than the tuned rules. The default world satisfies A2 by construction, which favours the product mode. What rules lack is a guarantee that follows the labels: the default
-rules exceed the budget in \StressRulesOver{} of the 14 stress rows of Table~\ref{tab:stress} and in \PopRulesOver{} of the \PopRows{} interrupted-population rows of Table~\ref{tab:pop},
-and on measured K-9 profiles they retry \RsimKsentRulesPv--\RsimKnineRulesPv\% (\S\ref{sec:eval-real}). Nominal i.i.d.\ bounds escalate least but exceed the budget at every $\alpha\ge10^{-2}$.
+rules exceed the budget in \StressRulesOver{} of the 14 stress rows of Table~\ref{tab:stress} and in \PopRulesOver{} of the \PopRows{} interrupted-population rows of Table~\ref{tab:pop}.
+The K-9 fixed-wait rule results are simulations under an assumed queued-mail lag law; vetted rules with matched calibration instead ask on every interrupted send (Table~\ref{tab:matched}). Nominal i.i.d.\ bounds escalate least but exceed the budget at every $\alpha\ge10^{-2}$.
 
 \input{generated/tab_planner}
 \input{generated/fig_pareto}

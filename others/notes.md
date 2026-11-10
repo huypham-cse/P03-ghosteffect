@@ -5,7 +5,7 @@ Values below come from the current CSV render; this is not a fresh experiment re
 Measurement, fitted-law simulation, model simulation and host timings remain distinct.
 See artifact/README.md for the experiment and CSV provenance.
 
-Total macros: 972. Do not edit generated values by hand.
+Total macros: 1008. Do not edit generated values by hand.
 
 | Macro | Value | Macro file | Used in |
 |---|---|---|---|
@@ -441,7 +441,7 @@ Total macros: 972. Do not edit generated values by hand.
 | `\RsimKnineRulesDup` | 49.91 | `macros.tex` | (unused) |
 | `\RsimKnineRulesErr` | 49.98 | `macros.tex` | (unused) |
 | `\RsimKnineRulesLoss` | 0.07 | `macros.tex` | (unused) |
-| `\RsimKnineRulesPv` | 65.85 | `macros.tex` | sections/00-abstract.tex, sections/01-introduction.tex, sections/07-evaluation.tex, sections/07-realsim.tex |
+| `\RsimKnineRulesPv` | 65.85 | `macros.tex` | sections/07-realsim.tex |
 | `\RsimKnineRulesPvHi` | 66.81 | `macros.tex` | (unused) |
 | `\RsimKnineRulesSecs` | 40 | `macros.tex` | (unused) |
 | `\RsimKnineSrcAsk` | 100.0 | `macros.tex` | (unused) |
@@ -532,7 +532,7 @@ Total macros: 972. Do not edit generated values by hand.
 | `\RsimKsentRulesDup` | 24.42 | `macros.tex` | (unused) |
 | `\RsimKsentRulesErr` | 24.49 | `macros.tex` | (unused) |
 | `\RsimKsentRulesLoss` | 0.08 | `macros.tex` | (unused) |
-| `\RsimKsentRulesPv` | 28.91 | `macros.tex` | sections/00-abstract.tex, sections/01-introduction.tex, sections/07-evaluation.tex, sections/07-realsim.tex |
+| `\RsimKsentRulesPv` | 28.91 | `macros.tex` | sections/07-realsim.tex |
 | `\RsimKsentRulesPvHi` | 29.84 | `macros.tex` | (unused) |
 | `\RsimKsentRulesSecs` | 53 | `macros.tex` | (unused) |
 | `\RsimKsentSrcAsk` | 100.0 | `macros.tex` | (unused) |
@@ -542,6 +542,42 @@ Total macros: 972. Do not edit generated values by hand.
 | `\RsimKsentSrcPv` | 0.00 | `macros.tex` | (unused) |
 | `\RsimKsentSrcPvHi` | 0.04 | `macros.tex` | (unused) |
 | `\RsimKsentSrcSecs` | 77 | `macros.tex` | (unused) |
+| `\RsimMatchElemFiveJointAsk` | 30.6 | `macros.tex` | sections/07-realsim.tex |
+| `\RsimMatchElemFiveJointPv` | 0.00 | `macros.tex` | (unused) |
+| `\RsimMatchElemFiveJointPvHi` | 0.04 | `macros.tex` | (unused) |
+| `\RsimMatchElemFiveLabelN` | 5{,}000 | `macros.tex` | sections/07-realsim.tex |
+| `\RsimMatchElemFiveLagN` | 5{,}000 | `macros.tex` | sections/07-realsim.tex |
+| `\RsimMatchElemFiveVettedAsk` | 7.8 | `macros.tex` | sections/07-realsim.tex |
+| `\RsimMatchElemFiveVettedPv` | 0.00 | `macros.tex` | (unused) |
+| `\RsimMatchElemFiveVettedPvHi` | 0.04 | `macros.tex` | (unused) |
+| `\RsimMatchElemFiveWorkflowN` | 12{,}000 | `macros.tex` | (unused) |
+| `\RsimMatchElemTwoJointAsk` | 100.0 | `macros.tex` | sections/07-realsim.tex |
+| `\RsimMatchElemTwoJointPv` | 0.00 | `macros.tex` | (unused) |
+| `\RsimMatchElemTwoJointPvHi` | 0.04 | `macros.tex` | (unused) |
+| `\RsimMatchElemTwoLabelN` | 2{,}000 | `macros.tex` | sections/07-realsim.tex |
+| `\RsimMatchElemTwoLagN` | 2{,}000 | `macros.tex` | sections/07-realsim.tex |
+| `\RsimMatchElemTwoVettedAsk` | 2.2 | `macros.tex` | sections/07-realsim.tex |
+| `\RsimMatchElemTwoVettedPv` | 0.00 | `macros.tex` | (unused) |
+| `\RsimMatchElemTwoVettedPvHi` | 0.04 | `macros.tex` | (unused) |
+| `\RsimMatchElemTwoWorkflowN` | 12{,}000 | `macros.tex` | (unused) |
+| `\RsimMatchKnineJointAsk` | 100.0 | `macros.tex` | (unused) |
+| `\RsimMatchKnineJointPv` | 0.00 | `macros.tex` | (unused) |
+| `\RsimMatchKnineJointPvHi` | 0.04 | `macros.tex` | (unused) |
+| `\RsimMatchKnineLabelN` | 2{,}000 | `macros.tex` | (unused) |
+| `\RsimMatchKnineLagN` | 2{,}000 | `macros.tex` | (unused) |
+| `\RsimMatchKnineVettedAsk` | 100.0 | `macros.tex` | (unused) |
+| `\RsimMatchKnineVettedPv` | 0.00 | `macros.tex` | (unused) |
+| `\RsimMatchKnineVettedPvHi` | 0.04 | `macros.tex` | (unused) |
+| `\RsimMatchKnineWorkflowN` | 12{,}000 | `macros.tex` | (unused) |
+| `\RsimMatchKsentJointAsk` | 100.0 | `macros.tex` | (unused) |
+| `\RsimMatchKsentJointPv` | 0.00 | `macros.tex` | (unused) |
+| `\RsimMatchKsentJointPvHi` | 0.04 | `macros.tex` | (unused) |
+| `\RsimMatchKsentLabelN` | 2{,}000 | `macros.tex` | (unused) |
+| `\RsimMatchKsentLagN` | 2{,}000 | `macros.tex` | (unused) |
+| `\RsimMatchKsentVettedAsk` | 100.0 | `macros.tex` | (unused) |
+| `\RsimMatchKsentVettedPv` | 0.00 | `macros.tex` | (unused) |
+| `\RsimMatchKsentVettedPvHi` | 0.04 | `macros.tex` | (unused) |
+| `\RsimMatchKsentWorkflowN` | 12{,}000 | `macros.tex` | (unused) |
 | `\RsimMixJointAsk` | 60.3 | `macros.tex` | (unused) |
 | `\RsimMixJointDup` | 2.93 | `macros.tex` | (unused) |
 | `\RsimMixJointErr` | 4.31 | `macros.tex` | (unused) |

@@ -1,0 +1,22 @@
+{
+  "command": [
+    "python3",
+    "artifact/scripts/planner_sim.py",
+    "real4",
+    "match2k"
+  ],
+  "git_commit": "d87fb2337629f88233af46f0ad5cdeef77df88a8",
+  "seed": [
+    101,
+    202,
+    303,
+    404,
+    505
+  ],
+  "python_version": "3.12.3 (main, Jul 15 2026, 23:46:41) [GCC 13.3.0]",
+  "date": "2026-11-10T02:55:37.361537+00:00",
+  "host": "Linux 6.18.54.1-microsoft-standard-WSL2",
+  "csv_sha256": "9e21d065e2179d0d1d159dc9d7e297f87f69e8208027291c2134ec9bba3798a5",
+  "kind": "measured-parameter simulation with shared calibration/lag inputs",
+  "manifest": "artifact/runs/2026-11-10/C03-MANIFEST.json"
+}

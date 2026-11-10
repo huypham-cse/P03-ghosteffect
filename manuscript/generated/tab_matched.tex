@@ -1,0 +1,22 @@
+\begin{table*}[t]
+\centering
+\caption{Matched-input, measured-parameter simulation. Joint and vetted rules use identical calibration records and lag tables for each seed.
+Labels are per outcome, and per fault class for keyed Element; lags are per class for Element and pooled for K-9.
+Zero observed errors do not certify vetted rules. $P_{\mathrm v}$, CP upper bound and ask are percentages.}
+\label{tab:matched}
+\small
+\begin{tabular}{@{}llrrrrr@{}}
+\toprule
+Profile & Policy & Labels & Lags & $P_{\mathrm v}$ & CP hi & Ask \\
+\midrule
+Element & vetted rules & 2{,}000 & 2{,}000 & 0.00 & 0.04 & 2.2 \\
+Element & joint & 2{,}000 & 2{,}000 & 0.00 & 0.04 & 100.0 \\
+Element & vetted rules & 5{,}000 & 5{,}000 & 0.00 & 0.04 & 7.8 \\
+Element & joint & 5{,}000 & 5{,}000 & 0.00 & 0.04 & 30.6 \\
+K-9 & vetted rules & 2{,}000 & 2{,}000 & 0.00 & 0.04 & 100.0 \\
+K-9 & joint & 2{,}000 & 2{,}000 & 0.00 & 0.04 & 100.0 \\
+K-9 + Sent & vetted rules & 2{,}000 & 2{,}000 & 0.00 & 0.04 & 100.0 \\
+K-9 + Sent & joint & 2{,}000 & 2{,}000 & 0.00 & 0.04 & 100.0 \\
+\bottomrule
+\end{tabular}
+\end{table*}
