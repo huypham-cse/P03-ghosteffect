@@ -261,8 +261,9 @@ class RunnerTests(unittest.TestCase):
 
     def test_real4_job_covers_all_existing_sensitivity_files(self):
         existing = {p.name for p in (ARTIFACT / 'results').glob('planner_real4_*.csv')}
-        self.assertEqual(16, len(existing))
-        self.assertEqual(existing, set(runner.PART_OUTPUTS['real4']))
+        declared = {'planner_real4_%s.csv' % tag for tag in planner.REAL4}
+        self.assertEqual(declared, set(runner.PART_OUTPUTS['real4']))
+        self.assertTrue(existing.issubset(declared))
 
     @unittest.skipUnless(os.name == 'posix', 'full runner uses POSIX host-crash semantics')
     def test_parallel_job_failure_records_failed_and_never_renders(self):

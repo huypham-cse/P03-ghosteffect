@@ -261,3 +261,20 @@ chuẩn hóa shell script; không thay code hay dữ liệu để né test.
 Bộ artifact trên nhánh C-03 kế thừa C-10: 46/46 test qua trên WSL sau sửa
 môi trường. C-10 triển khai xong, chờ review/merge #12; không tự nghiệm thu.
 Tiếp theo: retarget #12 về main, kiểm build và scrub trước publish.
+## 10/11/2026 — C-03: freeze thiết kế trước thí nghiệm
+
+Thêm bốn tag match2k, match5k (Element), matchk9 và matchk9sent. Mỗi tag
+so rules-vetted với ghost-joint bằng cùng bản ghi calibration và cùng object
+lag table. Budget 2.000 nhãn/outcome (và/class khi keyed) đi cùng 2.000 lag;
+Element có thêm cấu hình 5.000/5.000. Các seed, budget rủi ro, tag lịch sử,
+pilot/holdout và công thức joint không đổi.
+
+Đã xác nhận AST: chỉ hai hàm cũ của C là vetting/run đổi; không sửa các hàm
+hiệu chuẩn/chứng nhận của A. Hàm mới chỉ tạo input chung rồi gọi certifier
+hiện có. Có 4 test C-03 mới: cùng object dữ liệu, cùng kết quả certifier cũ,
+ngân sách/tag đúng và từ chối input thiếu/sai. Artifact 45/45 test PASS.
+
+Đây là commit thiết kế trước khi chạy các tag mới, chưa có kết quả để chọn
+cấu hình theo ý muốn. Bước tiếp theo chạy riêng tag mới từ snapshot commit
+sạch của C-03, lưu rõ source branch/commit; không gọi đó là một lần rerun
+pipeline từ main, và không thay 16 CSV REAL4 lịch sử.
