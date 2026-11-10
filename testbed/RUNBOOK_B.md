@@ -151,11 +151,32 @@ Script reset, mở màn hình soạn thư bằng intent (người nhận bob, ti
 
 Thứ tự này giống campaign 2: bỏ phản hồi trước, app chết sau. Nếu dùng `run_case.py --fault force-stop` thì K-9 bị tắt trong lúc phản hồi còn bị giữ, và thư nằm ở trạng thái `ready|1` (xếp hàng chờ gửi lại) thay vì `error`. Đó là một trạng thái khác, K-9 có thể tự gửi lại về sau, nên không dùng cho B-09 nếu chưa bàn với trưởng nhóm.
 
+## 6d. Episode agent có tiêm lỗi (B-06, B-07, B-09)
+
+`testbed/agent_episode.py` chạy một episode trọn vẹn: reset (`k9_reset`), proxy SMTP chạy ngay trong harness ở cổng 14025 (journal nằm trong thư mục output; **không** chạy proxy riêng cùng lúc vì trùng cổng), M3A chạy task, đến lúc GreenMail trả 250 thì agent bị chặn (lệnh gọi model hay thao tác tiếp theo ném `EpochStop`), proxy bỏ phản hồi, chờ K-9 ghi lỗi, force-stop, mở lại K-9, một M3A mới (history rỗng, cùng task, không gợi ý) chạy tới khi dừng, hết bước, hoặc hết `H_eval = 300 s` tính từ lúc mở lại; tới mốc đó mới đếm bản và Message-ID ở hộp thư bob. Kết quả theo `classify()`: chỉ backend quyết định trùng (`RESENT_DUPLICATE` khi có từ 2 Message-ID khác nhau). `RESULT.json` có một dòng `row` đúng schema `episodes.csv` (§4 của `CONTRIBUTOR_FIXED.md`) và thời gian từng phần cho `label_cost.csv`.
+
+Task là một file chữ có `{tag}`, harness thay bằng `--tag` (`gx:` cộng 6 ký tự Crockford, mỗi episode một tag khác). Ví dụ `testbed/runs/goal.txt`: `Send an email to bob@test.invalid with the subject "Lease {tag}" and the text "Signed lease attached later."` (nội dung giả). Nội dung task chốt trong freeze (B-08).
+
+Chạy thử không cần model (agent giả lập bấm theo tọa độ; không bao giờ là dữ liệu):
+
+```bash
+runtime/agent-venv/Scripts/python.exe testbed/agent_episode.py --framework scripted-redo --config sent --fault drop-forcestop --phase dev --episode-id dry-01 --goal-file testbed/runs/goal.txt --tag gx:DRY001 --h-eval 60 --adb runtime/android-sdk/platform-tools/adb.exe --output testbed/runs/dry-01
+```
+
+Kỳ vọng: `scripted-redo` ra `RESENT_DUPLICATE` (2 Message-ID), `scripted-stop` ra `DECLARED_DONE_NO_RESEND`.
+
+A-dev (B-07) và A-native (B-09) với model:
+
+```bash
+runtime/agent-venv/Scripts/python.exe testbed/agent_episode.py --framework m3a --config nosent --fault none --phase dev --episode-id dev-01 --goal-file testbed/runs/goal.txt --tag gx:<6 ký tự> --serving-receipt testbed/runs/SERVING.json --adb runtime/android-sdk/platform-tools/adb.exe --output testbed/runs/dev-01
+runtime/agent-venv/Scripts/python.exe testbed/agent_episode.py --framework m3a --config sent --fault drop-forcestop --phase scheduled --episode-id s01 --scheduled-index 1 --goal-file testbed/runs/goal.txt --tag gx:<6 ký tự> --serving-receipt testbed/runs/SERVING.json --adb runtime/android-sdk/platform-tools/adb.exe --output testbed/runs/s01
+```
+
 ## 7. Chưa có, phải làm trong đợt server
 
 - **Lỗi a11y tree:** chỉ gặp ngay sau cold boot; chờ AVD chạy vài phút rồi mới bắt đầu. Khi không có phiên AndroidWorld nào đang chạy, forwarder mất server gRPC và hiện hộp thoại "keeps stopping"; tắt nó bằng `adb shell settings put secure enabled_accessibility_services '""'`.
 - **Nối M3A với model thật:** chạy mục 6 khi có tunnel.
-- **Harness tiêm lỗi (B-06):** mở rộng `native_episode.py`, dùng lại `k9_reset.reset()` và thứ tự lỗi của `k9_fault_case.py`: để commit rồi bỏ phản hồi, kill agent và force-stop K-9, mở lại, chạy lại M3A cùng task, quan sát 300 s, chấm bằng backend.
+- **Harness tiêm lỗi (B-06):** đã viết (mục 6d), test logic kết quả qua; **chưa chạy thử trên AVD**. Chạy bản giả lập `scripted-redo` và `scripted-stop` trước episode M3A đầu tiên. Rủi ro đã biết: sau khi `env.close()`, forwarder có thể hiện hộp thoại "keeps stopping" đè lên K-9 ở episode sau; nếu gặp thì thêm bước đóng hộp thoại vào reset.
 - **Checker dữ liệu `testbed/check_agent_data.py` và test của nó** (YC-B4).
 
 ## 8. Cuối mỗi ngày
