@@ -237,3 +237,14 @@ test công cụ C-10; không coi cả 41 test là nội dung PR C-01.
 Trạng thái: commit C-01 chuẩn bị để review, không phải PR nghiệm thu cuối.
 Còn chờ đăng nhập GitHub để push/mở PR; C-02 và C-10 sẽ có commit/PR riêng.
 Hai provenance của B và giới hạn body trang 13 vẫn còn mở như đã báo.
+
+## 10/11/2026 — Commit riêng C-10
+
+C-02 được lưu ở commit d901d5b và nhánh `c/02-conventions`.
+Đưa riêng hai công cụ kiểm và 7 test của chúng vào commit C-10. Đã chạy lại
+7/7 test trên WSL: PASS. Không thêm dependency runtime ngoài Python stdlib
+và shell. Trạng thái: code và test sẵn sàng review; còn PR/merge lên main
+trước 13/11. Nhánh PR này nối tiếp C-02 để mỗi diff chỉ chứa một task.
+
+Tiếp theo: push ba nhánh sau khi xác thực GitHub; tiếp tục C-03 trong nhánh
+phát triển. C-01/C-02/C-10 chưa được tự đánh dấu nghiệm thu hoặc merge.
