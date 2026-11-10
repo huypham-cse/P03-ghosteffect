@@ -1,0 +1,47 @@
+{
+  "command": [
+    "/usr/bin/python3",
+    "-u",
+    "artifact/scripts/planner_sim.py",
+    "real4"
+  ],
+  "git_commit": "a518b5f0628d8864b43b2ac34c137d40d9bdac12",
+  "seed": {
+    "constants": {
+      "SEEDS": [
+        101,
+        202,
+        303,
+        404,
+        505
+      ],
+      "N_PER_SEED": 2400,
+      "NCAL": 2000,
+      "N_LAG": 20000
+    },
+    "random_seed_expressions": [
+      "s",
+      "s * 31 + 7",
+      "s",
+      "s * 977",
+      "s * 7919 + (ALL_POLICIES + EXTRA_POLICIES).index(p)",
+      "s * 31 + 7",
+      "s * 31 + 7",
+      "s * 31 + 7",
+      "s * 31 + 7",
+      "s * 31 + 11",
+      "s * 31 + 13"
+    ],
+    "note": "No seed changed; expressions and script hash record derived/calibration seeds."
+  },
+  "python_version": "3.12.3 (main, Jul 15 2026, 23:46:41) [GCC 13.3.0]",
+  "date": "2026-11-09T17:12:34.606551+00:00",
+  "host": {
+    "os": "Linux",
+    "architecture": "x86_64",
+    "kernel": "6.18.54.1-microsoft-standard-WSL2"
+  },
+  "csv_sha256": "cb367096d4beb0f7643da6172403530dce009377b624e15c1e8090b7681cef36",
+  "script_sha256": "106f3d0d22ecb77118d5abfc701cc3187453d57ba97aea8c622a6a7ef27d4545",
+  "manifest": "artifact/runs/2026-11-10/MANIFEST.json"
+}

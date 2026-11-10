@@ -17,6 +17,7 @@ an app may send a request and lose the acknowledgement. Each can leave the effec
 
 \subsection{Why API-level recovery does not transfer}
 \label{sec:bg-gap}
+\input{sections/tab-position}
 Table~\ref{tab:position} (appendix) summarizes recent recovery work. Three gaps matter.
 
 \para{No key.} Idempotency keys~\cite{stripe_idempotency,helland2012idempotence} let a server collapse retries, and agents use them when they exist~\cite{li2026exactlyonce}.

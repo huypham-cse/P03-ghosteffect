@@ -1,0 +1,21 @@
+{
+  "python": "3.12.3 (main, Jul 15 2026, 23:46:41) [GCC 13.3.0]",
+  "packages": {
+    "git": "1:2.43.0-1ubuntu7.4",
+    "latexmk": "1:4.83-1",
+    "poppler-utils": "24.02.0-1ubuntu9.11",
+    "python3": "3.12.3-0ubuntu2.1",
+    "python3-scipy": "1.11.4-6build1",
+    "texlive-fonts-extra": "2023.20240207-1",
+    "texlive-fonts-recommended": "2023.20240207-1",
+    "texlive-latex-base": "2023.20240207-1",
+    "texlive-latex-extra": "2023.20240207-1",
+    "texlive-latex-recommended": "2023.20240207-1",
+    "texlive-pictures": "2023.20240207-1",
+    "texlive-plain-generic": "2023.20240207-1",
+    "texlive-publishers": "2023.20240207-1",
+    "texlive-science": "2023.20240207-1"
+  },
+  "pdftex": "pdfTeX 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian)",
+  "pdfinfo": "Title:           GhostEffect: Budgeted Exactly-Once Recovery of GUI-Only Effects for Mobile Agents\nSubject:         \nCreator:         LaTeX with acmart 2024/02/04 v2.03 Typesetting articles for the Association for Computing Machinery and hyperref 2024-01-20 v7.01h Hypertext links for LaTeX\nProducer:        pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) kpathsea version 6.3.5\nCreationDate:    Tue Nov 10 00:13:40 2026 +07\nModDate:         Tue Nov 10 00:13:40 2026 +07\nCustom Metadata: yes\nMetadata Stream: yes\nTagged:          no\nUserProperties:  no\nSuspects:        no\nForm:            none\nJavaScript:      no\nPages:           20\nEncrypted:       no\nPage size:       612 x 792 pts (letter)\nPage rot:        0\nFile size:       851013 bytes\nOptimized:       no\nPDF version:     1.5\n"
+}

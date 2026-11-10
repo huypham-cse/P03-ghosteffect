@@ -1,0 +1,438 @@
+{
+  "status": "PARTIAL",
+  "task": "C-01",
+  "kind": "archived-csv-render-and-mechanical-split-verification",
+  "study_date_local": "2026-11-09",
+  "timezone": "Asia/Saigon",
+  "recorded_utc": "2026-11-09T16:53:21.226223+00:00",
+  "source_commit": "a518b5f0628d8864b43b2ac34c137d40d9bdac12",
+  "source_branch": "c/eval",
+  "source_has_uncommitted_task_changes": true,
+  "python": "3.11.18 (main, Oct 26 2026, 14:08:50) [MSC v.1944 64 bit (AMD64)]",
+  "platform": "Windows AMD64",
+  "full_suite": {
+    "status": "BLOCKED",
+    "attempted_command": "python artifact/run_all.py --output-dir tmp/full-suite-attempt --jobs 4",
+    "exit_code": 2,
+    "reason": "Native Windows; WSL is not installed; runner requires POSIX SIGKILL. No simulation or ledger benchmark was rerun."
+  },
+  "pdf_build": {
+    "status": "NOT_RUN",
+    "reason": "No TeX Live/pdflatex/BibTeX installed."
+  },
+  "render": {
+    "command": "python artifact/scripts/render.py --notes-output others/notes.md",
+    "exit_code": 0,
+    "source": "existing archived CSV files; not fresh experimental results"
+  },
+  "comparison": {
+    "preserved_macros": 972,
+    "byte_identical_tables": 19,
+    "committed_macro_discrepancies": {
+      "ClassSrcGtwoAsk": {
+        "committed": "31.0",
+        "current_csv_render": "30.4"
+      },
+      "ClassSrcLocalAsk": {
+        "committed": "6.0",
+        "current_csv_render": "6.5"
+      },
+      "ClassSrcNonGtwoAsk": {
+        "committed": "64.3",
+        "current_csv_render": "63.9"
+      },
+      "ClassSrcVlmAsk": {
+        "committed": "99.0",
+        "current_csv_render": "98.8"
+      },
+      "LedgerCand": {
+        "committed": "92",
+        "current_csv_render": "91"
+      },
+      "LedgerFullPfifty": {
+        "committed": "4.0",
+        "current_csv_render": "--"
+      },
+      "LedgerFullPninetyfive": {
+        "committed": "4.2",
+        "current_csv_render": "--"
+      },
+      "LedgerPfifty": {
+        "committed": "0.04",
+        "current_csv_render": "1.70"
+      },
+      "LedgerPninetyfive": {
+        "committed": "0.09",
+        "current_csv_render": "4.05"
+      },
+      "LedgerTaps": {
+        "committed": "228{,}793",
+        "current_csv_render": "3{,}264"
+      },
+      "NcalASrcAsk": {
+        "committed": "100.0",
+        "current_csv_render": "99.3"
+      },
+      "NcalCSrcAsk": {
+        "committed": "62.1",
+        "current_csv_render": "61.9"
+      },
+      "NcalDSrcAsk": {
+        "committed": "60.0",
+        "current_csv_render": "59.9"
+      },
+      "NcalESrcAsk": {
+        "committed": "47.4",
+        "current_csv_render": "47.0"
+      },
+      "NcalESrcPv": {
+        "committed": "0.00",
+        "current_csv_render": "0.01"
+      },
+      "NcalFSrcAsk": {
+        "committed": "27.2",
+        "current_csv_render": "27.1"
+      },
+      "NcalGSrcAsk": {
+        "committed": "23.8",
+        "current_csv_render": "23.7"
+      },
+      "NcalGSrcPv": {
+        "committed": "0.05",
+        "current_csv_render": "0.04"
+      },
+      "NsizeKeyHi": {
+        "committed": null,
+        "current_csv_render": "5.0"
+      },
+      "NsizeKeyJointTwo": {
+        "committed": null,
+        "current_csv_render": "4.6"
+      },
+      "NsizeKeyLo": {
+        "committed": null,
+        "current_csv_render": "4.3"
+      },
+      "NsizeLagFull": {
+        "committed": null,
+        "current_csv_render": "2{,}322"
+      },
+      "NsizeLagFullKey": {
+        "committed": null,
+        "current_csv_render": "2{,}668"
+      },
+      "NsizeProdTwo": {
+        "committed": "221",
+        "current_csv_render": "193"
+      },
+      "PopCmASrcAsk": {
+        "committed": "49.4",
+        "current_csv_render": "49.1"
+      },
+      "PopCmBSrc": {
+        "committed": "0.01",
+        "current_csv_render": "0.00"
+      },
+      "PopCmBSrcAsk": {
+        "committed": "49.8",
+        "current_csv_render": "49.4"
+      },
+      "PopCmBSrcHi": {
+        "committed": "0.07",
+        "current_csv_render": "0.04"
+      },
+      "PopCmCSrcAsk": {
+        "committed": "50.5",
+        "current_csv_render": "50.2"
+      },
+      "PopIwFSrcAsk": {
+        "committed": "55.6",
+        "current_csv_render": "55.0"
+      },
+      "PopIwPSrc": {
+        "committed": "0.13",
+        "current_csv_render": "0.16"
+      },
+      "PopIwPSrcAsk": {
+        "committed": "47.9",
+        "current_csv_render": "48.0"
+      },
+      "PopIwPSrcHi": {
+        "committed": "0.24",
+        "current_csv_render": "0.27"
+      },
+      "RealBlindLagLo": {
+        "committed": "4.5",
+        "current_csv_render": "4.6"
+      },
+      "RealLagFsMed": {
+        "committed": "11.9",
+        "current_csv_render": "12.0"
+      },
+      "RsimElemRulesDup": {
+        "committed": "0.42",
+        "current_csv_render": "0.43"
+      },
+      "RsimElemRulesLoss": {
+        "committed": "0.07",
+        "current_csv_render": "0.08"
+      },
+      "RsimKnineAppDup": {
+        "committed": "21.07",
+        "current_csv_render": "21.08"
+      },
+      "RsimKnineGtwoDup": {
+        "committed": "4.47",
+        "current_csv_render": "4.48"
+      },
+      "RsimKnineJointDup": {
+        "committed": "4.12",
+        "current_csv_render": "4.13"
+      },
+      "RsimKsentRulesLoss": {
+        "committed": "0.07",
+        "current_csv_render": "0.08"
+      },
+      "RsimMixJointDup": {
+        "committed": "2.92",
+        "current_csv_render": "2.93"
+      },
+      "RsimPassJointDup": {
+        "committed": "6.97",
+        "current_csv_render": "6.98"
+      },
+      "RsimPoolJointDup": {
+        "committed": "2.92",
+        "current_csv_render": "2.93"
+      },
+      "RsimTailCalJointDup": {
+        "committed": "4.62",
+        "current_csv_render": "4.63"
+      },
+      "RsimTailCalSrcLoss": {
+        "committed": "2.27",
+        "current_csv_render": "2.28"
+      },
+      "RsimUnkSrcErr": {
+        "committed": "5.12",
+        "current_csv_render": "5.13"
+      },
+      "RuleMinPvAsk": {
+        "committed": "24.1",
+        "current_csv_render": "24.2"
+      },
+      "ShareSrcNonce": {
+        "committed": "73",
+        "current_csv_render": "72"
+      },
+      "ShareSrcVlm": {
+        "committed": "17",
+        "current_csv_render": "19"
+      },
+      "SimAtomixDurDup": {
+        "committed": "5.3",
+        "current_csv_render": "5.4"
+      },
+      "SimAtomixDurLoss": {
+        "committed": "9.9",
+        "current_csv_render": "10.0"
+      },
+      "SimGtwoDup": {
+        "committed": "2.0",
+        "current_csv_render": "2.1"
+      },
+      "SimNoHopDup": {
+        "committed": "1.6",
+        "current_csv_render": "1.7"
+      },
+      "SimRulesDup": {
+        "committed": "0.97",
+        "current_csv_render": "0.98"
+      },
+      "SimSrcAsk": {
+        "committed": "47.4",
+        "current_csv_render": "47.0"
+      },
+      "SimSrcLoss": {
+        "committed": "1.6",
+        "current_csv_render": "1.5"
+      },
+      "SimSrcPv": {
+        "committed": "0.00",
+        "current_csv_render": "0.01"
+      },
+      "SimSrcPvHi": {
+        "committed": "0.04",
+        "current_csv_render": "0.07"
+      }
+    }
+  },
+  "source_input_hashes": {
+    "artifact/results/bayes_floor.csv": "a3edef8e792cf0dd6f1c673a7aa0982e54503f184649374a4c2d4293966c8ad1",
+    "artifact/results/calibration.csv": "07d15aae82ee4e24ec5803e9781b6920a34b45aa718dddc15121a2e4c19e1262",
+    "artifact/results/correlation.csv": "6dd62d52da3959130846b20fd1b253896b29170792bd715a23a6b8aed8ad17ec",
+    "artifact/results/cost_policy.csv": "776e15b483d6c58156f26c56b01e94a70381db50df51ca2877f027090e69de98",
+    "artifact/results/impossibility.csv": "79cb94dab11860014c5d764f4f52e1a9ff732e20bcea095b8b0006800bb9e8cd",
+    "artifact/results/lag_wait.csv": "9e619fd80c66593c1a89bc297d3127be6586a9410f1079f865309a9c21b5ec6c",
+    "artifact/results/late_commit.csv": "0fd6b972591c172122cf94ad30864c3d1026a8d8fdd6785b291d38910606be1c",
+    "artifact/results/ledger_bench.csv": "f5e5568e35e8838e806a6112208c188b51d6e22373e54093a76d6f18f9cff5ac",
+    "artifact/results/markov_planner.csv": "a5ad737a461808fad9df5118fbe52a958f590e46aabe55840258676f69651ace",
+    "artifact/results/nonce.csv": "c930077be036901d6c556dc1def1c2442b7f41577676ba63d34dc76846e182fc",
+    "artifact/results/nonce_before.csv": "8a3cb67800199bad366bcd3bc44c1e1e5cd29e2adb5929b0e2bbdde9e1c19a5e",
+    "artifact/results/planner_alpha_sweep.csv": "644a8b5e5506641a9298017415ba4c66214d81f804d655dbe8b3a23826302513",
+    "artifact/results/planner_class.csv": "06bef5dfee2ced406e619d02a8a05d28db91e349dbc0552be63c755ae9ab7e05",
+    "artifact/results/planner_decomp.csv": "32e9b615940608e90490f5ac8b81b771137b0ee18d99d811d56f404ed6440fc3",
+    "artifact/results/planner_ncal.csv": "82b59b2cee571ff80ae3fe125552a78c16f5eb2d8c252a33ff59373dc6b5b675",
+    "artifact/results/planner_real.csv": "f2e9a94f62a728c6262fca6268002b58e4463494a485bd3721e5697bfd862d74",
+    "artifact/results/planner_real4_boot10k.csv": "142bbad0ebe34b35a8b803f8c7599cd7d629716d3d9e451a3eec76a66e106837",
+    "artifact/results/planner_real4_down15.csv": "b41ac295c9e1e7bba42e222ab76a7da121c83151739ec636a730973a6533a02c",
+    "artifact/results/planner_real4_down5.csv": "554561cb8fc17c04c1ceefcb884f71013b6378e03141330735bc2490f4074be8",
+    "artifact/results/planner_real4_lag10k.csv": "3486b06880ccb43b45c0656b3810a505c8a5757613501ea1e3b08a6a1fbe0699",
+    "artifact/results/planner_real4_lag20k.csv": "f9804007a293e3b92b86677ca6fd438ced7088744d75e6c895fb2afaae1fc278",
+    "artifact/results/planner_real4_lag2k.csv": "f4ef0da79a2de2751aeead891c6b473264ec4eca817816e8c37ee564bf741daa",
+    "artifact/results/planner_real4_lag5k.csv": "cb367096d4beb0f7643da6172403530dce009377b624e15c1e8090b7681cef36",
+    "artifact/results/planner_real4_netlab.csv": "8a5ab80ce70999ca4aee16b3afe4ce2259ddab9477f68d118e093d2b0f6c898c",
+    "artifact/results/planner_real4_netlabkey.csv": "8cace1b127fd3c7678448959fea3ca7abad51ab4ee771a5fc16f1a21623f66b1",
+    "artifact/results/planner_real4_t0down15.csv": "e85b0fc3a7f653fcf25ab1538ca9c1d774a25b5b0686433915e81f4e95b255db",
+    "artifact/results/planner_real4_t0down5.csv": "93afacf9b6b7eea1381f10da39921d1f9843b99786e73aa72b18fbda668f0c30",
+    "artifact/results/planner_real4_tail5.csv": "a57f5bdf5c75b58e9b64d72de002007eeee94ec8d1ca38e9af8699547ff01f4f",
+    "artifact/results/planner_real4_tail5tied.csv": "5ba074bbbd3be4257868dc9b4f7c3933dbe54524d7f03df2b34cc5a85867da5d",
+    "artifact/results/planner_real4_vet.csv": "a92bca2be077be3b89a858d0dae3695ff1f64401aa19f343f659909d7234f0f6",
+    "artifact/results/planner_real4_vetk9.csv": "f3382a206b8f2e04ed71e39bf3fef3227ea4e56d7d525076bb3e186b64f0eb84",
+    "artifact/results/planner_real4_vetk9sent.csv": "c7bed795ec1608c2b42568209211bbe9dfe46145d2a496382691d162037270b0",
+    "artifact/results/planner_rules_sweep.csv": "bb000507f31b6a06daa1457c74f36560c949fad85e77904ebf2de1b4c6863b12",
+    "artifact/results/planner_sensitivity.csv": "51b3d7532ab2bd1f1fa87aac3a5c7184d74567c97158e39ea2206446b2440f4f",
+    "artifact/results/planner_share.csv": "2cbd3a6ff1c02e0c0de97a079e97bde3b1ee6ad33605d828e2774958cbc78f93",
+    "artifact/results/planner_sim.csv": "8548109443f48610139d14b838c52bf88a6774d7a1aa35eb69d0e621f8a6ed71",
+    "artifact/results/planner_stress.part0.csv": "f45c6ad46aa59fb9c6823182e742c902f969d4208bb01270759b8636a7764591",
+    "artifact/results/planner_stress.part1.csv": "103ef49af9ccfb18b9baaf263452c0fb56caeaa2f4145c1c3e60cd6897d5087b",
+    "artifact/results/planner_stress.part2.csv": "8ff426aaddef12c723be694eb2d0063e1f01623b294dd78ee513a7adae6a9dff",
+    "artifact/results/planner_stress.part3.csv": "4e37ded63d16d82a72d6397ea51adb611911f7e56e797e8d33b46137a72c476a",
+    "artifact/results/planner_stress.part4.csv": "806b306cd905cda965933f1b9e532fd482e5099d280e0287328a58aede77d822",
+    "artifact/results/planner_stress.part5.csv": "a3c4ea7091ab192e8bdf8341d4581696251d273872e839a1592caecd54ff433f",
+    "artifact/results/planner_user.csv": "2b35b521f2cd3aa84c7a7bbdbba58d9e989513c475f1fcd1a3f4ef0b95a0f2de",
+    "artifact/results/prism_instance_dp.csv": "6859de83e5737bcfbf9de76097541a0fa12e49737b255eb4977c1a67d614a879",
+    "artifact/results/real/campaign2/c1_rescored_cofailures.csv": "7a815e2beb29f3b50da70a2f3ca7a378236aa1ce673f7d27d9ff430cbe3d5d32",
+    "artifact/results/real/campaign2/c2_caldav_trials.csv": "cae42b1fa76c597ecfa00147791cfcea73e3944acbc66e4b0a1f8e4dc4a0639d",
+    "artifact/results/real/campaign2/c2_element_cofailure.csv": "38faeefe30428b05eb87906fd0051be26e1369d90a47cdae33b51e61b8ab7511",
+    "artifact/results/real/campaign2/c2_element_families.csv": "c17b8c1dabc06293f01f2f7d6cef094e64f881a195028a9190ef9506ef102157",
+    "artifact/results/real/campaign2/c2_element_first_visible.csv": "8fdf7caf1add057a69726b87267dc8b78068e03581ff22b4df12bebaec03e903",
+    "artifact/results/real/campaign2/c2_element_lag.csv": "45450cb4903f4e96073316ade65bd56f6d41d8eaf73997bd750276989f6d231b",
+    "artifact/results/real/campaign2/c2_element_outcomes.csv": "5bc2762c10202f7a1ed523137a55bc015cede69959f4e900a8f6297ee1740eb7",
+    "artifact/results/real/campaign2/c2_element_per_trial_families.csv": "55ec4fff5b51e05e5b25606553c891d49b9ef00ee6807e0b381ecfe943428a05",
+    "artifact/results/real/campaign2/c2_element_poll_verdicts.csv": "612a8c4f7586bc61ae865933fa5b5bf2cd535ba020f1d6a0064a592e9908764f",
+    "artifact/results/real/campaign2/c2_element_timeout_trials.csv": "97a8899f57ed3669b59d32a2a6c2429833acf9649d3d76ddbe09c1ec137a2ed2",
+    "artifact/results/real/campaign2/c2_element_trials.csv": "9a83e0ecfbd62fcdd1e24bb6c7b65dfbd0bddd0d8544eec6f7b66456e667f2c0",
+    "artifact/results/real/campaign2/c2_k9_families.csv": "e92514263d27ac39538dbe3e47336b06379d7c3da59a9ef1936d27955f6d3e05",
+    "artifact/results/real/campaign2/c2_k9_nosent_trials.csv": "1804a462ede4f575ac6f504993de2f2596690c82247ba2656badb2a7d105bb1b",
+    "artifact/results/real/campaign2/c2_k9_sent_trials.csv": "f0970515131b53f1b3d082605a25e5a2119b75eda6e392e321be583456594dfd",
+    "artifact/results/real/campaign2/c2_k9_summary.csv": "ea8ab89a45a59f9f58bb05c57d562bf9ad6bdd7df615e8df10e5973da9f06d8f",
+    "artifact/results/real/campaign2/c2_synapse_txn.csv": "a0b91f183ad82f1ef222d3ed345061a84e9ea8a1a0a82e986aa1e75236fdc1b8",
+    "artifact/results/real/campaign2/pilot_caldav.csv": "a5002ded83085cb9a6d6a3fd058f4dc77ba84cf98931c3b3762b9986a473db77",
+    "artifact/results/real/campaign2/pilot_element.csv": "80c8efeb76154b937fb7a801f32453d7d824e5c9352f1bdb4f713c1095db4141",
+    "artifact/results/real/campaign2/pilot_k9.csv": "00cae0c177214c8ef60151aa5955f6ef2034470a101ad443f0a60559683fa96e",
+    "artifact/results/real/campaign2/pilot_k9_sent.csv": "ef1ef01e60341a6f8c2f3d5d38007928568857486433b0e195b1d857eb18ee92",
+    "artifact/results/real/e4_element_partA_trials.csv": "fb61b8c0d7b80ece5bab5d3611b9d246b9fc958278b2e2a8d7e6b1962184a429",
+    "artifact/results/real/e4_element_partB_trials.csv": "5250d32aecd5c574ebf0577876128ce8e344188d44ae7acba021a4fc3259a9b4",
+    "artifact/results/real/e4_element_partC_trials.csv": "2c5c06a379a79529f11b2aa471d61c20cf0511ea1dfb049f771b8d606170fb88",
+    "artifact/results/real/e4_element_partD_trials.csv": "0f23c94d019fe9f683877e8a75615b9eaf3c4479d0ba34000dfba2a69b9cc0c1",
+    "artifact/results/real/e4_element_pilot_trials.csv": "96d4c7b600ce7a4f1fd98a38409346b0665f1da4d20b55dab8ad2388b1a1fa95",
+    "artifact/results/real/e4_eventual_copies.csv": "bc726bc88fefc6493d8a2c0d335179916cc1c4178e2e730d7ad142be07d4b081",
+    "artifact/results/real/e4_k9_after_sync.csv": "009138a86790eaeaeca9ad66adf7c8408d6b7950841c0ebc3b82dd0b1a626aac",
+    "artifact/results/real/e4_k9_part2_trials.csv": "2219e83aaf61b4fdeea1b6c9cc4537f6eb38fd891b9bf39706e6bab4adf7237c",
+    "artifact/results/real/e4_k9_trials.csv": "268dadb9bd9a97032645f005d025b7d75de7570852e78c40383ea527149cc51d",
+    "artifact/results/real/e4_kill_methods.csv": "12eb5a560d3f8376f67881edf4602fd05ea0e892b24fd9c649b0f45384ff4e8b",
+    "artifact/results/real/e4_outcomes.csv": "023abfb118b051dd7e0bee39f224647a407369890ac0af08057cf1bd0fa1149f",
+    "artifact/results/real/e4_visibility_lag.csv": "d9631bfe340a6d5d1e187adcd83a6373f259f7d42406fba638b6e4e2246f42da",
+    "artifact/results/real/e5_evidence_families.csv": "90507d4ad41bac9b358be486d6978054ff6e76f38e69eb70096e533b1b03c402",
+    "artifact/results/real/e5_per_trial_family_errors.csv": "33e31507c21acb5fe94adc1ec62c68f185a040fb752ee8e9b3c0b892111d2023",
+    "artifact/results/real/ledger_powerloss.csv": "06795176b963d8922cb36525942418006ac108cd79089491ca60f240070c4295",
+    "artifact/results/real/ledger_powerloss_summary.csv": "01d2789628c1a73cdd2a418020a45a7648b2a70a22403c75a34c2deabc817124",
+    "artifact/results/real/params.csv": "6dd49c747e84f099d417497bc8b214dd75c9e9c2f4de36aef3fb2b614af6d33f",
+    "artifact/results/saga_alloc.csv": "e05d56316ba1f4482b215d2d19f26c4065189ea209bebf95827e9b1a1711eb9c",
+    "artifact/results/saga_mixed.csv": "af0103472c8c9fcb92e70cf820aa9f9ed0eedd01ed127c2b99c83c122caa5c97",
+    "artifact/results/sample_size.csv": "47c66e37427349fc5bbb3572c81293466f22a6ab540c9942a967c48e53838b46",
+    "artifact/results/sprt_asym.csv": "b711f00f148f8e31b200dcb886d90ab1264bc7f40dd5292e4f316921a1b1cecd",
+    "artifact/results/sprt_validation.csv": "699f8b06eb301413da9678b8855e84b4acdc701824828b1fc6cbc0e9c19f6636"
+  },
+  "renderer_hashes": {
+    "artifact/scripts/render.py": "d6183e1ea8511baf0b975e7e152fa8e5bc2c8b5d7a019e9edaae09a127159eb1",
+    "artifact/scripts/render_guarantee.py": "e48f6b24f234bd388561fa84d42bda5e901f489a7946b164739b329e731ee60a",
+    "artifact/scripts/render_real.py": "6eefbb7a2d6b77ac3b05b1aabbaae15027b701e5cc4259e2e2eed9c1c98418c0",
+    "artifact/scripts/render_realsim.py": "d99c31914c6b6c4fa65297ac0353f58b93c04b25ddc2f0a73c46440c17f3c888"
+  },
+  "output_hashes": {
+    "manuscript/generated/fig_floor.tex": "ebd0170810941748ec4780271aee153a1568f408c273745fa588734488fa188d",
+    "manuscript/generated/fig_pareto.tex": "1639ef0b03182e5aab84e9a4550a5df6aaa184baa0b18e9ec5d3792662249bc9",
+    "manuscript/generated/fig_sprt.tex": "f9816f06d2bd994f593edb1990244733e12c2a5f55e683e0fad9ecae99f1ba26",
+    "manuscript/generated/macros.tex": "778e6156fe12f2b739674cebafbd1a93ab52faf4fa127654e74a076764facb76",
+    "manuscript/generated/macros_guarantee.tex": "09312b8c5042b9a601e0b3a6a689f753cce192f9b983db9c833c5966ef14c956",
+    "manuscript/generated/macros_real.tex": "908021c1175937b6d4ce8bceda7de605be0b558ff8a1711fe97c062fa63657d1",
+    "manuscript/generated/real_section.tex": "3c122f47952adc8e093d6aeaf068e49a966bc351c3f750671b29934e6c779b90",
+    "manuscript/generated/tab_calib.tex": "959337c25f16f7cdf0490f2fe2f6f22d366d92ef022eb69621b45ccfcf46db35",
+    "manuscript/generated/tab_corr.tex": "e6b85254fe2cae893af8af07f6354d852691c8138beec2dc835277c014aa374b",
+    "manuscript/generated/tab_lag.tex": "95dcf8a6e7b06e050b91e09a7bc94c0d417e3f3e0b8d673194e152beaffb5fc2",
+    "manuscript/generated/tab_nonce.tex": "4b71aa6bc0fc2d61174f58a923bf79a48a9e22668947c984b0c961d78861489f",
+    "manuscript/generated/tab_nsize.tex": "cf87d2eaa05b7bb89a60ef3d21c14e63737ec1a854a540936279c886509a5b9f",
+    "manuscript/generated/tab_planner.tex": "d521fdd8c40edc9d37b792a0e01420ab19b235672dc4a762616238a5b0861091",
+    "manuscript/generated/tab_pop.tex": "71277b15ab6489f48835f1793242ec2bb3aecff45ae6e92a88e82ff44ae72953",
+    "manuscript/generated/tab_real.tex": "c934cb0bdccb134634732708a4ba3661d253744769fa51d62f06f5f7f12ec329",
+    "manuscript/generated/tab_real4.tex": "b40b81dbb358abc7437da0f1a4dcedd706a98cc0c80fcf8b571c4998e39a7094",
+    "manuscript/generated/tab_realcone.tex": "d5ad6fc3108c40dba4a2842c068beba0c9aa1343b9bb3280b242a1ec6335f4fd",
+    "manuscript/generated/tab_realsim.tex": "7245f3297f21f89ee2bfa741eac478f792cff520b414ffe3deb15d1322025b4d",
+    "manuscript/generated/tab_saga.tex": "a304bdba08dfbc9423dcc84941406796f281ea253a15d2b52c6f19367288b0c8",
+    "manuscript/generated/tab_sens.tex": "241fde81432c1580f8dd54d67a3090643e4c10e46e61b2f07861fb68030e3b74",
+    "manuscript/generated/tab_sprt.tex": "973fa467565a543ab36e580f9e544b3dcc9d73a026147d7927192ea63879d42b",
+    "manuscript/generated/tab_stress.tex": "d40ba913bb4acad4d95036f26fd4f546e8c81498fe8738f4b92ec7cf86936a6b"
+  },
+  "notes_sha256": "b2ef3e6cdef3742b97287a71b1cf8ebadb14c445f2eedd25a6239a27a146f128",
+  "c_body_readability_baseline": {
+    "files": [
+      "00-abstract.tex",
+      "01-introduction.tex",
+      "07-evaluation.tex",
+      "07-realsim.tex",
+      "08-discussion.tex",
+      "09-related-work.tex",
+      "10-conclusion.tex"
+    ],
+    "totals": {
+      "para": 18,
+      "emph": 34,
+      "long_sentences": 17,
+      "semicolon_paragraphs": 16
+    },
+    "limits": {
+      "para": 5,
+      "emph": 10,
+      "long_sentences": 0,
+      "semicolon_paragraphs": 0
+    },
+    "status": "FAIL; editorial tasks C-06/C-08/C-09/C-11 remain"
+  },
+  "validation": {
+    "artifact_tests": {
+      "run": 41,
+      "passed": 40,
+      "skipped": 1,
+      "skip_reason": "POSIX-only runner failure-path test; independent SciPy reference passed"
+    },
+    "testbed_tests": {
+      "run": 70,
+      "passed": 66,
+      "skipped": 4,
+      "skip_reason": "Android/integration environment absent"
+    },
+    "scrub": {
+      "status": "PASS",
+      "targets": [
+        "manuscript/",
+        "artifact/scripts/",
+        "artifact/tests/"
+      ],
+      "limitation": "text/filesystem scan; PDF metadata and archives require separate inspection"
+    },
+    "git_diff_check": "PASS"
+  },
+  "acceptance": "Not a full-suite PASS or final acceptance manifest. Fresh clean-main Linux run, result promotion, full PDF build and team approval remain required."
+}

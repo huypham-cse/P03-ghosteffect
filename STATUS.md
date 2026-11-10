@@ -1,5 +1,48 @@
 # STATUS — P03 GhostEffect (MobiSys 2027, rank 3)
 
+## 2026-11-10: WSL/LaTeX ready; C-01 reproduction and build verified
+
+Ubuntu 24.04.5 on WSL2, Python 3.12.3, TeX Live 2023/BibTeX and Poppler
+are installed. The full pipeline from a separate clean `main` checkout at
+`a518b5f` completed all 25 jobs successfully. Manifest and package versions:
+`artifact/runs/2026-11-10/`. The 48 C-owned aggregate CSVs were promoted with
+metadata; 47 match the archived files byte for byte. The sole changed CSV,
+`planner_sim.csv`, differs only in three p-values at floating-point precision.
+Raw measurements and B's host benchmark were not changed.
+
+The split renderer preserves all 972 macro values and 19 table/figure
+fragments on identical inputs. `others/notes.md` is regenerated. A fresh
+`manuscript/main.pdf` builds successfully (20 pages, maximum overfull 7.893 pt,
+no unresolved references/citations or `??`). **The conclusion is on page 13**;
+the final body limit is not met yet and needs the later editorial tasks.
+All 41 artifact tests pass on Linux; 67 testbed tests pass and 3 integration
+tests are skipped. Scrub passes on the inspected manuscript/code/receipts.
+
+C-01 implementation and reproduction are ready for review, with two B-owned
+`params.csv` provenance strings still awaiting B's update/review (numeric
+parameters match). C-02 remains a proposal, and no branch changes have been
+committed, submitted as a PR or merged. See `team/c-log.md` for details.
+The dated sections below are historical and do not supersede this update.
+
+## 2026-11-09: Part C preparation (unmerged branch `c/eval`)
+
+C-01 mechanical renderer/text split is prepared and verified on archived CSVs:
+972 macro names/values preserved; 19 table/figure fragments byte-identical
+before/after the split. Generated TeX and `others/notes.md` are regenerated
+from existing CSVs, not fresh experimental results. There are 59 macro
+discrepancies against the previously committed generated TeX, documented in
+`artifact/runs/2026-11-09/MANIFEST.json` (PARTIAL, not full-suite acceptance).
+C-02 is a proposal awaiting team approval. C-10 tools and tests are implemented;
+they have not been merged to main. Details and next steps: `team/c-log.md`.
+
+WSL 3.0.3 has now been installed and VirtualMachinePlatform enabled at the
+user's request. Windows requires a restart; no Ubuntu distribution or TeX
+toolchain is installed yet. Resume scripts are prepared in ignored
+`tmp/wsl-setup/`. Full POSIX reproduction and a fresh PDF build remain blocked;
+the PDF/build claims below describe the older
+draft, not this unmerged change. No raw measurement CSV or simulation CSV was
+changed. Editorial/readability requirements and the remaining C tasks are open.
+
 **Last updated 2026-11-07: round-3 revision done** (round-3 reviews 3/3/3; response in `reviews/round3/response.md`). Emulator campaign 2 integrated; measured-parameter
 simulation re-run; title changed to "GhostEffect: Budgeted Exactly-Once Recovery of GUI-Only Effects for Mobile Agents".
 Deadlines: abstract Nov 27, paper Dec 4, 2026.

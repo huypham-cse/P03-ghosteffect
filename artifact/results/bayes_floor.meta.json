@@ -1,0 +1,26 @@
+{
+  "command": [
+    "/usr/bin/python3",
+    "-u",
+    "artifact/scripts/sim_impossibility.py"
+  ],
+  "git_commit": "a518b5f0628d8864b43b2ac34c137d40d9bdac12",
+  "seed": {
+    "constants": {},
+    "random_seed_expressions": [
+      "880 + ti",
+      "4242 + int(pi * 100) * 7 + pols.index(p)"
+    ],
+    "note": "No seed changed; expressions and script hash record derived/calibration seeds."
+  },
+  "python_version": "3.12.3 (main, Jul 15 2026, 23:46:41) [GCC 13.3.0]",
+  "date": "2026-11-09T17:12:34.606551+00:00",
+  "host": {
+    "os": "Linux",
+    "architecture": "x86_64",
+    "kernel": "6.18.54.1-microsoft-standard-WSL2"
+  },
+  "csv_sha256": "a3edef8e792cf0dd6f1c673a7aa0982e54503f184649374a4c2d4293966c8ad1",
+  "script_sha256": "29b20d05e55105f4730ffcce3776435f548381d4f6e81a60f2bdfa672e7442e9",
+  "manifest": "artifact/runs/2026-11-10/MANIFEST.json"
+}

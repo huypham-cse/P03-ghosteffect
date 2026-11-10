@@ -1,0 +1,26 @@
+{
+  "command": [
+    "/usr/bin/python3",
+    "-u",
+    "artifact/scripts/sim_saga.py"
+  ],
+  "git_commit": "a518b5f0628d8864b43b2ac34c137d40d9bdac12",
+  "seed": {
+    "constants": {},
+    "random_seed_expressions": [
+      "500 + k",
+      "1300 + k"
+    ],
+    "note": "No seed changed; expressions and script hash record derived/calibration seeds."
+  },
+  "python_version": "3.12.3 (main, Jul 15 2026, 23:46:41) [GCC 13.3.0]",
+  "date": "2026-11-09T17:12:34.606551+00:00",
+  "host": {
+    "os": "Linux",
+    "architecture": "x86_64",
+    "kernel": "6.18.54.1-microsoft-standard-WSL2"
+  },
+  "csv_sha256": "af0103472c8c9fcb92e70cf820aa9f9ed0eedd01ed127c2b99c83c122caa5c97",
+  "script_sha256": "0a5661b271694ca92cff9881839460057febff44bf85a245686e8524a265aa6e",
+  "manifest": "artifact/runs/2026-11-10/MANIFEST.json"
+}
