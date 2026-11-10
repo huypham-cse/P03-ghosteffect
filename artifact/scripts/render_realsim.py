@@ -93,6 +93,51 @@ for tag, tn in (('main', ''), ('five', 'Five'), ('pooled', 'Pool'), ('mixlab', '
             M(pre + 'Secs', f"{float(r['secs']):.0f}")
 M('RsimTail', f1(100 * float([x for x in rd('real/params.csv') if x['name'] == 'elem_tail_ub'][0]['value'])))
 
+# C-03: retain the adverse results when the two policies see identical inputs.
+_matched_lines = []
+for _tag, _prefix, _app_label in (
+        ('match2k', 'RsimMatchElemTwo', 'Element'),
+        ('match5k', 'RsimMatchElemFive', 'Element'),
+        ('matchk9', 'RsimMatchKnine', 'K-9'),
+        ('matchk9sent', 'RsimMatchKsent', 'K-9 + Sent')):
+    _matched = rd('planner_real4_' + _tag + '.csv')
+    if len(_matched) != 2 or {r['policy'] for r in _matched} != {'rules-vetted', 'ghost-joint'}:
+        raise ValueError('missing or duplicate matched policies: ' + _tag)
+    _budgets = {(r['ncal'], r['nlag'], r['keyed'], r['n']) for r in _matched}
+    if len(_budgets) != 1 or any(r['tag'] != _tag for r in _matched):
+        raise ValueError('matched input metadata disagree: ' + _tag)
+    _ncal, _nlag, _, _n = next(iter(_budgets))
+    _inttex = lambda x: f'{int(x):,}'.replace(',', '{,}')
+    M(_prefix + 'LabelN', _inttex(_ncal))
+    M(_prefix + 'LagN', _inttex(_nlag))
+    M(_prefix + 'WorkflowN', _inttex(_n))
+    for _r in _matched:
+        _policy_name = 'Vetted' if _r['policy'] == 'rules-vetted' else 'Joint'
+        _pv = 'N/A' if int(_r['n1']) == 0 else f2(_r['cdup'])
+        _hi = 'N/A' if int(_r['n1']) == 0 else f2(_r['cdup_hi'])
+        M(_prefix + _policy_name + 'Pv', _pv)
+        M(_prefix + _policy_name + 'PvHi', _hi)
+        M(_prefix + _policy_name + 'Ask', f1(_r['ask']))
+        _matched_lines.append(' & '.join([
+            _app_label, 'vetted rules' if _policy_name == 'Vetted' else 'joint',
+            _inttex(_ncal), _inttex(_nlag), _pv, _hi, f1(_r['ask'])]) + r' \\')
+W('tab_matched.tex', r'''\begin{table*}[t]
+\centering
+\caption{Matched-input, measured-parameter simulation. Joint and vetted rules use identical calibration records and lag tables for each seed.
+Labels are per outcome, and per fault class for keyed Element; lags are per class for Element and pooled for K-9.
+Zero observed errors do not certify vetted rules. $P_{\mathrm v}$, CP upper bound and ask are percentages.}
+\label{tab:matched}
+\small
+\begin{tabular}{@{}llrrrrr@{}}
+\toprule
+Profile & Policy & Labels & Lags & $P_{\mathrm v}$ & CP hi & Ask \\
+\midrule
+''' + '\n'.join(_matched_lines) + r'''
+\bottomrule
+\end{tabular}
+\end{table*}
+''')
+
 
 # REAL4 stays separate: this renders the review evidence without rewriting the
 # draft to include it. These remain measured-parameter simulations, not new

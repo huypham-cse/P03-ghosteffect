@@ -1,5 +1,6 @@
 """C-owned checks for the shared submission tools (no Android required)."""
 import importlib.util
+import csv
 import json
 import os
 from pathlib import Path
@@ -84,6 +85,31 @@ class MatchedInputTests(unittest.TestCase):
             planner.vetting(random.Random(1), {}, scenario, 'rules-vetted', labels={})
         with self.assertRaises(ValueError):
             planner.vetting(random.Random(1), {}, scenario, 'rules-vetted-small', labels={}, lagx={})
+
+    def test_renderer_rejects_unequal_budgets_and_keeps_published_output(self):
+        with tempfile.TemporaryDirectory() as temp:
+            work = Path(temp)
+            inputs, output = work / 'results', work / 'generated'
+            shutil.copytree(ROOT / 'artifact/results', inputs)
+            source = inputs / 'planner_real4_match2k.csv'
+            with source.open(newline='') as stream:
+                reader = csv.DictReader(stream)
+                header, rows = reader.fieldnames, list(reader)
+            rows[1]['nlag'] = str(int(rows[0]['nlag']) + 1)
+            with source.open('w', newline='') as stream:
+                writer = csv.DictWriter(stream, fieldnames=header)
+                writer.writeheader()
+                writer.writerows(rows)
+            output.mkdir()
+            published = output / 'macros.tex'
+            published.write_bytes(b'previously reviewed output')
+            result = subprocess.run([sys.executable, str(ROOT / 'artifact/scripts/render.py'),
+                                     '--results-dir', str(inputs), '--output-dir', str(output)],
+                                    text=True, capture_output=True)
+            self.assertNotEqual(0, result.returncode)
+            self.assertIn('matched input metadata disagree', result.stderr)
+            self.assertEqual(b'previously reviewed output', published.read_bytes())
+            self.assertEqual([published], list(output.iterdir()))
 
 
 class ReadabilityTests(unittest.TestCase):

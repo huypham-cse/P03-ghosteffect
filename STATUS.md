@@ -24,6 +24,23 @@ parameters match). C-02 remains a proposal, and no branch changes have been
 committed, submitted as a PR or merged. See `team/c-log.md` for details.
 The dated sections below are historical and do not supersede this update.
 
+### C-03 matched-input study (2026-11-10)
+
+Four new configurations were frozen in commit `d87fb23` before collecting
+their outputs. Joint and vetted rules receive the same label records and lag
+tables; the 16 historical REAL4 tags are unchanged. On Element, with 2,000
+labels/outcome/class and 2,000 lag entries/class, joint asks 100% and vetted
+rules 2.2%; with 5,000/5,000 they ask 30.6% and 7.8%. Both have zero observed
+planner retries of committed effects. Both ask on every interrupted K-9 send,
+with and without Sent. These are fitted-law simulations, not new GUI runs.
+
+The table and prose retain the adverse comparison and distinguish unvetted
+fixed-wait rules from the stronger vetted baseline. The artifact passes 46
+tests; the PDF builds to 20 pages with the conclusion still on page 13.
+Evidence: `artifact/runs/2026-11-10/C03-MANIFEST.json`. The C-01, C-02 and
+C-10 changes have separate local commits/branches; publication still requires
+GitHub authentication. Team approval and the later editorial tasks remain open.
+
 ## 2026-11-09: Part C preparation (unmerged branch `c/eval`)
 
 C-01 mechanical renderer/text split is prepared and verified on archived CSVs:
