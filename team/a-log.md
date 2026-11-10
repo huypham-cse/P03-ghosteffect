@@ -128,3 +128,23 @@ Tổng 105 macro (24 + 12 + 16 + 18 + 7 + 24 + 2 + 2). Phần A không dùng mac
 **Trạng thái task:** A-01 đang làm (văn bản và test xong, còn bảng). A-06, A-05 chờ duyệt (#18, #17), A-09 tên chờ #9.
 
 **Tiếp theo:** khi C-01 merge: `render_guarantee.py` (bảng clock, ngân sách nhãn, cận tổng hợp), A-02, A-03, A-04.
+
+## 11/11/2026 (sáng sớm)
+
+**Đã làm:** A-09 phần giá trị, kèm số liệu cho A-01 (bảng), A-02, A-03, A-04:
+- `artifact/scripts/render_guarantee.py`: chạy độc lập (`--results-dir`, `--output-dir`), chỉ đọc CSV, chỉ ghi `macros_guarantee.tex` và `tab_cert_{clock,budget,lagapp,bound}.tex`. Dựng mọi file trong bộ nhớ trước; thiếu CSV hay dòng hay cột thì thoát 1 và không ghi gì. Có hàm `render(results_dir)` để `render.py` gọi sau C-01.
+- 105 macro đúng hợp đồng ở PR #9. Bảng:
+  - `tab_cert_clock` (A-01): mốc `r_e` so với `t_0`, 5 s và 15 s, product và joint, `P_v` (CP) và ask.
+  - `tab_cert_budget` (A-02, A-03): 2.000/20.000, 2.000/2.000 tied, 5.000/20.000, 5.000/5.000 tied, tail, tail tied; dấu † khi cận CP vượt α.
+  - `tab_cert_lagapp` (A-02, phụ lục): 10k, 20k, boot10k.
+  - `tab_cert_bound` (A-04): `q`, `ε`, cận dup và loss cho Element và thế giới mặc định.
+- Dòng bất lợi giữ nguyên: ở mốc 5.000, đuôi trễ đưa cả product (`P_v` 2,83, CP 3,19) và joint (2,01, CP 2,32) vượt ngân sách; dòng tail tied product có `P_v` 0,99 nhưng CP 1,21 nên vẫn ghi vượt ngân sách. Mốc sai `t_0` cho `P_v` từ 18,82 đến 46,42.
+- `\CertLabelMedS` và `\CertDeviceHoursFive` là `??` cho đến khi B giao `real/agent/label_cost.csv` (18/11); renderer báo trên stderr. Khi có file, renderer tự tính.
+- Chú thích bảng ghi CP là đầu trên của khoảng Clopper–Pearson hai phía 95% (đúng với `clopper_pearson` trong `ge_core.py`), không phải một phía.
+- Test mới trong `test_guarantee.py` (`RenderGuaranteeTests`): tham số khớp `planner_sim` (số lớp, K, α, β, δ); chạy hai lần giống từng byte và chỉ ghi file của A; thiếu CSV thì thoát khác 0 và giữ file cũ; giá trị khớp CSV (gồm một cận tự tính tay); `label_cost.csv` cho ra device-hours; mẫu số 0 in N/A.
+
+**Kiểm:** 105 macro; hai lượt chạy cùng SHA-256; các bảng biên dịch sạch trong một tài liệu LaTeX thử. `python -m unittest discover -s artifact/tests`: 40 test, 1 fail cũ của C, 1 skip.
+
+**Chưa làm và lý do:** chưa commit file sinh ra trong `manuscript/generated/`, vì `render.py` trên `main` thay cả thư mục khi build và sẽ xóa chúng; chưa input bảng vào `.tex`. Cả hai làm sau khi C-01 merge: C gọi `render_guarantee.render()` thay cho `exec` (YC-A9), rồi A input bảng vào §5.3, §3 và phụ lục.
+
+**Trạng thái task:** A-09 giá trị xong (chờ nối sau C-01). A-01 bảng đã sinh được. A-02, A-03, A-04: số liệu và bảng xong, còn câu chữ trong §5.3 và §4.
