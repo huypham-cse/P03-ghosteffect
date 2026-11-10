@@ -115,16 +115,17 @@ so certifying ``absent'' at $\alpha<\eta$ needs a second family). Within-view co
 \label{lem:calib}
 (i)~For a family of i.i.d.\ binary views, running the SPRT with $\tilde\epsilon_0\ge\epsilon_0$, $\tilde\epsilon_1\ge\epsilon_1$ ($\tilde\epsilon_0+\tilde\epsilon_1<1$) preserves the
 $(\alpha,\beta)$ guarantee.
-(ii)~Suppose each of the $K$ bounds an effect's decision can use (verdict levels or regions, $q_h$, and the two waits) is a one-sided $(1-\delta)$ Clopper--Pearson
+(ii)~Suppose each of the $K$ bounds that one fault class gives an effect's decision (verdict levels or regions, $q_h$, and the two waits) is a one-sided $(1-\delta)$ Clopper--Pearson
 bound~\cite{clopper1934use} from calibration effects that are i.i.d.\ draws from the population of \emph{interrupted} deployment effects \emph{of the effect's observable fault
 class} (agent death, app death seen as a pid change, connectivity loss, both), and an effect of unknown class uses the maximum over classes. Then with probability
-at least $1-K\delta$ all hold; marginally, $\PP(\text{retry}\mid X{=}1)\le\alpha_{\mathrm{test}}+\alpha_{\mathrm{lag}}+K\delta$ and $\PP(\text{declare}\mid X{=}0)\le\beta_{\mathrm{test}}+K\delta$.
+at least $1-Kn_{\mathrm{cls}}\delta$ all hold, where $n_{\mathrm{cls}}$ is the number of fault classes. Marginally, $\PP(\text{retry}\mid X{=}1)\le\alpha_{\mathrm{test}}+\alpha_{\mathrm{lag}}+Kn_{\mathrm{cls}}\delta$ and $\PP(\text{declare}\mid X{=}0)\le\beta_{\mathrm{test}}+Kn_{\mathrm{cls}}\delta$.
 (iii)~If deployed family rates exceed their bounds by factors $\kappa_f\ge1$, the test term of~\eqref{eq:lagsplit} is at most $\max_{A\in\mathcal R(\tau)}\prod_{f\in A}\kappa_f\cdot B(\tau)$.
 \end{lemma}
 Part~(i) is a monotone coupling, (ii) a union bound, and (iii) holds term by term. Keying by class makes the lab's fault mix irrelevant (only within-class exchangeability is
 needed) at the price of labels per class; the unknown-class fallback (per-family maximum, the largest wait, or for joint regions acting only when every class certifies)
-uses all classes' bounds, so $K$ is multiplied by the number of classes. \sys sets $\delta=\min(\alpha,\beta)/(10K)$, with $K{=}11$ for product certification (five ``absent'' and four ``committed''
-verdict levels, two waits; the nonce's false-match bound is analytic) and $K{=}5$ for joint certification, so $K\delta\le\min(\alpha_{\mathrm{cal}},\beta_{\mathrm{cal}})$. The population assumption is the one that bites:
+uses all classes' bounds, so the union runs over $Kn_{\mathrm{cls}}$ bounds. \sys sets $\delta=\min(\alpha,\beta)/(10\,K\,n_{\mathrm{cls}})$ with $n_{\mathrm{cls}}{=}4$.
+Here $K{=}11$ for product certification (five ``absent'' and four ``committed'' verdict levels, two waits; the nonce's false-match bound is analytic), $K{=}8$ for source
+families and $K{=}5$ for joint certification. Then $Kn_{\mathrm{cls}}\delta=\min(\alpha,\beta)/10\le\min(\alpha_{\mathrm{cal}},\beta_{\mathrm{cal}})$, and the guarantee pays the union bound on both sides. The population assumption is the one that bites:
 labels from uninterrupted effects miss cached history after a kill, optimistic ``sending'' entries and blackout lags. Part~(iii) is a margin against drift that is \emph{independent}
 across families; common-mode drift is what joint certification is for (\S\ref{sec:eval-pop}).
 

@@ -80,3 +80,16 @@ Tổng 24 macro. Ví dụ: `\CertBoundElemJointDup`.
 Đây là số đo trên emulator kết hợp phép tính. Giá trị có từ 18/11; trước đó là `??`.
 
 Tổng 105 macro (24 + 12 + 16 + 18 + 7 + 24 + 2 + 2). Phần A không dùng macro của C. Phần A dùng một số của B: `label_cost.csv` (đọc trực tiếp CSV, không dùng macro `\LabelTrial*`).
+
+## 10/11/2026 (tối)
+
+**Đã làm:**
+- A-05: sửa §4.3 (`04-theory.tex`, Lemma 4.6(ii) và đoạn sau nó) và chứng minh ở App. A (`appendix-proofs.tex`, phần (ii)). Ký hiệu mới `n_cls` là số lớp lỗi. Lemma nói rõ union bound chạy trên `K · n_cls` cận. Công thức ghi đúng như code: `δ = min(α, β) / (10 · K · n_cls)` với `n_cls = 4`, `K = 11` (product), `8` (source), `5` (joint). Từ đó `K · n_cls · δ = min(α, β)/10 ≤ min(α_cal, β_cal)`, tức trả union bound ở cả hai phía. Khớp `calibration_deltas(keyed=True)` trong `planner_sim.py` và `k_total` trong `testbed/calibration.py` (cộng `bound_count × số lớp` của từng stratum).
+- Build: `PYTHON=python sh manuscript/build.sh` thoát 0 trên Windows + MiKTeX, 20 trang, overfull lớn nhất 7,89 pt. Các file `manuscript/generated/*` và `main.pdf` mà build sinh lại trên Windows đã hoàn nguyên, không commit (thuộc C).
+- Test: `python -m unittest discover -s artifact/tests` vẫn 32 test, 1 fail của C như mục trước, 1 skip; test δ qua.
+
+**Trạng thái task:** A-05 xong, chờ nghiệm thu. A-09 tên: chờ duyệt PR #9.
+
+**Lưu ý cho C:** dòng setup ở `07-evaluation.tex` (dòng 16) còn ghi `δ = α/(10K)`, cần đổi thành `min(α, β)/(10 · K · n_cls)` theo phụ thuộc số 5 của `CONTRIBUTOR_FIXED.md` §3.
+
+**Tiếp theo:** nháp A-06 (đổi `D` thành `H_dedup`, các chi tiết lý thuyết), rồi A-01 trên §3 và §5.

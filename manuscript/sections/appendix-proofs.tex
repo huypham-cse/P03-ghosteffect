@@ -79,7 +79,7 @@ for all $n$. If the true walk exits at the top at step $n$, the model walk staye
 $\PP^{\mathrm{true}}_0(\text{declare})\le\PP^{\mathrm{model}}_0(\text{declare})\le\beta$ by (a) applied to the model, under which the planner's statistic is the exact log-likelihood ratio.
 Under $X{=}1$ a true 0-read implies a model 0-read, and the same argument bounds retries by $\alpha$. The argument is per read, so it also covers independent, non-identical views.
 (ii)~A one-sided $(1-\delta)$ Clopper--Pearson bound covers its parameter with probability at least $1-\delta$~\cite{clopper1934use} when the calibration effects are i.i.d.\ from the deployment
-population of the effect's fault class; a union bound over the $K$ bounds gives $1-K\delta$ (for an unknown class, the per-class bounds that the fallback uses are all in the union, and
+population of the effect's fault class; a union bound over the $Kn_{\mathrm{cls}}$ bounds of all classes gives $1-Kn_{\mathrm{cls}}\delta$ (for an unknown class, the per-class bounds that the fallback uses are all in the union, and
 a per-class bound valid for every class bounds any mixture of classes), and on the complementary event the guarantee may fail with probability at most 1, which gives the marginal bound. The
 declare side is identical with the ``committed'' bounds and $\beta_{\mathrm{test}}$.
 (iii)~Each term of $B(\tau)$ is $\prod_{f\in A}q_f$; replacing $q_f$ by $\kappa_fq_f$ multiplies it by $\prod_{f\in A}\kappa_f$, at most the maximum over $\mathcal R(\tau)$.
