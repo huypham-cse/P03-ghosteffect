@@ -1,23 +1,24 @@
 \begin{table}[!htbp]
 \centering
-\caption{Testbed apps. Hop-2 dedup basis from protocol specifications~\cite{matrix_spec,rfc4791,rfc9110,rfc5321}; candidate nonce field from the app's UI. Retry behavior,
-failed states and hop-1 visibility are measured, not assumed: so far for Element (with Synapse), Etar + DAVx5 (with Radicale) and K-9 Mail 24.0 (with GreenMail instead of
-Postfix), Table~\ref{tab:real}; the others are planned.}
+\caption{Testbed apps. Hop-2 dedup basis (CalDAV: the event URL with If-None-Match) from protocol specifications~\cite{matrix_spec,rfc4791,rfc9110,rfc5321}; candidate nonce field from the app's UI. Status:
+\emph{measured} rows have retry behavior, failed states and hop-1 visibility measured on our emulator testbed, not assumed (Table~\ref{tab:real}); \emph{planned} rows
+are not yet measured. K-9's nonce is the subject, which the recipient sees, so it is used only on test accounts that opted in.}
 \label{tab:apps}
 \footnotesize
 \setlength{\tabcolsep}{2pt}
-\begin{tabular}{@{}lll l@{}}
+\begin{tabular}{@{}lll l l@{}}
 \toprule
-App & Backend & Hop-2 dedup basis & Candidate nonce field \\
+App & Backend & Hop-2 dedup basis & Nonce field & Status \\
 \midrule
-Element & Synapse & Matrix transaction id & message body (visible) \\
-Etar + DAVx5 & Radicale & CalDAV URL + If-None-Match & event description \\
-Tasks.org + DAVx5 & Radicale & CalDAV URL + If-None-Match & task note \\
-Joplin & WebDAV & \texttt{PUT} by note id & note body \\
-Thunderbird (K-9) & Postfix & none (SMTP) & mail body (visible) \\
-Simple SMS & SMS & none & message body (visible) \\
-MockBank-A / B & ours & request id / none & private note \\
-Pro Expense, Markor & local & n/a & note / file \\
+Element & Synapse & Matrix txnId & body (visible) & measured \\
+Etar + DAVx5 & Radicale & URL + If-None-Match & event description & measured \\
+Tasks.org + DAVx5 & Radicale & URL + If-None-Match & task note & planned \\
+Joplin & WebDAV & \texttt{PUT} by note id & note body & planned \\
+K-9 Mail 24.0 & GreenMail & none (SMTP) & subject (visible) & measured \\
+Simple SMS & SMS & none & body (visible) & planned \\
+MockBank-A / B & ours & request id / none & private note & planned \\
+Pro Expense & local & n/a & note & planned \\
+Markor & local & n/a & file & planned \\
 \bottomrule
 \end{tabular}
 \end{table}

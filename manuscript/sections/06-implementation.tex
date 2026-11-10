@@ -12,7 +12,7 @@ timings. A DTMC analyzer and a PRISM model~\cite{kwiatkowska2011prism} are in th
 \para{Emulator testbed (built).} Android~13 (API~33, arm64) emulators run F-Droid builds of the apps against self-hosted servers on the host. A TCP fault proxy in front of
 each server forwards a matching request (Matrix \texttt{PUT \dots/send/\dots/<txnId>}, SMTP end of \texttt{DATA}, CalDAV \texttt{PUT}) so the server commits, then drops the reply
 and resets the connection (or, in one cell, withholds it until the client times out; or keeps dropping the app's immediate retries until the fault, ``sticky''); it logs every
-request with its id. A scripted driver (uiautomator, adb; no LLM) sends a nonce-tagged message and applies a fault: background + \texttt{kill -9}, \emph{force-stop}, or a
+request with its id. A scripted driver (uiautomator, adb; no LLM) sends a nonce-tagged message (for K-9 the nonce is the subject, which the recipient sees, on test accounts that opted in) and applies a fault: background + \texttt{kill -9}, \emph{force-stop}, or a
 20\,s \emph{network cut}; it relaunches the app and polls until 20\,s after the message is seen, or for up to 300\,s. Its reader returns $\bot$ unless the foreground package,
 the room title and the timeline are verified, and ``absent'' only on a verified screen scrolled to the bottom with the previous message visible. Ground truth comes from the
 server only. A scripted \emph{GUI redo} recomposes and re-sends the same content, as an agent that trusts the screen would.
