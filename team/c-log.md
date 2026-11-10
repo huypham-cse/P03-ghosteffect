@@ -237,3 +237,14 @@ test công cụ C-10; không coi cả 41 test là nội dung PR C-01.
 Trạng thái: commit C-01 chuẩn bị để review, không phải PR nghiệm thu cuối.
 Còn chờ đăng nhập GitHub để push/mở PR; C-02 và C-10 sẽ có commit/PR riêng.
 Hai provenance của B và giới hạn body trang 13 vẫn còn mở như đã báo.
+
+## 10/11/2026 — Commit riêng C-02
+
+C-01 đã được lưu ở commit 84aa339 và nhánh `c/01-pipeline`.
+Bản quy ước `QUYET_DINH_CHUNG.md` có commit riêng cho C-02, nối tiếp C-01
+để PR chỉ hiển thị thay đổi của task này. Đã rà lại phạm vi, điều kiện chọn
+product/joint/ASK và cách viết tên macro. Tài liệu vẫn là đề xuất, không
+mạo nhận trưởng nhóm hoặc A/B đã duyệt. Không có thay đổi code/số liệu.
+
+Tiếp theo: publish PR đề xuất sau khi đăng nhập GitHub, rồi chốt với nhóm
+trước 11/11; C-10 được tách tiếp ở commit khác.
