@@ -6,14 +6,14 @@ For Theorem~\ref{thm:main} the family's reads are conditionally i.i.d.\ given $X
 Because $p_0\ne p_1$ have full support, $\E_1Z=D_1>0$, $\E_0Z=-D_0<0$ and $\PP_x(Z\ne0)>0$.
 
 \subsection{Theorem~\ref{thm:main}}
-\para{(a)} Let $N=\inf\{n:L_n\notin(-b,a)\}$ over reads taken after $t_0+w$. Since $\PP_x(Z\neq0)>0$, Stein (1946) gives $\PP_x(N>n)\le cr^n$ for constants $c<\infty$, $r<1$, so
+\para{(a)} Let $N=\inf\{n:L_n\notin(-b,a)\}$ over reads taken after $r_e+w$. Since $\PP_x(Z\neq0)>0$, Stein (1946) gives $\PP_x(N>n)\le cr^n$ for constants $c<\infty$, $r<1$, so
 $\E_x[N]<\infty$~\cite{tartakovsky2014sequential}. Under $X{=}0$ reads are i.i.d.\ $p_0$, and the likelihood-ratio identity for stopped sequences gives
 $\PP_0(L_N\ge a)=\E_1[e^{-L_N};L_N\ge a]\le e^{-a}=\beta$. Under $X{=}1$,
 $\PP_1(\text{retry})\le\PP_1(T>w)+\PP_1(\text{retry}\mid T\le w)$. Given $T\le w$ every read is i.i.d.\ $p_1$, so $\PP_1(L_N\le-b\mid T\le w)=\E_0[e^{L_N};L_N\le-b]\le e^{-b}=\alpha-G(w)$.
 Both inequalities are exact; overshoot only lowers the realized error. For~\eqref{eq:ub}, Wald's identity gives $\E_1[L_N]=D_1\E_1[N]$ given visibility; on $\{L_N\ge a\}$,
 $L_{N-1}<a$ so $L_N<a+u^\star$, and on $\{L_N\le-b\}$, $L_N<a$. Hence $D_1\E_1[N]\le a+u^\star$; symmetrically $D_0\E_0[N]\le b+v^\star$.
 
-\para{(b)} Let the decision be $\phi(U,Y_1,\dots,Y_N)$ with all reads end-to-end and taken by $t_0+w$. Given $X{=}1$ and $T>w$, A1 says every such read has the law it has under $X{=}0$,
+\para{(b)} Let the decision be $\phi(U,Y_1,\dots,Y_N)$ with all reads end-to-end and taken by $r_e+w$. Given $X{=}1$ and $T>w$, A1 says every such read has the law it has under $X{=}0$,
 and $U$ is independent of $(X,T)$. So $(U,N,Y_{1:N})$ has the same law as under $X{=}0$, $\PP_1(\text{retry}\mid T>w)=\PP_0(\text{retry})$, and
 $\PP_1(\text{retry})\ge G(w)\,\PP_0(\text{retry})$. A verification-only policy has $\PP_0(\text{retry})=1-\PP_0(\text{declare})\ge1-\beta$. The argument fails for a policy that may ask
 ($\PP_0(\text{retry})$ can be 0) or reads a hop-1 view (whose law does not depend on $T$).
@@ -49,8 +49,8 @@ For the hand-over: if hop~1 ends failed or stuck, the planner sets the product t
 list of end-to-end verdicts that skips hop~1. That list satisfies the two conditions above, so it is in $\mathcal R(\tau)$ and the same union bound covers it. The reset happens at most
 once per effect, so no run is counted under two lists.
 
-\emph{Lag, Eq.~\eqref{eq:lagsplit}.} Partition retrying runs by path: $\Pi_1$, hop~1 read ``absent'' (end-to-end reads from $t_0+w_1$ on); $\Pi_0$, every other path (end-to-end reads
-from $t_0+w_0$ on, measured from $t_0$ also after a stuck or failed hand-over). On $\{T\le w_1\}\cap\Pi_1$ or $\{T\le w_0\}\cap\Pi_0$ every end-to-end read is post-visibility, and the run
+\emph{Lag, Eq.~\eqref{eq:lagsplit}.} Fix the class $c$ and write $T=T_c$. Since $t_{\mathrm{vis}}\le r_e+T$, a read at time $t\ge r_e+w$ on the event $T\le w$ is post-visibility. Partition retrying runs by path: $\Pi_1$, hop~1 read ``absent'' (end-to-end reads from $r_e+w_1$ on); $\Pi_0$, every other path (end-to-end reads
+from $r_e+w_0$ on, measured from $r_e$ also after a stuck or failed hand-over). On $\{T\le w_1\}\cap\Pi_1$ or $\{T\le w_0\}\cap\Pi_0$ every end-to-end read is post-visibility, and the run
 lies in some $E_A$, $A\in\mathcal R(\tau)$, so these parts sum to at most $B(\tau)$ (the paths are disjoint, and assignments that skip hop~1 belong to $\mathcal R(\tau)$).
 $\PP(\Pi_1,T>w_1\mid X{=}1)=\PP(\text{hop-1 abs}\mid X{=}1)\,G(w_1)\le q_hG(w_1)$, since hop-1 readings and $T$ are independent given $X$. $\PP(\Pi_0,T>w_0\mid X{=}1)\le G(w_0)$,
 since $\Pi_0$ is a single event set; on the stuck path hop-1 status depends on $T$, which this term does not need. The bound $q_hG(w)\le\alpha_{\mathrm{lag}}$ alone would spend the lag

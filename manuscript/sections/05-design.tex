@@ -50,7 +50,7 @@ the app renders it, and in-app search often queries the server. They are therefo
 \para{Calibration labels.} For each (app version, family, verdict level or region) the store holds one-sided Clopper--Pearson bounds (Lemma~\ref{lem:calib}(ii)) from calibration
 \emph{effects}, not reads. Lemma~\ref{lem:calib} needs effects drawn from the \emph{interrupted} population, so labels come from fault-injected runs on test accounts or a staging backend:
 the controller injects the fault classes of \S\ref{sec:impl} at the commit point, records the true outcome from the test backend, runs every family once per view on recovery, and logs the
-time from $t_0$ to visibility. Bounds and lag tables are keyed by the observable fault class (Lemma~\ref{lem:calib}(ii)), so the lab's fault mix need not match deployment's;
+lag $T_c$ from the anchor $r_e$ to visibility. Bounds and lag tables are keyed by the observable fault class (Lemma~\ref{lem:calib}(ii)), so the lab's fault mix need not match deployment's;
 an effect whose class the controller cannot tell uses the per-class maximum. Passive labels (confirmed sends, abandoned forms) are cheaper but miss cached history after a
 kill, optimistic entries and restart lags (\S\ref{sec:eval-pop},~\S\ref{sec:eval-real}). A label costs a fault-injected effect plus one read of every view ($\approx$15\,s), on test
 devices.
@@ -74,7 +74,7 @@ false-match bound is analytic. Pooling across devices assumes the devices are ex
 \label{alg:recover}
 \small
 \begin{algorithmic}[1]
-\Require record $e$ (\textsf{ISSUED} at $t_0$); budget $(\alpha_e,\beta_e)$ from the saga layer; calibrated bounds $q$; lag tables
+\Require record $e$ (\textsf{ISSUED} at $t_0$, anchor $r_e$ of its fault class); budget $(\alpha_e,\beta_e)$ from the saga layer; calibrated bounds $q$; lag tables
 \State $\alpha_t,\alpha_l,\beta_t\gets 0.5\alpha_e,\,0.4\alpha_e,\,0.9\beta_e$ \Comment{$\alpha_{\mathrm{cal}}$ via $\delta$}
 \State $\tau_a,\tau_c\gets$ largest thresholds certified for $\alpha_t,\beta_t$ \Comment{Prop.~\ref{prop:family} or \ref{prop:joint}}
 \State \Call{VerifyForeground}{$e$.app}; $P\gets1$; $d\gets\bot$; $\ell\gets\alpha_l$
@@ -89,7 +89,7 @@ false-match bound is analytic. Pooling across devices assumes the devices are ex
 \EndIf
 \If{$d\ne$ com \textbf{and} app not local}
   \State $w\gets$ \Call{CertifiedWait}{$e$.app, $e$.class, $d{=}$abs ? $\ell/q_h$ : $\ell$} \Comment{$q_h{=}\max_r q^{\mathrm{abs}}_{\text{hop1}}(r)$}
-  \State \textbf{if} $w-\text{elapsed}>W_{\max}$ \Return \Call{Ask}{$e$}; \Call{WaitUntil}{$t_0+w$}
+  \State \textbf{if} $w-\text{elapsed}>W_{\max}$ \Return \Call{Ask}{$e$}; \Call{WaitUntil}{$r_e+w$}
 \EndIf
 \For{$f\in$ [nonce, digest, VLM] available for $e$}
   \State $(s,r)\gets$ \Call{Readout}{$f$} \Comment{one read per view}
@@ -104,14 +104,14 @@ false-match bound is analytic. Pooling across devices assumes the devices are ex
 
 Algorithm~\ref{alg:recover} applies \S\ref{sec:theory} to one effect. \textsc{Readout} reads each view of a family once and returns the majority side and its count.
 The thresholds come from enumerating stopping assignments (at most $4^4$ per app, precomputed) or, for joint certification, from the fixed-sequence test. \textsc{CertifiedWait} returns
-the smallest logged commit-to-visibility time of the effect's fault class (the maximum over classes if unknown) whose CP upper bound on the exceedance probability is at most
+the smallest logged lag $T_c$ of the effect's fault class (the latest deadline over classes if the class is unknown) whose CP upper bound on the exceedance probability is at most
 its argument; a logged effect that never became visible counts as an exceedance at every wait. \textsc{Retry} reuses the nonce. Four details matter in practice.
 
 \para{Hop 1 and monitoring.} A hop-1 verdict starts the product on either side, so the ``committed'' side of a G2 or local app is certified like any other declaration
 (its bound enters $B_{\mathrm{com}}$), and a hop-1 ``absent'' verdict relaxes its own wait $w_1$, with half of the lag share (Eq.~\eqref{eq:lagsplit}). For a G2 app with an outbox entry,
 \textsc{Monitor} marks the record \textsf{PENDING} and lets the agent continue; the controller re-reads hop~1 in the background until a terminal state. Its reads are fallible, so an
 ``acknowledged'' entry whose hop-1 bound alone does not certify is corroborated by the end-to-end families, read in the background once the entry is acknowledged (and visible).
-A failed entry, or one pending longer than a stuck limit (120\,s) or close to the server's dedup horizon $H_{\mathrm{dedup}}$ (Theorem~\ref{thm:twohop}), is handed over to the end-to-end path. The hand-over resets the product once and keeps the hop-1 reads in the audit log. On that path the wait is still measured from $t_0$, with $w_0$ certified from the
+A failed entry, or one pending longer than a stuck limit (120\,s) or close to the server's dedup horizon $H_{\mathrm{dedup}}$ (Theorem~\ref{thm:twohop}), is handed over to the end-to-end path. The hand-over resets the product once and keeps the hop-1 reads in the audit log. On that path the wait is still measured from $r_e$, with $w_0$ certified from the
 unconditional lag table, which is what the proof of Eq.~\eqref{eq:lagsplit} needs. Two entries mean a duplicate, which is compensated or asked about.
 
 \para{Waiting.} The wait is the price of the lag share (Theorem~\ref{thm:main}(a,b)). If the certified wait exceeds $W_{\max}$ (120\,s), or recovery was delayed while the device

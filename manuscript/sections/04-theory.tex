@@ -14,13 +14,13 @@ $d(x\|y)=x\log\frac{x}{y}+(1-x)\log\frac{1-x}{1-y}$. A policy is \emph{verificat
 \label{thm:main}
 Consider an effect with prior $\pi\in(0,1)$, lag tail $G$, and a family of conditionally i.i.d.\ views with laws $p_0,p_1$.
 \begin{enumerate}[leftmargin=*,label=(\alph*),topsep=1pt,itemsep=1pt]
-\item \emph{Achievability.} If $G(w)<\alpha$, waiting until $t_0+w$ and then running the SPRT on $L_n=\sum_{i\le n}\log\frac{p_1(Y_i)}{p_0(Y_i)}$, which declares when
+\item \emph{Achievability.} If $G(w)<\alpha$, waiting until $r_e+w$ and then running the SPRT on $L_n=\sum_{i\le n}\log\frac{p_1(Y_i)}{p_0(Y_i)}$, which declares when
 $L_n\ge a=\log\frac1\beta$ and retries when $L_n\le-b=-\log\frac{1}{\alpha-G(w)}$, meets $(\alpha,\beta)$. Given visibility,
 \begin{equation}
 \E_1[N]\le\frac{a+u^\star}{D_1},\qquad \E_0[N]\le\frac{b+v^\star}{D_0}.
 \label{eq:ub}
 \end{equation}
-\item \emph{Lag converse.} Every policy that decides by $t_0+w$ from end-to-end reads alone has $\PP(\text{retry}\mid X{=}1)\ge G(w)\,\PP(\text{retry}\mid X{=}0)$;
+\item \emph{Lag converse.} Every policy that decides by $r_e+w$ from end-to-end reads alone has $\PP(\text{retry}\mid X{=}1)\ge G(w)\,\PP(\text{retry}\mid X{=}0)$;
 a verification-only one with $\PP(\text{declare}\mid X{=}0)\le\beta$ thus has $\PP(\text{retry}\mid X{=}1)\ge(1-\beta)\,G(w)$.
 \item \emph{Information converse.} Every verification-only policy meeting $(\alpha,\beta)$ with $\alpha+\beta<1$ and $\E_x[N]<\infty$ satisfies the right inequality
 below for any lag, and the left one if all reads follow visibility:
@@ -71,13 +71,13 @@ $\mathcal R(\tau)$ includes the assignments that start after the hand-over, whic
 \end{proposition}
 (Proof in Appendix~\ref{app:proofs}: every retry stops at an assignment in $\mathcal R(\tau)$; A2 and a union bound finish.)
 The planner picks the largest $\tau$ with $B(\tau)\le\alpha_{\mathrm{test}}$. The lag adds two terms. Let $w_1$ be the wait after a hop-1 ``absent'' verdict and $w_0$ the
-wait, measured from $t_0$, on every other path (hop~1 tied or absent from the app, a non-G2 entry, a failed or stuck entry). Then
+wait on every other path (hop~1 tied or absent from the app, a non-G2 entry, a failed or stuck entry). Both waits run from the anchor $r_e$, so end-to-end reads start at $r_e+w_1$ or $r_e+w_0$. For an effect of class $c$,
 \begin{equation}
-\PP(\text{retry}\mid X{=}1)\le B(\tau)+q_h\,G(w_1)+G(w_0),
+\PP(\text{retry}\mid X{=}1)\le B(\tau)+q_h\,G_c(w_1)+G_c(w_0),
 \label{eq:lagsplit}
 \end{equation}
 where $q_h$ bounds the hop-1 ``absent'' verdict. The first lag term uses only that hop-1 reads the local outbox, independent of $T$ given $X$; the second needs no
-independence, because the remaining paths are disjoint and each reads end-to-end views no earlier than $t_0+w_0$. \alg certifies each term at $\alpha_{\mathrm{lag}}/2$ (all of
+independence, because the remaining paths are disjoint and each reads end-to-end views no earlier than $r_e+w_0$. \alg certifies each term at $\alpha_{\mathrm{lag}}/2$ (all of
 $\alpha_{\mathrm{lag}}$ to $w_0$ if the app has no hop-1 family).
 
 \para{Without A2.} A2 lets bounds multiply, and it is doubtful when families read the same screens: a stale history after a restart fools nonce, digest and VLM at

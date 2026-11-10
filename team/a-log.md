@@ -111,3 +111,20 @@ Tổng 105 macro (24 + 12 + 16 + 18 + 7 + 24 + 2 + 2). Phần A không dùng mac
 **Trạng thái task:** A-06 xong, chờ nghiệm thu. A-05 chờ PR #17, A-09 tên chờ PR #9.
 
 **Tiếp theo:** A-01 (mốc `r_e` ở §3, Eq. 2, Alg. 1; chứng minh trong App. A).
+
+## 11/11/2026 (rạng sáng)
+
+**Đã làm:** A-01, phần văn bản và test:
+- §3: định nghĩa `t_vis`, mốc `r_e` theo lớp lỗi (agent chết: `t_0` tức ISSUED; app chết: lúc controller xác nhận ý định mở lại; mất mạng: lúc khôi phục; kết hợp: mốc muộn hơn), `T_c = max(0, t_vis − r_e)`, `G_c(w)`, deadline `r_e + w_c`. Lớp không biết thì lấy deadline muộn nhất qua các lớp; thiếu mốc cần dùng thì ASK. A1 đổi thành `T ≤ t − r_e`.
+- §4: Thm 4.1(a,b) chờ và quyết định theo `r_e + w`; Eq. 2 dùng `G_c(w_1)`, `G_c(w_0)` và câu nói rõ cả hai khoảng chờ chạy từ `r_e`.
+- §5: Alg. 1 nhận `r_e` và gọi `WaitUntil{r_e+w}`; `CertifiedWait` dùng lag `T_c`; nhãn hiệu chuẩn ghi `T_c` từ `r_e`; nhánh hand-over đo từ `r_e`.
+- App. A: chứng minh Thm 4.1(a,b) và Eq. 2 dùng `r_e + w`, thêm bước `t_vis ≤ r_e + T`.
+- Test mới `artifact/tests/test_guarantee.py` (`AnchorTests`): chạy product và joint trên hồ sơ Element đo được, downtime 15 s, ghi lại mọi lượt đọc đầu-cuối và khoảng chờ chứng nhận. Với mốc đúng (`clock='origin'`): 0 lượt đọc trước `r_e + w` trên 53 effect retry. Test đối chứng với mốc sai (`clock='t0'`): bắt được 360 lượt đọc sớm. Test chỉ đọc, không sửa hàm nào của `planner_sim.py`.
+
+**Kiểm:** `grep -n 'WaitUntil' manuscript/sections/05-design.tex` chỉ còn `r_e+w`; không còn `t_0+w` trong các file của A. Build thoát 0, 20 trang, overfull lớn nhất 7,89 pt. `python -m unittest discover -s artifact/tests`: 34 test, 1 fail cũ của C, 1 skip. Độ dễ đọc trên bốn file của A không đổi (21, 50, 20, 21).
+
+**Còn lại của A-01:** bảng mốc đúng so với mốc sai (`down5`, `down15`, `t0down5`, `t0down15`; product và joint; `P_v` và cận CP), sinh bằng `render_guarantee.py` vào `tab_cert_clock.tex` với macro `\CertClock*`. Chờ C-01 merge (file `render_guarantee.py` và `macros_guarantee.tex` do C-01 tạo).
+
+**Trạng thái task:** A-01 đang làm (văn bản và test xong, còn bảng). A-06, A-05 chờ duyệt (#18, #17), A-09 tên chờ #9.
+
+**Tiếp theo:** khi C-01 merge: `render_guarantee.py` (bảng clock, ngân sách nhãn, cận tổng hợp), A-02, A-03, A-04.
