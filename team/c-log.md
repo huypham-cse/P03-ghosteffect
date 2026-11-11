@@ -516,3 +516,7 @@ scope boundaries. The revised text separates measured emulator facts from
 simulations, keeps the agent/phone limitation explicit, and avoids presenting
 unmeasured claims as results. Agent-dependent language remains provisional until
 B supplies real agent evidence.
+
+C-09 follow-up: the introduction now opens with the measured K-9 hidden-outcome
+scenario before naming a ghost effect, as required by the story checklist. This
+reorders existing emulator evidence only and does not make an agent-performance claim.
