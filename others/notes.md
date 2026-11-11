@@ -5,7 +5,7 @@ Values below come from the current CSV render; this is not a fresh experiment re
 Measurement, fitted-law simulation, model simulation and host timings remain distinct.
 See artifact/README.md for the experiment and CSV provenance.
 
-Total macros: 1016. Do not edit generated values by hand.
+Total macros: 1019. Do not edit generated values by hand.
 
 | Macro | Value | Macro file | Used in |
 |---|---|---|---|
@@ -850,6 +850,9 @@ Total macros: 1016. Do not edit generated values by hand.
 | `\SimMajPv` | 4.0 | `macros.tex` | (unused) |
 | `\SimMajPvHi` | 4.47 | `macros.tex` | (unused) |
 | `\SimMajSecs` | 50 | `macros.tex` | (unused) |
+| `\SimModelVettedAsk` | 100.0 | `macros.tex` | sections/07-evaluation.tex |
+| `\SimModelVettedPv` | 0.00 | `macros.tex` | sections/07-evaluation.tex |
+| `\SimModelVettedPvHi` | 0.04 | `macros.tex` | sections/07-evaluation.tex |
 | `\SimN` | 12{,}000 | `macros.tex` | sections/01-introduction.tex, sections/07-evaluation.tex, sections/appendix-results.tex |
 | `\SimNoAskAsk` | 4.3 | `macros.tex` | (unused) |
 | `\SimNoAskDup` | 0.23 | `macros.tex` | (unused) |
