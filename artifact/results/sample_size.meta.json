@@ -1,0 +1,23 @@
+{
+  "command": [
+    "/usr/bin/python3",
+    "-u",
+    "artifact/scripts/sample_size.py"
+  ],
+  "git_commit": "a518b5f0628d8864b43b2ac34c137d40d9bdac12",
+  "seed": {
+    "constants": {},
+    "random_seed_expressions": [],
+    "note": "No seed changed; expressions and script hash record derived/calibration seeds."
+  },
+  "python_version": "3.12.3 (main, Jul 15 2026, 23:46:41) [GCC 13.3.0]",
+  "date": "2026-11-09T17:12:34.606551+00:00",
+  "host": {
+    "os": "Linux",
+    "architecture": "x86_64",
+    "kernel": "6.18.54.1-microsoft-standard-WSL2"
+  },
+  "csv_sha256": "47c66e37427349fc5bbb3572c81293466f22a6ab540c9942a967c48e53838b46",
+  "script_sha256": "099a7c688ce760b8c6599be89fff5736b0f66bbd42eb8d07d1fdb0da3d7f0bd4",
+  "manifest": "artifact/runs/2026-11-10/MANIFEST.json"
+}

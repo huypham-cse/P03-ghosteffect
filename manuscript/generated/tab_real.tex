@@ -2,8 +2,9 @@
 \centering
 \caption{Emulator measurements, campaign 2 (Android~13 emulators, self-hosted servers, scripted driver; ground truth = server copies). (a)~After a commit whose reply was
 lost (TCP reset after the server committed), under no fault, background + \texttt{kill -9}, force-stop or a 20\,s network cut. App re-send: how the app resolved it; GUI redo:
-a scripted agent recomposes and re-sends the same content. (b)~Element's recovery-to-visible lag (s; upper end of a one-dump $\approx$2\,s interval; no trial censored,
-window $\ge$120\,s). Sticky: every reply dropped until the fault. (c)~Family errors against the server, wrong/observed, with no-observation ($\bot$, wrong screen) separated;
+a scripted agent recomposes and re-sends the same content. (b)~Element's recovery-to-visible lag (s; upper end of a one-dump $\approx$2\,s interval; first visibility was observed
+in all recorded trials, with trial-specific follow-up windows). This is not a uniform late-duplicate follow-up. Sticky: every reply dropped until the fault.
+(c)~Family errors against the server, wrong/observed, with no-observation ($\bot$, wrong screen) separated;
 Element's send-state indicator appears in the same dump as the row in \RealElemN/\RealElemN{} trials, so the two are one reading.}
 \label{tab:real}
 \footnotesize

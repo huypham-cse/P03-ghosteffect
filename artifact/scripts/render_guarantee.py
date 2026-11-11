@@ -12,6 +12,7 @@ model-based world for the bound rows marked "default"), except \\CertElemTrialsN
 
 Standalone: python3 artifact/scripts/render_guarantee.py [--results-dir DIR] [--output-dir DIR]
 Library:    render(results_dir) -> {file name: text}
+Pipeline:   render.py exec()s this file; the last block below then writes through render.py's W().
 """
 import argparse
 import csv
@@ -21,7 +22,7 @@ import os
 from pathlib import Path
 import sys
 
-HERE = Path(__file__).resolve().parent
+CERT_DIR = Path(__file__).resolve().parent
 
 # Parameters of the runs, not results (CONTRIBUTOR_FIXED YC-04): the risk budgets of every planner run
 # (planner_sim.run defaults), the number of observable fault classes (planner_sim.CLASSES) and the per-class
@@ -54,26 +55,26 @@ def num(x):
     return v
 
 
-def _half_up(x, d):
+def cert_half_up(x, d):
     v = num(x)
     if not math.isfinite(v):
         return 'N/A'
     return str(Decimal(repr(v)).quantize(Decimal(1).scaleb(-d), rounding=ROUND_HALF_UP))
 
 
-def f1(x):
-    return _half_up(x, 1)
+def cert_f1(x):
+    return cert_half_up(x, 1)
 
 
-def f2(x):
-    return _half_up(x, 2)
+def cert_f2(x):
+    return cert_half_up(x, 2)
 
 
 def count(n):
     return f'{int(n):,}'.replace(',', '{,}')
 
 
-def sci(x):
+def cert_sci(x):
     e = int(math.floor(math.log10(x)))
     m = x / 10 ** e
     if round(m, 1) >= 10:
@@ -100,7 +101,7 @@ def one(rows, what, **match):
     return hit[0]
 
 
-def col(row, name, what):
+def cert_col(row, name, what):
     if name not in row or row[name] in (None, ''):
         raise InputError(f'{what}: missing column {name}')
     return row[name]
@@ -124,8 +125,8 @@ def composed_bound(row, side, what):
     q is the share of effects with that outcome the planner asked about (q1 = ask1/n1), eps the simulated user's
     error rate among those asks (user_e1), r the planner's own residual beyond the budget, which the simulator
     assumes is 0.  q*eps is computed from counts, so a zero denominator gives N/A, never 0."""
-    n = num(col(row, 'n1' if side == 1 else 'n0', what))
-    asked = num(col(row, 'ask1' if side == 1 else 'ask0', what))
+    n = num(cert_col(row, 'n1' if side == 1 else 'n0', what))
+    asked = num(cert_col(row, 'ask1' if side == 1 else 'ask0', what))
     eps = num(row.get('user_e1' if side == 1 else 'user_e0'))
     budget = ALPHA_PCT if side == 1 else BETA_PCT
     if not n > 0:
@@ -150,7 +151,7 @@ def label_median(results):
     if not path.is_file():
         return None
     rows = read_csv(path.parent, path.name)
-    v = num(col(one(rows, 'label_cost.csv', component='total'), 'median_s', 'label_cost.csv'))
+    v = num(cert_col(one(rows, 'label_cost.csv', component='total'), 'median_s', 'label_cost.csv'))
     if not v > 0:
         raise InputError('label_cost.csv: total median_s must be positive')
     return v
@@ -162,7 +163,7 @@ DAGGER = '$^\\dagger$'
 
 def pv_cell(r):
     mark = DAGGER if num(r['cdup_hi']) > ALPHA_PCT else ''
-    return f"{f2(r['cdup'])} ({f2(r['cdup_hi'])}){mark} & {f1(r['ask'])}"
+    return f"{cert_f2(r['cdup'])} ({cert_f2(r['cdup_hi'])}){mark} & {cert_f1(r['ask'])}"
 
 
 def clock_row(tag, rows):
@@ -205,8 +206,8 @@ def render(results):
     def put(prefix, rows, cols=('Pv', 'PvHi', 'Ask')):
         for pn, r in rows.items():
             for c in cols:
-                M[prefix + pn + c] = {'Pv': lambda: f2(r['cdup']), 'PvHi': lambda: f2(r['cdup_hi']),
-                                      'Ask': lambda: f1(r['ask']),
+                M[prefix + pn + c] = {'Pv': lambda: cert_f2(r['cdup']), 'PvHi': lambda: cert_f2(r['cdup_hi']),
+                                      'Ask': lambda: cert_f1(r['ask']),
                                       'Over': lambda: 'over budget' if num(r['cdup_hi']) > ALPHA_PCT
                                       else 'within budget'}[c]()
 
@@ -242,12 +243,12 @@ def render(results):
             q0, e0, loss = composed_bound(r, 0, what)
             bounds[(world, pn)] = (q1, e1, dup, q0, e0, loss)
             pre = 'CertBound' + world + pn
-            M[pre + 'Qone'], M[pre + 'EpsOne'], M[pre + 'Dup'] = f2(q1), f2(e1), f2(dup)
-            M[pre + 'Qzero'], M[pre + 'EpsZero'], M[pre + 'Loss'] = f2(q0), f2(e0), f2(loss)
+            M[pre + 'Qone'], M[pre + 'EpsOne'], M[pre + 'Dup'] = cert_f2(q1), cert_f2(e1), cert_f2(dup)
+            M[pre + 'Qzero'], M[pre + 'EpsZero'], M[pre + 'Loss'] = cert_f2(q0), cert_f2(e0), cert_f2(loss)
 
     # A-05 exact computation
-    M['CertDeltaProd'] = sci(delta(K_PRODUCT))
-    M['CertDeltaJoint'] = sci(delta(K_JOINT))
+    M['CertDeltaProd'] = cert_sci(delta(K_PRODUCT))
+    M['CertDeltaJoint'] = cert_sci(delta(K_JOINT))
 
     # A-08: B's measured label time
     med = label_median(results)
@@ -282,7 +283,7 @@ def render(results):
         nlag = lagn(r) if 'nlag' in r and r['nlag'] not in (None, '') else count(int(num(R4['down5']['Prod']['nlag'])))
         body.append(budget_label(r, nlag, ', tail' if tail else '') + ' & '
                     + f"{pv_cell(rows['Prod'])} & {pv_cell(rows['Joint'])}" + ' \\\\')
-    tail_pct = f1(100 * num(R4['tail5']['Prod']['lag_tail']))
+    tail_pct = cert_f1(100 * num(R4['tail5']['Prod']['lag_tail']))
     files['tab_cert_budget.tex'] = HEADER + table(
         'tab:cert-budget',
         '\\emph{Measured-parameter simulation}, Element: label budget. '
@@ -310,7 +311,7 @@ def render(results):
         f'Budgets $\\alpha=\\beta={ALPHA_PCT:g}\\%$. N/A: no effect in the denominator.',
         ' & $q_1$ & $\\epsilon_1$ & dup bound & $q_0$ & $\\epsilon_0$ & loss bound \\\\',
         [f"{'Element' if w == 'Elem' else 'default'}, {'product' if pn == 'Prod' else 'joint'} & "
-         + ' & '.join(f2(v) for v in bounds[(w, pn)]) + ' \\\\'
+         + ' & '.join(cert_f2(v) for v in bounds[(w, pn)]) + ' \\\\'
          for w in ('Elem', 'Def') for pn in ('Prod', 'Joint')],
         cols='@{}l ccc ccc@{}')
     return files
@@ -335,10 +336,10 @@ def publish(files, output):
                 tmp.unlink()
 
 
-def main(argv=None):
+def cert_main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--results-dir', type=Path, default=HERE.parent / 'results')
-    parser.add_argument('--output-dir', type=Path, default=HERE.parent.parent / 'manuscript' / 'generated')
+    parser.add_argument('--results-dir', type=Path, default=CERT_DIR.parent / 'results')
+    parser.add_argument('--output-dir', type=Path, default=CERT_DIR.parent.parent / 'manuscript' / 'generated')
     args = parser.parse_args(argv)
     try:
         files = render(args.results_dir)
@@ -351,5 +352,11 @@ def main(argv=None):
     return 0
 
 
-if __name__ == '__main__':
-    raise SystemExit(main())
+if 'W' in globals() and 'RES' in globals() and 'MACROS' in globals():
+    # Executed by render.py (C-01 wiring: exec of this file in render.py's namespace, after its own outputs).
+    # Write through render.py's W into its staging directory.  An InputError aborts the whole render, so the
+    # published generated/ directory stays as it was.  Module-level names here avoid render.py's (cert_*).
+    for _cert_name, _cert_text in sorted(render(RES).items()):
+        W(_cert_name, _cert_text)
+elif __name__ == '__main__':
+    raise SystemExit(cert_main())

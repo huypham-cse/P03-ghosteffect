@@ -148,12 +148,12 @@ class RenderGuaranteeTests(unittest.TestCase):
         macros = dict(re.findall(r'\\newcommand\{\\(\w+)\}\{(.*)\\xspace\}', files['macros_guarantee.tex']))
         self.assertEqual(105, len(macros))
         row = next(r for r in rg.read_csv(RESULTS, 'planner_real4_t0down5.csv') if r['policy'] == 'ghost')
-        self.assertEqual(rg.f2(row['cdup']), macros['CertClockTzeroDownFiveProdPv'])
-        self.assertEqual(rg.f2(row['cdup_hi']), macros['CertClockTzeroDownFiveProdPvHi'])
+        self.assertEqual(rg.cert_f2(row['cdup']), macros['CertClockTzeroDownFiveProdPv'])
+        self.assertEqual(rg.cert_f2(row['cdup_hi']), macros['CertClockTzeroDownFiveProdPvHi'])
         # Composed bound by hand from the Element product row: alpha + (ask1/n1) * user_e1.
         r = next(r for r in rg.read_csv(RESULTS, 'planner_real.csv') if r['tag'] == 'main' and r['policy'] == 'ghost')
         by_hand = rg.ALPHA_PCT + 100 * float(r['ask1']) / float(r['n1']) * float(r['user_e1']) / 100
-        self.assertEqual(rg.f2(by_hand), macros['CertBoundElemProdDup'])
+        self.assertEqual(rg.cert_f2(by_hand), macros['CertBoundElemProdDup'])
         # Over-budget labels agree with the CP bound against alpha.
         for name, value in macros.items():
             if name.endswith('Over'):
@@ -179,10 +179,10 @@ class RenderGuaranteeTests(unittest.TestCase):
     def test_zero_denominators_print_na(self):
         nobody = dict(n1='0', ask1='0', user_e1='nan', n0='0', ask0='0', user_e0='nan')
         q, eps, bound = rg.composed_bound(nobody, 1, 'fixture')
-        self.assertEqual(['N/A'] * 3, [rg.f2(q), rg.f2(eps), rg.f2(bound)])
+        self.assertEqual(['N/A'] * 3, [rg.cert_f2(q), rg.cert_f2(eps), rg.cert_f2(bound)])
         never_asked = dict(n1='50', ask1='0', user_e1='nan')
         q, eps, bound = rg.composed_bound(never_asked, 1, 'fixture')
-        self.assertEqual(('0.00', 'N/A', rg.f2(rg.ALPHA_PCT)), (rg.f2(q), rg.f2(eps), rg.f2(bound)))
+        self.assertEqual(('0.00', 'N/A', rg.cert_f2(rg.ALPHA_PCT)), (rg.cert_f2(q), rg.cert_f2(eps), rg.cert_f2(bound)))
         with self.assertRaises(rg.InputError):
             rg.composed_bound(dict(n1='50', ask1='5', user_e1=''), 1, 'fixture')
 

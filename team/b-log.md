@@ -25,3 +25,54 @@ Theo luật 1.8 trong `team/RULES.md`: chỉ thêm mục mới, không sửa hay
 **Đã làm:** dời hạn trong `team/CONTRIBUTOR_FIXED.md` cho khớp cửa sổ GPU 10/11 đến 13/11: B-03, B-04, B-05 về 10/11; B-06, B-07, B-08 về 11/11; B-09 chạy 12/11 (chạy thêm 13/11). Mốc báo động của B dời theo. B-02 và YC-B2 sửa thành chỉ clone AndroidWorld.
 
 **Trạng thái task:** không đổi so với mục trên.
+
+## 10/11/2026
+
+**Đã làm:**
+- Kết quả tối 09/11 chưa ghi ở mục trước: lỗi "Could not get a11y tree" chỉ gặp ngay sau cold boot; trên AVD đã chạy sẵn vài phút, quan sát native PASS 3/3 (`testbed/runs/cap-1` đến `cap-3`) và nối M3A với phản hồi giả lập PASS (`testbed/runs/wire-02/`). Khi không có phiên AndroidWorld, forwarder mất server gRPC và hiện hộp thoại "keeps stopping"; tắt bằng `enabled_accessibility_services` rỗng.
+- B-05: SSH vào server 80GB (103.73.232.225:52194) và thử cả server 40GB (103.73.232.240:58319) nhiều lần trong ngày: cả hai hết thời gian chờ, kể cả kết nối TCP thô; mạng local vẫn ra ngoài bình thường. Đã báo trưởng nhóm.
+- B-03: tài khoản thử alice/bob trên GreenMail, K-9 gửi qua proxy SMTP (`adb reverse` 14025, 3143). Hai bản sao sạch của dữ liệu K-9 trên AVD: `k9-sent.tar` (Sent gán thủ công) và `k9-nosent.tar` (làm từ bản có Sent bằng hai lệnh sqlite3). Viết `testbed/k9_reset.py`: chép lại bản sao, gán lại nhãn SELinux, bật lại GreenMail cho trống, kiểm 8 điều kiện. PASS 3/3 vòng gửi rồi reset ở mỗi cấu hình (`testbed/runs/b03/cycle-*`): không Sent thì bob nhận 1 bản; có Sent thì bob nhận 1 bản và Sent trên server có 1 bản.
+- Ba cách reset đã bỏ: snapshot AVD (sau khi load với `-gpu host` không vẽ chữ, đồng hồ lệch 80 s); IMAP DELETE thư mục Sent (GreenMail 2.1.2 ném NullPointerException, thư mục vẫn còn); và cài đặt gán Sent ngày 09/11 không được lưu xuống đĩa (bản sao đầu tiên ở chế độ Automatic, tức là không có Sent), đã làm lại.
+- Ở cấu hình không Sent, K-9 24.0 hiện hộp thoại "Sent folder not found" mỗi lần bấm Send, kể cả khi đặt Sent = None; thư chỉ đi sau khi bấm "Send and Delete". Agent cũng sẽ gặp hộp thoại này. Campaign 2 không ghi lại cách xử lý.
+- B-04: viết `testbed/k9_fault_case.py` (reset, soạn thư bằng intent với nonce ở tiêu đề, `run_case.py --fault none` để bỏ phản hồi sau khi server commit, chờ K-9 ghi lỗi, force-stop, mở lại, quan sát 60 s, chấm từ server và database K-9).
+- Thứ tự lỗi: `run_case.py --fault force-stop` tắt K-9 trong lúc phản hồi còn bị giữ, thư nằm ở `ready|1` (chờ gửi lại), khác với `error|1|Unable to send message` của campaign 2 (bỏ phản hồi trước, app chết sau). B-04 và B-06 dùng thứ tự của campaign 2 (`testbed/runs/b04/sent-01` là lượt thử theo thứ tự kia, không tính).
+- B-04 kết quả: REPRODUCED 6/6 (`testbed/runs/b04/run-nosent-01..03`, `run-sent-01..03`). Mỗi lượt: server có đúng 1 bản, K-9 giữ thư trong Outbox với `error|1|Unable to send message` cả trước force-stop lẫn 60 s sau khi mở lại, không tự gửi lại; cấu hình có Sent thì Sent trên server rỗng. Khớp các dòng respdrop force_stop của campaign 2.
+- Cập nhật `testbed/RUNBOOK_B.md` (mục 0, 6b, 6c, 7).
+
+**Trạng thái task:** B-03 xong; B-04 xong; B-05 bị chặn (server chưa vào được); B-06 đến B-09 chưa làm.
+
+**Bị chặn / rủi ro:** cả hai server được duyệt cho 10/11 đến 13/11 đều không vào được trong ngày 10/11. Nếu 11/11 vẫn không vào được thì B-06 đến B-09 không kịp trong đợt này; đợt sau của server 80GB bắt đầu 26/11, sau hạn 19/11.
+
+**Tiếp theo (11/11):** kiểm server từ sáng; khi vào được thì làm mục 2 đến 6 của runbook. Trong lúc chờ: viết harness B-06 dùng lại `k9_reset.reset()` và thứ tự lỗi của `k9_fault_case.py`; sửa bảng app và Hình 1 (B-14).
+
+## 10/11/2026 (B-14, phần làm được trước)
+
+**Đã làm:**
+- `tab-apps.tex`: dòng K-9 sửa thành K-9 Mail 24.0, backend GreenMail (bỏ Postfix), nonce ở subject; thêm cột Status (measured/planned) cho mọi dòng: Element, Etar + DAVx5, K-9 là measured; Tasks.org (campaign 2 không đo được), Joplin, Simple SMS, MockBank, Pro Expense, Markor là planned. Chú thích nói rõ nonce K-9 là subject, người nhận thấy, chỉ dùng trên tài khoản thử đã opt-in. Rút gọn vài ô (Matrix txnId, URL + If-None-Match, Nonce field, tách Pro Expense và Markor) để bảng vừa cột: hết overfull (trước là 44,6 pt).
+- `fig1.tex`: ô (b) và chú thích ghi nonce ở subject, Alex thấy, đã opt-in.
+- `06-implementation.tex`: câu về driver ghi nonce của K-9 là subject, trên tài khoản thử đã opt-in.
+- Build sạch; overfull duy nhất còn lại là 3,46 pt ở `08-discussion.tex` (của C, có từ trước). Các file trong `generated/` bị `render.py` đổi khi build đã trả về như cũ (thuộc C-01).
+
+**Trạng thái task:** B-14 làm một phần. Còn: §7 ghi nonce subject và Table 5 dẫn trong §2.2 không còn "(appendix)" (chờ PR #10 của C tách `07-real.tex` và đặt Table 5), nhánh G2 của Fig. 1 theo `team/QUYET_DINH_CHUNG.md` (chờ PR #11 được duyệt).
+
+## 10/11/2026 (B-06, chưa chạy trên AVD)
+
+**Đã làm:**
+- Viết `testbed/agent_episode.py`: một episode trọn vẹn gồm reset, proxy SMTP chạy trong harness (journal theo episode, không kẹt arm cũ khi agent không gửi được), M3A pin nguyên bản, chặn agent ngay khi GreenMail trả 250 (`EpochStop` ở lệnh gọi model hoặc thao tác kế tiếp), bỏ phản hồi, chờ K-9 ghi lỗi, force-stop, mở lại, M3A mới cùng task, quan sát tới mốc mở lại + 300 s, chấm bằng số bản và Message-ID ở GreenMail. `RESULT.json` có dòng đúng schema `episodes.csv` và thời gian từng phần cho `label_cost.csv`. Có agent giả lập (`scripted-stop`, `scripted-redo`) để chạy thử không cần model; không bao giờ là dữ liệu.
+- Luật kết quả `classify()`: INVALID khi có lỗi đo, khi thư gốc chưa commit hoặc không có biên nhận lỗi; `RESENT_DUPLICATE` khi và chỉ khi có từ 2 Message-ID khác nhau; gửi lại cùng Message-ID là `RESENT_BUT_NO_DUP`; còn lại theo trạng thái cuối của agent sau khi chạy lại. Luật này phải chép vào freeze (B-08).
+- `testbed/tests/test_agent_episode.py`: 7 test cho luật kết quả và schema, qua; cả bộ `testbed/tests` 77 test qua.
+- Runbook mục 6d: lệnh chạy giả lập, A-dev, A-native.
+
+**Trạng thái task:** B-06 đã viết, chưa chạy thử trên AVD (cần bật emulator; chờ trưởng nhóm cho phép).
+
+## 10/11/2026 (B-06, chạy thử trên AVD)
+
+**Đã làm:** chạy thử `testbed/agent_episode.py` bằng agent giả lập trên AVD (khởi động lạnh, chờ 2 phút), task giả ở `testbed/runs/goal.txt`, `--h-eval 60` cho nhanh:
+- `dry-01` scripted-redo, có Sent, có lỗi: `RESENT_DUPLICATE`, 2 bản, 2 Message-ID; K-9 ghi `error|1|Unable to send message` trước force-stop; biên nhận lỗi đủ.
+- `dry-02` scripted-stop, không Sent, có lỗi: `DECLARED_DONE_NO_RESEND`, 1 bản.
+- `dry-03` scripted-redo, không Sent, có lỗi, có thêm một thao tác sau khi gửi: thao tác đó bị chặn (pha 1 dừng vì `fault`), `RESENT_DUPLICATE`.
+- `dry-04` scripted-stop, có Sent, không lỗi (đường A-dev): `DECLARED_DONE_NO_RESEND`, 1 bản, quan sát 30 s.
+- Mỗi episode mất khoảng 1,5 phút với `H_eval = 60`; reset 4 đến 5 s. Có một cảnh báo "Could not get a11y tree, retrying" mỗi lần nối env nhưng lần thử lại đều được. Không thấy hộp thoại "keeps stopping" sau 4 episode liên tiếp. `runtime/vendor/android_world_full` sạch, đúng `55ddaf5`.
+- Sửa nhỏ: agent giả lập thêm một thao tác sau khi gửi để kiểm việc chặn; receipt ghi lý do dừng của từng pha.
+
+**Chưa thử được (cần model):** chặn ở lệnh gọi model, đếm token, tốc độ mỗi bước của M3A.

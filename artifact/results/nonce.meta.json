@@ -1,0 +1,33 @@
+{
+  "command": [
+    "/usr/bin/python3",
+    "-u",
+    "artifact/scripts/sim_nonce.py"
+  ],
+  "git_commit": "a518b5f0628d8864b43b2ac34c137d40d9bdac12",
+  "seed": {
+    "constants": {
+      "SEEDS": [
+        3,
+        5,
+        7,
+        11,
+        13
+      ]
+    },
+    "random_seed_expressions": [
+      "seed * 101 + k * 7 + int(ec * 1000)"
+    ],
+    "note": "No seed changed; expressions and script hash record derived/calibration seeds."
+  },
+  "python_version": "3.12.3 (main, Jul 15 2026, 23:46:41) [GCC 13.3.0]",
+  "date": "2026-11-09T17:12:34.606551+00:00",
+  "host": {
+    "os": "Linux",
+    "architecture": "x86_64",
+    "kernel": "6.18.54.1-microsoft-standard-WSL2"
+  },
+  "csv_sha256": "c930077be036901d6c556dc1def1c2442b7f41577676ba63d34dc76846e182fc",
+  "script_sha256": "9ccc1b00581b4bb84ea2d296ff4e3bf5d749ef7b0d08e5f7f1e0f080b7b6fa36",
+  "manifest": "artifact/runs/2026-11-10/MANIFEST.json"
+}

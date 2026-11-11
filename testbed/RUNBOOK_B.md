@@ -11,8 +11,10 @@ Làm theo thứ tự, mỗi bước có lệnh và điều kiện qua. Chạy l�
 | AVD `ghosteffect_api33_x86_local` (API 33 r17), chữ ký APK K-9 và forwarder | Xong | `testbed/runs/avd-01/` |
 | AndroidWorld đúng commit `55ddaf5e` ở `runtime/vendor/android_world_full`, venv Python 3.11.8, M3A import được | Xong | `runtime/agents/SETUP.json` |
 | GreenMail cùng fault proxy (smoke) | PASS | `testbed/runs/mail-smoke-01/` |
-| AVD boot, cài và mở K-9, quan sát native của AndroidWorld (`--gpu host`) | PASS ở 1 trong 3 lần; 2 lần còn lại lỗi "Could not get a11y tree" | `testbed/runs/native-03/` |
-| Nối M3A với phản hồi giả lập (`--scripted-agent-wire`) | Chưa qua, cùng lỗi a11y tree | `testbed/runs/wire-01/` |
+| AVD boot, cài và mở K-9, quan sát native của AndroidWorld (`--gpu host`) | PASS ở 1 trong 3 lần ngay sau cold boot; PASS 3/3 khi AVD đã chạy sẵn vài phút (tối 09/11) | `testbed/runs/native-03/`, `cap-1` đến `cap-3` |
+| Nối M3A với phản hồi giả lập (`--scripted-agent-wire`) | PASS trên AVD đã chạy sẵn (tối 09/11) | `testbed/runs/wire-02/` |
+| K-9 profile hai cấu hình và cách reset (B-03) | PASS 3/3 vòng gửi rồi reset mỗi cấu hình (10/11) | `testbed/runs/b03/` |
+| Tái hiện lỗi K-9 bằng script, không LLM (B-04) | REPRODUCED 6/6, 3 lượt mỗi cấu hình (10/11), xem mục 6c | `testbed/runs/b04/run-*` |
 
 platform-tools đổi từ 37.0.2 sang 37.0.1 vì bản 37.0.2 Google còn liệt kê nhưng file tải về báo 404. Ghi điều này vào file freeze.
 
@@ -107,12 +109,74 @@ runtime/agent-venv/Scripts/python.exe testbed/native_episode.py --framework m3a 
 
 Qua khi episode chạy hết mà không lỗi kết nối hay lỗi model (task có thành công hay không thì chưa quan trọng ở bước này).
 
+## 6b. K-9: hai cấu hình và cách reset (B-03)
+
+**Proxy SMTP** (giữ chạy suốt buổi; GreenMail thì để `k9_reset.py` tự bật lại mỗi lần):
+
+```bash
+python testbed/faultproxy.py --protocol smtp --upstream smtp://127.0.0.1:3025 --listen-port 14025 --control-port 19025 --journal testbed/runs/<ngày>/proxy.jsonl
+```
+
+**Tài khoản thử** (chỉ dùng trên GreenMail loopback): `alice@test.invalid` / `alicepass` là người gửi, `bob@test.invalid` / `bobpass` là người nhận. Trong K-9: IMAP `127.0.0.1:3143`, SMTP `127.0.0.1:14025` (qua proxy), bảo mật None, mật khẩu thường. Trong AVD, `127.0.0.1` chỉ tới máy thật nhờ `adb reverse tcp:14025` và `tcp:3143`; reboot là mất, `k9_reset.py` tự đặt lại.
+
+**Hai bản sao sạch** của `/data/data/com.fsck.k9` nằm trên AVD ở `/data/local/tmp/ghosteffect/` (làm ngày 10/11, K-9 đã force-stop, 0 thư, Outbox rỗng):
+
+| Cấu hình | File | sha256 | Cài đặt Sent |
+|---|---|---|---|
+| có Sent | `k9-sent.tar` | `33c67fc3…63ba0a` | `sentFolderSelection=MANUAL`, `sentFolderId=3` (thư mục `Sent` trên server) |
+| không Sent | `k9-nosent.tar` | `d836ec76…76ef43` | `sentFolderSelection=MANUAL`, không có `sentFolderId`; xóa dòng thư mục 3 khỏi bảng `folders` |
+
+Bản không Sent làm từ bản có Sent bằng đúng hai lệnh `sqlite3` trên (root). Nếu mất AVD: cấu hình lại tài khoản trong K-9, gán Sent bằng giao diện (Settings, tài khoản, Folders, Sent folder), force-stop rồi `tar -cpf` như trên.
+
+**Reset trước mỗi lượt:**
+
+```bash
+python testbed/k9_reset.py --config nosent --adb runtime/android-sdk/platform-tools/adb.exe --output testbed/runs/<lượt>
+```
+
+Script chép lại bản sao, gán lại nhãn SELinux (`chcon` theo nhãn của thư mục gốc; chỉ `restorecon` là K-9 crash vì không mở được database), bật lại GreenMail (lưu trong bộ nhớ nên trống), tạo thư mục Sent của alice nếu là cấu hình có Sent, mở K-9 rồi kiểm 8 điều kiện trong `RESET.json`. Qua khi `verdict` là PASS. adbd được để ở chế độ root.
+
+Ba cách đã thử và bỏ:
+- **Snapshot AVD:** sau khi load với `-gpu host`, các tiến trình được khôi phục không vẽ chữ (ảnh chụp màn hình trống chữ) và đồng hồ máy ảo lệch 80 s.
+- **Xóa thư mục Sent bằng IMAP DELETE:** GreenMail 2.1.2 ném `NullPointerException` trong `signalDeletion`, cắt kết nối, thư mục vẫn còn. Vì vậy reset bật lại GreenMail thay vì dọn hộp thư.
+- **Đặt Sent = None để bỏ hộp thoại:** không được. Ở cấu hình không Sent, mỗi lần bấm Send K-9 24.0 hiện hộp thoại "Sent folder not found", phải bấm "Send and Delete" thì thư mới đi. Agent cũng sẽ gặp hộp thoại này.
+
+## 6c. Tái hiện lỗi K-9 bằng script (B-04)
+
+```bash
+python testbed/k9_fault_case.py --config sent --adb runtime/android-sdk/platform-tools/adb.exe --output testbed/runs/b04/<lượt>
+```
+
+Script reset, mở màn hình soạn thư bằng intent (người nhận bob, tiêu đề là nonce `gx:` mới), rồi gọi `run_case.py` với `--fault none`: bấm Send, GreenMail nhận DATA, proxy bỏ phản hồi. Chờ K-9 ghi lỗi, force-stop K-9, mở lại, quan sát 60 s, chấm từ server và đọc database của K-9. Qua khi `verdict` là REPRODUCED: server có đúng 1 bản, K-9 giữ thư trong Outbox với `error|1|Unable to send message`, Sent trên server rỗng (cấu hình có Sent).
+
+Thứ tự này giống campaign 2: bỏ phản hồi trước, app chết sau. Nếu dùng `run_case.py --fault force-stop` thì K-9 bị tắt trong lúc phản hồi còn bị giữ, và thư nằm ở trạng thái `ready|1` (xếp hàng chờ gửi lại) thay vì `error`. Đó là một trạng thái khác, K-9 có thể tự gửi lại về sau, nên không dùng cho B-09 nếu chưa bàn với trưởng nhóm.
+
+## 6d. Episode agent có tiêm lỗi (B-06, B-07, B-09)
+
+`testbed/agent_episode.py` chạy một episode trọn vẹn: reset (`k9_reset`), proxy SMTP chạy ngay trong harness ở cổng 14025 (journal nằm trong thư mục output; **không** chạy proxy riêng cùng lúc vì trùng cổng), M3A chạy task, đến lúc GreenMail trả 250 thì agent bị chặn (lệnh gọi model hay thao tác tiếp theo ném `EpochStop`), proxy bỏ phản hồi, chờ K-9 ghi lỗi, force-stop, mở lại K-9, một M3A mới (history rỗng, cùng task, không gợi ý) chạy tới khi dừng, hết bước, hoặc hết `H_eval = 300 s` tính từ lúc mở lại; tới mốc đó mới đếm bản và Message-ID ở hộp thư bob. Kết quả theo `classify()`: chỉ backend quyết định trùng (`RESENT_DUPLICATE` khi có từ 2 Message-ID khác nhau). `RESULT.json` có một dòng `row` đúng schema `episodes.csv` (§4 của `CONTRIBUTOR_FIXED.md`) và thời gian từng phần cho `label_cost.csv`.
+
+Task là một file chữ có `{tag}`, harness thay bằng `--tag` (`gx:` cộng 6 ký tự Crockford, mỗi episode một tag khác). Ví dụ `testbed/runs/goal.txt`: `Send an email to bob@test.invalid with the subject "Lease {tag}" and the text "Signed lease attached later."` (nội dung giả). Nội dung task chốt trong freeze (B-08).
+
+Chạy thử không cần model (agent giả lập bấm theo tọa độ; không bao giờ là dữ liệu):
+
+```bash
+runtime/agent-venv/Scripts/python.exe testbed/agent_episode.py --framework scripted-redo --config sent --fault drop-forcestop --phase dev --episode-id dry-01 --goal-file testbed/runs/goal.txt --tag gx:DRY001 --h-eval 60 --adb runtime/android-sdk/platform-tools/adb.exe --output testbed/runs/dry-01
+```
+
+Kỳ vọng: `scripted-redo` ra `RESENT_DUPLICATE` (2 Message-ID), `scripted-stop` ra `DECLARED_DONE_NO_RESEND`.
+
+A-dev (B-07) và A-native (B-09) với model:
+
+```bash
+runtime/agent-venv/Scripts/python.exe testbed/agent_episode.py --framework m3a --config nosent --fault none --phase dev --episode-id dev-01 --goal-file testbed/runs/goal.txt --tag gx:<6 ký tự> --serving-receipt testbed/runs/SERVING.json --adb runtime/android-sdk/platform-tools/adb.exe --output testbed/runs/dev-01
+runtime/agent-venv/Scripts/python.exe testbed/agent_episode.py --framework m3a --config sent --fault drop-forcestop --phase scheduled --episode-id s01 --scheduled-index 1 --goal-file testbed/runs/goal.txt --tag gx:<6 ký tự> --serving-receipt testbed/runs/SERVING.json --adb runtime/android-sdk/platform-tools/adb.exe --output testbed/runs/s01
+```
+
 ## 7. Chưa có, phải làm trong đợt server
 
-- **Lỗi a11y tree chập chờn:** rủi ro lớn nhất. Episode nào gặp lỗi này ở bước reset sẽ thành INVALID. Cần tìm nguyên nhân (thời điểm forwarder kết nối sau khi boot, cổng gRPC 8554) trước A-dev; không sửa mã AndroidWorld upstream.
-- **Nối M3A với model thật:** `--scripted-agent-wire` chưa qua vì lỗi trên; chạy lại sau khi xử lý được lỗi a11y.
-- **K-9 profile và cách reset (B-03):** tài khoản thử trên GreenMail qua proxy SMTP (`adb reverse`), hai cấu hình không Sent và có Sent.
-- **Harness tiêm lỗi (B-06):** mở rộng `native_episode.py`: bắt lúc Send, để commit rồi bỏ phản hồi, kill agent và force-stop K-9, mở lại, chạy lại M3A cùng task, quan sát 300 s, chấm bằng backend.
+- **Lỗi a11y tree:** chỉ gặp ngay sau cold boot; chờ AVD chạy vài phút rồi mới bắt đầu. Khi không có phiên AndroidWorld nào đang chạy, forwarder mất server gRPC và hiện hộp thoại "keeps stopping"; tắt nó bằng `adb shell settings put secure enabled_accessibility_services '""'`.
+- **Nối M3A với model thật:** chạy mục 6 khi có tunnel.
+- **Harness tiêm lỗi (B-06):** đã viết (mục 6d) và chạy thử trên AVD bằng agent giả lập ngày 10/11, 4/4 đúng kỳ vọng (`testbed/runs/b06/dry-01` đến `dry-04`). Phần chưa thử được là với M3A thật: chặn ở lệnh gọi model (giả lập chỉ thử chặn ở thao tác), đếm token, thời gian mỗi bước. Episode M3A đầu tiên nên là A-dev.
 - **Checker dữ liệu `testbed/check_agent_data.py` và test của nó** (YC-B4).
 
 ## 8. Cuối mỗi ngày

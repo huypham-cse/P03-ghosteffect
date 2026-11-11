@@ -1,0 +1,25 @@
+{
+  "command": [
+    "/usr/bin/python3",
+    "-u",
+    "artifact/scripts/markov_planner.py"
+  ],
+  "git_commit": "a518b5f0628d8864b43b2ac34c137d40d9bdac12",
+  "seed": {
+    "constants": {},
+    "random_seed_expressions": [
+      "seed"
+    ],
+    "note": "No seed changed; expressions and script hash record derived/calibration seeds."
+  },
+  "python_version": "3.12.3 (main, Jul 15 2026, 23:46:41) [GCC 13.3.0]",
+  "date": "2026-11-09T17:12:34.606551+00:00",
+  "host": {
+    "os": "Linux",
+    "architecture": "x86_64",
+    "kernel": "6.18.54.1-microsoft-standard-WSL2"
+  },
+  "csv_sha256": "a5ad737a461808fad9df5118fbe52a958f590e46aabe55840258676f69651ace",
+  "script_sha256": "bb46491413d08e1a9cace080938bf7abe9bf4a9689495585d221dfd2a788546c",
+  "manifest": "artifact/runs/2026-11-10/MANIFEST.json"
+}

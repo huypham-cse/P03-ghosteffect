@@ -1,0 +1,2502 @@
+{
+  "status": "PASS",
+  "kind": "C-01-clean-main-reproduction",
+  "created_utc": "20261109T170418Z",
+  "workspace": "/root/ghosteffect-runs/c01-20261110",
+  "source_inputs": {
+    "manuscript/main.tex": "c7fcfeacd6fc2d186179a5b7e01955abb2f8a48160dc479c8b42d04493785306",
+    "manuscript/build.sh": "e3d6105a6ef11819031565963ed289cb1fc310062f9ca71c4ffb2190cbfc8a62",
+    "manuscript/references.bib": "9a289f1d5d977ae75bc3c4793d1bffac7683be7d5c0895b226e6eede8339c052",
+    "artifact/scripts/sim_nonce.py": "9ccc1b00581b4bb84ea2d296ff4e3bf5d749ef7b0d08e5f7f1e0f080b7b6fa36",
+    "artifact/scripts/planner_sim.py": "106f3d0d22ecb77118d5abfc701cc3187453d57ba97aea8c622a6a7ef27d4545",
+    "artifact/scripts/sim_sprt.py": "c959d6f003242ffa0bc7d2110353ffce2ca78f3ba7d64f199d7772a436589fd2",
+    "artifact/scripts/sim_impossibility.py": "29b20d05e55105f4730ffcce3776435f548381d4f6e81a60f2bdfa672e7442e9",
+    "artifact/scripts/render_real.py": "a47c703b848e8d33abe07d7b4f7b245288bfba334baba8a9107c43bfeddf37b5",
+    "artifact/scripts/real_params.py": "fc08f58533e07f5f7141767ecaf5b069c1c4914c36ecd28186e9d311ce855a18",
+    "artifact/scripts/ge_core.py": "f305f985297e002ee7c27f02a8d0d94503b44a63a0796823bd2968f5bca91d7a",
+    "artifact/scripts/sample_size.py": "099a7c688ce760b8c6599be89fff5736b0f66bbd42eb8d07d1fdb0da3d7f0bd4",
+    "artifact/scripts/ledger.py": "c26ccf5680e502862a7ecd3ec094892336fa5875051a81d8cb5b0d772e3385c2",
+    "artifact/scripts/markov_planner.py": "bb46491413d08e1a9cace080938bf7abe9bf4a9689495585d221dfd2a788546c",
+    "artifact/scripts/render.py": "20f9072219f25067d808ad1c24dbfced86b2ea3d1a3445841632a79c3f822662",
+    "artifact/scripts/bench_ledger.py": "e98444e16e04f8e1b0c902c0aa2aac339c583822568899c7052be51369da9bfb",
+    "artifact/scripts/sim_saga.py": "0a5661b271694ca92cff9881839460057febff44bf85a245686e8524a265aa6e",
+    "artifact/results/real/e4_element_pilot_trials.csv": "96d4c7b600ce7a4f1fd98a38409346b0665f1da4d20b55dab8ad2388b1a1fa95",
+    "artifact/results/real/e4_visibility_lag.csv": "d9631bfe340a6d5d1e187adcd83a6373f259f7d42406fba638b6e4e2246f42da",
+    "artifact/results/real/e4_k9_part2_trials.csv": "2219e83aaf61b4fdeea1b6c9cc4537f6eb38fd891b9bf39706e6bab4adf7237c",
+    "artifact/results/real/e4_element_partD_trials.csv": "0f23c94d019fe9f683877e8a75615b9eaf3c4479d0ba34000dfba2a69b9cc0c1",
+    "artifact/results/real/e4_k9_trials.csv": "268dadb9bd9a97032645f005d025b7d75de7570852e78c40383ea527149cc51d",
+    "artifact/results/real/ledger_powerloss.csv": "06795176b963d8922cb36525942418006ac108cd79089491ca60f240070c4295",
+    "artifact/results/real/SUMMARY.md": "6634b985048257219f42361344a53632356686ca0e94f712b2f4149de7cfd346",
+    "artifact/results/real/e4_outcomes.csv": "023abfb118b051dd7e0bee39f224647a407369890ac0af08057cf1bd0fa1149f",
+    "artifact/results/real/e4_k9_after_sync.csv": "009138a86790eaeaeca9ad66adf7c8408d6b7950841c0ebc3b82dd0b1a626aac",
+    "artifact/results/real/e4_element_partC_trials.csv": "2c5c06a379a79529f11b2aa471d61c20cf0511ea1dfb049f771b8d606170fb88",
+    "artifact/results/real/params.csv": "6dd49c747e84f099d417497bc8b214dd75c9e9c2f4de36aef3fb2b614af6d33f",
+    "artifact/results/real/e4_element_partA_trials.csv": "fb61b8c0d7b80ece5bab5d3611b9d246b9fc958278b2e2a8d7e6b1962184a429",
+    "artifact/results/real/e4_element_partB_trials.csv": "5250d32aecd5c574ebf0577876128ce8e344188d44ae7acba021a4fc3259a9b4",
+    "artifact/results/real/e5_evidence_families.csv": "90507d4ad41bac9b358be486d6978054ff6e76f38e69eb70096e533b1b03c402",
+    "artifact/results/real/e4_eventual_copies.csv": "bc726bc88fefc6493d8a2c0d335179916cc1c4178e2e730d7ad142be07d4b081",
+    "artifact/results/real/ledger_powerloss_summary.csv": "01d2789628c1a73cdd2a418020a45a7648b2a70a22403c75a34c2deabc817124",
+    "artifact/results/real/e5_per_trial_family_errors.csv": "33e31507c21acb5fe94adc1ec62c68f185a040fb752ee8e9b3c0b892111d2023",
+    "artifact/results/real/e4_kill_methods.csv": "12eb5a560d3f8376f67881edf4602fd05ea0e892b24fd9c649b0f45384ff4e8b",
+    "artifact/results/real/campaign2/c2_element_lag.csv": "45450cb4903f4e96073316ade65bd56f6d41d8eaf73997bd750276989f6d231b",
+    "artifact/results/real/campaign2/c2_synapse_txn.csv": "a0b91f183ad82f1ef222d3ed345061a84e9ea8a1a0a82e986aa1e75236fdc1b8",
+    "artifact/results/real/campaign2/c2_k9_summary.csv": "ea8ab89a45a59f9f58bb05c57d562bf9ad6bdd7df615e8df10e5973da9f06d8f",
+    "artifact/results/real/campaign2/c2_element_families.csv": "c17b8c1dabc06293f01f2f7d6cef094e64f881a195028a9190ef9506ef102157",
+    "artifact/results/real/campaign2/c2_element_poll_verdicts.csv": "612a8c4f7586bc61ae865933fa5b5bf2cd535ba020f1d6a0064a592e9908764f",
+    "artifact/results/real/campaign2/c2_element_trials.csv": "9a83e0ecfbd62fcdd1e24bb6c7b65dfbd0bddd0d8544eec6f7b66456e667f2c0",
+    "artifact/results/real/campaign2/c2_k9_families.csv": "e92514263d27ac39538dbe3e47336b06379d7c3da59a9ef1936d27955f6d3e05",
+    "artifact/results/real/campaign2/c2_caldav_trials.csv": "cae42b1fa76c597ecfa00147791cfcea73e3944acbc66e4b0a1f8e4dc4a0639d",
+    "artifact/results/real/campaign2/c2_element_outcomes.csv": "5bc2762c10202f7a1ed523137a55bc015cede69959f4e900a8f6297ee1740eb7",
+    "artifact/results/real/campaign2/c2_k9_nosent_trials.csv": "1804a462ede4f575ac6f504993de2f2596690c82247ba2656badb2a7d105bb1b",
+    "artifact/results/real/campaign2/c2_element_cofailure.csv": "38faeefe30428b05eb87906fd0051be26e1369d90a47cdae33b51e61b8ab7511",
+    "artifact/results/real/campaign2/c1_rescored_cofailures.csv": "7a815e2beb29f3b50da70a2f3ca7a378236aa1ce673f7d27d9ff430cbe3d5d32",
+    "artifact/results/real/campaign2/c2_element_timeout_trials.csv": "97a8899f57ed3669b59d32a2a6c2429833acf9649d3d76ddbe09c1ec137a2ed2",
+    "artifact/results/real/campaign2/c2_element_per_trial_families.csv": "55ec4fff5b51e05e5b25606553c891d49b9ef00ee6807e0b381ecfe943428a05",
+    "artifact/results/real/campaign2/c2_element_first_visible.csv": "8fdf7caf1add057a69726b87267dc8b78068e03581ff22b4df12bebaec03e903",
+    "artifact/results/real/campaign2/pilot_element.csv": "80c8efeb76154b937fb7a801f32453d7d824e5c9352f1bdb4f713c1095db4141",
+    "artifact/results/real/campaign2/pilot_k9.csv": "00cae0c177214c8ef60151aa5955f6ef2034470a101ad443f0a60559683fa96e",
+    "artifact/results/real/campaign2/pilot_caldav.csv": "a5002ded83085cb9a6d6a3fd058f4dc77ba84cf98931c3b3762b9986a473db77",
+    "artifact/results/real/campaign2/c2_k9_sent_trials.csv": "f0970515131b53f1b3d082605a25e5a2119b75eda6e392e321be583456594dfd",
+    "artifact/results/real/campaign2/pilot_k9_sent.csv": "ef1ef01e60341a6f8c2f3d5d38007928568857486433b0e195b1d857eb18ee92",
+    "artifact/results/real/campaign2/logs/source_excerpts_synapse_k9.txt": "81cdfe43aebc1612fb2b2bfe7fb4808798ce545cd322d4f99eea2a18d56fe7e0",
+    "artifact/results/real/campaign2/logs/k9_localstore_snapshot_before_c2.txt": "05e15bc8d97aacd502bbdad77384b33132e23fb07ed05a8396242987ceee16b2",
+    "artifact/results/real/campaign2/logs/versions_hashes.txt": "d71be709496e5a6ec8d418655356477974549a250d560c768bb3155e5d4dd772",
+    "manuscript/figures/fig-arch.tex": "7737b38db036e5799c282e261f599e53fd09b72c5ae852e8aff5bae7a79141c3",
+    "manuscript/figures/fig1.tex": "95a2ff9afabd1a5bc46af9379d470bb42507eeb8474736da476534c5a4d1a666",
+    "manuscript/sections/appendix-proofs.tex": "521fd9068d313099be9aec8efc5c1b9b045f0910b1b85d185346f9f8aabc069a",
+    "manuscript/sections/09-related-work.tex": "b2af04990442d62d18ac3cc380299b2b746e172dc53189dcd3f80edb6d41cc5e",
+    "manuscript/sections/04-theory.tex": "1fe37225a383a25735890fd4e1319c9020fd6b15fc214a7840a7b1e3fe971e5a",
+    "manuscript/sections/07-real.tex": "30f8e6a31f4cea6d1e69940768df2384ef17fce71cc4e622fd4de3bd4173abc5",
+    "manuscript/sections/02-background-motivation.tex": "5d6e09bdc06b0957f6e42c9a082be50d14d2ba36c9ac2486419aa2833c91601a",
+    "manuscript/sections/tab-apps.tex": "924b67baf23956ef53880dec84076813b16b1561aab9ca20acbbce571b88bffa",
+    "manuscript/sections/10-conclusion.tex": "d1809879a6b4c70b1c48031b8be2d2596e09a430956d3dbde0c3a4962ffcb196",
+    "manuscript/sections/01-introduction.tex": "6d63a587416ebe3acee37009620fdd6e61f344b99298cc1f28823d882c88855f",
+    "manuscript/sections/06-implementation.tex": "44064ec98cec46d8386671d5bd8e39891ae368bc2fc1a3c0dfc452260764a7b5",
+    "manuscript/sections/03-model.tex": "948313973a0cd3af299ea9923ebc4ccac2cea059040f9e4566aac589bc060c60",
+    "manuscript/sections/07-evaluation.tex": "c88c8587ddd8a7e9d0a5811b341e73980043620e9340c323268ad04041a9b846",
+    "manuscript/sections/tab-position.tex": "80dc1425fe9bd8034e8f459d48da537642cbd16b16f61de62613a09f2b718820",
+    "manuscript/sections/08-discussion.tex": "ed68d258ac0014b878993f8e6ef92fba54d200ea24cd48609b28044e5c334970",
+    "manuscript/sections/00-abstract.tex": "7a322c143cbec48923d6aa88a7326dca8d8de827c98d1b6dfe13e65ee3901fa2",
+    "manuscript/sections/05-design.tex": "010e13bf22b5532f95c26703e7644fd2b39823fa96899378090c5e1b561b3bcf",
+    "manuscript/figures/icons/label.pdf": "e91911af74b136ec8ba115593ca26c0ae6f2fcf0b8d6bb42e1ce55c38bd8fcb5",
+    "manuscript/figures/icons/eye.pdf": "5024a952219a9b69ef0fe54e25b2ae09ed53dfb860fc608c70fe178e5143f7cb",
+    "manuscript/figures/icons/gear.pdf": "0562d62cc3e4b3e23533f728dd5ed17e2a9cc521b35a9782fe4b5d97d4311238",
+    "manuscript/figures/icons/warning.pdf": "79a42d255cab6a601f4425a6ac86b2148eed25e8028867a574e14f1b0e6ff7b7",
+    "manuscript/figures/icons/repeat.pdf": "2c9e472e32595bb00db6ad6c5bfa8f8a10c9130c8b55eb1b26dcb69c59c7a37e",
+    "manuscript/figures/icons/magnifier.pdf": "e3d7ecfaee9fac4acc6ea996ce5f737bbd23c4ca14914ec2b66dcf471d177fce",
+    "manuscript/figures/icons/check.pdf": "0a672e602bea6bc3e0f80220269c4bbe2557681da2af0e8a1fd8709dbab2cd24",
+    "manuscript/figures/icons/bank.pdf": "9a5952a4251603dc73969a9ebf8baa4ffd1263f5e3471923251369f913affc92",
+    "manuscript/figures/icons/receipt.pdf": "ffdcf2fa161531991a1c80a7be727671bfcc88a674fbd3ec7df1e002b74e8ac5",
+    "manuscript/figures/icons/ghost.pdf": "610eedbb791a902bb532356629656d1a806978f437694f3b65e785965dcc1322",
+    "manuscript/figures/icons/person.pdf": "372a8af3345d51fe462c960782d073bf604c3e2f6f5f87dbcbd66cf2f703409c",
+    "manuscript/figures/icons/shield.pdf": "15185f29a7d1e39cc1be49bd9ff3c6cba8a24cb5785fed0ce8d2c9d659807419",
+    "manuscript/figures/icons/phone.pdf": "7ce04160db3c6e4508d8eee5ec4b46c9f2a65699e8f0f0ab0e23bc2bf16c2dff",
+    "manuscript/figures/icons/nosignal.pdf": "e78bfb09ca1f74e8fd12b2e85549c5294b824153cb09f7f07e0b6b7e0715ec38",
+    "manuscript/figures/icons/bolt.pdf": "165cb411c355b2aa2784a6e304d0472aad0a1b73f76daaaeea4f171cbe829cca",
+    "manuscript/figures/icons/money.pdf": "564895b8f6b681e0381859efc2e9988f64b115d198d98b9f61eaaf7c7b9c3679",
+    "manuscript/figures/icons/lock.pdf": "ab614835145d2c14fff05cb60b807f5145c2e0b3963c983ab74046c77522a75c",
+    "manuscript/figures/icons/cross.pdf": "3d498bf9bd8c758868bd007feb7ae7acdade89dd423d73cfae6d56c20b414255",
+    "manuscript/figures/icons/hourglass.pdf": "f8ccaf7402634966094754cea11ea4e54fd5b054740e02de0a541e80c69ab73b",
+    "manuscript/figures/icons/thinking.pdf": "da72993c5cd736347445d3e1c6e0c36175db1dfe8175ec7966c9e81906279213",
+    "manuscript/figures/icons/robot.pdf": "8ee7c47f9a4cca8772c9ae3870a34a97d24ab0358d627a0791d4b9c7c905b0c4"
+  },
+  "jobs": 4,
+  "timeout_seconds": 7200,
+  "completed": [
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-u",
+        "/root/ghosteffect-runs/c01-20261110/artifact/scripts/sim_sprt.py"
+      ],
+      "log": "/root/ghosteffect-runs/c01-20261110/logs/sim_sprt.log",
+      "seconds": 20.494154211,
+      "outputs": {
+        "artifact/results/sprt_validation.csv": {
+          "rows": 24,
+          "columns": [
+            "eps",
+            "alpha",
+            "beta",
+            "exact_dup",
+            "exact_loss",
+            "exact_EN",
+            "mc_dup",
+            "mc_dup_hi",
+            "mc_loss",
+            "mc_loss_hi",
+            "mc_EN",
+            "mc_EN_ci",
+            "wald_EN",
+            "lb_EN",
+            "ub_EN",
+            "ratio_to_lb",
+            "n_mc"
+          ],
+          "sha256": "699f8b06eb301413da9678b8855e84b4acdc701824828b1fc6cbc0e9c19f6636"
+        },
+        "artifact/results/sprt_asym.csv": {
+          "rows": 8,
+          "columns": [
+            "eps0",
+            "eps1",
+            "alpha",
+            "beta",
+            "exact_dup",
+            "exact_loss",
+            "EN1",
+            "EN0",
+            "LB1",
+            "LB0"
+          ],
+          "sha256": "b711f00f148f8e31b200dcb886d90ab1264bc7f40dd5292e4f316921a1b1cecd"
+        },
+        "artifact/results/calibration.csv": {
+          "rows": 20,
+          "columns": [
+            "n_cal",
+            "mode",
+            "dup",
+            "dup_ci",
+            "viol",
+            "viol_ci",
+            "worst",
+            "EN",
+            "EN_ci",
+            "alpha"
+          ],
+          "sha256": "07d15aae82ee4e24ec5803e9781b6920a34b45aa718dddc15121a2e4c19e1262"
+        },
+        "artifact/results/correlation.csv": {
+          "rows": 12,
+          "columns": [
+            "scenario",
+            "rho",
+            "eps",
+            "alpha",
+            "eps_view_cp",
+            "q1_cp",
+            "bound_all_wrong",
+            "true_all_wrong",
+            "v1-naive_dup",
+            "v1-naive_dup_hi",
+            "v1-naive_ask",
+            "v1-naive_EN",
+            "v1_dup",
+            "v1_dup_hi",
+            "v1_ask",
+            "v1_EN",
+            "v2-view_dup",
+            "v2-view_dup_hi",
+            "v2-view_ask",
+            "v2-view_EN",
+            "v2-cert_dup",
+            "v2-cert_dup_hi",
+            "v2-cert_ask",
+            "v2-cert_EN"
+          ],
+          "sha256": "6dd62d52da3959130846b20fd1b253896b29170792bd715a23a6b8aed8ad17ec"
+        }
+      },
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-u",
+        "/root/ghosteffect-runs/c01-20261110/artifact/scripts/sim_impossibility.py"
+      ],
+      "log": "/root/ghosteffect-runs/c01-20261110/logs/sim_impossibility.log",
+      "seconds": 20.25134691400001,
+      "outputs": {
+        "artifact/results/impossibility.csv": {
+          "rows": 9,
+          "columns": [
+            "pi",
+            "floor",
+            "always-retry",
+            "always-retry_lo",
+            "never-retry",
+            "never-retry_lo",
+            "coin(0.5)",
+            "coin(0.5)_lo",
+            "single-read",
+            "single-read_lo",
+            "majority-of-5",
+            "majority-of-5_lo",
+            "fooled-SPRT",
+            "fooled-SPRT_lo"
+          ],
+          "sha256": "79cb94dab11860014c5d764f4f52e1a9ff732e20bcea095b8b0006800bb9e8cd"
+        },
+        "artifact/results/bayes_floor.csv": {
+          "rows": 19,
+          "columns": [
+            "pi",
+            "n0",
+            "n1",
+            "n3",
+            "n9",
+            "n27"
+          ],
+          "sha256": "a3edef8e792cf0dd6f1c673a7aa0982e54503f184649374a4c2d4293966c8ad1"
+        },
+        "artifact/results/cost_policy.csv": {
+          "rows": 21,
+          "columns": [
+            "ratio",
+            "pi",
+            "always",
+            "never",
+            "bayes",
+            "with_ask",
+            "action"
+          ],
+          "sha256": "776e15b483d6c58156f26c56b01e94a70381db50df51ca2877f027090e69de98"
+        },
+        "artifact/results/late_commit.csv": {
+          "rows": 24,
+          "columns": [
+            "shape",
+            "wait",
+            "q",
+            "floor"
+          ],
+          "sha256": "0fd6b972591c172122cf94ad30864c3d1026a8d8fdd6785b291d38910606be1c"
+        },
+        "artifact/results/lag_wait.csv": {
+          "rows": 12,
+          "columns": [
+            "tail",
+            "alpha_lag",
+            "exact_wait",
+            "certified_wait",
+            "n_lag",
+            "delta",
+            "G_at_cert"
+          ],
+          "sha256": "9e619fd80c66593c1a89bc297d3127be6586a9410f1079f865309a9c21b5ec6c"
+        }
+      },
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-u",
+        "/root/ghosteffect-runs/c01-20261110/artifact/scripts/sim_saga.py"
+      ],
+      "log": "/root/ghosteffect-runs/c01-20261110/logs/sim_saga.log",
+      "seconds": 6.0335233149999965,
+      "outputs": {
+        "artifact/results/saga_alloc.csv": {
+          "rows": 4,
+          "columns": [
+            "k",
+            "n_wf",
+            "obs_opt",
+            "obs_opt_ci",
+            "obs_uni",
+            "obs_uni_ci",
+            "saving_pct",
+            "saving_ci",
+            "saving_p90",
+            "pred_saving_pct",
+            "max_e2e_dup",
+            "max_e2e_loss",
+            "frac_worse",
+            "naive_e2e_dup_mean",
+            "naive_e2e_dup_max"
+          ],
+          "sha256": "e05d56316ba1f4482b215d2d19f26c4065189ea209bebf95827e9b1a1711eb9c"
+        },
+        "artifact/results/saga_mixed.csv": {
+          "rows": 2,
+          "columns": [
+            "k",
+            "secs_opt",
+            "secs_opt_ci",
+            "secs_uni",
+            "secs_uni_ci",
+            "saving_pct",
+            "saving_ci",
+            "saving_max"
+          ],
+          "sha256": "af0103472c8c9fcb92e70cf820aa9f9ed0eedd01ed127c2b99c83c122caa5c97"
+        }
+      },
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-u",
+        "/root/ghosteffect-runs/c01-20261110/artifact/scripts/sim_nonce.py"
+      ],
+      "log": "/root/ghosteffect-runs/c01-20261110/logs/sim_nonce.log",
+      "seconds": 35.140460262999994,
+      "outputs": {
+        "artifact/results/nonce.csv": {
+          "rows": 9,
+          "columns": [
+            "k",
+            "t",
+            "ec",
+            "eps0_analytic",
+            "eps1_analytic",
+            "eps1_mc",
+            "eps1_mc_ci",
+            "fp_mc",
+            "n_mc",
+            "eps0_mc_hi",
+            "D1",
+            "D0",
+            "EN",
+            "p_dup",
+            "p_loss"
+          ],
+          "sha256": "c930077be036901d6c556dc1def1c2442b7f41577676ba63d34dc76846e182fc"
+        },
+        "artifact/results/nonce_before.csv": {
+          "rows": 1,
+          "columns": [
+            "vlm_eps0",
+            "vlm_eps1",
+            "vlm_D1",
+            "vlm_D0",
+            "vlm_EN",
+            "vlm_dup",
+            "lookalike_D"
+          ],
+          "sha256": "8a3cb67800199bad366bcd3bc44c1e1e5cd29e2adb5929b0e2bbdde9e1c19a5e"
+        }
+      },
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-u",
+        "/root/ghosteffect-runs/c01-20261110/artifact/scripts/markov_planner.py"
+      ],
+      "log": "/root/ghosteffect-runs/c01-20261110/logs/markov_planner.log",
+      "seconds": 4.679688762999973,
+      "outputs": {
+        "artifact/results/markov_planner.csv": {
+          "rows": 7,
+          "columns": [
+            "G2",
+            "e2e_eps",
+            "n_max",
+            "budget",
+            "exact_dup",
+            "mc_dup",
+            "mc_dup_hi",
+            "exact_loss",
+            "mc_loss",
+            "mc_loss_hi",
+            "exact_ask",
+            "mc_ask",
+            "EN"
+          ],
+          "sha256": "a5ad737a461808fad9df5118fbe52a958f590e46aabe55840258676f69651ace"
+        },
+        "artifact/results/prism_instance_dp.csv": {
+          "rows": 1,
+          "columns": [
+            "eps",
+            "alpha",
+            "A",
+            "NMAX",
+            "P_dup_given_x1",
+            "P_loss_given_x0",
+            "P_ask_x1",
+            "EN_x1"
+          ],
+          "sha256": "6859de83e5737bcfbf9de76097541a0fa12e49737b255eb4977c1a67d614a879"
+        }
+      },
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-u",
+        "/root/ghosteffect-runs/c01-20261110/artifact/scripts/real_params.py"
+      ],
+      "log": "/root/ghosteffect-runs/c01-20261110/logs/real_params.log",
+      "seconds": 0.031899976999994806,
+      "outputs": {
+        "artifact/results/real/params.csv": {
+          "rows": 22,
+          "columns": [
+            "name",
+            "value",
+            "provenance"
+          ],
+          "sha256": "b9e45b17a33294de8839e26bf92b21c16cbe3133ecd60380f49a3efbb7b4a5e1"
+        }
+      },
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-u",
+        "/root/ghosteffect-runs/c01-20261110/artifact/scripts/planner_sim.py",
+        "rulesweep"
+      ],
+      "log": "/root/ghosteffect-runs/c01-20261110/logs/planner_rulesweep.log",
+      "seconds": 4.532870167999988,
+      "outputs": {
+        "artifact/results/planner_rules_sweep.csv": {
+          "rows": 12,
+          "columns": [
+            "policy",
+            "n",
+            "dup",
+            "dup_lo",
+            "dup_hi",
+            "loss",
+            "loss_lo",
+            "loss_hi",
+            "ask",
+            "ask_lo",
+            "ask_hi",
+            "uerr",
+            "uerr_lo",
+            "uerr_hi",
+            "obs",
+            "secs",
+            "bg",
+            "cdup",
+            "cdup_hi",
+            "closs",
+            "closs_hi",
+            "altered",
+            "why_wait",
+            "why_contra",
+            "why_struct",
+            "why_uncert",
+            "amb",
+            "n1",
+            "n0",
+            "ask1",
+            "ask0",
+            "q1",
+            "q0",
+            "user_e1",
+            "user_e0"
+          ],
+          "sha256": "bb000507f31b6a06daa1457c74f36560c949fad85e77904ebf2de1b4c6863b12"
+        }
+      },
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-u",
+        "/root/ghosteffect-runs/c01-20261110/artifact/scripts/planner_sim.py",
+        "main"
+      ],
+      "log": "/root/ghosteffect-runs/c01-20261110/logs/planner_main.log",
+      "seconds": 18.294161666999997,
+      "outputs": {
+        "artifact/results/planner_sim.csv": {
+          "rows": 24,
+          "columns": [
+            "policy",
+            "n",
+            "dup",
+            "dup_lo",
+            "dup_hi",
+            "loss",
+            "loss_lo",
+            "loss_hi",
+            "ask",
+            "ask_lo",
+            "ask_hi",
+            "uerr",
+            "uerr_lo",
+            "uerr_hi",
+            "obs",
+            "secs",
+            "bg",
+            "cdup",
+            "cdup_hi",
+            "closs",
+            "closs_hi",
+            "altered",
+            "why_wait",
+            "why_contra",
+            "why_struct",
+            "why_uncert",
+            "amb",
+            "n1",
+            "n0",
+            "ask1",
+            "ask0",
+            "q1",
+            "q0",
+            "user_e1",
+            "user_e0",
+            "p_dup",
+            "p_err"
+          ],
+          "sha256": "f873b2557525b80caaa57244653ed4512b25ccf3acdec87ed5a124d0081e59ba"
+        },
+        "artifact/results/planner_class.csv": {
+          "rows": 28,
+          "columns": [
+            "policy",
+            "cls",
+            "effects",
+            "ask",
+            "secs",
+            "cdup"
+          ],
+          "sha256": "06bef5dfee2ced406e619d02a8a05d28db91e349dbc0552be63c755ae9ab7e05"
+        }
+      },
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-u",
+        "/root/ghosteffect-runs/c01-20261110/artifact/scripts/planner_sim.py",
+        "stress1/6"
+      ],
+      "log": "/root/ghosteffect-runs/c01-20261110/logs/planner_stress1_6.log",
+      "seconds": 24.558794098999982,
+      "outputs": {
+        "artifact/results/planner_stress.part1.csv": {
+          "rows": 15,
+          "columns": [
+            "policy",
+            "n",
+            "dup",
+            "dup_lo",
+            "dup_hi",
+            "loss",
+            "loss_lo",
+            "loss_hi",
+            "ask",
+            "ask_lo",
+            "ask_hi",
+            "uerr",
+            "uerr_lo",
+            "uerr_hi",
+            "obs",
+            "secs",
+            "bg",
+            "cdup",
+            "cdup_hi",
+            "closs",
+            "closs_hi",
+            "altered",
+            "why_wait",
+            "why_contra",
+            "why_struct",
+            "why_uncert",
+            "amb",
+            "n1",
+            "n0",
+            "ask1",
+            "ask0",
+            "q1",
+            "q0",
+            "user_e1",
+            "user_e0",
+            "scenario"
+          ],
+          "sha256": "103ef49af9ccfb18b9baaf263452c0fb56caeaa2f4145c1c3e60cd6897d5087b"
+        }
+      },
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-u",
+        "/root/ghosteffect-runs/c01-20261110/artifact/scripts/planner_sim.py",
+        "stress2/6"
+      ],
+      "log": "/root/ghosteffect-runs/c01-20261110/logs/planner_stress2_6.log",
+      "seconds": 24.500341996999992,
+      "outputs": {
+        "artifact/results/planner_stress.part2.csv": {
+          "rows": 15,
+          "columns": [
+            "policy",
+            "n",
+            "dup",
+            "dup_lo",
+            "dup_hi",
+            "loss",
+            "loss_lo",
+            "loss_hi",
+            "ask",
+            "ask_lo",
+            "ask_hi",
+            "uerr",
+            "uerr_lo",
+            "uerr_hi",
+            "obs",
+            "secs",
+            "bg",
+            "cdup",
+            "cdup_hi",
+            "closs",
+            "closs_hi",
+            "altered",
+            "why_wait",
+            "why_contra",
+            "why_struct",
+            "why_uncert",
+            "amb",
+            "n1",
+            "n0",
+            "ask1",
+            "ask0",
+            "q1",
+            "q0",
+            "user_e1",
+            "user_e0",
+            "scenario"
+          ],
+          "sha256": "8ff426aaddef12c723be694eb2d0063e1f01623b294dd78ee513a7adae6a9dff"
+        }
+      },
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-u",
+        "/root/ghosteffect-runs/c01-20261110/artifact/scripts/planner_sim.py",
+        "stress0/6"
+      ],
+      "log": "/root/ghosteffect-runs/c01-20261110/logs/planner_stress0_6.log",
+      "seconds": 32.599009526,
+      "outputs": {
+        "artifact/results/planner_stress.part0.csv": {
+          "rows": 20,
+          "columns": [
+            "policy",
+            "n",
+            "dup",
+            "dup_lo",
+            "dup_hi",
+            "loss",
+            "loss_lo",
+            "loss_hi",
+            "ask",
+            "ask_lo",
+            "ask_hi",
+            "uerr",
+            "uerr_lo",
+            "uerr_hi",
+            "obs",
+            "secs",
+            "bg",
+            "cdup",
+            "cdup_hi",
+            "closs",
+            "closs_hi",
+            "altered",
+            "why_wait",
+            "why_contra",
+            "why_struct",
+            "why_uncert",
+            "amb",
+            "n1",
+            "n0",
+            "ask1",
+            "ask0",
+            "q1",
+            "q0",
+            "user_e1",
+            "user_e0",
+            "scenario"
+          ],
+          "sha256": "f45c6ad46aa59fb9c6823182e742c902f969d4208bb01270759b8636a7764591"
+        }
+      },
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-u",
+        "/root/ghosteffect-runs/c01-20261110/artifact/scripts/planner_sim.py",
+        "stress3/6"
+      ],
+      "log": "/root/ghosteffect-runs/c01-20261110/logs/planner_stress3_6.log",
+      "seconds": 25.856641491000005,
+      "outputs": {
+        "artifact/results/planner_stress.part3.csv": {
+          "rows": 15,
+          "columns": [
+            "policy",
+            "n",
+            "dup",
+            "dup_lo",
+            "dup_hi",
+            "loss",
+            "loss_lo",
+            "loss_hi",
+            "ask",
+            "ask_lo",
+            "ask_hi",
+            "uerr",
+            "uerr_lo",
+            "uerr_hi",
+            "obs",
+            "secs",
+            "bg",
+            "cdup",
+            "cdup_hi",
+            "closs",
+            "closs_hi",
+            "altered",
+            "why_wait",
+            "why_contra",
+            "why_struct",
+            "why_uncert",
+            "amb",
+            "n1",
+            "n0",
+            "ask1",
+            "ask0",
+            "q1",
+            "q0",
+            "user_e1",
+            "user_e0",
+            "scenario"
+          ],
+          "sha256": "4e37ded63d16d82a72d6397ea51adb611911f7e56e797e8d33b46137a72c476a"
+        }
+      },
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-u",
+        "/root/ghosteffect-runs/c01-20261110/artifact/scripts/planner_sim.py",
+        "stress4/6"
+      ],
+      "log": "/root/ghosteffect-runs/c01-20261110/logs/planner_stress4_6.log",
+      "seconds": 24.905920690999977,
+      "outputs": {
+        "artifact/results/planner_stress.part4.csv": {
+          "rows": 15,
+          "columns": [
+            "policy",
+            "n",
+            "dup",
+            "dup_lo",
+            "dup_hi",
+            "loss",
+            "loss_lo",
+            "loss_hi",
+            "ask",
+            "ask_lo",
+            "ask_hi",
+            "uerr",
+            "uerr_lo",
+            "uerr_hi",
+            "obs",
+            "secs",
+            "bg",
+            "cdup",
+            "cdup_hi",
+            "closs",
+            "closs_hi",
+            "altered",
+            "why_wait",
+            "why_contra",
+            "why_struct",
+            "why_uncert",
+            "amb",
+            "n1",
+            "n0",
+            "ask1",
+            "ask0",
+            "q1",
+            "q0",
+            "user_e1",
+            "user_e0",
+            "scenario"
+          ],
+          "sha256": "806b306cd905cda965933f1b9e532fd482e5099d280e0287328a58aede77d822"
+        }
+      },
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-u",
+        "/root/ghosteffect-runs/c01-20261110/artifact/scripts/planner_sim.py",
+        "stress5/6"
+      ],
+      "log": "/root/ghosteffect-runs/c01-20261110/logs/planner_stress5_6.log",
+      "seconds": 25.519729907999988,
+      "outputs": {
+        "artifact/results/planner_stress.part5.csv": {
+          "rows": 15,
+          "columns": [
+            "policy",
+            "n",
+            "dup",
+            "dup_lo",
+            "dup_hi",
+            "loss",
+            "loss_lo",
+            "loss_hi",
+            "ask",
+            "ask_lo",
+            "ask_hi",
+            "uerr",
+            "uerr_lo",
+            "uerr_hi",
+            "obs",
+            "secs",
+            "bg",
+            "cdup",
+            "cdup_hi",
+            "closs",
+            "closs_hi",
+            "altered",
+            "why_wait",
+            "why_contra",
+            "why_struct",
+            "why_uncert",
+            "amb",
+            "n1",
+            "n0",
+            "ask1",
+            "ask0",
+            "q1",
+            "q0",
+            "user_e1",
+            "user_e0",
+            "scenario"
+          ],
+          "sha256": "a3c4ea7091ab192e8bdf8341d4581696251d273872e839a1592caecd54ff433f"
+        }
+      },
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-u",
+        "/root/ghosteffect-runs/c01-20261110/artifact/scripts/planner_sim.py",
+        "user"
+      ],
+      "log": "/root/ghosteffect-runs/c01-20261110/logs/planner_user.log",
+      "seconds": 11.72564093599999,
+      "outputs": {
+        "artifact/results/planner_user.csv": {
+          "rows": 20,
+          "columns": [
+            "policy",
+            "n",
+            "dup",
+            "dup_lo",
+            "dup_hi",
+            "loss",
+            "loss_lo",
+            "loss_hi",
+            "ask",
+            "ask_lo",
+            "ask_hi",
+            "uerr",
+            "uerr_lo",
+            "uerr_hi",
+            "obs",
+            "secs",
+            "bg",
+            "cdup",
+            "cdup_hi",
+            "closs",
+            "closs_hi",
+            "altered",
+            "why_wait",
+            "why_contra",
+            "why_struct",
+            "why_uncert",
+            "amb",
+            "n1",
+            "n0",
+            "ask1",
+            "ask0",
+            "q1",
+            "q0",
+            "user_e1",
+            "user_e0",
+            "user_err"
+          ],
+          "sha256": "2b35b521f2cd3aa84c7a7bbdbba58d9e989513c475f1fcd1a3f4ef0b95a0f2de"
+        }
+      },
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-u",
+        "/root/ghosteffect-runs/c01-20261110/artifact/scripts/planner_sim.py",
+        "sens"
+      ],
+      "log": "/root/ghosteffect-runs/c01-20261110/logs/planner_sens.log",
+      "seconds": 9.028917057000001,
+      "outputs": {
+        "artifact/results/planner_sensitivity.csv": {
+          "rows": 28,
+          "columns": [
+            "policy",
+            "n",
+            "dup",
+            "dup_lo",
+            "dup_hi",
+            "loss",
+            "loss_lo",
+            "loss_hi",
+            "ask",
+            "ask_lo",
+            "ask_hi",
+            "uerr",
+            "uerr_lo",
+            "uerr_hi",
+            "obs",
+            "secs",
+            "bg",
+            "cdup",
+            "cdup_hi",
+            "closs",
+            "closs_hi",
+            "altered",
+            "why_wait",
+            "why_contra",
+            "why_struct",
+            "why_uncert",
+            "amb",
+            "n1",
+            "n0",
+            "ask1",
+            "ask0",
+            "q1",
+            "q0",
+            "user_e1",
+            "user_e0",
+            "variant"
+          ],
+          "sha256": "51b3d7532ab2bd1f1fa87aac3a5c7184d74567c97158e39ea2206446b2440f4f"
+        }
+      },
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-u",
+        "/root/ghosteffect-runs/c01-20261110/artifact/scripts/planner_sim.py",
+        "share"
+      ],
+      "log": "/root/ghosteffect-runs/c01-20261110/logs/planner_share.log",
+      "seconds": 8.135458502000006,
+      "outputs": {
+        "artifact/results/planner_share.csv": {
+          "rows": 15,
+          "columns": [
+            "policy",
+            "family",
+            "share",
+            "n",
+            "total"
+          ],
+          "sha256": "2cbd3a6ff1c02e0c0de97a079e97bde3b1ee6ad33605d828e2774958cbc78f93"
+        }
+      },
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-u",
+        "/root/ghosteffect-runs/c01-20261110/artifact/scripts/planner_sim.py",
+        "decomp"
+      ],
+      "log": "/root/ghosteffect-runs/c01-20261110/logs/planner_decomp.log",
+      "seconds": 24.171471404000016,
+      "outputs": {
+        "artifact/results/planner_decomp.csv": {
+          "rows": 40,
+          "columns": [
+            "seed",
+            "app",
+            "tau",
+            "B_cp",
+            "B_true",
+            "realized"
+          ],
+          "sha256": "32e9b615940608e90490f5ac8b81b771137b0ee18d99d811d56f404ed6440fc3"
+        }
+      },
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-u",
+        "/root/ghosteffect-runs/c01-20261110/artifact/scripts/planner_sim.py",
+        "sweep"
+      ],
+      "log": "/root/ghosteffect-runs/c01-20261110/logs/planner_sweep.log",
+      "seconds": 48.73010599599999,
+      "outputs": {
+        "artifact/results/planner_alpha_sweep.csv": {
+          "rows": 20,
+          "columns": [
+            "policy",
+            "n",
+            "dup",
+            "dup_lo",
+            "dup_hi",
+            "loss",
+            "loss_lo",
+            "loss_hi",
+            "ask",
+            "ask_lo",
+            "ask_hi",
+            "uerr",
+            "uerr_lo",
+            "uerr_hi",
+            "obs",
+            "secs",
+            "bg",
+            "cdup",
+            "cdup_hi",
+            "closs",
+            "closs_hi",
+            "altered",
+            "why_wait",
+            "why_contra",
+            "why_struct",
+            "why_uncert",
+            "amb",
+            "n1",
+            "n0",
+            "ask1",
+            "ask0",
+            "q1",
+            "q0",
+            "user_e1",
+            "user_e0",
+            "alpha"
+          ],
+          "sha256": "644a8b5e5506641a9298017415ba4c66214d81f804d655dbe8b3a23826302513"
+        }
+      },
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-u",
+        "/root/ghosteffect-runs/c01-20261110/artifact/scripts/planner_sim.py",
+        "ncal"
+      ],
+      "log": "/root/ghosteffect-runs/c01-20261110/logs/planner_ncal.log",
+      "seconds": 80.66942618099998,
+      "outputs": {
+        "artifact/results/planner_ncal.csv": {
+          "rows": 29,
+          "columns": [
+            "policy",
+            "n",
+            "dup",
+            "dup_lo",
+            "dup_hi",
+            "loss",
+            "loss_lo",
+            "loss_hi",
+            "ask",
+            "ask_lo",
+            "ask_hi",
+            "uerr",
+            "uerr_lo",
+            "uerr_hi",
+            "obs",
+            "secs",
+            "bg",
+            "cdup",
+            "cdup_hi",
+            "closs",
+            "closs_hi",
+            "altered",
+            "why_wait",
+            "why_contra",
+            "why_struct",
+            "why_uncert",
+            "amb",
+            "n1",
+            "n0",
+            "ask1",
+            "ask0",
+            "q1",
+            "q0",
+            "user_e1",
+            "user_e0",
+            "ncal",
+            "study",
+            "kappa",
+            "shift_test"
+          ],
+          "sha256": "82b59b2cee571ff80ae3fe125552a78c16f5eb2d8c252a33ff59373dc6b5b675"
+        }
+      },
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-u",
+        "/root/ghosteffect-runs/c01-20261110/artifact/scripts/planner_sim.py",
+        "real"
+      ],
+      "log": "/root/ghosteffect-runs/c01-20261110/logs/planner_real.log",
+      "seconds": 103.784239727,
+      "outputs": {
+        "artifact/results/planner_real.csv": {
+          "rows": 59,
+          "columns": [
+            "policy",
+            "n",
+            "dup",
+            "dup_lo",
+            "dup_hi",
+            "loss",
+            "loss_lo",
+            "loss_hi",
+            "ask",
+            "ask_lo",
+            "ask_hi",
+            "uerr",
+            "uerr_lo",
+            "uerr_hi",
+            "obs",
+            "secs",
+            "bg",
+            "cdup",
+            "cdup_hi",
+            "closs",
+            "closs_hi",
+            "altered",
+            "why_wait",
+            "why_contra",
+            "why_struct",
+            "why_uncert",
+            "amb",
+            "n1",
+            "n0",
+            "ask1",
+            "ask0",
+            "q1",
+            "q0",
+            "user_e1",
+            "user_e0",
+            "tag",
+            "app",
+            "cal_pop",
+            "ncal",
+            "keyed",
+            "lag_tail"
+          ],
+          "sha256": "f2e9a94f62a728c6262fca6268002b58e4463494a485bd3721e5697bfd862d74"
+        }
+      },
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-u",
+        "/root/ghosteffect-runs/c01-20261110/artifact/scripts/planner_sim.py",
+        "real4"
+      ],
+      "log": "/root/ghosteffect-runs/c01-20261110/logs/planner_real4.log",
+      "seconds": 209.147902667,
+      "outputs": {
+        "artifact/results/planner_real4_vet.csv": {
+          "rows": 3,
+          "columns": [
+            "policy",
+            "n",
+            "dup",
+            "dup_lo",
+            "dup_hi",
+            "loss",
+            "loss_lo",
+            "loss_hi",
+            "ask",
+            "ask_lo",
+            "ask_hi",
+            "uerr",
+            "uerr_lo",
+            "uerr_hi",
+            "obs",
+            "secs",
+            "bg",
+            "cdup",
+            "cdup_hi",
+            "closs",
+            "closs_hi",
+            "altered",
+            "why_wait",
+            "why_contra",
+            "why_struct",
+            "why_uncert",
+            "amb",
+            "n1",
+            "n0",
+            "ask1",
+            "ask0",
+            "q1",
+            "q0",
+            "user_e1",
+            "user_e0",
+            "tag",
+            "app",
+            "cal_pop",
+            "ncal",
+            "nlag",
+            "keyed",
+            "lag_tail",
+            "downtime",
+            "clock"
+          ],
+          "sha256": "a92bca2be077be3b89a858d0dae3695ff1f64401aa19f343f659909d7234f0f6"
+        },
+        "artifact/results/planner_real4_vetk9.csv": {
+          "rows": 2,
+          "columns": [
+            "policy",
+            "n",
+            "dup",
+            "dup_lo",
+            "dup_hi",
+            "loss",
+            "loss_lo",
+            "loss_hi",
+            "ask",
+            "ask_lo",
+            "ask_hi",
+            "uerr",
+            "uerr_lo",
+            "uerr_hi",
+            "obs",
+            "secs",
+            "bg",
+            "cdup",
+            "cdup_hi",
+            "closs",
+            "closs_hi",
+            "altered",
+            "why_wait",
+            "why_contra",
+            "why_struct",
+            "why_uncert",
+            "amb",
+            "n1",
+            "n0",
+            "ask1",
+            "ask0",
+            "q1",
+            "q0",
+            "user_e1",
+            "user_e0",
+            "tag",
+            "app",
+            "cal_pop",
+            "ncal",
+            "nlag",
+            "keyed",
+            "lag_tail",
+            "downtime",
+            "clock"
+          ],
+          "sha256": "f3382a206b8f2e04ed71e39bf3fef3227ea4e56d7d525076bb3e186b64f0eb84"
+        },
+        "artifact/results/planner_real4_vetk9sent.csv": {
+          "rows": 2,
+          "columns": [
+            "policy",
+            "n",
+            "dup",
+            "dup_lo",
+            "dup_hi",
+            "loss",
+            "loss_lo",
+            "loss_hi",
+            "ask",
+            "ask_lo",
+            "ask_hi",
+            "uerr",
+            "uerr_lo",
+            "uerr_hi",
+            "obs",
+            "secs",
+            "bg",
+            "cdup",
+            "cdup_hi",
+            "closs",
+            "closs_hi",
+            "altered",
+            "why_wait",
+            "why_contra",
+            "why_struct",
+            "why_uncert",
+            "amb",
+            "n1",
+            "n0",
+            "ask1",
+            "ask0",
+            "q1",
+            "q0",
+            "user_e1",
+            "user_e0",
+            "tag",
+            "app",
+            "cal_pop",
+            "ncal",
+            "nlag",
+            "keyed",
+            "lag_tail",
+            "downtime",
+            "clock"
+          ],
+          "sha256": "c7bed795ec1608c2b42568209211bbe9dfe46145d2a496382691d162037270b0"
+        },
+        "artifact/results/planner_real4_lag2k.csv": {
+          "rows": 2,
+          "columns": [
+            "policy",
+            "n",
+            "dup",
+            "dup_lo",
+            "dup_hi",
+            "loss",
+            "loss_lo",
+            "loss_hi",
+            "ask",
+            "ask_lo",
+            "ask_hi",
+            "uerr",
+            "uerr_lo",
+            "uerr_hi",
+            "obs",
+            "secs",
+            "bg",
+            "cdup",
+            "cdup_hi",
+            "closs",
+            "closs_hi",
+            "altered",
+            "why_wait",
+            "why_contra",
+            "why_struct",
+            "why_uncert",
+            "amb",
+            "n1",
+            "n0",
+            "ask1",
+            "ask0",
+            "q1",
+            "q0",
+            "user_e1",
+            "user_e0",
+            "tag",
+            "app",
+            "cal_pop",
+            "ncal",
+            "nlag",
+            "keyed",
+            "lag_tail",
+            "downtime",
+            "clock"
+          ],
+          "sha256": "f4ef0da79a2de2751aeead891c6b473264ec4eca817816e8c37ee564bf741daa"
+        },
+        "artifact/results/planner_real4_lag5k.csv": {
+          "rows": 2,
+          "columns": [
+            "policy",
+            "n",
+            "dup",
+            "dup_lo",
+            "dup_hi",
+            "loss",
+            "loss_lo",
+            "loss_hi",
+            "ask",
+            "ask_lo",
+            "ask_hi",
+            "uerr",
+            "uerr_lo",
+            "uerr_hi",
+            "obs",
+            "secs",
+            "bg",
+            "cdup",
+            "cdup_hi",
+            "closs",
+            "closs_hi",
+            "altered",
+            "why_wait",
+            "why_contra",
+            "why_struct",
+            "why_uncert",
+            "amb",
+            "n1",
+            "n0",
+            "ask1",
+            "ask0",
+            "q1",
+            "q0",
+            "user_e1",
+            "user_e0",
+            "tag",
+            "app",
+            "cal_pop",
+            "ncal",
+            "nlag",
+            "keyed",
+            "lag_tail",
+            "downtime",
+            "clock"
+          ],
+          "sha256": "cb367096d4beb0f7643da6172403530dce009377b624e15c1e8090b7681cef36"
+        },
+        "artifact/results/planner_real4_lag10k.csv": {
+          "rows": 2,
+          "columns": [
+            "policy",
+            "n",
+            "dup",
+            "dup_lo",
+            "dup_hi",
+            "loss",
+            "loss_lo",
+            "loss_hi",
+            "ask",
+            "ask_lo",
+            "ask_hi",
+            "uerr",
+            "uerr_lo",
+            "uerr_hi",
+            "obs",
+            "secs",
+            "bg",
+            "cdup",
+            "cdup_hi",
+            "closs",
+            "closs_hi",
+            "altered",
+            "why_wait",
+            "why_contra",
+            "why_struct",
+            "why_uncert",
+            "amb",
+            "n1",
+            "n0",
+            "ask1",
+            "ask0",
+            "q1",
+            "q0",
+            "user_e1",
+            "user_e0",
+            "tag",
+            "app",
+            "cal_pop",
+            "ncal",
+            "nlag",
+            "keyed",
+            "lag_tail",
+            "downtime",
+            "clock"
+          ],
+          "sha256": "3486b06880ccb43b45c0656b3810a505c8a5757613501ea1e3b08a6a1fbe0699"
+        },
+        "artifact/results/planner_real4_lag20k.csv": {
+          "rows": 2,
+          "columns": [
+            "policy",
+            "n",
+            "dup",
+            "dup_lo",
+            "dup_hi",
+            "loss",
+            "loss_lo",
+            "loss_hi",
+            "ask",
+            "ask_lo",
+            "ask_hi",
+            "uerr",
+            "uerr_lo",
+            "uerr_hi",
+            "obs",
+            "secs",
+            "bg",
+            "cdup",
+            "cdup_hi",
+            "closs",
+            "closs_hi",
+            "altered",
+            "why_wait",
+            "why_contra",
+            "why_struct",
+            "why_uncert",
+            "amb",
+            "n1",
+            "n0",
+            "ask1",
+            "ask0",
+            "q1",
+            "q0",
+            "user_e1",
+            "user_e0",
+            "tag",
+            "app",
+            "cal_pop",
+            "ncal",
+            "nlag",
+            "keyed",
+            "lag_tail",
+            "downtime",
+            "clock"
+          ],
+          "sha256": "f9804007a293e3b92b86677ca6fd438ced7088744d75e6c895fb2afaae1fc278"
+        },
+        "artifact/results/planner_real4_boot10k.csv": {
+          "rows": 2,
+          "columns": [
+            "policy",
+            "n",
+            "dup",
+            "dup_lo",
+            "dup_hi",
+            "loss",
+            "loss_lo",
+            "loss_hi",
+            "ask",
+            "ask_lo",
+            "ask_hi",
+            "uerr",
+            "uerr_lo",
+            "uerr_hi",
+            "obs",
+            "secs",
+            "bg",
+            "cdup",
+            "cdup_hi",
+            "closs",
+            "closs_hi",
+            "altered",
+            "why_wait",
+            "why_contra",
+            "why_struct",
+            "why_uncert",
+            "amb",
+            "n1",
+            "n0",
+            "ask1",
+            "ask0",
+            "q1",
+            "q0",
+            "user_e1",
+            "user_e0",
+            "tag",
+            "app",
+            "cal_pop",
+            "ncal",
+            "nlag",
+            "keyed",
+            "lag_tail",
+            "downtime",
+            "clock"
+          ],
+          "sha256": "142bbad0ebe34b35a8b803f8c7599cd7d629716d3d9e451a3eec76a66e106837"
+        },
+        "artifact/results/planner_real4_tail5.csv": {
+          "rows": 2,
+          "columns": [
+            "policy",
+            "n",
+            "dup",
+            "dup_lo",
+            "dup_hi",
+            "loss",
+            "loss_lo",
+            "loss_hi",
+            "ask",
+            "ask_lo",
+            "ask_hi",
+            "uerr",
+            "uerr_lo",
+            "uerr_hi",
+            "obs",
+            "secs",
+            "bg",
+            "cdup",
+            "cdup_hi",
+            "closs",
+            "closs_hi",
+            "altered",
+            "why_wait",
+            "why_contra",
+            "why_struct",
+            "why_uncert",
+            "amb",
+            "n1",
+            "n0",
+            "ask1",
+            "ask0",
+            "q1",
+            "q0",
+            "user_e1",
+            "user_e0",
+            "tag",
+            "app",
+            "cal_pop",
+            "ncal",
+            "nlag",
+            "keyed",
+            "lag_tail",
+            "downtime",
+            "clock"
+          ],
+          "sha256": "a57f5bdf5c75b58e9b64d72de002007eeee94ec8d1ca38e9af8699547ff01f4f"
+        },
+        "artifact/results/planner_real4_tail5tied.csv": {
+          "rows": 2,
+          "columns": [
+            "policy",
+            "n",
+            "dup",
+            "dup_lo",
+            "dup_hi",
+            "loss",
+            "loss_lo",
+            "loss_hi",
+            "ask",
+            "ask_lo",
+            "ask_hi",
+            "uerr",
+            "uerr_lo",
+            "uerr_hi",
+            "obs",
+            "secs",
+            "bg",
+            "cdup",
+            "cdup_hi",
+            "closs",
+            "closs_hi",
+            "altered",
+            "why_wait",
+            "why_contra",
+            "why_struct",
+            "why_uncert",
+            "amb",
+            "n1",
+            "n0",
+            "ask1",
+            "ask0",
+            "q1",
+            "q0",
+            "user_e1",
+            "user_e0",
+            "tag",
+            "app",
+            "cal_pop",
+            "ncal",
+            "nlag",
+            "keyed",
+            "lag_tail",
+            "downtime",
+            "clock"
+          ],
+          "sha256": "5ba074bbbd3be4257868dc9b4f7c3933dbe54524d7f03df2b34cc5a85867da5d"
+        },
+        "artifact/results/planner_real4_down5.csv": {
+          "rows": 2,
+          "columns": [
+            "policy",
+            "n",
+            "dup",
+            "dup_lo",
+            "dup_hi",
+            "loss",
+            "loss_lo",
+            "loss_hi",
+            "ask",
+            "ask_lo",
+            "ask_hi",
+            "uerr",
+            "uerr_lo",
+            "uerr_hi",
+            "obs",
+            "secs",
+            "bg",
+            "cdup",
+            "cdup_hi",
+            "closs",
+            "closs_hi",
+            "altered",
+            "why_wait",
+            "why_contra",
+            "why_struct",
+            "why_uncert",
+            "amb",
+            "n1",
+            "n0",
+            "ask1",
+            "ask0",
+            "q1",
+            "q0",
+            "user_e1",
+            "user_e0",
+            "tag",
+            "app",
+            "cal_pop",
+            "ncal",
+            "nlag",
+            "keyed",
+            "lag_tail",
+            "downtime",
+            "clock"
+          ],
+          "sha256": "554561cb8fc17c04c1ceefcb884f71013b6378e03141330735bc2490f4074be8"
+        },
+        "artifact/results/planner_real4_down15.csv": {
+          "rows": 2,
+          "columns": [
+            "policy",
+            "n",
+            "dup",
+            "dup_lo",
+            "dup_hi",
+            "loss",
+            "loss_lo",
+            "loss_hi",
+            "ask",
+            "ask_lo",
+            "ask_hi",
+            "uerr",
+            "uerr_lo",
+            "uerr_hi",
+            "obs",
+            "secs",
+            "bg",
+            "cdup",
+            "cdup_hi",
+            "closs",
+            "closs_hi",
+            "altered",
+            "why_wait",
+            "why_contra",
+            "why_struct",
+            "why_uncert",
+            "amb",
+            "n1",
+            "n0",
+            "ask1",
+            "ask0",
+            "q1",
+            "q0",
+            "user_e1",
+            "user_e0",
+            "tag",
+            "app",
+            "cal_pop",
+            "ncal",
+            "nlag",
+            "keyed",
+            "lag_tail",
+            "downtime",
+            "clock"
+          ],
+          "sha256": "b41ac295c9e1e7bba42e222ab76a7da121c83151739ec636a730973a6533a02c"
+        },
+        "artifact/results/planner_real4_t0down5.csv": {
+          "rows": 2,
+          "columns": [
+            "policy",
+            "n",
+            "dup",
+            "dup_lo",
+            "dup_hi",
+            "loss",
+            "loss_lo",
+            "loss_hi",
+            "ask",
+            "ask_lo",
+            "ask_hi",
+            "uerr",
+            "uerr_lo",
+            "uerr_hi",
+            "obs",
+            "secs",
+            "bg",
+            "cdup",
+            "cdup_hi",
+            "closs",
+            "closs_hi",
+            "altered",
+            "why_wait",
+            "why_contra",
+            "why_struct",
+            "why_uncert",
+            "amb",
+            "n1",
+            "n0",
+            "ask1",
+            "ask0",
+            "q1",
+            "q0",
+            "user_e1",
+            "user_e0",
+            "tag",
+            "app",
+            "cal_pop",
+            "ncal",
+            "nlag",
+            "keyed",
+            "lag_tail",
+            "downtime",
+            "clock"
+          ],
+          "sha256": "93afacf9b6b7eea1381f10da39921d1f9843b99786e73aa72b18fbda668f0c30"
+        },
+        "artifact/results/planner_real4_t0down15.csv": {
+          "rows": 2,
+          "columns": [
+            "policy",
+            "n",
+            "dup",
+            "dup_lo",
+            "dup_hi",
+            "loss",
+            "loss_lo",
+            "loss_hi",
+            "ask",
+            "ask_lo",
+            "ask_hi",
+            "uerr",
+            "uerr_lo",
+            "uerr_hi",
+            "obs",
+            "secs",
+            "bg",
+            "cdup",
+            "cdup_hi",
+            "closs",
+            "closs_hi",
+            "altered",
+            "why_wait",
+            "why_contra",
+            "why_struct",
+            "why_uncert",
+            "amb",
+            "n1",
+            "n0",
+            "ask1",
+            "ask0",
+            "q1",
+            "q0",
+            "user_e1",
+            "user_e0",
+            "tag",
+            "app",
+            "cal_pop",
+            "ncal",
+            "nlag",
+            "keyed",
+            "lag_tail",
+            "downtime",
+            "clock"
+          ],
+          "sha256": "e85b0fc3a7f653fcf25ab1538ca9c1d774a25b5b0686433915e81f4e95b255db"
+        },
+        "artifact/results/planner_real4_netlab.csv": {
+          "rows": 2,
+          "columns": [
+            "policy",
+            "n",
+            "dup",
+            "dup_lo",
+            "dup_hi",
+            "loss",
+            "loss_lo",
+            "loss_hi",
+            "ask",
+            "ask_lo",
+            "ask_hi",
+            "uerr",
+            "uerr_lo",
+            "uerr_hi",
+            "obs",
+            "secs",
+            "bg",
+            "cdup",
+            "cdup_hi",
+            "closs",
+            "closs_hi",
+            "altered",
+            "why_wait",
+            "why_contra",
+            "why_struct",
+            "why_uncert",
+            "amb",
+            "n1",
+            "n0",
+            "ask1",
+            "ask0",
+            "q1",
+            "q0",
+            "user_e1",
+            "user_e0",
+            "tag",
+            "app",
+            "cal_pop",
+            "ncal",
+            "nlag",
+            "keyed",
+            "lag_tail",
+            "downtime",
+            "clock"
+          ],
+          "sha256": "8a5ab80ce70999ca4aee16b3afe4ce2259ddab9477f68d118e093d2b0f6c898c"
+        },
+        "artifact/results/planner_real4_netlabkey.csv": {
+          "rows": 2,
+          "columns": [
+            "policy",
+            "n",
+            "dup",
+            "dup_lo",
+            "dup_hi",
+            "loss",
+            "loss_lo",
+            "loss_hi",
+            "ask",
+            "ask_lo",
+            "ask_hi",
+            "uerr",
+            "uerr_lo",
+            "uerr_hi",
+            "obs",
+            "secs",
+            "bg",
+            "cdup",
+            "cdup_hi",
+            "closs",
+            "closs_hi",
+            "altered",
+            "why_wait",
+            "why_contra",
+            "why_struct",
+            "why_uncert",
+            "amb",
+            "n1",
+            "n0",
+            "ask1",
+            "ask0",
+            "q1",
+            "q0",
+            "user_e1",
+            "user_e0",
+            "tag",
+            "app",
+            "cal_pop",
+            "ncal",
+            "nlag",
+            "keyed",
+            "lag_tail",
+            "downtime",
+            "clock"
+          ],
+          "sha256": "8cace1b127fd3c7678448959fea3ca7abad51ab4ee771a5fc16f1a21623f66b1"
+        }
+      },
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-u",
+        "/root/ghosteffect-runs/c01-20261110/artifact/scripts/sample_size.py"
+      ],
+      "log": "/root/ghosteffect-runs/c01-20261110/logs/sample_size.log",
+      "seconds": 0.032324072999983855,
+      "outputs": {
+        "artifact/results/sample_size.csv": {
+          "rows": 4,
+          "columns": [
+            "alpha",
+            "p",
+            "delta_prod",
+            "delta_joint",
+            "prod_n",
+            "prod_n0",
+            "joint_n",
+            "joint_n_q",
+            "joint_n_k",
+            "lag_n",
+            "prod_n_key",
+            "prod_n0_key",
+            "joint_n_key",
+            "joint_n_q_key",
+            "joint_n_k_key",
+            "lag_n_key",
+            "lag_n_full",
+            "lag_n_full_key"
+          ],
+          "sha256": "47c66e37427349fc5bbb3572c81293466f22a6ab540c9942a967c48e53838b46"
+        }
+      },
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-u",
+        "/root/ghosteffect-runs/c01-20261110/artifact/scripts/bench_ledger.py"
+      ],
+      "log": "/root/ghosteffect-runs/c01-20261110/logs/bench_ledger.log",
+      "seconds": 61.26778547399999,
+      "outputs": {
+        "artifact/results/ledger_bench.csv": {
+          "rows": 1,
+          "columns": [
+            "issue_p50_ms",
+            "issue_p95_ms",
+            "fullfsync_p50_ms",
+            "fullfsync_p95_ms",
+            "bytes_per_effect",
+            "kill_trials",
+            "taps_checked",
+            "invariant_violations",
+            "ghost_candidates",
+            "fullfsync_supported",
+            "kill_window_origin"
+          ],
+          "sha256": "d9cec1de48b2400001aaf4e64e9109eac674abf7067261aa82388d5409fc5fae"
+        }
+      },
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-u",
+        "/root/ghosteffect-runs/c01-20261110/artifact/scripts/render.py"
+      ],
+      "log": "/root/ghosteffect-runs/c01-20261110/logs/render.log",
+      "seconds": 0.0641882859999896,
+      "outputs": {},
+      "exit_code": 0
+    }
+  ],
+  "errors": [],
+  "study_date_local": "2026-11-10",
+  "timezone": "Asia/Saigon",
+  "source_commit": "a518b5f0628d8864b43b2ac34c137d40d9bdac12",
+  "source_branch": "main",
+  "clean_source_verified_before_and_after": true,
+  "python_version": "3.12.3 (main, Jul 15 2026, 23:46:41) [GCC 13.3.0]",
+  "host": {
+    "os": "Linux",
+    "architecture": "x86_64",
+    "kernel": "6.18.54.1-microsoft-standard-WSL2"
+  },
+  "promoted_csvs": [
+    "artifact/results/sprt_validation.csv",
+    "artifact/results/sprt_asym.csv",
+    "artifact/results/calibration.csv",
+    "artifact/results/correlation.csv",
+    "artifact/results/impossibility.csv",
+    "artifact/results/bayes_floor.csv",
+    "artifact/results/cost_policy.csv",
+    "artifact/results/late_commit.csv",
+    "artifact/results/lag_wait.csv",
+    "artifact/results/saga_alloc.csv",
+    "artifact/results/saga_mixed.csv",
+    "artifact/results/nonce.csv",
+    "artifact/results/nonce_before.csv",
+    "artifact/results/markov_planner.csv",
+    "artifact/results/prism_instance_dp.csv",
+    "artifact/results/planner_rules_sweep.csv",
+    "artifact/results/planner_sim.csv",
+    "artifact/results/planner_class.csv",
+    "artifact/results/planner_stress.part1.csv",
+    "artifact/results/planner_stress.part2.csv",
+    "artifact/results/planner_stress.part0.csv",
+    "artifact/results/planner_stress.part3.csv",
+    "artifact/results/planner_stress.part4.csv",
+    "artifact/results/planner_stress.part5.csv",
+    "artifact/results/planner_user.csv",
+    "artifact/results/planner_sensitivity.csv",
+    "artifact/results/planner_share.csv",
+    "artifact/results/planner_decomp.csv",
+    "artifact/results/planner_alpha_sweep.csv",
+    "artifact/results/planner_ncal.csv",
+    "artifact/results/planner_real.csv",
+    "artifact/results/planner_real4_vet.csv",
+    "artifact/results/planner_real4_vetk9.csv",
+    "artifact/results/planner_real4_vetk9sent.csv",
+    "artifact/results/planner_real4_lag2k.csv",
+    "artifact/results/planner_real4_lag5k.csv",
+    "artifact/results/planner_real4_lag10k.csv",
+    "artifact/results/planner_real4_lag20k.csv",
+    "artifact/results/planner_real4_boot10k.csv",
+    "artifact/results/planner_real4_tail5.csv",
+    "artifact/results/planner_real4_tail5tied.csv",
+    "artifact/results/planner_real4_down5.csv",
+    "artifact/results/planner_real4_down15.csv",
+    "artifact/results/planner_real4_t0down5.csv",
+    "artifact/results/planner_real4_t0down15.csv",
+    "artifact/results/planner_real4_netlab.csv",
+    "artifact/results/planner_real4_netlabkey.csv",
+    "artifact/results/sample_size.csv"
+  ],
+  "csv_differences": [
+    {
+      "file": "artifact/results/planner_sim.csv",
+      "before_sha256": "8548109443f48610139d14b838c52bf88a6774d7a1aa35eb69d0e621f8a6ed71",
+      "after_sha256": "f873b2557525b80caaa57244653ed4512b25ccf3acdec87ed5a124d0081e59ba"
+    }
+  ],
+  "b_owned_params_provenance_changes_not_promoted": [
+    {
+      "name": "elem_tail_ub",
+      "archived": "one-sided 95% CP upper bound on P(not visible within the window) from 0/101 censored (used only for the lag-tail sensitivity rows; not a measurement)",
+      "fresh": "one-sided 95% zero-exceedance/order-statistic reference from 101 recorded first-visibility endpoints (not a common follow-up window; missing attempts not characterized); used only for lag-tail sensitivity under the sampling assumptions, not a measured tail rate"
+    },
+    {
+      "name": "k9_failed_commit",
+      "archived": "K-9 (campaign 2): after a lost SMTP reply the mail stays in the Outbox with send_state=error, 0 new DATA on Sync or Send-messages, in 20/20 (c2_k9_summary.csv)",
+      "fresh": "K-9 campaign-2 plug-in: Outbox:error persists over the observed windows in 20/20 lost-reply cases, with no new DATA observed. Sync tap recorded 20/20; explicit Send-messages tap recorded 8/20, not verified for the remaining cases (per-trial CSVs). Unattended permanent failure was not measured."
+    }
+  ],
+  "ledger_policy": "Fresh benchmark succeeded; receipt retained here. B-owned artifact/results/ledger_bench.csv was not replaced.",
+  "branch_build": {
+    "status": "PASS",
+    "command": "sh manuscript/build.sh",
+    "exit_code": 0,
+    "pdf_sha256": "ead750a53503d9c744d0815b2858b2a06078b50643085b764f27f76b7906df0f",
+    "pages": 20,
+    "max_overfull_pt": 7.89293,
+    "undefined_references_or_citations": 0,
+    "unresolved_question_marks": 0,
+    "references_pages": [
+      13
+    ],
+    "conclusion_heading_pages": [
+      13
+    ],
+    "final_body_page_limit_met": false,
+    "layout_note": "Conclusion is on page 13; C-06 and the later editorial tasks must recover space before final submission.",
+    "first_attempt": "Missing binhex.tex; installed texlive-plain-generic and retried successfully."
+  },
+  "split_comparison": {
+    "status": "PASS",
+    "macro_names_and_values_preserved": 972,
+    "byte_identical_table_figure_fragments": 19,
+    "basis": "Clean-main renderer and split renderer on the same promoted CSVs and retained B-owned ledger."
+  },
+  "team_acceptance": "Not claimed; pending PR and independent review.",
+  "macro_changes_vs_committed_tex": {
+    "ClassSrcGtwoAsk": {
+      "committed": "31.0",
+      "fresh": "30.4"
+    },
+    "ClassSrcLocalAsk": {
+      "committed": "6.0",
+      "fresh": "6.5"
+    },
+    "ClassSrcNonGtwoAsk": {
+      "committed": "64.3",
+      "fresh": "63.9"
+    },
+    "ClassSrcVlmAsk": {
+      "committed": "99.0",
+      "fresh": "98.8"
+    },
+    "LedgerCand": {
+      "committed": "92",
+      "fresh": "91"
+    },
+    "LedgerFullPfifty": {
+      "committed": "4.0",
+      "fresh": "--"
+    },
+    "LedgerFullPninetyfive": {
+      "committed": "4.2",
+      "fresh": "--"
+    },
+    "LedgerPfifty": {
+      "committed": "0.04",
+      "fresh": "1.70"
+    },
+    "LedgerPninetyfive": {
+      "committed": "0.09",
+      "fresh": "4.05"
+    },
+    "LedgerTaps": {
+      "committed": "228{,}793",
+      "fresh": "3{,}264"
+    },
+    "NcalASrcAsk": {
+      "committed": "100.0",
+      "fresh": "99.3"
+    },
+    "NcalCSrcAsk": {
+      "committed": "62.1",
+      "fresh": "61.9"
+    },
+    "NcalDSrcAsk": {
+      "committed": "60.0",
+      "fresh": "59.9"
+    },
+    "NcalESrcAsk": {
+      "committed": "47.4",
+      "fresh": "47.0"
+    },
+    "NcalESrcPv": {
+      "committed": "0.00",
+      "fresh": "0.01"
+    },
+    "NcalFSrcAsk": {
+      "committed": "27.2",
+      "fresh": "27.1"
+    },
+    "NcalGSrcAsk": {
+      "committed": "23.8",
+      "fresh": "23.7"
+    },
+    "NcalGSrcPv": {
+      "committed": "0.05",
+      "fresh": "0.04"
+    },
+    "NsizeKeyHi": {
+      "committed": null,
+      "fresh": "5.0"
+    },
+    "NsizeKeyJointTwo": {
+      "committed": null,
+      "fresh": "4.6"
+    },
+    "NsizeKeyLo": {
+      "committed": null,
+      "fresh": "4.3"
+    },
+    "NsizeLagFull": {
+      "committed": null,
+      "fresh": "2{,}322"
+    },
+    "NsizeLagFullKey": {
+      "committed": null,
+      "fresh": "2{,}668"
+    },
+    "NsizeProdTwo": {
+      "committed": "221",
+      "fresh": "193"
+    },
+    "PopCmASrcAsk": {
+      "committed": "49.4",
+      "fresh": "49.1"
+    },
+    "PopCmBSrc": {
+      "committed": "0.01",
+      "fresh": "0.00"
+    },
+    "PopCmBSrcAsk": {
+      "committed": "49.8",
+      "fresh": "49.4"
+    },
+    "PopCmBSrcHi": {
+      "committed": "0.07",
+      "fresh": "0.04"
+    },
+    "PopCmCSrcAsk": {
+      "committed": "50.5",
+      "fresh": "50.2"
+    },
+    "PopIwFSrcAsk": {
+      "committed": "55.6",
+      "fresh": "55.0"
+    },
+    "PopIwPSrc": {
+      "committed": "0.13",
+      "fresh": "0.16"
+    },
+    "PopIwPSrcAsk": {
+      "committed": "47.9",
+      "fresh": "48.0"
+    },
+    "PopIwPSrcHi": {
+      "committed": "0.24",
+      "fresh": "0.27"
+    },
+    "RealBlindLagLo": {
+      "committed": "4.5",
+      "fresh": "4.6"
+    },
+    "RealLagFsMed": {
+      "committed": "11.9",
+      "fresh": "12.0"
+    },
+    "RsimElemRulesDup": {
+      "committed": "0.42",
+      "fresh": "0.43"
+    },
+    "RsimElemRulesLoss": {
+      "committed": "0.07",
+      "fresh": "0.08"
+    },
+    "RsimKnineAppDup": {
+      "committed": "21.07",
+      "fresh": "21.08"
+    },
+    "RsimKnineGtwoDup": {
+      "committed": "4.47",
+      "fresh": "4.48"
+    },
+    "RsimKnineJointDup": {
+      "committed": "4.12",
+      "fresh": "4.13"
+    },
+    "RsimKsentRulesLoss": {
+      "committed": "0.07",
+      "fresh": "0.08"
+    },
+    "RsimMixJointDup": {
+      "committed": "2.92",
+      "fresh": "2.93"
+    },
+    "RsimPassJointDup": {
+      "committed": "6.97",
+      "fresh": "6.98"
+    },
+    "RsimPoolJointDup": {
+      "committed": "2.92",
+      "fresh": "2.93"
+    },
+    "RsimTailCalJointDup": {
+      "committed": "4.62",
+      "fresh": "4.63"
+    },
+    "RsimTailCalSrcLoss": {
+      "committed": "2.27",
+      "fresh": "2.28"
+    },
+    "RsimUnkSrcErr": {
+      "committed": "5.12",
+      "fresh": "5.13"
+    },
+    "RuleMinPvAsk": {
+      "committed": "24.1",
+      "fresh": "24.2"
+    },
+    "ShareSrcNonce": {
+      "committed": "73",
+      "fresh": "72"
+    },
+    "ShareSrcVlm": {
+      "committed": "17",
+      "fresh": "19"
+    },
+    "SimAtomixDurDup": {
+      "committed": "5.3",
+      "fresh": "5.4"
+    },
+    "SimAtomixDurLoss": {
+      "committed": "9.9",
+      "fresh": "10.0"
+    },
+    "SimGtwoDup": {
+      "committed": "2.0",
+      "fresh": "2.1"
+    },
+    "SimNoHopDup": {
+      "committed": "1.6",
+      "fresh": "1.7"
+    },
+    "SimRulesDup": {
+      "committed": "0.97",
+      "fresh": "0.98"
+    },
+    "SimSrcAsk": {
+      "committed": "47.4",
+      "fresh": "47.0"
+    },
+    "SimSrcLoss": {
+      "committed": "1.6",
+      "fresh": "1.5"
+    },
+    "SimSrcPv": {
+      "committed": "0.00",
+      "fresh": "0.01"
+    },
+    "SimSrcPvHi": {
+      "committed": "0.04",
+      "fresh": "0.07"
+    }
+  },
+  "generated_output_hashes": {
+    "manuscript/generated/fig_floor.tex": "838c34323f770b8b781a708f82003b62d480910e8988642dd7286652844b2cab",
+    "manuscript/generated/fig_pareto.tex": "8dba738c1ec98f6edcc6df9d3026c2b0188959152af90f142fc72164b1e4659d",
+    "manuscript/generated/fig_sprt.tex": "c0a6cb2463d1ae2ba62aee22065d16ad9f55be69a45d9363d6ff81c6eefe9444",
+    "manuscript/generated/macros.tex": "369ca714dd69c31459ff87b0e0a0b73a18d5a80afbef772b8b1db9a87c2a2ddc",
+    "manuscript/generated/macros_guarantee.tex": "f47c9a7125089df09dc6ac38e0a9987f5e2b71a1992453e40b66d4ceea9d19ec",
+    "manuscript/generated/macros_real.tex": "525a56b5eda1a3034c48bd3cf9aa162d0ad94a60148341b6959198f5623f18f2",
+    "manuscript/generated/real_section.tex": "c1ef49823023e0c30e7c148f1c0f38c76661a767495b5dc269035c1f354ebf05",
+    "manuscript/generated/tab_calib.tex": "d6193e6ae706f1172e8579a46d701b234b836696b9dea7828c5cfdd766a59513",
+    "manuscript/generated/tab_corr.tex": "99590213dedd7fab0bc5ec298f0985c063f6b17cdfa946a0de08ff77209ad116",
+    "manuscript/generated/tab_lag.tex": "d307f708cea1f118fab883d9bb16a3a5498fa0b3a1b8f4f851d310060b7f183a",
+    "manuscript/generated/tab_nonce.tex": "c37530d4e5078b15bdaa178b89d6cc0e4f97ff7570b8c44b6d7a3a7d6e0c4634",
+    "manuscript/generated/tab_nsize.tex": "ef8bd2e2ab353fedb58e7f44188f499a69bb0ba5d04aa7ccb755bc43e0d888b4",
+    "manuscript/generated/tab_planner.tex": "8fd57f4dca652199ef3b124d49c783659e13342da983676149b161be1df62c0b",
+    "manuscript/generated/tab_pop.tex": "1b5fd1c771d2c481cb6788f3256ee8ece19dfa20d221add2eb7a0c5487fa67fe",
+    "manuscript/generated/tab_real.tex": "12ef346be14e1d1c2f901bcb222ef47f306ec08e3f3e5e7c7ad28f9c86da1e3c",
+    "manuscript/generated/tab_real4.tex": "9791bc29c95312d036d9dab11c5fbf0fd4f34d080389b9fb9e43b720fadca9e2",
+    "manuscript/generated/tab_realcone.tex": "4fd3155c02fa0ec631f0e9fcc954d2fecbe0b11978891a451141e467e0f4412a",
+    "manuscript/generated/tab_realsim.tex": "9c697f2aa919dc3a9928ca8d811e9a8a044711c3e538d1603d5c73c782a148fb",
+    "manuscript/generated/tab_saga.tex": "4b17fa262ae1b237d621e5c59fbfce4cd4508f9a854b5bde513836c15daf76b8",
+    "manuscript/generated/tab_sens.tex": "efe7e807682b7fa0f6c09eda864a4060fba05e7a1e74b5bf1b6dd5eed5274f6b",
+    "manuscript/generated/tab_sprt.tex": "c9653d290e9995284db96851e0dbbd224a239289388c80df8288a76c9739b2ee",
+    "manuscript/generated/tab_stress.tex": "e893d6af69d74de6d4583b1d8f0e47c8bce3bccb1e43e5ad64a422d064b87c18"
+  },
+  "notes_sha256": "f9961cdf45c8c084d701c8af25361a3f0a313ef3d87ecdd792f806c64183b112",
+  "validation": {
+    "artifact_tests": {
+      "run": 41,
+      "passed": 41,
+      "skipped": 0
+    },
+    "testbed_tests": {
+      "run": 70,
+      "passed": 67,
+      "skipped": 3,
+      "reason": "Android/backend integration environment unavailable"
+    },
+    "raw_measurement_csv_changed": false
+  },
+  "c01_status": "Pipeline, promotion, mechanical split and build validated; B-owned params provenance update and team review remain open."
+}
