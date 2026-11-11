@@ -2016,7 +2016,35 @@ def part_share():
     write('planner_share.csv', rows)
 
 
-PARTS = dict(share=part_share, main=part_main, rulesweep=part_rulesweep, stress=part_stress, sweep=part_sweep, user=part_user, sens=part_sens, ncal=part_ncal,
+# C-05: fixed reporting design; no new seed, budget or policy tuning.
+SEED_CASES = {
+    'model': (['redo', 'g2-only', 'always-ask', 'rules', 'ghost', 'ghost-joint'], {}),
+    'element': (['ghost', 'ghost-joint'], dict(only_app='element', cal_pop='fault', keyed='all')),
+    'element5k': (['ghost', 'ghost-joint'], dict(only_app='element', cal_pop='fault', keyed='all', ncal_scale=2.5)),
+    'k9': (['ghost', 'ghost-joint'], dict(only_app='k9', cal_pop='fault')),
+    'k9sent': (['ghost', 'ghost-joint'], dict(only_app='k9sent', cal_pop='fault')),
+}
+
+
+def part_seedvariance():
+    """Report the original Table 2/4 rows by original seed, without pooling away variability."""
+    measured = real_overrides()
+    if not measured:
+        raise ValueError('seed variance requires the archived measured parameters')
+    measured.pop('elem_tail_ub', None)
+    rows = []
+    for case, (policies, extra) in SEED_CASES.items():
+        overrides = dict(extra) if case == 'model' else dict(measured, catalog='measured', **extra)
+        for seed in SEEDS:
+            out, eff = run(policies, seeds=[seed], overrides=overrides)
+            for row in summarize(out, eff, policies):
+                row.update(case=case, seed=seed, ncal=int(round(NCAL * extra.get('ncal_scale', 1))),
+                           nlag=extra.get('nlag', N_LAG), keyed=extra.get('keyed', 'pooled'))
+                rows.append(row)
+    write('planner_seed_variance.csv', rows)
+
+
+PARTS = dict(seedvariance=part_seedvariance, share=part_share, main=part_main, rulesweep=part_rulesweep, stress=part_stress, sweep=part_sweep, user=part_user, sens=part_sens, ncal=part_ncal,
              decomp=part_decomp, real=part_real)
 
 if __name__ == '__main__':

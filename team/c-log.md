@@ -423,3 +423,15 @@ C-03 chờ review #13; C-04 chờ review #26; C-05 seed variance chưa triển k
 C-07 related work, C-08 abstract, C-09 intro/discussion/conclusion, C-11 readability,
 C-12 anonymous bundle còn phải làm. Chỉ chốt nhận định agent khi B có dữ liệu thật.
 C-13 là freeze/submit đúng lịch, không thực hiện sớm hoặc tự nghiệm thu thay nhóm.
+
+## 11/11/2026 — C-05 freeze thiết kế trước khi chạy
+
+Đóng băng part seedvariance: dùng nguyên SEEDS 101,202,303,404,505 và 2.400
+workflow mỗi seed; alpha/beta mặc định, không sửa ngân sách hoặc calibrator.
+Dòng model: redo, theorem-only, always-ask, rules, product, joint. Dòng measured:
+Element 2k/5k, K9 không/có Sent, product/joint, đúng ngân sách Table 4 hiện hữu.
+Xuất riêng từng seed (70 dòng), báo mean/sample SD/range, không coi SD là CI.
+Sẽ kiểm weighted pooled metrics khớp CSV gốc trước khi promote. Part mới được
+commit trước output, chạy trong workspace riêng từ snapshot commit sạch;
+đây là thí nghiệm bổ sung theo seed, không gọi là rerun toàn pipeline trên main.
+Không đổi dữ liệu raw hoặc số aggregate cũ. C-05 đang làm; chưa có kết quả.
