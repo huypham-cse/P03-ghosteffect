@@ -248,3 +248,13 @@ mạo nhận trưởng nhóm hoặc A/B đã duyệt. Không có thay đổi cod
 
 Tiếp theo: publish PR đề xuất sau khi đăng nhập GitHub, rồi chốt với nhóm
 trước 11/11; C-10 được tách tiếp ở commit khác.
+
+## 11/11/2026 — C-02 sau khi C-01 được squash-merge
+
+C-01 đã được trưởng nhóm duyệt và merge tại PR #10. Đã rebase C-02 lên
+main mới, giữ PR #11 chỉ chứa tài liệu quy ước và nhật ký của C-02.
+Review của trưởng nhóm xác nhận nội dung đúng R06. A đã cung cấp hợp đồng
+105 macro tại PR #9; không nhận thay quyết định hoặc sự đồng ý của A/B.
+C-02 còn chờ trưởng nhóm chốt quyền sửa paper, chỉ định người nghiệm thu C,
+và hợp đồng Agent*/LabelTrial* từ B theo review #11 ngày 11/11.
+Tiếp theo: retarget #11 về main; chờ xác nhận để chốt tài liệu, không tự merge.
