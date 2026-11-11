@@ -468,7 +468,7 @@ order_b = ['redo', 'ckpt', 'atomix', 'atomix-durable', 'verify', 'key', 'key-ask
 order_a = ['ghost-nononce', 'ghost-nohop1', 'ghost-nodigest', 'ghost-nocal', 'ghost-uniform', 'ghost-noask', 'ghost-visible']
 hw = max(max(float(P[p]['dup_hi']) - float(P[p]['dup']), float(P[p]['dup']) - float(P[p]['dup_lo'])) for p in P)
 M('SimHalfWidth', f1(hw))
-W('tab_planner.tex', r"""\begin{table}[t]
+_planner_full = (r"""\begin{table}[t]
 \centering
 \caption{Model-based simulation: 12{,}000 paired interrupted workflows (5 seeds $\times$ 2{,}400), $\alpha{=}\beta{=}1\%$ per workflow, default
 world (persistent nonce misses, within-view VLM correlation 0.6, cross-view 0.1, fallible Monitor, user wrong on 5\% of asks, 10\% with a look-alike), 2{,}000
@@ -487,7 +487,20 @@ Policy & dup & loss & ask & $P_{\mathrm{v}}$ & s \\
 \bottomrule
 \end{tabular}
 \end{table}
-""")
+"""
+)
+W('tab_planner_extended.tex', _planner_full.replace('tab:planner}', 'tab:planner-extended}'))
+_main_rows = '\n'.join(prow(P[p]) for p in ('redo', 'g2-only', 'always-ask', 'rules', 'ghost', 'ghost-joint'))
+_full_rows = '\n'.join(prow(P[p]) for p in order_b[:12]) + '\n\\midrule\n' + '\n'.join(prow(P[p]) for p in order_b[12:]) + '\n\\midrule\n' + '\n'.join(prow(P[p]) for p in order_a)
+_planner_main = _planner_full.replace(_full_rows, _main_rows)
+_caption_start = _planner_main.index(r'\caption{')
+_caption_end = _planner_main.index(r'\label{', _caption_start)
+_planner_main = _planner_main[:_caption_start] + r"""\caption{Model-based simulation on the same \SimN{} interrupted workflows per policy.
+dup/loss include user errors; ask is the asking rate; $P_{\mathrm v}$ counts committed effects retried by the planner; s is blocking time.
+Rates are percentages. Full assumptions, baselines and ablations are in Appendix~\ref{app:extra}.}
+""" + _planner_main[_caption_end:]
+W('tab_planner.tex', _planner_main)
+
 mm = lambda k, p, fmt=f2: fmt(P[p][k])
 for key, pol in [('Redo', 'redo'), ('Ckpt', 'ckpt'), ('Atomix', 'atomix'), ('AtomixDur', 'atomix-durable'), ('Verify', 'verify'),
                  ('Key', 'key'), ('KeyAsk', 'key-ask'), ('AskAll', 'always-ask'), ('NonceAsk', 'nonce-ask'), ('Maj', 'maj3-ask'),
@@ -668,7 +681,7 @@ for r in ss:
     lines.append(f"{alpha_tex(r['alpha'])} & {float(r['p']) * 100:.1f}\\% & {nn(r['prod_n'])} & {nn(r['prod_n0'])} & {nn(r['joint_n'])} & {nn(r['joint_n_q'])} & {nn(r['joint_n_k'])} & {nn(r['lag_n'])}" + r' \\')
 W('tab_nsize.tex', r"""\begin{table}[t]
 \centering
-\caption{Calibration sizes that make certification possible (exact one-sided Clopper--Pearson, $\delta{=}\min(\alpha,\beta)/(10K)$, $\alpha{=}\beta$), per stratum. Keying by the four
+\caption{Calibration sizes that make certification possible (exact one-sided Clopper--Pearson, $\delta{=}\min(\alpha,\beta)/(10K n_{\mathrm{cls}})$, $\alpha{=}\beta$), per stratum. Keying by the four
 observable fault classes multiplies every entry by \NsizeKeyLo--\NsizeKeyHi{} (each class needs its own labels and is certified at $\delta/4$). Product (A2): effects so that two families, each with true wrong-verdict rate $p$, multiply to
 $\alpha_{\mathrm{test}}{=}\alpha/2$; \emph{med.}: observed at the expected count $\lceil pn\rceil$ (about half of such sets fail), \emph{0}: zero wrong verdicts (minimum for any $p$).
 Joint: whole effects for a jointly calibrated region to certify $\alpha_{\mathrm{test}}$ with zero events (\emph{0}), at a true region rate $\alpha_{\mathrm{test}}/4$ (\emph{med.}), and with zero events for one
