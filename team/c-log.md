@@ -248,3 +248,16 @@ trước 13/11. Nhánh PR này nối tiếp C-02 để mỗi diff chỉ chứa m
 
 Tiếp theo: push ba nhánh sau khi xác thực GitHub; tiếp tục C-03 trong nhánh
 phát triển. C-01/C-02/C-10 chưa được tự đánh dấu nghiệm thu hoặc merge.
+
+## 11/11/2026 — C-10 cập nhật main và kiểm tra lại
+
+Đã rebase C-10 trực tiếp lên main sau squash-merge #10; PR #12 không còn
+phụ thuộc tài liệu C-02. Xung đột nhật ký được giải bằng cách giữ phần main
+và chỉ nối mục C-10. Một lệnh sửa bằng Windows python thất bại do alias Store;
+đã dùng Python WSL, sửa sạch dấu xung đột trước khi publish.
+Lần kiểm đầu sau checkout có lỗi scrub vì Git Windows đổi shell script sang
+CRLF. Đã đặt *.sh text eol=lf trong .git/info/attributes (chỉ máy local) và
+chuẩn hóa shell script; không thay code hay dữ liệu để né test.
+Bộ artifact trên nhánh C-03 kế thừa C-10: 46/46 test qua trên WSL sau sửa
+môi trường. C-10 triển khai xong, chờ review/merge #12; không tự nghiệm thu.
+Tiếp theo: retarget #12 về main, kiểm build và scrub trước publish.
