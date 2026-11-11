@@ -456,3 +456,16 @@ Chỉ thêm macro SimSeedCount, không đổi giá trị macro kết quả cũ; 
 C-05 xong triển khai và thí nghiệm, chờ review/merge; không tự nghiệm thu.
 Tiếp theo: hoàn thiện C-06 model-vetted trên cùng label records/lag table,
 đóng băng thiết kế riêng trước khi sinh CSV; sau đó C-07 và C-11/C-12.
+
+
+## 11/11/2026 — C-06 freeze model-vetted trước kết quả
+
+Thêm part modelmatched riêng: giữ default model, passive calibration population,
+2k labels/outcome/app, 20k lag samples và 5 seed/2.400 workflows như Table 2.
+So joint/vetted bằng cùng record objects và lag table objects; product giữ
+calibrator cũ, dùng làm control cùng joint để kiểm tương đương aggregate cũ.
+Chỉ mở guard trong helper C-owned matched_labels bằng flag matched_model;
+không sửa calibrator của A hoặc lịch sử thí nghiệm C-03. Vetted ở đây dùng
+passive labels đúng default model, không gọi là fault-injected labels.
+Commit thiết kế trước output. Dự kiến thêm một dòng vetted vào bảng model,
+chỉ publish nếu hai control product/joint khớp CSV cũ. C-06 vẫn đang làm.
