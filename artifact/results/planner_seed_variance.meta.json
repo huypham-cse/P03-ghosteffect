@@ -1,0 +1,125 @@
+{
+  "kind": "supplemental-per-seed-report",
+  "status": "PASS",
+  "source_commit": "db47f5595b07a24dc4365203e086d43f8ad37919",
+  "python": "3.12.3 (main, Jul 15 2026, 23:46:41) [GCC 13.3.0]",
+  "host": "Linux-6.18.58.1-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "seeds": [
+    101,
+    202,
+    303,
+    404,
+    505
+  ],
+  "n_per_seed": 2400,
+  "seconds": 34.359742968999996,
+  "exit_code": 0,
+  "sha256": "83b85ede2c40f68f025687809c03db4db21efc8e1c331236f4481f30591b82a5",
+  "command": "python3 artifact/scripts/planner_sim.py seedvariance",
+  "rows": 70,
+  "validation": [
+    {
+      "case": "model",
+      "policy": "redo",
+      "pooled_metrics_match": true,
+      "ask_mean": 0.0,
+      "ask_sd": 0.0
+    },
+    {
+      "case": "model",
+      "policy": "g2-only",
+      "pooled_metrics_match": true,
+      "ask_mean": 72.98333333333333,
+      "ask_sd": 0.8772787786989699
+    },
+    {
+      "case": "model",
+      "policy": "always-ask",
+      "pooled_metrics_match": true,
+      "ask_mean": 100.0,
+      "ask_sd": 0.0
+    },
+    {
+      "case": "model",
+      "policy": "rules",
+      "pooled_metrics_match": true,
+      "ask_mean": 23.9,
+      "ask_sd": 1.2042315438117008
+    },
+    {
+      "case": "model",
+      "policy": "ghost",
+      "pooled_metrics_match": true,
+      "ask_mean": 24.85,
+      "ask_sd": 1.29186826383773
+    },
+    {
+      "case": "model",
+      "policy": "ghost-joint",
+      "pooled_metrics_match": true,
+      "ask_mean": 66.71666666666667,
+      "ask_sd": 0.9439132493096097
+    },
+    {
+      "case": "element",
+      "policy": "ghost",
+      "pooled_metrics_match": true,
+      "ask_mean": 3.0083333333333333,
+      "ask_sd": 0.2558346905501459
+    },
+    {
+      "case": "element",
+      "policy": "ghost-joint",
+      "pooled_metrics_match": true,
+      "ask_mean": 72.85833333333333,
+      "ask_sd": 1.0076099333461221
+    },
+    {
+      "case": "element5k",
+      "policy": "ghost",
+      "pooled_metrics_match": true,
+      "ask_mean": 2.7,
+      "ask_sd": 0.19184774055368894
+    },
+    {
+      "case": "element5k",
+      "policy": "ghost-joint",
+      "pooled_metrics_match": true,
+      "ask_mean": 12.666666666666666,
+      "ask_sd": 0.5929270612815715
+    },
+    {
+      "case": "k9",
+      "policy": "ghost",
+      "pooled_metrics_match": true,
+      "ask_mean": 100.0,
+      "ask_sd": 0.0
+    },
+    {
+      "case": "k9",
+      "policy": "ghost-joint",
+      "pooled_metrics_match": true,
+      "ask_mean": 100.0,
+      "ask_sd": 0.0
+    },
+    {
+      "case": "k9sent",
+      "policy": "ghost",
+      "pooled_metrics_match": true,
+      "ask_mean": 100.0,
+      "ask_sd": 0.0
+    },
+    {
+      "case": "k9sent",
+      "policy": "ghost-joint",
+      "pooled_metrics_match": true,
+      "ask_mean": 100.0,
+      "ask_sd": 0.0
+    }
+  ],
+  "source_inputs": {
+    "real/params.csv": "6dd49c747e84f099d417497bc8b214dd75c9e9c2f4de36aef3fb2b614af6d33f"
+  },
+  "date": "2026-11-11",
+  "validation_summary": "49 artifact tests pass; PDF build passes; scrub scan passes"
+}

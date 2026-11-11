@@ -446,6 +446,51 @@ M('VlmEN', f1(nb['vlm_EN']))
 # ===================================================================== planner simulation
 ps = rd('planner_sim.csv')
 P = {r['policy']: r for r in ps}
+
+# C-05: variability across fixed original seeds, not confidence intervals.
+import statistics as _statistics
+import importlib.util as _seed_import
+_seed_spec = _seed_import.spec_from_file_location('_seed_report_plan', os.path.join(HERE, 'planner_sim.py'))
+_seed_plan = _seed_import.module_from_spec(_seed_spec)
+_seed_spec.loader.exec_module(_seed_plan)
+_report_seeds, _seed_cases = _seed_plan.SEEDS, _seed_plan.SEED_CASES
+_seed_rows = rd('planner_seed_variance.csv')
+_seed_index = {(r['case'], r['policy'], int(r['seed'])): r for r in _seed_rows}
+_expected_seed_rows = {(case, policy, seed) for case, (policies, _) in _seed_cases.items()
+                       for policy in policies for seed in _report_seeds}
+if set(_seed_index) != _expected_seed_rows or len(_seed_rows) != len(_seed_index):
+    raise ValueError('incomplete or duplicate seed variance rows')
+if any(int(r['n']) != 2400 for r in _seed_rows):
+    raise ValueError('unexpected seed workflow budget')
+M('SimSeedCount', str(len(_report_seeds)))
+_seed_lines = []
+for _case, (_policies, _) in _seed_cases.items():
+    for _policy in _policies:
+        _rows = [_seed_index[(_case, _policy, _seed)] for _seed in _report_seeds]
+        _ask = [float(r['ask']) for r in _rows]
+        _pv = [float(r['cdup']) for r in _rows if int(r['n1']) > 0]
+        _name = {'ghost': 'product', 'ghost-joint': 'joint', 'g2-only': 'theorem-only'}.get(_policy, _policy)
+        _spread = lambda values: (f'{_statistics.mean(values):.2f} $\\pm$ {_statistics.stdev(values):.2f}'
+                                  if len(values) == len(_report_seeds) else 'N/A')
+        _seed_lines.append(' & '.join([_case, _name, _spread(_ask),
+                           f'{min(_ask):.2f}--{max(_ask):.2f}', _spread(_pv)]) + r' \\')
+W('tab_seed_variance.tex', r"""\begin{table*}[t]
+\centering
+\caption{Across-seed variability for the original model-based and measured-parameter simulations.
+Each row reports the same \SimSeedCount{} original seeds with unchanged per-seed workflow and calibration budgets.
+Values are percentages: arithmetic mean $\pm$ sample standard deviation across seeds, and the asking-rate range.
+Standard deviation is not a confidence interval; aggregate CP bounds remain in the original result tables.}
+\label{tab:seedvariance}
+\small
+\begin{tabular}{@{}llrrr@{}}
+\toprule
+Profile & Policy & ask mean $\pm$ SD & ask range & $P_{\mathrm v}$ mean $\pm$ SD \\
+\midrule
+""" + '\n'.join(_seed_lines) + r"""
+\bottomrule
+\end{tabular}
+\end{table*}
+""")
 names = {'redo': 'Redo (AgentProg-style)', 'ckpt': 'Checkpoint-resume', 'atomix': 'Atomix-style, in-memory',
          'atomix-durable': 'Atomix-style, durable log', 'verify': 'Verify-before-retry', 'key': 'Ledger + key',
          'key-ask': 'Ledger + key + ask (look-alike)', 'always-ask': 'Ledger + always ask', 'nonce-ask': 'Ledger + nonce + ask',

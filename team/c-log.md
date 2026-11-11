@@ -435,3 +435,24 @@ Sẽ kiểm weighted pooled metrics khớp CSV gốc trước khi promote. Part 
 commit trước output, chạy trong workspace riêng từ snapshot commit sạch;
 đây là thí nghiệm bổ sung theo seed, không gọi là rerun toàn pipeline trên main.
 Không đổi dữ liệu raw hoặc số aggregate cũ. C-05 đang làm; chưa có kết quả.
+
+
+## 11/11/2026 — C-05 kết quả theo seed và kiểm pooled equivalence
+
+Đã chạy snapshot thiết kế db47f5595b07a24dc4365203e086d43f8ad37919 trong
+/root/ghosteffect-runs/c05-20261111; chỉ part mới, không phải full main rerun.
+70 dòng (14 policy/profile × 5 seed), giữ nguyên toàn bộ seed/budget. Cả 14
+nhóm đều khớp n,n1,n0 và weighted pooled ask/dup/loss/cdup/closs của CSV cũ
+(sai số tối đa cho phép 1e-10). Không thay các CSV aggregate cũ hoặc raw.
+Receipt tại artifact/runs/2026-11-11/C05-MANIFEST.json; CSV kèm .meta.json.
+
+Sinh tab_seed_variance ở phụ lục: mean ± sample SD và range asking; không gọi
+SD là CI, không lấy trung bình CP interval. Có test kiểm tách seed không đổi
+workflow/effect counts và renderer từ chối seed trùng mà giữ output cũ.
+Lần test đầu phát hiện import planner_sim không hoạt động khi renderer chạy
+qua runpy; đã load bằng đường dẫn script để không phụ thuộc sys.path.
+Bản cuối 49 test qua, build 22 trang, không ref/cite thiếu; scrub PASS.
+Chỉ thêm macro SimSeedCount, không đổi giá trị macro kết quả cũ; notes sinh lại.
+C-05 xong triển khai và thí nghiệm, chờ review/merge; không tự nghiệm thu.
+Tiếp theo: hoàn thiện C-06 model-vetted trên cùng label records/lag table,
+đóng băng thiết kế riêng trước khi sinh CSV; sau đó C-07 và C-11/C-12.

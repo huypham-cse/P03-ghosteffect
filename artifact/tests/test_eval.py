@@ -137,6 +137,44 @@ class MatchedInputTests(unittest.TestCase):
             self.assertEqual(b'previously reviewed output', published.read_bytes())
             self.assertEqual([published], list(output.iterdir()))
 
+    def test_renderer_rejects_duplicate_seeds(self):
+        with tempfile.TemporaryDirectory() as temp:
+            work = Path(temp)
+            inputs, output = work / 'results', work / 'generated'
+            shutil.copytree(ROOT / 'artifact/results', inputs)
+            source = inputs / 'planner_seed_variance.csv'
+            with source.open(newline='') as stream:
+                reader = csv.DictReader(stream)
+                header, rows = reader.fieldnames, list(reader)
+            rows[1] = dict(rows[0])
+            with source.open('w', newline='') as stream:
+                writer = csv.DictWriter(stream, fieldnames=header)
+                writer.writeheader()
+                writer.writerows(rows)
+            output.mkdir()
+            published = output / 'macros.tex'
+            published.write_bytes(b'previously reviewed output')
+            result = subprocess.run([sys.executable, str(ROOT / 'artifact/scripts/render.py'),
+                                     '--results-dir', str(inputs), '--output-dir', str(output)],
+                                    text=True, capture_output=True)
+            self.assertNotEqual(0, result.returncode)
+            self.assertIn('incomplete or duplicate seed variance rows', result.stderr)
+            self.assertEqual(b'previously reviewed output', published.read_bytes())
+            self.assertEqual([published], list(output.iterdir()))
+
+
+class SeedReportingTests(unittest.TestCase):
+    def test_partition_preserves_original_workflows_and_effect_counts(self):
+        policies = ['ghost', 'ghost-joint']
+        options = dict(n_per_seed=12, overrides=dict(ncal_scale=.025, nlag=64))
+        pooled, counts = planner.run(policies, seeds=[101, 202], **options)
+        split = [planner.run(policies, seeds=[seed], **options) for seed in (101, 202)]
+        for policy in policies:
+            self.assertEqual(pooled[policy], split[0][0][policy] + split[1][0][policy])
+            for metric in ('n1', 'n0', 'd1', 'l0', 'ask1', 'ask0'):
+                self.assertEqual(counts[policy][metric], sum(part[1][policy][metric] for part in split))
+
+
 class ReadabilityTests(unittest.TestCase):
     def count(self, source):
         with tempfile.TemporaryDirectory() as temp:

@@ -109,3 +109,12 @@ Without the nonce the product mode asks \SimNoNonceAsk\%, without hop~1 \SimNoHo
 bounds ask \SimNoCalAsk\% but retry \SimNoCalPv\%; declaring when uncertified loses \SimNoAskLv\% of absent effects; visible nonces cut asks to \SimVisAsk\% but alter
 \SimAltered\% of effects; a uniform budget split changes nothing significant ($p{=}\SimPUni$). A six-symbol nonce has $\epsilon_0\le\NonceEpsZero$, and giving every saga step the
 full $\alpha$ yields duplicate probabilities up to \SagaNaiveSixteen\% at $k{=}16$ (Tables~\ref{tab:nonce},~\ref{tab:saga}, appendix).
+
+
+\subsection{Variability across original seeds}
+\label{app:seedvariance}
+\input{generated/tab_seed_variance}
+Table~\ref{tab:seedvariance} separates between-seed variability from pooled sampling uncertainty.
+Each per-seed run retains the original policy-specific random streams, label budgets and lag budgets.
+The model profile belongs to the model-based simulation; the remaining profiles belong to measured-parameter simulations.
+A zero per-seed standard deviation describes these runs and does not establish zero deployment uncertainty.
