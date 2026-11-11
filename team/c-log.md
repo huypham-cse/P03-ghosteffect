@@ -470,3 +470,7 @@ không sửa calibrator của A hoặc lịch sử thí nghiệm C-03. Vetted �
 passive labels đúng default model, không gọi là fault-injected labels.
 Commit thiết kế trước output. Dự kiến thêm một dòng vetted vào bảng model,
 chỉ publish nếu hai control product/joint khớp CSV cũ. C-06 vẫn đang làm.
+
+C-06 lần chạy đầu dừng ở guard measured-only trong vetting, chưa sinh CSV.
+Đã mở guard C-owned chỉ khi matched_model; không đổi seed/budget. Giữ receipt
+FAIL tại workspace c06-model-20261111, commit sửa trước lần chạy v2.
