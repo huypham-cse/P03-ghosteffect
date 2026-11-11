@@ -5,8 +5,6 @@
 decides each ambiguous effect with the rules of \S\ref{sec:theory}. Its parts are an effect classifier, the ledger, the nonce writer, the probe families with their
 calibration store, and the \alg planner with its saga layer (Figure~\ref{fig:arch}).
 
-\input{figures/fig-arch}
-
 \subsection{Where it runs, and the ledger}
 \label{sec:design-ledger}
 \para{Topology.} The ledger must outlive the agent. In the host topology (our testbed), the controller is a host process separate from the agent, which drives the
@@ -25,6 +23,8 @@ positive costs one ledger write; a false negative falls back to the agent's nati
 \textsf{ISSUED} is committed in SQLite (WAL mode, \texttt{synchronous=FULL}) \emph{before} the commit tap is injected. On restart, every \textsf{ISSUED} record is a ghost-effect
 candidate and is resolved before the agent continues. This is the prepare--dispatch--settle discipline of Agent libOS~\cite{zhang2026agentlibos}, except that settlement is a
 statistical decision.
+
+\input{figures/fig-arch}
 
 \subsection{Content-carried nonce}
 \label{sec:design-nonce}
@@ -96,33 +96,44 @@ are exchangeable within a stratum (app version, locale, VLM), and per-device dri
 \State $\tau_a,\tau_c\gets$ largest thresholds certified for $\alpha_t,\beta_t$ \Comment{Prop.~\ref{prop:family} or \ref{prop:joint}}
 \State \Call{VerifyForeground}{$e$.app}; $P\gets1$; $d\gets\bot$; $\ell\gets\alpha_l$
 \If{$e$.app has a hop-1 family}
-  \State $\ell\gets\alpha_l/2$; $(s,r)\gets$ \Call{Readout}{hop-1} \Comment{entries after $t_0$}
+  \State $\ell\gets\alpha_l/2$; $(s,r)\gets$ \Call{Readout}{hop-1} \Comment{entries after $t_0$}\label{alg:hop1}
   \If{$s=$ com $\wedge$ (G2 $\vee$ local)} $P\gets q^{\mathrm{com}}_{\text{hop1}}(r)$; $d\gets$ com
     \State $o\gets$ acked; \textbf{if} G2: $o\gets$ \Call{Monitor}{$e$} \Comment{bkgd., fallible}
     \State \textbf{if} $o=$ acked $\wedge\,P\le\tau_c$: \Return \Call{Mark}{$e$, \textsf{COMMITTED}}
     \State \textbf{if} $o\in\{$failed, stuck$\}$: $P\gets1$; $d\gets\bot$ \Comment{hand over, once}
-  \ElsIf{$s=$ abs} $P\gets q^{\mathrm{abs}}_{\text{hop1}}(r)$; $d\gets$ abs; \textbf{if} $P\le\tau_a$ \Return \Call{Retry}{$e$}
+  \ElsIf{$s=$ abs} $P\gets q^{\mathrm{abs}}_{\text{hop1}}(r)$; $d\gets$ abs; \textbf{if} $P\le\tau_a$ \Return \Call{Retry}{$e$}\label{alg:abs1}
   \EndIf
 \EndIf
 \If{$d\ne$ com \textbf{and} app not local}
-  \State $w\gets$ \Call{CertifiedWait}{$e$.app, $e$.class, $d{=}$abs ? $\ell/q_h$ : $\ell$} \Comment{$q_h{=}\max_r q^{\mathrm{abs}}_{\text{hop1}}(r)$}
-  \State \textbf{if} $w-\text{elapsed}>W_{\max}$ \Return \Call{Ask}{$e$}; \Call{WaitUntil}{$r_e+w$}
+  \State $w\gets$ \Call{CertifiedWait}{$e$.app, $e$.class, $d{=}$abs ? $\ell/q_h$ : $\ell$} \Comment{$q_h{=}\max_r q^{\mathrm{abs}}_{\text{hop1}}(r)$}\label{alg:cw}
+  \State \textbf{if} $w-\text{elapsed}>W_{\max}$ \Return \Call{Ask}{$e$}; \Call{WaitUntil}{$r_e+w$}\label{alg:wait}
 \EndIf
 \For{$f\in$ [nonce, digest, VLM] available for $e$}
-  \State $(s,r)\gets$ \Call{Readout}{$f$} \Comment{one read per view}
+  \State $(s,r)\gets$ \Call{Readout}{$f$} \Comment{one read per view}\label{alg:read}
   \State \textbf{if} $s=\bot$ \textbf{continue}; \textbf{if} $d\notin\{\bot,s\}$ \textbf{break}
   \State $P\gets P\cdot q^{s}_f(r)$; $d\gets s$
   \State \textbf{if} $s=$ abs $\wedge P\le\tau_a$: \Call{VerifyForeground}{}; \Return \Call{Retry}{$e$}
-  \State \textbf{if} $s=$ com $\wedge P\le\tau_c$: \Return \Call{Mark}{$e$, \textsf{COMMITTED}}
+  \State \textbf{if} $s=$ com $\wedge P\le\tau_c$: \Return \Call{Mark}{$e$, \textsf{COMMITTED}}\label{alg:com}
 \EndFor
-\State \Return \Call{Ask}{$e$} \Comment{disagreement or not certifiable}
+\State \Return \Call{Ask}{$e$} \Comment{disagreement or not certifiable}\label{alg:ask}
 \end{algorithmic}
 \end{algorithm}
 
 Algorithm~\ref{alg:recover} applies \S\ref{sec:theory} to one effect. \textsc{Readout} reads each view of a family once and returns the majority side and its count.
 The thresholds come from enumerating stopping assignments (at most $4^4$ per app, precomputed) or, for joint certification, from the fixed-sequence test. \textsc{CertifiedWait} returns
 the smallest logged lag $T_c$ of the effect's fault class (the latest deadline over classes if the class is unknown) whose CP upper bound on the exceedance probability is at most
-its argument; a logged effect that never became visible counts as an exceedance at every wait. \textsc{Retry} reuses the nonce. Four details matter in practice.
+its argument; a logged effect that never became visible counts as an exceedance at every wait. \textsc{Retry} reuses the nonce.
+
+Two runs show the algorithm at work. In the first, K-9 lost the SMTP reply to a send that the server applied. K-9 then keeps the mail in its Outbox in a permanent failed
+state, so hop~1 reads ``absent'' (line~\ref{alg:hop1}). Fault-injected calibration sees the same reading on committed sends, so $q^{\mathrm{abs}}_{\text{hop1}}$ is far above
+$\tau_a$ and the planner does not retry (line~\ref{alg:abs1}). Without a Sent folder no other family can see the mail, so nothing reaches $\tau_a$ or $\tau_c$ and the planner
+asks (line~\ref{alg:ask}). With a Sent folder the certified wait for its lag exceeds $W_{\max}$, and the planner asks at line~\ref{alg:wait}. In measured-parameter simulation
+both K-9 profiles ask on every interrupted send (\RsimKnineProdAsk\% and \RsimKsentProdAsk\%).
+
+In the second run, an Element message is interrupted. Element has no hop-1 family, so the planner skips line~\ref{alg:hop1} and computes the certified wait of the effect's
+fault class (line~\ref{alg:cw}). It waits until $r_e+w$ (line~\ref{alg:wait}) and then reads nonce, digest and VLM once per view (line~\ref{alg:read}). If the timeline shows the
+message, their ``committed'' verdicts multiply until $P\le\tau_c$, and the planner marks the effect committed (line~\ref{alg:com}). If it does not, the ``absent'' verdicts
+lead to a retry with the same nonce. In measured-parameter simulation, product certification asks on \RsimElemProdAsk\% of Element workflows.
 
 \para{Hop 1 and monitoring.} A hop-1 verdict starts the product on either side, so the ``committed'' side of a G2 or local app is certified like any other declaration
 (its bound enters $B_{\mathrm{com}}$), and a hop-1 ``absent'' verdict relaxes its own wait $w_1$, with half of the lag share (Eq.~\eqref{eq:lagsplit}). For a G2 app with an outbox entry,

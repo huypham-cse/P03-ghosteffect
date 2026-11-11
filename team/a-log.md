@@ -193,3 +193,19 @@ Tổng 105 macro (24 + 12 + 16 + 18 + 7 + 24 + 2 + 2). Phần A không dùng mac
 **Trạng thái task:** A-01 xong cả văn bản, test và bảng (chờ nghiệm thu).
 
 **Tiếp theo:** A-07 (rút §4 còn 1,5 trang, walk-through K-9 và Element ở §5.4) kèm lượt đọc YC-12; nhắn C xác nhận C-02 và hai chỗ δ của C.
+
+## 11/11/2026 (tối)
+
+**Đã làm:** A-07, nhánh `a/a07-shorten` (dựng trên `a/a01-table`):
+- Đo bằng script đọc tọa độ tiêu đề trong PDF (pypdf): trước khi sửa, từ tiêu đề §4 đến tiêu đề §5 là khoảng 5,0 cột; sau khi sửa là **2,86 cột** (≤ 3 cột).
+- Thm 4.1 trong thân bài còn **3 dòng** (đã kiểm bằng `pdftotext`), giả thiết đặt ở câu dẫn ngay trước (views i.i.d. có điều kiện; (b), (c) cho policy verification-only đạt β; (d) cho policy không hỏi). Đoạn "What is classical" ghi nguồn của từng phần và nói (c), (d) bằng lời. Phát biểu đầy đủ kèm Eq. `eq:ub`, `eq:lb` chuyển sang App. A.
+- Giữ đủ Prop 4.4 (joint, giờ là Prop 4.3) và Thm 4.8 (two-hop, giờ là Thm 4.5). Corollary 4.2 giữ nguyên.
+- Chuyển xuống App. A, có câu trỏ tới trong §4: Prop 4.3 (product, `prop:family`), Lemma 4.5 (`lem:floor`), Lemma 4.6(iii) thành `lem:drift` riêng, Lemma 4.7 (`lem:nonce`), đoạn saga, công thức source families, chi tiết dedup theo giao thức (Synapse, Matrix, CalDAV, SMTP).
+- Lemma 4.6 trong thân bài chỉ còn (i), (ii) và đoạn δ của A-05 (giữ công thức `δ = min(α,β)/(10·K·n_cls)`).
+- §5.4: hai walk-through dẫn số dòng của Alg. 1 qua `\label` (dòng 5, 10, 12, 13, 15, 19, 20; đã đối chiếu từng nhãn với số dòng trong PDF). K-9: hop 1 đọc "absent" vì thư nằm ở Outbox trạng thái lỗi, calibration thấy cùng cách đọc trên thư đã commit nên không retry, không Sent thì hỏi ở dòng 20, có Sent thì hỏi ở dòng 13 vì chờ vượt `W_max` (khớp `why_struct` 100% và `why_wait` 100% trong `planner_real.csv`). Element: không hop 1, chờ theo lớp, đọc mỗi view một lần, đánh dấu committed ở dòng 19.
+- Hình 2 (`fig-arch`) đang nổi lên đầu cột chứa tiêu đề §5 và đẩy tiêu đề xuống; chuyển `\input` xuống cuối §5.1 để hình nằm sau tiêu đề.
+- Nhãn "Proof." mới trong App. A dùng môi trường `proof` để không tăng `\emph`.
+
+**Kiểm:** build thoát 0, 21 trang, overfull lớn nhất 3,46 pt, không tham chiếu thiếu, kết luận vẫn trang 13. Test: 42, 1 fail cũ của C, 1 skip. Độ dễ đọc bốn file của A: trước `para 21, emph 49, câu dài 16, đoạn chấm phẩy 19`; sau `20, 47, 12, 13`.
+
+**Trạng thái task:** A-07 xong (chờ nghiệm thu). Còn lại của A: lượt đọc YC-12 (giới hạn `\para` 5, `\emph` 10, 0 câu dài, ≤ 1 chấm phẩy mỗi đoạn) và giá trị A-08 (chờ B, 18/11).
