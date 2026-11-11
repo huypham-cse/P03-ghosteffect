@@ -520,3 +520,11 @@ B supplies real agent evidence.
 C-09 follow-up: the introduction now opens with the measured K-9 hidden-outcome
 scenario before naming a ghost effect, as required by the story checklist. This
 reorders existing emulator evidence only and does not make an agent-performance claim.
+
+## 11/11/2026 — C-07 related-work source audit
+
+Checked LIMBO, Agent libOS, VeriGUI, and invariant confluence against their primary
+sources. Added direct problem-boundary comparisons and `others/citation-audit.md`.
+Corrected Agent libOS's title and changed VeriGUI from an unsupported ACL
+proceedings claim to its verified arXiv status. No claims assert that any cited
+system implements or evaluates this paper's calibrated GUI recovery.
