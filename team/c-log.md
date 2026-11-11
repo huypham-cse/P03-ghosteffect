@@ -508,3 +508,11 @@ emulator measurements, measured-parameter simulation, and model-based simulation
 It explicitly says that LLM agents and physical phones remain unmeasured. This is a
 scope-safe draft only: any later agent-performance conclusion still depends on B's
 real agent evidence and the team's approval.
+
+## 11/11/2026 — C-09 readable story pass
+
+Reworked the introduction, discussion, and conclusion for direct prose and clear
+scope boundaries. The revised text separates measured emulator facts from
+simulations, keeps the agent/phone limitation explicit, and avoids presenting
+unmeasured claims as results. Agent-dependent language remains provisional until
+B supplies real agent evidence.
