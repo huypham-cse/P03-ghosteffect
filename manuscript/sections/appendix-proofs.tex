@@ -1,7 +1,7 @@
 \section{Proofs}
 \label{app:proofs}
 
-Throughout, $\PP_x,\E_x$ condition on $X{=}x$; the lag $T$ is independent of reading errors given $X$; and the policy's randomization $U$ has a law that does not depend on $X$.
+Throughout, $\PP_x,\E_x$ condition on $X{=}x$. The lag $T$ is independent of reading errors given $X$, and the policy's randomization $U$ has a law that does not depend on $X$.
 For Theorem~\ref{thm:main} the family's reads are conditionally i.i.d.\ given $X$ and the visibility state, with $Z_i=\log\frac{p_1(Y_i)}{p_0(Y_i)}$ and $L_n=\sum_{i\le n}Z_i$.
 Because $p_0\ne p_1$ have full support, $\E_1Z=D_1>0$, $\E_0Z=-D_0<0$ and $\PP_x(Z\ne0)>0$.
 
@@ -9,39 +9,39 @@ Because $p_0\ne p_1$ have full support, $\E_1Z=D_1>0$, $\E_0Z=-D_0<0$ and $\PP_x
 The theorem in full reads as follows. For a family of conditionally i.i.d.\ views with full support, let $u^\star=\max_y\log\frac{p_1(y)}{p_0(y)}$, $v^\star=\max_y\log\frac{p_0(y)}{p_1(y)}$
 and $d(x\|y)=x\log\frac{x}{y}+(1-x)\log\frac{1-x}{1-y}$. Consider an effect with prior $\pi\in(0,1)$, lag tail $G$, and views with laws $p_0,p_1$.
 \begin{enumerate}[leftmargin=*,label=(\alph*),topsep=1pt,itemsep=1pt]
-\item \emph{Achievability.} If $G(w)<\alpha$, waiting until $r_e+w$ and then running the SPRT on $L_n=\sum_{i\le n}\log\frac{p_1(Y_i)}{p_0(Y_i)}$, which declares when
+\item Achievability. If $G(w)<\alpha$, waiting until $r_e+w$ and then running the SPRT on $L_n=\sum_{i\le n}\log\frac{p_1(Y_i)}{p_0(Y_i)}$, which declares when
 $L_n\ge a=\log\frac1\beta$ and retries when $L_n\le-b=-\log\frac{1}{\alpha-G(w)}$, meets $(\alpha,\beta)$. Given visibility,
 \begin{equation}
 \E_1[N]\le\frac{a+u^\star}{D_1},\qquad \E_0[N]\le\frac{b+v^\star}{D_0}.
 \label{eq:ub}
 \end{equation}
-\item \emph{Lag converse.} Every policy that decides by $r_e+w$ from end-to-end reads alone has $\PP(\text{retry}\mid X{=}1)\ge G(w)\,\PP(\text{retry}\mid X{=}0)$.
+\item Lag converse. Every policy that decides by $r_e+w$ from end-to-end reads alone has $\PP(\text{retry}\mid X{=}1)\ge G(w)\,\PP(\text{retry}\mid X{=}0)$.
 A verification-only one with $\PP(\text{declare}\mid X{=}0)\le\beta$ thus has $\PP(\text{retry}\mid X{=}1)\ge(1-\beta)\,G(w)$.
-\item \emph{Information converse.} Every verification-only policy meeting $(\alpha,\beta)$ with $\alpha+\beta<1$ and $\E_x[N]<\infty$ satisfies the right inequality
+\item Information converse. Every verification-only policy meeting $(\alpha,\beta)$ with $\alpha+\beta<1$ and $\E_x[N]<\infty$ satisfies the right inequality
 below for any lag, and the left one if all reads follow visibility:
 \begin{equation}
 \E_1[N]\ge\frac{d(1-\alpha\,\|\,\beta)}{D_1},\qquad \E_0[N]\ge\frac{d(1-\beta\,\|\,\alpha)}{D_0}.
 \label{eq:lb}
 \end{equation}
-\item \emph{Weak evidence.} Every policy that does not ask has $\PP(\dup)+\PP(\loss)\ge\E[\min(\pi_{\mathcal F},1-\pi_{\mathcal F})]$, where $\pi_{\mathcal F}$ is the posterior
+\item Weak evidence. Every policy that does not ask has $\PP(\dup)+\PP(\loss)\ge\E[\min(\pi_{\mathcal F},1-\pi_{\mathcal F})]$, where $\pi_{\mathcal F}$ is the posterior
 of $X{=}1$ when it decides, and the Bayes rule attains this. Under any lag, the right side is at least $\min(\pi,1-\pi)\big(1-\sqrt{D_0\E_0[N]/2}\big)$.
 \end{enumerate}
 The gap between~\eqref{eq:ub} and~\eqref{eq:lb} under $X{=}1$ tends to $u^\star/D_1$ as $\alpha,\beta\to0$, provided $\alpha\log(1/\beta)\to0$. A fallible user makes asking cost
 $c_{\mathrm{ask}}+\epsilon_u[\pi_{\mathcal F}c_{\dup}+(1-\pi_{\mathcal F})c_{\loss}]$.
 
-\para{(a)} Let $N=\inf\{n:L_n\notin(-b,a)\}$ over reads taken after $r_e+w$. Since $\PP_x(Z\neq0)>0$, Stein (1946) gives $\PP_x(N>n)\le cr^n$ for constants $c<\infty$, $r<1$, so
+(a)~Let $N=\inf\{n:L_n\notin(-b,a)\}$ over reads taken after $r_e+w$. Since $\PP_x(Z\neq0)>0$, Stein (1946) gives $\PP_x(N>n)\le cr^n$ for constants $c<\infty$, $r<1$, so
 $\E_x[N]<\infty$~\cite{tartakovsky2014sequential}. Under $X{=}0$ reads are i.i.d.\ $p_0$, and the likelihood-ratio identity for stopped sequences gives
 $\PP_0(L_N\ge a)=\E_1[e^{-L_N};L_N\ge a]\le e^{-a}=\beta$. Under $X{=}1$,
 $\PP_1(\text{retry})\le\PP_1(T>w)+\PP_1(\text{retry}\mid T\le w)$. Given $T\le w$ every read is i.i.d.\ $p_1$, so $\PP_1(L_N\le-b\mid T\le w)=\E_0[e^{L_N};L_N\le-b]\le e^{-b}=\alpha-G(w)$.
-Both inequalities are exact; overshoot only lowers the realized error. For~\eqref{eq:ub}, Wald's identity gives $\E_1[L_N]=D_1\E_1[N]$ given visibility; on $\{L_N\ge a\}$,
-$L_{N-1}<a$ so $L_N<a+u^\star$, and on $\{L_N\le-b\}$, $L_N<a$. Hence $D_1\E_1[N]\le a+u^\star$; symmetrically $D_0\E_0[N]\le b+v^\star$.
+Both inequalities are exact, and overshoot only lowers the realized error. For~\eqref{eq:ub}, Wald's identity gives $\E_1[L_N]=D_1\E_1[N]$ given visibility. On $\{L_N\ge a\}$,
+$L_{N-1}<a$ so $L_N<a+u^\star$, and on $\{L_N\le-b\}$, $L_N<a$. Hence $D_1\E_1[N]\le a+u^\star$, and symmetrically $D_0\E_0[N]\le b+v^\star$.
 
-\para{(b)} Let the decision be $\phi(U,Y_1,\dots,Y_N)$ with all reads end-to-end and taken by $r_e+w$. Given $X{=}1$ and $T>w$, A1 says every such read has the law it has under $X{=}0$,
+(b)~Let the decision be $\phi(U,Y_1,\dots,Y_N)$ with all reads end-to-end and taken by $r_e+w$. Given $X{=}1$ and $T>w$, A1 says every such read has the law it has under $X{=}0$,
 and $U$ is independent of $(X,T)$. So $(U,N,Y_{1:N})$ has the same law as under $X{=}0$, $\PP_1(\text{retry}\mid T>w)=\PP_0(\text{retry})$, and
 $\PP_1(\text{retry})\ge G(w)\,\PP_0(\text{retry})$. A verification-only policy has $\PP_0(\text{retry})=1-\PP_0(\text{declare})\ge1-\beta$. The argument fails for a policy that may ask
 ($\PP_0(\text{retry})$ can be 0) or reads a hop-1 view (whose law does not depend on $T$).
 
-\para{(c)} Let $Q_x$ be the law of $(U,N,Y_1,\dots,Y_N)$ under $\PP_x$. Without lag, the log-likelihood ratio of $Q_1$ to $Q_0$ is $L_N$ (the $U$ terms cancel), so Wald's identity gives
+(c)~Let $Q_x$ be the law of $(U,N,Y_1,\dots,Y_N)$ under $\PP_x$. Without lag, the log-likelihood ratio of $Q_1$ to $Q_0$ is $L_N$ (the $U$ terms cancel), so Wald's identity gives
 $\KL(Q_1\|Q_0)=D_1\E_1[N]$. With a lag, $Q_1=\int Q_1^{t}\,\mu(dt)$ is a mixture over $T$; under $Q_1^t$ reads before visibility have law $p_0$ and contribute nothing to
 $\KL(Q_0\|Q_1^t)$, so $\KL(Q_0\|Q_1^t)\le D_0\E_0[N]$, and by convexity of KL in its second argument $\KL(Q_0\|Q_1)\le D_0\E_0[N]$. The decision is a function of
 $(U,N,Y_{1:N})$, so by data processing~\cite{cover2006elements}
@@ -51,11 +51,11 @@ $(U,N,Y_{1:N})$, so by data processing~\cite{cover2006elements}
 with $\alpha'\le\alpha$, $\beta'\le\beta$. For $p>q$, $d(p\|q)$ increases in $p$ ($\partial_pd=\log\frac{p(1-q)}{q(1-p)}>0$) and decreases in $q$ ($\partial_qd=\frac{q-p}{q(1-q)}<0$); since
 $1-\beta'\ge1-\beta>\alpha\ge\alpha'$, $d(1-\beta'\|\alpha')\ge d(1-\beta\|\alpha)$. The bound on $\E_1[N]$ is symmetric without lag~\cite{kaufmann2016complexity}.
 
-\para{(d)} Let $r_{\mathcal F}=\PP(\text{retry}\mid\mathcal F)$. Then $\PP(\dup)+\PP(\loss)=\E[\pi_{\mathcal F}r_{\mathcal F}+(1-\pi_{\mathcal F})(1-r_{\mathcal F})]\ge\E[\min(\pi_{\mathcal F},1-\pi_{\mathcal F})]$,
+(d)~Let $r_{\mathcal F}=\PP(\text{retry}\mid\mathcal F)$. Then $\PP(\dup)+\PP(\loss)=\E[\pi_{\mathcal F}r_{\mathcal F}+(1-\pi_{\mathcal F})(1-r_{\mathcal F})]\ge\E[\min(\pi_{\mathcal F},1-\pi_{\mathcal F})]$,
 with equality for the Bayes rule. For the second claim, $\pi\,Q_1(\text{retry})+(1-\pi)Q_0(\text{declare})\ge\min(\pi,1-\pi)[1-(Q_0(\text{retry})-Q_1(\text{retry}))]\ge\min(\pi,1-\pi)(1-\mathrm{TV}(Q_0,Q_1))$,
 and Pinsker gives $\mathrm{TV}\le\sqrt{\KL(Q_0\|Q_1)/2}\le\sqrt{D_0\E_0[N]/2}$ by~(c), under any lag.
 
-\para{Corollary~\ref{cor:notfree}} (absolute continuity). If $\PP_0(\text{retry})>0$, some finite record $(u,y_{1:n})$, with reads at times $t_1\le\dots\le t_n$, leads to retry and has
+Corollary~\ref{cor:notfree} follows by absolute continuity. If $\PP_0(\text{retry})>0$, some finite record $(u,y_{1:n})$, with reads at times $t_1\le\dots\le t_n$, leads to retry and has
 positive $\PP_0$-probability. If $0<\epsilon_1<1$, $p_1$ has full support and the record has positive $\PP_1$-probability, so $\PP_1(\text{retry})>0$. If $G(t)>0$ for all $t$, then under
 $X{=}1$ and $T>t_n$ every read has its $X{=}0$ law (A1), so $\PP_1(\text{retry})\ge G(t_n)\,\PP_0(\text{record})>0$. Neither argument needs a bounded stopping time.
 For the equivalence: if $D_0>0$, pick $w$ with $G(w)<\alpha$ ($G\to0$ since $X=\mathbf 1\{T<\infty\}$) and apply (a), which needs $\beta>0$ for a finite threshold $a$. If $D_0=0$ then $p_0=p_1$,
@@ -87,11 +87,11 @@ once per effect, so no run is counted under two lists.
 \end{proof}
 
 
-\emph{Lag, Eq.~\eqref{eq:lagsplit}.} Fix the class $c$ and write $T=T_c$. Since $t_{\mathrm{vis}}\le r_e+T$, a read at time $t\ge r_e+w$ on the event $T\le w$ is post-visibility. Partition retrying runs by path: $\Pi_1$, hop~1 read ``absent'' (end-to-end reads from $r_e+w_1$ on); $\Pi_0$, every other path (end-to-end reads
-from $r_e+w_0$ on, measured from $r_e$ also after a stuck or failed hand-over). On $\{T\le w_1\}\cap\Pi_1$ or $\{T\le w_0\}\cap\Pi_0$ every end-to-end read is post-visibility, and the run
+For the lag terms of Eq.~\eqref{eq:lagsplit}, fix the class $c$ and write $T=T_c$. Since $t_{\mathrm{vis}}\le r_e+T$, a read at time $t\ge r_e+w$ on the event $T\le w$ is post-visibility. Partition retrying runs by path. On $\Pi_1$ hop~1 read ``absent'', and end-to-end reads start at $r_e+w_1$. $\Pi_0$ is every other path, and its end-to-end reads
+start at $r_e+w_0$, measured from $r_e$ also after a stuck or failed hand-over. On $\{T\le w_1\}\cap\Pi_1$ or $\{T\le w_0\}\cap\Pi_0$ every end-to-end read is post-visibility, and the run
 lies in some $E_A$, $A\in\mathcal R(\tau)$, so these parts sum to at most $B(\tau)$ (the paths are disjoint, and assignments that skip hop~1 belong to $\mathcal R(\tau)$).
 $\PP(\Pi_1,T>w_1\mid X{=}1)=\PP(\text{hop-1 abs}\mid X{=}1)\,G(w_1)\le q_hG(w_1)$, since hop-1 readings and $T$ are independent given $X$. $\PP(\Pi_0,T>w_0\mid X{=}1)\le G(w_0)$,
-since $\Pi_0$ is a single event set; on the stuck path hop-1 status depends on $T$, which this term does not need. The bound $q_hG(w)\le\alpha_{\mathrm{lag}}$ alone would spend the lag
+since $\Pi_0$ is a single event set. On the stuck path hop-1 status depends on $T$, which this term does not need. The bound $q_hG(w)\le\alpha_{\mathrm{lag}}$ alone would spend the lag
 share twice when both paths occur (up to $(2-q_h)\alpha_{\mathrm{lag}}$).
 
 \subsection{Proposition~\ref{prop:joint}}
@@ -116,7 +116,7 @@ so that two views' errors have correlation $\rho$. Then
 \sup\PP(\text{all $V$ views wrong})=w+(1-w)\big(\epsilon(1-\rho)\big)^V,\\
 w=\rho\epsilon/(1-\epsilon+\rho\epsilon),
 \end{gather*}
-attained when the family is \emph{blind} (all views wrong) with probability $w$ and otherwise errs independently at rate $\epsilon(1-\rho)$.
+attained when the family is blind (all views wrong) with probability $w$ and otherwise errs independently at rate $\epsilon(1-\rho)$.
 If the views are only exchangeable, with $m_2=\epsilon^2+\rho\epsilon(1-\epsilon)$, the supremum is $m_2$ for $2\le V\le(1-m_2)/(\epsilon-m_2)$ and strictly smaller for larger $V$.
 \end{lemma}
 As $V\to\infty$ the supremum tends to $w>0$, so more views of one family cannot certify a side below its persistent mass. A hidden nonce field is such a blind state ($w\ge\eta$),
@@ -128,7 +128,7 @@ value. For $V\ge3$, let $q$ be the quadratic with $q(a)=f(a)$, $q'(a)=f'(a)$ and
 for some $\xi\in(0,1)$; since $f'''\ge0$ on $[0,1]$, $f\le q$ there. So $\E f(\theta)\le\E q(\theta)$, and $\E q(\theta)$ depends only on $\E\theta$ and $\E\theta^2$. The two-point law
 that puts mass $w=\rho\epsilon/(1-\epsilon+\rho\epsilon)$ on $1$ and $1-w$ on $a$ has mean $\epsilon$ and variance $\rho\epsilon(1-\epsilon)$ (direct computation), and $f=q$ on its support,
 so it attains $\E q$. Hence $\sup\E f(\theta)=w+(1-w)a^V$, and $\PP(\text{all $V$ wrong})=\E\theta^V$ by conditional independence. As $V\to\infty$ the supremum decreases to $w$.
-\emph{Exchangeable views.} Let $\xi_1,\dots,\xi_V$ be exchangeable error indicators with mean $\epsilon$ and pairwise correlation $\rho$, and $m_2=\E\xi_1\xi_2=\epsilon^2+\rho\epsilon(1-\epsilon)$.
+For exchangeable views, let $\xi_1,\dots,\xi_V$ be exchangeable error indicators with mean $\epsilon$ and pairwise correlation $\rho$, and $m_2=\E\xi_1\xi_2=\epsilon^2+\rho\epsilon(1-\epsilon)$.
 Then $\PP(\text{all wrong})\le\PP(\xi_1=\xi_2=1)=m_2$. The law of $S=\sum\xi_i$ with $\PP(S{=}V)=m_2$, $\PP(S{=}1)=V(\epsilon-m_2)$ and $S=0$ otherwise (each realization's positions uniform)
 has marginal $\epsilon$ and pair probability $m_2$, and is valid when $V(\epsilon-m_2)\le1-m_2$, where it attains $m_2$. For larger $V$ the mass $V(\epsilon-m_2)$ that
 must sit on configurations with exactly one error exceeds $1-m_2$, so any law with pair probability $m_2$ puts pair mass on configurations with $2\le S<V$, and
@@ -143,8 +143,9 @@ for all $n$. If the true walk exits at the top at step $n$, the model walk staye
 $\PP^{\mathrm{true}}_0(\text{declare})\le\PP^{\mathrm{model}}_0(\text{declare})\le\beta$ by (a) applied to the model, under which the planner's statistic is the exact log-likelihood ratio.
 Under $X{=}1$ a true 0-read implies a model 0-read, and the same argument bounds retries by $\alpha$. The argument is per read, so it also covers independent, non-identical views.
 (ii)~A one-sided $(1-\delta)$ Clopper--Pearson bound covers its parameter with probability at least $1-\delta$~\cite{clopper1934use} when the calibration effects are i.i.d.\ from the deployment
-population of the effect's fault class; a union bound over the $Kn_{\mathrm{cls}}$ bounds of all classes gives $1-Kn_{\mathrm{cls}}\delta$ (for an unknown class, the per-class bounds that the fallback uses are all in the union, and
-a per-class bound valid for every class bounds any mixture of classes), and on the complementary event the guarantee may fail with probability at most 1, which gives the marginal bound. The
+population of the effect's fault class. A union bound over the $Kn_{\mathrm{cls}}$ bounds of all classes gives $1-Kn_{\mathrm{cls}}\delta$. For an unknown class, the per-class bounds that
+the fallback uses are all in the union, and a per-class bound valid for every class bounds any mixture of classes. On the complementary event the guarantee may fail
+with probability at most 1, which gives the marginal bound. The
 declare side is identical with the ``committed'' bounds and $\beta_{\mathrm{test}}$.
 
 \subsection{Drift}
@@ -160,8 +161,8 @@ The lemma is a margin against drift that is independent across families. Common-
 \subsection{Content-carried nonce}
 \begin{lemma}[Content-carried nonce]
 \label{lem:nonce}
-Suppose the effect has a free-text field that the app stores verbatim and renders in sent/history views, and that the probe reads only those views, only outgoing items of
-the verified account, and never drafts, failed entries, notifications or keyboard suggestions, so an uncommitted nonce is never visible to it. The planner writes $k$ symbols
+Suppose the effect has a free-text field that the app stores verbatim and renders in sent/history views. Suppose also that the probe reads only those views and only
+outgoing items of the verified account. It never reads drafts, failed entries, notifications or keyboard suggestions, so an uncommitted nonce is never visible to it. The planner writes $k$ symbols
 drawn uniformly from an alphabet of size $m$ and reuses them on retry. A view matches if one of its $M$ visible tokens is within edit distance $t$ of the nonce after OCR in which
 each symbol errs independently with probability $e_c$. If the field is hidden, truncated or mis-tokenized (split, merged, wrapped) with probability $\eta$, then per view
 \begin{equation}
@@ -173,12 +174,12 @@ where $|B_t|$ bounds the number of length-$k$ strings within edit distance $t$ o
 The hidden-field term $\eta$ is a blind state in the sense of Lemma~\ref{lem:floor}, common to all nonce views.
 
 \begin{proof}
-\emph{Miss.} If $X{=}1$ and the effect is visible, the nonce token is on screen unless the field is hidden or truncated (probability $\le\eta$). Each symbol suffers at most one OCR
-operation with probability $e_c$, so the edit distance between the read token and the nonce is at most a $\mathrm{Bin}(k,e_c)$ count; a union bound gives $\epsilon_1$.
-\emph{False match.} If $X{=}0$, the nonce was never committed and the probe never reads a view where an uncommitted copy could appear, so the $M$ visible tokens and their readings are
-independent of the uniformly drawn nonce $\nu$. For a fixed reading $s$, $\PP(d(s,\nu)\le t)\le|B_t|/m^k$, and a union bound over $M$ tokens gives $\epsilon_0$. For $t{=}1$, the
-length-$k$ strings within edit distance 1 of $s$ are: $s$ and its $k(m-1)$ substitutions if $|s|=k$; at most $km$ insertions if $|s|=k-1$; at most $k+1$ deletions if $|s|=k+1$;
-none otherwise. All are at most $km$.
+For the miss rate, if $X{=}1$ and the effect is visible, the nonce token is on screen unless the field is hidden or truncated (probability $\le\eta$). Each symbol suffers at most one OCR
+operation with probability $e_c$, so the edit distance between the read token and the nonce is at most a $\mathrm{Bin}(k,e_c)$ count. A union bound gives $\epsilon_1$.
+For the false-match rate, if $X{=}0$, the nonce was never committed and the probe never reads a view where an uncommitted copy could appear, so the $M$ visible tokens and their readings are
+independent of the uniformly drawn nonce $\nu$. For a fixed reading $s$, $\PP(d(s,\nu)\le t)\le|B_t|/m^k$, and a union bound over $M$ tokens gives $\epsilon_0$. For $t{=}1$, count the
+length-$k$ strings within edit distance 1 of $s$. If $|s|=k$, they are $s$ and its $k(m-1)$ substitutions. If $|s|=k-1$, there are at most $km$ insertions, and if $|s|=k+1$,
+at most $k+1$ deletions. Otherwise there are none. All counts are at most $km$.
 \end{proof}
 
 
@@ -187,11 +188,11 @@ Let hop~1 create $n_1$ entries with distinct ids. By H1 every application at the
 ($\Leftarrow$)~With $n_1{=}1$ and G2: durability keeps the entry across admissible app kills (which do not cancel scheduled work), and retransmission until acknowledged, with finitely many
 faults, ends with an applied, acknowledged transmission, so $C_e\ge1$. By H2 every retransmission carries the same id, and the server applies it at most once, so $C_e\le1$.
 ($\Rightarrow$, contrapositive)~If $n_1{=}0$, nothing is sent and $C_e=0$ on the fault-free schedule. If $n_1\ge2$, the entries carry distinct ids, dedup does not merge them, and
-$C_e\ge2$ on the fault-free schedule. If $n_1{=}1$ and G2 fails: without durability, ``app kill after hop~1, before the first transmission'' gives $C_e=0$; without retransmission,
-``first transmission lost before apply'' gives $C_e=0$; without dedup, ``first transmission applied, acknowledgement lost, retransmission applied'' gives $C_e=2$. Each schedule is admissible.
-Under G2$'$, dedup still gives $C_e\le1$; retransmission stops before an acknowledgement only in the failed state, so $C_e=0$ implies the entry ended failed.
-\emph{Horizon.} If a retransmission may come later than $H_{\mathrm{dedup}}$ after the first application, ``first transmission applied, acknowledgement lost, retransmission after $H_{\mathrm{dedup}}$'' gives $C_e=2$,
-so the horizon condition in H3 is necessary; Synapse showed exactly this after we aged a transaction-id row past 24\,h (\S\ref{sec:eval-real}).
+$C_e\ge2$ on the fault-free schedule. If $n_1{=}1$ and G2 fails, one of three admissible schedules breaks it. Without durability, ``app kill after hop~1, before the first transmission'' gives $C_e=0$.
+Without retransmission, ``first transmission lost before apply'' gives $C_e=0$. Without dedup, ``first transmission applied, acknowledgement lost, retransmission applied'' gives $C_e=2$.
+Under G2$'$, dedup still gives $C_e\le1$. Retransmission stops before an acknowledgement only in the failed state, so $C_e=0$ implies the entry ended failed.
+For the horizon condition, suppose a retransmission may come later than $H_{\mathrm{dedup}}$ after the first application. Then ``first transmission applied, acknowledgement lost,
+retransmission after $H_{\mathrm{dedup}}$'' gives $C_e=2$, so the horizon condition in H3 is necessary. Synapse showed exactly this after we aged a transaction-id row past 24\,h (\S\ref{sec:eval-real}).
 
 Dedup scopes differ by protocol. Matrix clients send with a client-chosen transaction id that makes retransmission idempotent~\cite{matrix_spec}. Synapse keeps
 these ids per device in a cache that lasts from 30 to 60\,min and a 24\,h table~\cite{synapse_txn,matrix_spec}, and we measured both scopes (\S\ref{sec:eval-real}). CalDAV creates resources
@@ -218,11 +219,12 @@ The guarantee part is a union bound, and it is what the saga layer is for: givin
 duplicate probability by up to $k$. The allocation part is not optimal in exact cost. It optimizes the surrogate $J$, needs priors $\pi_i$ (the per-step guarantee does not),
 and is sometimes worse than uniform (Table~\ref{tab:saga}). An ambiguous compensation is asked about.
 
-\noindent\emph{Proof.}
-\emph{Guarantee.} $\PP(\dup_i)=\pi_i\PP(\dup_i\mid X_i{=}1)\le\pi_i\alpha_i$, so $\PP(\bigcup_i\dup_i)\le\sum_i\pi_i\alpha_i$ for any joint law; losses are analogous with $1-\pi_i$.
-\emph{Optimum.} $J=\sum_iw_i\log\frac1{\alpha_i}+\sum_iv_i\log\frac1{\beta_i}$ is strictly convex on the open orthant and decreasing in each variable, so the constraints are active.
-Stationarity, $-w_i/\alpha_i+\lambda=0$, gives $\alpha_i=w_i/\lambda$ with $\lambda=W/\alpha$; $\beta_i$ is analogous.
-\emph{Saving.} $J_{\mathrm{unif}}-J^\star=\sum_iw_i\big[\log\frac k\alpha-\log\frac{W}{\alpha w_i}\big]=\sum_iw_i\log\frac{kw_i}{W}=W\,\KL(\hat w\|u_k)$, plus the analogous $\beta$ term.
+\begin{proof}
+For the guarantee, $\PP(\dup_i)=\pi_i\PP(\dup_i\mid X_i{=}1)\le\pi_i\alpha_i$, so $\PP(\bigcup_i\dup_i)\le\sum_i\pi_i\alpha_i$ for any joint law. Losses are analogous with $1-\pi_i$.
+For the optimum, $J=\sum_iw_i\log\frac1{\alpha_i}+\sum_iv_i\log\frac1{\beta_i}$ is strictly convex on the open orthant and decreasing in each variable, so the constraints are active.
+Stationarity, $-w_i/\alpha_i+\lambda=0$, gives $\alpha_i=w_i/\lambda$ with $\lambda=W/\alpha$, and $\beta_i$ is analogous.
+For the saving, $J_{\mathrm{unif}}-J^\star=\sum_iw_i\big[\log\frac k\alpha-\log\frac{W}{\alpha w_i}\big]=\sum_iw_i\log\frac{kw_i}{W}=W\,\KL(\hat w\|u_k)$, plus the analogous $\beta$ term.
+\end{proof}
 
 \subsection{Label budgets}
 \label{app:labels}

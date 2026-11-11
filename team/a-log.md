@@ -209,3 +209,18 @@ Tổng 105 macro (24 + 12 + 16 + 18 + 7 + 24 + 2 + 2). Phần A không dùng mac
 **Kiểm:** build thoát 0, 21 trang, overfull lớn nhất 3,46 pt, không tham chiếu thiếu, kết luận vẫn trang 13. Test: 42, 1 fail cũ của C, 1 skip. Độ dễ đọc bốn file của A: trước `para 21, emph 49, câu dài 16, đoạn chấm phẩy 19`; sau `20, 47, 12, 13`.
 
 **Trạng thái task:** A-07 xong (chờ nghiệm thu). Còn lại của A: lượt đọc YC-12 (giới hạn `\para` 5, `\emph` 10, 0 câu dài, ≤ 1 chấm phẩy mỗi đoạn) và giá trị A-08 (chờ B, 18/11).
+
+## 11/11/2026 (khuya)
+
+**Đã làm:** YC-12 (độ dễ đọc) và YC-10 (thuật ngữ) trên mọi file `.tex` của A (`03-model`, `04-theory`, `05-design`, `appendix-proofs`, `figures/fig-arch`), nhánh `a/yc12-readability` (dựng trên `a/a07-shorten`):
+- `\para{`: 20 → 5. Giữ ba đoạn thiết lập ở §3 và "Calibration labels", "How many labels" ở §5.3; các đoạn khác mở bằng câu thường.
+- `\emph{`: 47 → 10. Chỉ giữ chỗ định nghĩa lần đầu: committed, duplicate, loss, view, probe family, guarantee, verification-only, family verdicts, evidence sources, dedup horizon. Nhãn trong chứng minh ở App. A đổi thành câu ("For the miss rate, …") hoặc môi trường `proof`.
+- Câu > 45 từ: 12 → 0 (ngoài Alg. 1). Tách câu ở Lemma 4.4(ii), Thm 4.5 (H1, H2, H3 thành câu riêng), §5.1, §5.3, §5.4, App. A (Lemma 4.4 (ii), Lemma nonce, chứng minh Thm 4.5).
+- Đoạn > 1 dấu chấm phẩy: 13 → 0 (ngoài Alg. 1).
+- YC-10: không còn "escalat"; "G2" chỉ còn trong Thm 4.5 và mã giả Alg. 1. Văn xuôi dùng "app with idempotent retries" theo C-02; nhãn Hình 2 đổi "G2" thành "retry class".
+
+**Về Alg. 1:** `team/readability_count.py` (của C, nhánh `c/10-checks`) bỏ qua `tabular`, TikZ và code nhưng chưa bỏ qua `algorithmic`, nên tính cả thuật toán thành 2 "câu" dài và 1 đoạn 16 dấu chấm phẩy. Đề nghị C thêm `algorithmic` vào danh sách môi trường bỏ qua (một từ trong regex dòng 24). Với thay đổi đó, bốn file của A đạt đủ: `para 5, emph 10, câu dài 0, đoạn chấm phẩy 0`.
+
+**Kiểm:** §4 vẫn 2,89 cột, Thm 4.1 vẫn 3 dòng, build thoát 0, overfull lớn nhất 3,46 pt, không tham chiếu thiếu, kết luận trang 13. Đã xem Hình 2 sau khi đổi nhãn. Test: 42, 1 fail cũ của C, 1 skip. Lệnh grep YC-A6 và YC-A8 vẫn rỗng.
+
+**Trạng thái:** YC-12, YC-10 trên file của A xong, chờ C sửa công cụ cho Alg. 1. Còn lại: giá trị A-08 (chờ `label_cost.csv` của B, 18/11), PR nghiệm thu `[A] Nghiệm thu` chậm nhất 19/11.

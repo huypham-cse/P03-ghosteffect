@@ -15,7 +15,7 @@ from end-to-end reads alone. In part (d) it never asks, and the effect is commit
 (c)~$\E_0[N]\ge d(1{-}\beta\,\|\,\alpha)/D_0$. (d)~$\PP(\dup){+}\PP(\loss)\ge\bar\pi\big(1{-}\sqrt{D_0\E_0[N]/2}\big)$.
 \end{theorem}
 
-\para{What is classical.} We claim none of these inequalities, and Appendix~\ref{app:proofs} states them in full. Part~(a) is Wald's bound~\cite{wald1945sprt} plus a union bound on
+We claim none of these inequalities, and Appendix~\ref{app:proofs} states them in full. Part~(a) is Wald's bound~\cite{wald1945sprt} plus a union bound on
 the lag, and (b) is the noisy-read, finite-wait form of Li's waiting argument~\cite{li2026exactlyonce}. Part~(c) says a verification-only policy needs about $\log(1/\alpha)/D_0$ reads
 (Lemma~1 of~\cite{kaufmann2016complexity}, see also~\cite{tartakovsky2014sequential}). Part~(d) says a policy that never asks errs at least at the Bayes floor, by Le Cam's
 two-point method~\cite{tsybakov2009nonparametric}.
@@ -26,7 +26,7 @@ If $0<\epsilon_1<1$, or if $G(t)>0$ for every $t$, every verification-only polic
 for unbounded stopping times too. For $\alpha,\beta>0$ with $\alpha+\beta<1$, $(\alpha,\beta)$ is reachable by verification if and only if $D_0>0$.
 \end{corollary}
 
-\para{Consequences.} Exactly-once by verification is a limit, not a point, so \sys exposes $(\alpha,\beta)$ as a knob. By~(b), asking or a lag-free family such as the app's
+Exactly-once by verification is a limit, not a point, so \sys exposes $(\alpha,\beta)$ as a knob. By~(b), asking or a lag-free family such as the app's
 Outbox is the only escape from the lag floor. Otherwise the lag share is paid in waiting time (Table~\ref{tab:lag}), and the planner asks when the certified wait exceeds a cap. By~(d), on a look-alike screen ($D_0\to0$) the error approaches the prior floor for any number of reads.
 
 \subsection{Correlated reads: certify views, not reads}
@@ -39,7 +39,7 @@ $q^{\mathrm{com}}_f(r)$ bound the probability that at least $r$ read committed w
 Product certification (Proposition~\ref{prop:family} in the appendix) consults families in a fixed order and multiplies the bounds of the verdicts seen so far. Under A2 the
 probability of reaching a retry is at most a sum $B(\tau)$ of such products, with no assumption about the views within a family. The planner picks the largest $\tau$ with
 $B(\tau)\le\alpha_{\mathrm{test}}$. If a hop-1 entry ends failed or stuck, the planner hands over once to the end-to-end families, and the same bound covers that path.
-The lag adds two terms. Let $w_1$ be the wait after a hop-1 ``absent'' verdict and $w_0$ the wait on every other path (hop~1 tied or absent from the app, a non-G2 entry,
+The lag adds two terms. Let $w_1$ be the wait after a hop-1 ``absent'' verdict and $w_0$ the wait on every other path (hop~1 tied or absent from the app, an entry of an app without idempotent retries,
 a failed or stuck entry). Both waits run from the anchor $r_e$. For an effect of class $c$,
 \begin{equation}
 \PP(\text{retry}\mid X{=}1)\le B(\tau)+q_h\,G_c(w_1)+G_c(w_0),
@@ -49,7 +49,7 @@ where $q_h$ bounds the hop-1 ``absent'' verdict. The first lag term uses only th
 (Appendix~\ref{app:proofs}). \alg certifies each term at $\alpha_{\mathrm{lag}}/2$, or all of
 $\alpha_{\mathrm{lag}}$ to $w_0$ if the app has no hop-1 family.
 
-\para{Without A2.} A2 lets bounds multiply, and it is doubtful when families read the same screens: a stale history after a restart fools nonce, digest and VLM at
+A2 lets bounds multiply, and it is doubtful when families read the same screens: a stale history after a restart fools nonce, digest and VLM at
 once~\cite{zheng2026vpcontrol}. The remedy is to calibrate larger units.
 
 \begin{proposition}[Joint certification]
@@ -70,9 +70,9 @@ A hidden nonce field is such a blind state, so certifying ``absent'' below its r
 \label{lem:calib}
 (i)~For a family of i.i.d.\ binary views, running the SPRT with $\tilde\epsilon_0\ge\epsilon_0$, $\tilde\epsilon_1\ge\epsilon_1$ ($\tilde\epsilon_0+\tilde\epsilon_1<1$) preserves the
 $(\alpha,\beta)$ guarantee.
-(ii)~Suppose each of the $K$ bounds that one fault class gives an effect's decision (verdict levels or regions, $q_h$, and the two waits) is a one-sided $(1-\delta)$ Clopper--Pearson
-bound~\cite{clopper1934use} from calibration effects that are i.i.d.\ draws from the population of \emph{interrupted} deployment effects \emph{of the effect's observable fault
-class}, and an effect of unknown class uses the maximum over classes. Then with probability
+(ii)~One fault class gives an effect's decision $K$ bounds: verdict levels or regions, $q_h$, and the two waits. Suppose each is a one-sided $(1-\delta)$ Clopper--Pearson
+bound~\cite{clopper1934use} from calibration effects that are i.i.d.\ draws from the population of interrupted deployment effects of the effect's observable fault
+class. Suppose also that an effect of unknown class uses the maximum over classes. Then with probability
 at least $1-Kn_{\mathrm{cls}}\delta$ all hold, where $n_{\mathrm{cls}}$ is the number of fault classes. Marginally, $\PP(\text{retry}\mid X{=}1)\le\alpha_{\mathrm{test}}+\alpha_{\mathrm{lag}}+Kn_{\mathrm{cls}}\delta$ and $\PP(\text{declare}\mid X{=}0)\le\beta_{\mathrm{test}}+Kn_{\mathrm{cls}}\delta$.
 \end{lemma}
 Part~(i) is a monotone coupling and (ii) a union bound. Keying by class makes the lab's fault mix irrelevant at the price of labels per class. The unknown-class fallback
@@ -91,11 +91,12 @@ Reusing the nonce also makes a later duplicate detectable, because two items car
 
 \begin{theorem}[Two-hop decomposition]
 \label{thm:twohop}
-Let hop~1 create $n_1$ entries in the app's local outbox and hop~2 transmit entries to the server. Assume (H1) the server is reached only through the outbox; (H2) each entry
-has an app-assigned id, unique per entry, persisted with it and reused by every retransmission from the same device, also after restarts; and (H3) admissible fault schedules
-have finitely many agent kills, app kills that do not cancel the app's scheduled work, transmissions lost before the server applies them, and acknowledgements lost after;
-every entry is transmitted at least once on the fault-free schedule, a positive window separates an entry's creation from its first transmission, and every retransmission
-happens within the server's \emph{dedup horizon} $H_{\mathrm{dedup}}$ of the first application.
+Let hop~1 create $n_1$ entries in the app's local outbox and hop~2 transmit entries to the server. Assume three conditions.
+(H1)~The server is reached only through the outbox.
+(H2)~Each entry has an app-assigned id, unique per entry, persisted with it and reused by every retransmission from the same device, also after restarts.
+(H3)~Admissible fault schedules have finitely many agent kills, app kills that do not cancel the app's scheduled work, transmissions lost before the server applies them,
+and acknowledgements lost after. Every entry is transmitted at least once on the fault-free schedule, and a positive window separates an entry's creation from its first
+transmission. Every retransmission happens within the server's \emph{dedup horizon} $H_{\mathrm{dedup}}$ of the first application.
 Let \textbf{G2} mean: entries are durable, each is retransmitted until acknowledged, and the server applies each (device, id) at most once within $H_{\mathrm{dedup}}$. Then $C_e=1$ under every admissible
 schedule if and only if $n_1=1$ and G2 holds. If retransmission may instead stop in a failed state shown by the app (\textbf{G2$'$}), then $n_1=1$ implies $C_e\le1$ under
 every admissible schedule, and $C_e=0$ only if the entry ends failed.
@@ -103,10 +104,10 @@ every admissible schedule, and $C_e=0$ only if the entry ends failed.
 The positive window in H3 is a property of the app. Element sends its first transmission within a fraction of a second, faster than one accessibility read, so Element has
 no hop-1 family (\S\ref{sec:eval-real}).
 ($\Leftarrow$) is at-least-once delivery plus idempotent application~\cite{helland2012idempotence,birrell1984rpc,wang2021kafka}. What the agent gains is that hop~1 is
-\emph{observable on the device} within seconds, so for a G2 app the late-commit regime of Theorem~\ref{thm:main}(b) becomes a local check. The planner therefore counts hop-1
-entries created after $t_0$ and hands a pending entry over to the end-to-end path before its age approaches $H_{\mathrm{dedup}}$ (\S\ref{sec:design-planner}). ``Retrying is safe'' thus means the \emph{app's own} retry, on the same device, within $H_{\mathrm{dedup}}$.
+observable on the device within seconds, so for an app with idempotent retries the late-commit regime of Theorem~\ref{thm:main}(b) becomes a local check. The planner therefore counts hop-1
+entries created after $t_0$ and hands a pending entry over to the end-to-end path before its age approaches $H_{\mathrm{dedup}}$ (\S\ref{sec:design-planner}). ``Retrying is safe'' thus means the app's own retry, on the same device, within $H_{\mathrm{dedup}}$.
 An agent that redoes the step through the GUI creates a new entry with a new id ($n_1{=}2$), which no server merges, and a re-login creates a new device. A failed entry is
 ambiguous end to end, because the server may have applied it before the app gave up, so it goes to the end-to-end path. K-9~Mail enters this state by design after every lost
 SMTP reply, the client-side face of the 1988 SMTP duplicate problem~\cite{rfc1047}. Force-stop cancels scheduled work and violates H3, so a force-stopped app is treated as
-non-G2 until its entries reach a terminal state. Appendix~\ref{app:proofs} discusses dedup scopes per protocol. Per-step guarantees compose across a workflow by a union bound
+an app without idempotent retries until its entries reach a terminal state. Appendix~\ref{app:proofs} discusses dedup scopes per protocol. Per-step guarantees compose across a workflow by a union bound
 (Proposition~\ref{prop:saga}).
