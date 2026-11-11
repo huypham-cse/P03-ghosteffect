@@ -374,3 +374,27 @@ Review của trưởng nhóm xác nhận nội dung đúng R06. A đã cung cấ
 C-02 còn chờ trưởng nhóm chốt quyền sửa paper, chỉ định người nghiệm thu C,
 và hợp đồng Agent*/LabelTrial* từ B theo review #11 ngày 11/11.
 Tiếp theo: retarget #11 về main; chờ xác nhận để chốt tài liệu, không tự merge.
+## 11/11/2026 — C-04 Table 4 và cập nhật chuỗi PR
+
+C-01 đã được duyệt/merge #10. Đã rebase #11 và #12 lên main rồi retarget
+cả hai về main; #13 vẫn dựa #12 để không lẫn thay đổi công cụ vào diff C-03.
+Các bản trước rebase được giữ ở backup/c02-pre-main, backup/c10-pre-main,
+backup/c03-pre-main. Không chạy lại thí nghiệm C-03; receipt vẫn chỉ đến commit
+thiết kế lịch sử d87fb23 đã có trước CSV. Việc rebase không đổi dữ liệu hay seed.
+C-10 kiểm độc lập tại tmp/c10-review: 41 test qua, build 20 trang, không ref
+chưa định nghĩa, overfull lớn nhất 3,46388 pt. Log nằm trong worktree local.
+
+C-04: renderer lấy số workflow/ngân sách nhãn từ CSV, kiểm nhất quán giữa
+các policy; lấy số đo late Element từ CSV campaign2 chỉ đọc. Caption và văn
+bản phân biệt calibration/test cùng fitted law với reader trên màn hình thật;
+giữ kết quả zero late family errors 0/99 và pairwise cofailures 0/101, không
+đánh đồng hai mẫu số. Bỏ số 12.000, 2.000, 5.000 viết cứng trong caption/nhãn.
+Thêm 7 macro Rsim* cho số đếm; không thay tên macro/schema cũ hoặc số liệu.
+Chưa dẫn nhãn bảng ngân sách chưa merge của A; dùng sec:design-probes hiện hữu.
+
+Validation C-04: 47 test artifact qua; build 20 trang, không ref/cite chưa định
+nghĩa, overfull lớn nhất 3,46388 pt; scrub manuscript/scripts/tests PASS.
+Sinh lại others/notes.md. Không thay CSV/raw measurements hay hàm của A/B.
+C-04 xong triển khai, chờ review; vẫn cần A review cách diễn giải ngân sách.
+Tiếp theo: C-06 cấu trúc đánh giá và rút bài; C-05 seed variance; C-02 chờ
+quyết định trưởng nhóm/hợp đồng B. Chỉ trưởng nhóm merge và người khác nghiệm thu.

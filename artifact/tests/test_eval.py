@@ -112,6 +112,31 @@ class MatchedInputTests(unittest.TestCase):
             self.assertEqual([published], list(output.iterdir()))
 
 
+    def test_table_caption_rejects_mixed_label_budgets(self):
+        with tempfile.TemporaryDirectory() as temp:
+            work = Path(temp)
+            inputs, output = work / 'results', work / 'generated'
+            shutil.copytree(ROOT / 'artifact/results', inputs)
+            source = inputs / 'planner_real.csv'
+            with source.open(newline='') as stream:
+                reader = csv.DictReader(stream)
+                header, rows = reader.fieldnames, list(reader)
+            rows[1]['ncal'] = str(int(rows[0]['ncal']) + 1)
+            with source.open('w', newline='') as stream:
+                writer = csv.DictWriter(stream, fieldnames=header)
+                writer.writeheader()
+                writer.writerows(rows)
+            output.mkdir()
+            published = output / 'macros.tex'
+            published.write_bytes(b'previously reviewed output')
+            result = subprocess.run([sys.executable, str(ROOT / 'artifact/scripts/render.py'),
+                                     '--results-dir', str(inputs), '--output-dir', str(output)],
+                                    text=True, capture_output=True)
+            self.assertNotEqual(0, result.returncode)
+            self.assertIn('inconsistent reporting count', result.stderr)
+            self.assertEqual(b'previously reviewed output', published.read_bytes())
+            self.assertEqual([published], list(output.iterdir()))
+
 class ReadabilityTests(unittest.TestCase):
     def count(self, source):
         with tempfile.TemporaryDirectory() as temp:

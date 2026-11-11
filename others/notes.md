@@ -5,7 +5,7 @@ Values below come from the current CSV render; this is not a fresh experiment re
 Measurement, fitted-law simulation, model simulation and host timings remain distinct.
 See artifact/README.md for the experiment and CSV provenance.
 
-Total macros: 1008. Do not edit generated values by hand.
+Total macros: 1015. Do not edit generated values by hand.
 
 | Macro | Value | Macro file | Used in |
 |---|---|---|---|
@@ -318,6 +318,7 @@ Total macros: 1008. Do not edit generated values by hand.
 | `\RealTimeoutN` | 6 | `macros_real.tex` | sections/07-real.tex |
 | `\RealTimeoutOnce` | 6 | `macros_real.tex` | sections/07-real.tex |
 | `\RealTwoN` | 149 | `macros_real.tex` | sections/01-introduction.tex |
+| `\RsimBaseLabelN` | 2{,}000 | `macros.tex` | sections/07-realsim.tex |
 | `\RsimElemAppAsk` | 0.0 | `macros.tex` | (unused) |
 | `\RsimElemAppDup` | 1.03 | `macros.tex` | (unused) |
 | `\RsimElemAppErr` | 1.03 | `macros.tex` | (unused) |
@@ -381,6 +382,10 @@ Total macros: 1008. Do not edit generated values by hand.
 | `\RsimElemSrcPv` | 0.00 | `macros.tex` | (unused) |
 | `\RsimElemSrcPvHi` | 0.04 | `macros.tex` | (unused) |
 | `\RsimElemSrcSecs` | 70 | `macros.tex` | (unused) |
+| `\RsimFitCoN` | 101 | `macros.tex` | sections/07-realsim.tex |
+| `\RsimFitCoWrong` | 0 | `macros.tex` | sections/07-realsim.tex |
+| `\RsimFitLateObs` | 99 | `macros.tex` | sections/07-realsim.tex |
+| `\RsimFitLateWrong` | 0 | `macros.tex` | sections/07-realsim.tex |
 | `\RsimFiveJointAsk` | 12.7 | `macros.tex` | sections/00-abstract.tex, sections/01-introduction.tex, sections/07-realsim.tex, sections/10-conclusion.tex |
 | `\RsimFiveJointDup` | 0.09 | `macros.tex` | (unused) |
 | `\RsimFiveJointErr` | 0.76 | `macros.tex` | (unused) |
@@ -388,6 +393,7 @@ Total macros: 1008. Do not edit generated values by hand.
 | `\RsimFiveJointPv` | 0.00 | `macros.tex` | (unused) |
 | `\RsimFiveJointPvHi` | 0.04 | `macros.tex` | sections/01-introduction.tex |
 | `\RsimFiveJointSecs` | 24 | `macros.tex` | (unused) |
+| `\RsimFiveLabelN` | 5{,}000 | `macros.tex` | sections/07-realsim.tex |
 | `\RsimFiveProdAsk` | 2.7 | `macros.tex` | (unused) |
 | `\RsimFiveProdDup` | 0.05 | `macros.tex` | (unused) |
 | `\RsimFiveProdErr` | 0.14 | `macros.tex` | (unused) |
@@ -726,6 +732,7 @@ Total macros: 1008. Do not edit generated values by hand.
 | `\RsimUnkSrcPv` | 0.00 | `macros.tex` | (unused) |
 | `\RsimUnkSrcPvHi` | 0.04 | `macros.tex` | (unused) |
 | `\RsimUnkSrcSecs` | 78 | `macros.tex` | (unused) |
+| `\RsimWorkflowN` | 12{,}000 | `macros.tex` | (unused) |
 | `\RuleBestTenAsk` | 16.3 | `macros.tex` | sections/07-evaluation.tex |
 | `\RuleBestTenName` | wait 60 s, all but VLM | `macros.tex` | (unused) |
 | `\RuleBestTenPv` | 0.47 | `macros.tex` | (unused) |

@@ -1,9 +1,18 @@
 \input{generated/tab_realsim}
 
+
+\para{Scope of the fitted-law experiment.} Calibration and test records in Table~\ref{tab:realsim} are simulated draws from the same fitted distribution.
+The underlying emulator measurements found \RsimFitLateWrong/\RsimFitLateObs{} wrong late Element family reads and
+\RsimFitCoWrong/\RsimFitCoN{} pairwise late cofailures.
+These zero counts do not establish error-free readers on new screens.
+The table instead tests certification decisions and their asking cost under the fitted law.
+The label and lag budgets differ: additional simulated labels do not constitute additional emulator trials.
+The budget analysis in Section~\ref{sec:design-probes} must be read alongside the asking rates, tail cases and tied-budget comparison.
+
 \para{Measured-parameter simulation.} Table~\ref{tab:realsim} reruns every mode on profiles built from these measurements (\texttt{params.csv} records each value's source), with per-class lags
-and $\bot$ as no observation. On \emph{Element} every certified mode stays within budget (CP upper \RsimElemJointPvHi\%): the certified wait reaches the measured maximum. The product mode escalates \RsimElemProdAsk\%; joint certification, which needs no cross-family
-independence, \RsimElemJointAsk\% with 2{,}000 labels per class and \RsimFiveJointAsk\% with 5{,}000. Keying by class matters little here: with a net-heavy lab mix the pooled wait still reaches the maximum. Simpler mechanisms also hold: Theorem~\ref{thm:twohop} alone (\RsimElemGtwoAsk\%
-escalations) and rules with a 10 or 30\,s wait (\RsimElemRulesAsk\% and \RsimElemRulesThirtyAsk\%), whereas trusting the app's status right after relaunch retries
+and $\bot$ as no observation. On \emph{Element} every certified mode stays within budget (CP upper \RsimElemJointPvHi\%): the certified wait reaches the measured maximum. The product mode asks \RsimElemProdAsk\%; joint certification, which needs no cross-family
+independence, \RsimElemJointAsk\% with \RsimBaseLabelN{} labels per class and outcome and \RsimFiveJointAsk\% with \RsimFiveLabelN{}. Keying by class matters little here: with a net-heavy lab mix the pooled wait still reaches the maximum. Simpler mechanisms also hold: Theorem~\ref{thm:twohop} alone (\RsimElemGtwoAsk\%
+asks) and rules with a 10 or 30\,s wait (\RsimElemRulesAsk\% and \RsimElemRulesThirtyAsk\%), whereas trusting the app's status right after relaunch retries
 \RsimElemAppPv\% (the lag-blind reads). Two departures break the budget. Passive labels, whose lag logs come from uninterrupted sends, give product \RsimPassProdPv\% and joint
 \RsimPassJointPv\%; a tail of \RsimTail\% beyond 14\,s that the logs miss gives product and rules \RsimTailProdPv\% (joint holds only because it asks \RsimTailJointAsk\%), and if the logs contain it, every mode asks on every
 interrupted Element send. On \emph{K-9} no family can certify, so every mode, like Theorem~\ref{thm:twohop}, asks on every interrupted send; trusting K-9's status retries
