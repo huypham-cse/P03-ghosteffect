@@ -364,3 +364,13 @@ Các mô tả PR có test/manifest và ghi rõ điểm còn mở: provenance do 
 Tiếp theo: nhóm review C-01 trước để gỡ chờ A/B; phía C tiếp tục C-04
 (chú thích và nguồn số của Table 4), C-05 (variance theo seed), C-06
 (cấu trúc evaluation và rút độ dài). Đăng nhập không còn là blocker.
+
+## 11/11/2026 — C-02 sau khi C-01 được squash-merge
+
+C-01 đã được trưởng nhóm duyệt và merge tại PR #10. Đã rebase C-02 lên
+main mới, giữ PR #11 chỉ chứa tài liệu quy ước và nhật ký của C-02.
+Review của trưởng nhóm xác nhận nội dung đúng R06. A đã cung cấp hợp đồng
+105 macro tại PR #9; không nhận thay quyết định hoặc sự đồng ý của A/B.
+C-02 còn chờ trưởng nhóm chốt quyền sửa paper, chỉ định người nghiệm thu C,
+và hợp đồng Agent*/LabelTrial* từ B theo review #11 ngày 11/11.
+Tiếp theo: retarget #11 về main; chờ xác nhận để chốt tài liệu, không tự merge.
