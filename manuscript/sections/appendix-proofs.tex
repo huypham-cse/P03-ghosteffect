@@ -6,14 +6,14 @@ For Theorem~\ref{thm:main} the family's reads are conditionally i.i.d.\ given $X
 Because $p_0\ne p_1$ have full support, $\E_1Z=D_1>0$, $\E_0Z=-D_0<0$ and $\PP_x(Z\ne0)>0$.
 
 \subsection{Theorem~\ref{thm:main}}
-\para{(a)} Let $N=\inf\{n:L_n\notin(-b,a)\}$ over reads taken after $t_0+w$. Since $\PP_x(Z\neq0)>0$, Stein (1946) gives $\PP_x(N>n)\le cr^n$ for constants $c<\infty$, $r<1$, so
+\para{(a)} Let $N=\inf\{n:L_n\notin(-b,a)\}$ over reads taken after $r_e+w$. Since $\PP_x(Z\neq0)>0$, Stein (1946) gives $\PP_x(N>n)\le cr^n$ for constants $c<\infty$, $r<1$, so
 $\E_x[N]<\infty$~\cite{tartakovsky2014sequential}. Under $X{=}0$ reads are i.i.d.\ $p_0$, and the likelihood-ratio identity for stopped sequences gives
 $\PP_0(L_N\ge a)=\E_1[e^{-L_N};L_N\ge a]\le e^{-a}=\beta$. Under $X{=}1$,
 $\PP_1(\text{retry})\le\PP_1(T>w)+\PP_1(\text{retry}\mid T\le w)$. Given $T\le w$ every read is i.i.d.\ $p_1$, so $\PP_1(L_N\le-b\mid T\le w)=\E_0[e^{L_N};L_N\le-b]\le e^{-b}=\alpha-G(w)$.
 Both inequalities are exact; overshoot only lowers the realized error. For~\eqref{eq:ub}, Wald's identity gives $\E_1[L_N]=D_1\E_1[N]$ given visibility; on $\{L_N\ge a\}$,
 $L_{N-1}<a$ so $L_N<a+u^\star$, and on $\{L_N\le-b\}$, $L_N<a$. Hence $D_1\E_1[N]\le a+u^\star$; symmetrically $D_0\E_0[N]\le b+v^\star$.
 
-\para{(b)} Let the decision be $\phi(U,Y_1,\dots,Y_N)$ with all reads end-to-end and taken by $t_0+w$. Given $X{=}1$ and $T>w$, A1 says every such read has the law it has under $X{=}0$,
+\para{(b)} Let the decision be $\phi(U,Y_1,\dots,Y_N)$ with all reads end-to-end and taken by $r_e+w$. Given $X{=}1$ and $T>w$, A1 says every such read has the law it has under $X{=}0$,
 and $U$ is independent of $(X,T)$. So $(U,N,Y_{1:N})$ has the same law as under $X{=}0$, $\PP_1(\text{retry}\mid T>w)=\PP_0(\text{retry})$, and
 $\PP_1(\text{retry})\ge G(w)\,\PP_0(\text{retry})$. A verification-only policy has $\PP_0(\text{retry})=1-\PP_0(\text{declare})\ge1-\beta$. The argument fails for a policy that may ask
 ($\PP_0(\text{retry})$ can be 0) or reads a hop-1 view (whose law does not depend on $T$).
@@ -45,9 +45,12 @@ $f_1,\dots,f_j$ (the others tied, i.e.\ skipped) and no com-verdict (a com-verdi
 $E_A=\bigcap_{(f,r)\in A}\{\text{at least $r$ views of $f$ read absent}\}$. Under $X{=}1$ with the effect visible, A2 makes the events in $E_A$ independent, so
 $\PP(E_A)\le\prod_{(f,r)\in A}q^{\mathrm{abs}}_f(r)$. A union bound over $\mathcal R(\tau)$ gives $B(\tau)$. Nothing is assumed about the joint law of views within a family,
 because each $q$ bounds the family's verdict event directly.
+For the hand-over: if hop~1 ends failed or stuck, the planner sets the product to $1$ once and does not use the hop-1 verdict again. A run that then retries stops after an ordered
+list of end-to-end verdicts that skips hop~1. That list satisfies the two conditions above, so it is in $\mathcal R(\tau)$ and the same union bound covers it. The reset happens at most
+once per effect, so no run is counted under two lists.
 
-\emph{Lag, Eq.~\eqref{eq:lagsplit}.} Partition retrying runs by path: $\Pi_1$, hop~1 read ``absent'' (end-to-end reads from $t_0+w_1$ on); $\Pi_0$, every other path (end-to-end reads
-from $t_0+w_0$ on, measured from $t_0$ also after a stuck or failed hand-over). On $\{T\le w_1\}\cap\Pi_1$ or $\{T\le w_0\}\cap\Pi_0$ every end-to-end read is post-visibility, and the run
+\emph{Lag, Eq.~\eqref{eq:lagsplit}.} Fix the class $c$ and write $T=T_c$. Since $t_{\mathrm{vis}}\le r_e+T$, a read at time $t\ge r_e+w$ on the event $T\le w$ is post-visibility. Partition retrying runs by path: $\Pi_1$, hop~1 read ``absent'' (end-to-end reads from $r_e+w_1$ on); $\Pi_0$, every other path (end-to-end reads
+from $r_e+w_0$ on, measured from $r_e$ also after a stuck or failed hand-over). On $\{T\le w_1\}\cap\Pi_1$ or $\{T\le w_0\}\cap\Pi_0$ every end-to-end read is post-visibility, and the run
 lies in some $E_A$, $A\in\mathcal R(\tau)$, so these parts sum to at most $B(\tau)$ (the paths are disjoint, and assignments that skip hop~1 belong to $\mathcal R(\tau)$).
 $\PP(\Pi_1,T>w_1\mid X{=}1)=\PP(\text{hop-1 abs}\mid X{=}1)\,G(w_1)\le q_hG(w_1)$, since hop-1 readings and $T$ are independent given $X$. $\PP(\Pi_0,T>w_0\mid X{=}1)\le G(w_0)$,
 since $\Pi_0$ is a single event set; on the stuck path hop-1 status depends on $T$, which this term does not need. The bound $q_hG(w)\le\alpha_{\mathrm{lag}}$ alone would spend the lag
@@ -79,7 +82,7 @@ for all $n$. If the true walk exits at the top at step $n$, the model walk staye
 $\PP^{\mathrm{true}}_0(\text{declare})\le\PP^{\mathrm{model}}_0(\text{declare})\le\beta$ by (a) applied to the model, under which the planner's statistic is the exact log-likelihood ratio.
 Under $X{=}1$ a true 0-read implies a model 0-read, and the same argument bounds retries by $\alpha$. The argument is per read, so it also covers independent, non-identical views.
 (ii)~A one-sided $(1-\delta)$ Clopper--Pearson bound covers its parameter with probability at least $1-\delta$~\cite{clopper1934use} when the calibration effects are i.i.d.\ from the deployment
-population of the effect's fault class; a union bound over the $K$ bounds gives $1-K\delta$ (for an unknown class, the per-class bounds that the fallback uses are all in the union, and
+population of the effect's fault class; a union bound over the $Kn_{\mathrm{cls}}$ bounds of all classes gives $1-Kn_{\mathrm{cls}}\delta$ (for an unknown class, the per-class bounds that the fallback uses are all in the union, and
 a per-class bound valid for every class bounds any mixture of classes), and on the complementary event the guarantee may fail with probability at most 1, which gives the marginal bound. The
 declare side is identical with the ``committed'' bounds and $\beta_{\mathrm{test}}$.
 (iii)~Each term of $B(\tau)$ is $\prod_{f\in A}q_f$; replacing $q_f$ by $\kappa_fq_f$ multiplies it by $\prod_{f\in A}\kappa_f$, at most the maximum over $\mathcal R(\tau)$.
@@ -100,7 +103,7 @@ faults, ends with an applied, acknowledged transmission, so $C_e\ge1$. By H2 eve
 $C_e\ge2$ on the fault-free schedule. If $n_1{=}1$ and G2 fails: without durability, ``app kill after hop~1, before the first transmission'' gives $C_e=0$; without retransmission,
 ``first transmission lost before apply'' gives $C_e=0$; without dedup, ``first transmission applied, acknowledgement lost, retransmission applied'' gives $C_e=2$. Each schedule is admissible.
 Under G2$'$, dedup still gives $C_e\le1$; retransmission stops before an acknowledgement only in the failed state, so $C_e=0$ implies the entry ended failed.
-\emph{Horizon.} If a retransmission may come later than $D$ after the first application, ``first transmission applied, acknowledgement lost, retransmission after $D$'' gives $C_e=2$,
+\emph{Horizon.} If a retransmission may come later than $H_{\mathrm{dedup}}$ after the first application, ``first transmission applied, acknowledgement lost, retransmission after $H_{\mathrm{dedup}}$'' gives $C_e=2$,
 so the horizon condition in H3 is necessary; Synapse showed exactly this after we aged a transaction-id row past 24\,h (\S\ref{sec:eval-real}).
 
 \subsection{Proposition~\ref{prop:saga}}
@@ -119,12 +122,35 @@ is strictly convex, and subject to $\sum\alpha_i\le\alpha$, $\sum\beta_i\le\beta
 \end{equation}
 saving $W\,\KL(\hat w\|u_k)+V\,\KL(\hat v\|u_k)$ over the uniform split ($W=\sum w_i$, $\hat w=w/W$, $u_k$ uniform; $V,\hat v$ likewise).
 \end{proposition}
-The allocation optimizes the surrogate $J$, needs priors $\pi_i$ (the per-step guarantee does not), and in exact cost is sometimes worse than uniform (Appendix, Table~\ref{tab:saga}).
-Since it uses priors anyway, it could optimize under the constraint the guarantee implies, $\sum_i\pi_i\alpha_i\le\alpha$, which gives $\alpha_i\propto w_i/\pi_i$ and is cheaper.
-Its main role is safety: giving every step the full $\alpha$, the natural per-call default, multiplies the end-to-end duplicate probability by up to $k$.
+The guarantee part is a union bound, and it is what the saga layer is for: giving every step the full $\alpha$, the natural per-call default, multiplies the end-to-end
+duplicate probability by up to $k$. The allocation part is not optimal in exact cost. It optimizes the surrogate $J$, needs priors $\pi_i$ (the per-step guarantee does not),
+and is sometimes worse than uniform (Table~\ref{tab:saga}).
 
 \noindent\emph{Proof.}
 \emph{Guarantee.} $\PP(\dup_i)=\pi_i\PP(\dup_i\mid X_i{=}1)\le\pi_i\alpha_i$, so $\PP(\bigcup_i\dup_i)\le\sum_i\pi_i\alpha_i$ for any joint law; losses are analogous with $1-\pi_i$.
 \emph{Optimum.} $J=\sum_iw_i\log\frac1{\alpha_i}+\sum_iv_i\log\frac1{\beta_i}$ is strictly convex on the open orthant and decreasing in each variable, so the constraints are active.
 Stationarity, $-w_i/\alpha_i+\lambda=0$, gives $\alpha_i=w_i/\lambda$ with $\lambda=W/\alpha$; $\beta_i$ is analogous.
 \emph{Saving.} $J_{\mathrm{unif}}-J^\star=\sum_iw_i\big[\log\frac k\alpha-\log\frac{W}{\alpha w_i}\big]=\sum_iw_i\log\frac{kw_i}{W}=W\,\KL(\hat w\|u_k)$, plus the analogous $\beta$ term.
+
+\subsection{Label budgets}
+\label{app:labels}
+Table~\ref{tab:nsize} gives the calibration sizes that make certification possible (\S\ref{sec:design-probes}). Table~\ref{tab:cert-lagapp} extends the label budget of
+Table~\ref{tab:cert-budget} to larger tied budgets and to a bootstrap lag table at the larger label count.
+
+\input{generated/tab_nsize}
+\input{generated/tab_cert_lagapp}
+
+\subsection{Composed error bounds}
+\label{app:composed}
+Table~\ref{tab:cert-bound} evaluates Eq.~\eqref{eq:composed} with the budgets in place of the planner's own error rates. The $q_x$ and $\epsilon_x$ columns are rates the
+simulations observed. The simulated user errs on 5\% of asks, or 10\% with a look-alike on screen, so $\epsilon_x$ depends on which effects a mode asks about. Neither
+simulated world has an app that retransmits without dedup ($r_1{=}r_0{=}0$).
+
+\input{generated/tab_cert_bound}
+
+\subsection{Lag anchors}
+\label{app:anchor}
+Table~\ref{tab:cert-clock} compares waiting from the anchor $r_e$ of \S\ref{sec:model} with waiting from $t_0$ for every fault class, after an outage of 5 or 15\,s
+before the anchor. Waiting from $r_e$ keeps every row within the budget. Waiting from $t_0$ puts every row over it, for both product and joint certification.
+
+\input{generated/tab_cert_clock}

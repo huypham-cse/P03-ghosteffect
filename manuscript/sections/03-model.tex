@@ -3,9 +3,16 @@
 
 \para{Effects, outcomes, lag.}
 A workflow runs effects $e_1,\dots,e_k$. For effect $e$, let $t_0$ be the time the ledger records \textsf{ISSUED}, immediately before the commit tap,
-and let $T\in[0,\infty]$ be the time from $t_0$ until the effect becomes visible to end-to-end probes (in flight, server, rendering).
-The hidden outcome is $X=\mathbf 1\{T<\infty\}$: $X{=}1$ means \emph{committed}, possibly later; $X{=}0$ means \emph{absent}. The lag tail is
-$G(w)=\PP(T>w\mid X{=}1)$, and $G(w)\to0$ as $w\to\infty$ by definition of $X$. Recovery ends with $C_e$ applied copies: a \emph{duplicate} is $C_e\ge2$
+and let $t_{\mathrm{vis}}\in[t_0,\infty]$ be the time the effect becomes visible to end-to-end probes (in flight, server, rendering).
+The hidden outcome is $X=\mathbf 1\{t_{\mathrm{vis}}<\infty\}$: $X{=}1$ means \emph{committed}, possibly later; $X{=}0$ means \emph{absent}.
+An effect cannot become visible while its app is dead or the network is down, so the lag is measured from an anchor $r_e$ that depends on the
+effect's observable fault class $c$. For agent death $r_e=t_0$. For app death $r_e$ is the time the controller confirms its intent to relaunch the app. For connectivity loss
+$r_e$ is the time the connection is restored. For a combined fault $r_e$ is the later of the last two. The lag of class $c$ is $T_c=\max(0,\,t_{\mathrm{vis}}-r_e)$ and its tail is
+$G_c(w)=\PP(T_c>w\mid X{=}1,\text{class }c)$, with $G_c(w)\to0$ as $w\to\infty$ by definition of $X$. An effect waits until the deadline $r_e+w_c$.
+If the class is unknown, the planner uses the latest deadline over the classes. If an anchor it needs was not observed, it asks.
+Waiting from $t_0$ instead waits too little after an outage. In measured-parameter simulation on Element with a 15\,s outage, product certification then retries
+\CertClockTzeroDownFifteenProdPv\% of committed effects, against \CertClockDownFifteenProdPv\% when it waits from $r_e$ (Table~\ref{tab:cert-clock} in the appendix).
+We write $T$ and $G$ for $T_c$ and $G_c$ when the class is fixed. Recovery ends with $C_e$ applied copies: a \emph{duplicate} is $C_e\ge2$
 (retrying when $X{=}1$) and a \emph{loss} is $C_e=0$ (not retrying when $X{=}0$). Partial effects are modeled as several effects.
 
 \para{Views and probe families.}
@@ -13,9 +20,11 @@ A \emph{view} is one rendering read by one reader (the history list through the 
 (a count of matching history items compared with a snapshot taken before the tap), and VLM. A read at time $t$ of view $v$ returns $Y\in\{0,1\}$ ($1$ = ``committed'').
 We assume:
 \begin{itemize}[leftmargin=*,topsep=1pt,itemsep=0pt]
-\item[\textbf{A1}] (\emph{lag}) A read of an end-to-end view at time $t$ has law $p^v_1$ if $X{=}1$ and $T\le t-t_0$, and $p^v_0$ otherwise:
+\item[\textbf{A1}] (\emph{lag}) A read of an end-to-end view at time $t$ has law $p^v_1$ if $X{=}1$ and $T\le t-r_e$, and $p^v_0$ otherwise:
 an effect that is not yet visible looks absent. Hop-1 views observe the outbox entry, which exists from the tap on; a view qualifies as hop~1 only if its content
 does not depend on rendering the end-to-end state (Element's send-state indicator does not qualify: it is drawn with the lagged timeline row, \S\ref{sec:eval-real}).
+Given $X$, the lag $T$ is independent of the readers' errors: a read depends on $T$ only through whether the effect is visible at $t$.
+Element's \texttt{/sync} echo, which can show ``Sent'' before the app's own request returns, is an end-to-end view under A1. The echo is the event the server applied, so it appears only after the commit, and its arrival is when $T$ ends.
 \item[\textbf{A2}] (\emph{independence across families}) Given $X$ and visibility, readings of different families are independent.
 Readings of views \emph{within} a family may be arbitrarily dependent, and the planner reads each view at most once. Only product certification
 (Proposition~\ref{prop:family}) uses A2; joint certification (Proposition~\ref{prop:joint}) does not.
@@ -37,3 +46,18 @@ The guarantee is conditional on $X$, so it needs no prior. Exactly-once is $\alp
 and are reported separately (\S\ref{sec:eval}). \sys splits each effect's duplicate budget into a test share, a lag share (paid in waiting time) and a calibration share,
 $\alpha=\alpha_{\mathrm{test}}+\alpha_{\mathrm{lag}}+\alpha_{\mathrm{cal}}$ with weights $0.5/0.4/0.1$, and $\beta=\beta_{\mathrm{test}}+\beta_{\mathrm{cal}}$ with $0.9/0.1$. These weights are
 a design choice; the guarantee holds for any split.
+
+The end-to-end error adds what the user and the app do. Let $q_x$ be the probability that the planner asks about an effect with outcome $x$, and $\epsilon_x$ the user's
+error rate on those asks. Let $r_x$ be the rate of errors that neither the planner nor the user causes, such as an app that retransmits without dedup. A duplicate or a loss
+needs one of these three events, so a union bound gives
+\begin{equation}
+\begin{gathered}
+\PP(\dup\mid X{=}1)\le\min(1,\alpha+q_1\epsilon_1+r_1),\\
+\PP(\loss\mid X{=}0)\le\min(1,\beta+q_0\epsilon_0+r_0).
+\end{gathered}
+\label{eq:composed}
+\end{equation}
+A deployer who cares about end-to-end errors should read~\eqref{eq:composed}, not only the rate $P_{\mathrm v}$ at which the planner retries a committed effect by itself.
+A mode that asks more meets~\eqref{eq:guarantee} more easily but pays $q_1\epsilon_1$. In measured-parameter simulation on Element, where no app retransmits without dedup
+($r_1{=}r_0{=}0$), the duplicate bound is \CertBoundElemProdDup\% for product and \CertBoundElemJointDup\% for joint. Joint asks about \CertBoundElemJointQone\% of committed
+effects there (Table~\ref{tab:cert-bound} also gives the default world).
