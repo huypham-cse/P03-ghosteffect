@@ -288,6 +288,12 @@ class ScrubTests(unittest.TestCase):
             self.assertEqual(0, self.run_scrub(path).returncode)
             self.assertEqual(2, self.run_scrub(path.with_name('missing.txt')).returncode)
 
+    def test_reserved_test_domains_are_not_identity_findings(self):
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / 'fixtures.txt'
+            path.write_text('alice@test.invalid\nbob@ghost.local\n', encoding='utf-8')
+            self.assertEqual(0, self.run_scrub(path).returncode)
+
     def test_flags_identity_paths_and_keys_without_echoing_secret(self):
         cases = ['/' + 'Users/abc/private', 'C:' + chr(92) + 'Users' + chr(92) + 'abc',
                  'D:' + chr(92) + 'work', 'Bá ' + 'Nguyên', 'Gia ' + 'Huy', 'Trung ' + 'Nguyên',

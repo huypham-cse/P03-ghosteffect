@@ -30,8 +30,10 @@ patterns = [
     ('github-token', re.compile(r'\b(?:gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,})')),
     ('private-key', re.compile(r'-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----')),
     ('team-account', re.compile(r'nguyennguyen938-debug', re.I)),
-    ('email', re.compile(r'\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b', re.I)),
 ]
+email_pattern = re.compile(r'\b[A-Z0-9._%+-]+@([A-Z0-9.-]+\.[A-Z]{2,})\b', re.I)
+# These domains are isolated test fixtures, not identities or routable accounts.
+test_email_domains = {'test.invalid', 'ghost.local'}
 names = re.compile(r'\b(?:gia huy|trung nguyen|ba nguyen)\b')
 excluded = {'.git', '__pycache__'}
 forbidden_dirs = {'runtime', 'tmp', 'codex', 'team', 'runs'}
@@ -77,6 +79,9 @@ def scan(path, label):
         for rule, pattern in patterns:
             if pattern.search(line):
                 report(label, number, rule)
+        for match in email_pattern.finditer(line):
+            if match.group(1).casefold() not in test_email_domains:
+                report(label, number, 'email')
         if names.search(folded(line)):
             report(label, number, 'team-name')
 

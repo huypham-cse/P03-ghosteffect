@@ -537,3 +537,13 @@ readability scan. The final scan reports 0 `para` commands, 1 emphasis command,
 C-owned files. Regenerated `others/notes.md` and the PDF; the document builds to
 22 pages with no unresolved references or citations. Existing layout warnings
 remain outside this scope; the largest overfull box is 4.16365pt.
+
+## 11/11/2026 — C-12 anonymous bundle tooling
+
+Added `team/make_bundle.sh` to create a deterministic ZIP from tracked
+`artifact/` and `testbed/` files only. It excludes run receipts, local runtime
+state, team/internal paths, review files, and local configuration; it adds a
+README and SHA-256 manifest, then scrubs the staged contents. The scrub checker
+now permits only the reserved fixture domains `test.invalid` and `ghost.local`,
+while reporting every other email-like identity. No source raw data was changed.
+Upload or public artifact linkage remains a later coordinated task.

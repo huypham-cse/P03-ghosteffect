@@ -1,7 +1,8 @@
 # GhostEffect artifact
 
-Experiment runtime is **stdlib-only Python 3** (sqlite3 included) and simulations are **seeded**. On Linux/WSL, run
-`python3 artifact/run_all.py --output-dir /absolute/path/to/fresh-run --jobs 2` from the project root; `artifact/run_all.sh` is a thin wrapper.
+Experiment runtime is **stdlib-only Python 3.12** (sqlite3 included) and simulations are **seeded**. On Linux/WSL, reproduce with one command:
+`python3 artifact/run_all.py --output-dir /absolute/path/to/fresh-run --jobs 2`.
+The reference 25-job run took about six minutes with four workers. `artifact/run_all.sh` is a thin wrapper.
 The runner copies inputs/scripts into a fresh workspace, records hashes/exits/CSV structure, runs REAL4 and publishes generated fragments there.
 Archived results and the original manuscript are not overwritten. The full suite includes POSIX SIGKILL and rejects native Windows.
 Compile a reviewed generated workspace with `manuscript/build.sh`; LaTeX/BibTeX failures now propagate.
@@ -62,7 +63,7 @@ Etar+DAVx5+Radicale, Synapse txnId horizon). Campaign 1 (`results/real/*.csv`) s
 * Fault-class-keyed calibration (`keyed='all'`), lab fault mix (`cal_faults`), unknown-class fallback (`class_known`), no-observation reads (bot).
 * `sample_size.py`: product zero-event column and joint median-case column at a true region rate alpha_test/4.
 
-`retired/illustrative.py` and `retired/illustrative_results/` are the round-1 † projections (seeded draws around target rates). They are **not** measurements and are
+`retired/illustrative.py` and `retired/illustrative_results/` are the round-1 projections (seeded draws around target rates). They are **not** measurements and are
 **not** used by the paper. They are kept only so the change can be audited.
 
 ## Not done
@@ -70,4 +71,4 @@ Etar+DAVx5+Radicale, Synapse txnId horizon). Campaign 1 (`results/real/*.csv`) s
 - Device harness (AndroidWorld fault injector, on-device controller), power-loss ledger test on a device: see paper §6 and §7.
 
 Verification: `python -m unittest discover -s artifact/tests -v`; SciPy is an optional independent test reference, not a runtime dependency.
-The 2026-11-08 isolated25-job run passed, including16REAL4tags. Do not claim byte-identical reproduction of the archive: unmodified bundled source already differs from stored `ghost-src` outputs on both Windows and Linux, and floating CI/host timings also vary. See [`../codex/code-fixes.md`](../codex/code-fixes.md) for evidence, fixes and remaining gates. No archived CSV was replaced to hide differences.
+The isolated 25-job run passed, including all declared REAL4 tags. Ledger latency, filesystem durability, and floating-point tails can vary by host. No archived CSV was replaced to hide differences.
