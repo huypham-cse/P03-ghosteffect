@@ -207,10 +207,10 @@ Total macros: 1019. Do not edit generated values by hand.
 | `\RealBlindLagHi` | 13.6 | `macros_real.tex` | (unused) |
 | `\RealBlindLagLo` | 4.6 | `macros_real.tex` | (unused) |
 | `\RealCalKill` | 5 | `macros_real.tex` | sections/07-real.tex |
-| `\RealCalN` | 8 | `macros_real.tex` | sections/00-abstract.tex, sections/01-introduction.tex, sections/07-real.tex |
+| `\RealCalN` | 8 | `macros_real.tex` | sections/01-introduction.tex, sections/07-real.tex |
 | `\RealCalOnce` | 8 | `macros_real.tex` | sections/07-real.tex |
-| `\RealCalRecDup` | 3 | `macros_real.tex` | sections/00-abstract.tex, sections/01-introduction.tex, sections/07-real.tex |
-| `\RealCalRecN` | 3 | `macros_real.tex` | sections/00-abstract.tex, sections/01-introduction.tex, sections/07-real.tex |
+| `\RealCalRecDup` | 3 | `macros_real.tex` | sections/01-introduction.tex, sections/07-real.tex |
+| `\RealCalRecN` | 3 | `macros_real.tex` | sections/01-introduction.tex, sections/07-real.tex |
 | `\RealCensored` | 0 | `macros_real.tex` | sections/07-real.tex |
 | `\RealCoBot` | 2 | `macros_real.tex` | (unused) |
 | `\RealCoN` | 101 | `macros_real.tex` | sections/01-introduction.tex, sections/07-real.tex, sections/08-discussion.tex |
@@ -221,7 +221,7 @@ Total macros: 1019. Do not edit generated values by hand.
 | `\RealElemN` | 101 | `macros_real.tex` | sections/07-real.tex |
 | `\RealElemNofaultN` | 12 | `macros_real.tex` | sections/07-real.tex |
 | `\RealElemOnce` | 101 | `macros_real.tex` | (unused) |
-| `\RealElemRL` | 83 | `macros_real.tex` | figures/fig1.tex, sections/00-abstract.tex, sections/01-introduction.tex, sections/07-real.tex |
+| `\RealElemRL` | 83 | `macros_real.tex` | figures/fig1.tex, sections/01-introduction.tex, sections/07-real.tex |
 | `\RealElemSameTxn` | 65 | `macros_real.tex` | (unused) |
 | `\RealElemSentPolls` | 1{,}036 | `macros_real.tex` | sections/07-real.tex |
 | `\RealElemStd` | 60 | `macros_real.tex` | sections/07-real.tex |
@@ -249,8 +249,8 @@ Total macros: 1019. Do not edit generated values by hand.
 | `\RealKRd` | 20 | `macros_real.tex` | figures/fig1.tex |
 | `\RealKRdNosent` | 12 | `macros_real.tex` | (unused) |
 | `\RealKRdSent` | 8 | `macros_real.tex` | (unused) |
-| `\RealKRecDup` | 20 | `macros_real.tex` | figures/fig1.tex, sections/00-abstract.tex, sections/01-introduction.tex, sections/07-real.tex |
-| `\RealKRecN` | 20 | `macros_real.tex` | figures/fig1.tex, sections/00-abstract.tex, sections/01-introduction.tex, sections/07-real.tex |
+| `\RealKRecDup` | 20 | `macros_real.tex` | figures/fig1.tex, sections/01-introduction.tex, sections/07-real.tex |
+| `\RealKRecN` | 20 | `macros_real.tex` | figures/fig1.tex, sections/01-introduction.tex, sections/07-real.tex |
 | `\RealKSentAckedN` | 7 | `macros_real.tex` | (unused) |
 | `\RealKSentN` | 8 | `macros_real.tex` | sections/07-real.tex |
 | `\RealKSentWrong` | 8 | `macros_real.tex` | sections/07-real.tex |
@@ -386,14 +386,14 @@ Total macros: 1019. Do not edit generated values by hand.
 | `\RsimFitCoWrong` | 0 | `macros.tex` | sections/07-realsim.tex |
 | `\RsimFitLateObs` | 99 | `macros.tex` | sections/07-realsim.tex |
 | `\RsimFitLateWrong` | 0 | `macros.tex` | sections/07-realsim.tex |
-| `\RsimFiveJointAsk` | 12.7 | `macros.tex` | sections/00-abstract.tex, sections/01-introduction.tex, sections/07-realsim.tex, sections/10-conclusion.tex |
+| `\RsimFiveJointAsk` | 12.7 | `macros.tex` | sections/00-abstract.tex, sections/01-introduction.tex, sections/07-realsim.tex |
 | `\RsimFiveJointDup` | 0.09 | `macros.tex` | (unused) |
 | `\RsimFiveJointErr` | 0.76 | `macros.tex` | (unused) |
 | `\RsimFiveJointLoss` | 0.67 | `macros.tex` | (unused) |
 | `\RsimFiveJointPv` | 0.00 | `macros.tex` | (unused) |
 | `\RsimFiveJointPvHi` | 0.04 | `macros.tex` | sections/01-introduction.tex |
 | `\RsimFiveJointSecs` | 24 | `macros.tex` | (unused) |
-| `\RsimFiveLabelN` | 5{,}000 | `macros.tex` | sections/07-realsim.tex |
+| `\RsimFiveLabelN` | 5{,}000 | `macros.tex` | sections/00-abstract.tex, sections/07-realsim.tex |
 | `\RsimFiveProdAsk` | 2.7 | `macros.tex` | (unused) |
 | `\RsimFiveProdDup` | 0.05 | `macros.tex` | (unused) |
 | `\RsimFiveProdErr` | 0.14 | `macros.tex` | (unused) |
@@ -797,7 +797,7 @@ Total macros: 1019. Do not edit generated values by hand.
 | `\SimCkptPv` | 100.0 | `macros.tex` | (unused) |
 | `\SimCkptPvHi` | 100.00 | `macros.tex` | (unused) |
 | `\SimCkptSecs` | 14 | `macros.tex` | (unused) |
-| `\SimGhostAsk` | 24.9 | `macros.tex` | sections/00-abstract.tex, sections/01-introduction.tex, sections/07-evaluation.tex, sections/appendix-results.tex |
+| `\SimGhostAsk` | 24.9 | `macros.tex` | sections/01-introduction.tex, sections/07-evaluation.tex, sections/appendix-results.tex |
 | `\SimGhostBg` | 2.1 | `macros.tex` | (unused) |
 | `\SimGhostCloss` | 0.00 | `macros.tex` | (unused) |
 | `\SimGhostDup` | 0.94 | `macros.tex` | (unused) |

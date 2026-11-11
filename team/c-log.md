@@ -528,3 +528,12 @@ sources. Added direct problem-boundary comparisons and `others/citation-audit.md
 Corrected Agent libOS's title and changed VeriGUI from an unsupported ACL
 proceedings claim to its verified arXiv status. No claims assert that any cited
 system implements or evaluates this paper's calibrated GUI recovery.
+
+## 11/11/2026 — C-11 readability pass
+
+Revised C-owned evaluation prose and appendix material after a source-level
+readability scan. The final scan reports 0 `para` commands, 1 emphasis command,
+0 overlong sentences, and 0 paragraphs with more than one semicolon across the
+C-owned files. Regenerated `others/notes.md` and the PDF; the document builds to
+22 pages with no unresolved references or citations. Existing layout warnings
+remain outside this scope; the largest overfull box is 4.16365pt.
