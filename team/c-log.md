@@ -398,3 +398,28 @@ Sinh lại others/notes.md. Không thay CSV/raw measurements hay hàm của A/B.
 C-04 xong triển khai, chờ review; vẫn cần A review cách diễn giải ngân sách.
 Tiếp theo: C-06 cấu trúc đánh giá và rút bài; C-05 seed variance; C-02 chờ
 quyết định trưởng nhóm/hợp đồng B. Chỉ trưởng nhóm merge và người khác nghiệm thu.
+## 11/11/2026 — C-06 sắp lại đánh giá và rút phần thân
+
+Đưa emulator, agent placeholder và measured-parameter simulation lên trước
+model-based comparison. Chuyển RQ1/RQ2, cấu hình chi tiết, so sánh baseline và
+ablation đầy đủ xuống appendix-results; giữ mọi kết quả bất lợi. Renderer sinh
+bảng model gọn 6 policy và bảng đầy đủ riêng ở phụ lục, không xóa CSV hay kết quả.
+Bảng vetted matched vẫn ở phần fitted-law: planner_sim.csv chưa có dòng vetted
+matched trong default model; không ghép số từ thế giới khác thành một hàng giả.
+Cần review yêu cầu hàng vetted của C-06 trước khi nghiệm thu toàn bộ task.
+
+Sửa delta trong setup và caption tab_nsize theo công thức A-05 (#17), có số lớp;
+đưa StressNover cạnh kết quả stress, và rút planned study thành một câu.
+Build đầu thất bại do bỏ label sec:device-plan còn được B dẫn; đã giữ label ở
+câu scope/future work. Lỗi cú pháp renderer khi tách biểu thức đã sửa trước build.
+Bản cuối build 21 trang tổng, Conclusion ở trang 12 (trước là 13), không ref/cite
+thiếu; overfull còn 3,46388 pt ở discussion chưa xử lý. 47 test artifact qua,
+scrub manuscript/scripts/tests PASS. Macro values và CSV không đổi; notes sinh lại
+để chỉ đúng vị trí văn bản mới. C-06 xong phần cấu trúc/rút bài, chờ review; chưa
+nghiệm thu toàn task, đặc biệt hàng vetted cùng mô hình và readability C-11.
+
+Tổng việc còn lại: C-02 chờ quyết định lead/hợp đồng B; C-10 chờ review #12;
+C-03 chờ review #13; C-04 chờ review #26; C-05 seed variance chưa triển khai;
+C-07 related work, C-08 abstract, C-09 intro/discussion/conclusion, C-11 readability,
+C-12 anonymous bundle còn phải làm. Chỉ chốt nhận định agent khi B có dữ liệu thật.
+C-13 là freeze/submit đúng lịch, không thực hiện sớm hoặc tự nghiệm thu thay nhóm.
