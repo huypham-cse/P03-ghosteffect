@@ -179,3 +179,17 @@ Tổng 105 macro (24 + 12 + 16 + 18 + 7 + 24 + 2 + 2). Phần A không dùng mac
 **Kiểm:** build thoát 0, overfull lớn nhất 3,46 pt, không tham chiếu thiếu. Độ dễ đọc trên `03-model` và `appendix-proofs` không tăng (8, 25, 2, 10 trước và sau).
 
 **Trạng thái task:** A-04 xong (chờ nghiệm thu).
+
+## 11/11/2026 (chiều, tiếp)
+
+**Đã làm:** A-01, phần bảng, nhánh `a/a01-table` (dựng trên `a/a04-composed-bound`):
+- §3: thêm câu cho thấy chờ từ `t_0` sai thế nào (mô phỏng với tham số đo, Element, mất kết nối 15 s: product retry 43,77% effect đã commit, so với 0,00% khi chờ từ `r_e`), bằng macro `\CertClock*`.
+- Phụ lục `app:anchor` với `tab_cert_clock`: mốc đúng `r_e` so với mốc sai `t_0`, 5 s và 15 s, product và joint, `P_v`, cận CP và ask.
+- Đối chiếu đủ 4 dòng × 2 chính sách của bảng với `planner_real4_{down5,down15,t0down5,t0down15}.csv`: khớp.
+- Phát hiện và sửa: heredoc trong shell làm `\ref` thành ký tự CR; đã sửa và quét lại mọi dòng thêm mới trong file của A (không còn ký tự điều khiển hay lệnh thiếu dấu `\`).
+
+**Kiểm:** build thoát 0, overfull lớn nhất 3,46 pt, không tham chiếu thiếu, kết luận vẫn trang 13. Test: 42, 1 fail cũ của C, 1 skip. Độ dễ đọc `03-model` và `appendix-proofs` không đổi.
+
+**Trạng thái task:** A-01 xong cả văn bản, test và bảng (chờ nghiệm thu).
+
+**Tiếp theo:** A-07 (rút §4 còn 1,5 trang, walk-through K-9 và Element ở §5.4) kèm lượt đọc YC-12; nhắn C xác nhận C-02 và hai chỗ δ của C.

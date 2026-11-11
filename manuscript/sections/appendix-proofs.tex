@@ -147,3 +147,10 @@ simulations observed. The simulated user errs on 5\% of asks, or 10\% with a loo
 simulated world has an app that retransmits without dedup ($r_1{=}r_0{=}0$).
 
 \input{generated/tab_cert_bound}
+
+\subsection{Lag anchors}
+\label{app:anchor}
+Table~\ref{tab:cert-clock} compares waiting from the anchor $r_e$ of \S\ref{sec:model} with waiting from $t_0$ for every fault class, after an outage of 5 or 15\,s
+before the anchor. Waiting from $r_e$ keeps every row within the budget. Waiting from $t_0$ puts every row over it, for both product and joint certification.
+
+\input{generated/tab_cert_clock}

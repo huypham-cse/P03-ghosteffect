@@ -10,6 +10,8 @@ effect's observable fault class $c$. For agent death $r_e=t_0$. For app death $r
 $r_e$ is the time the connection is restored. For a combined fault $r_e$ is the later of the last two. The lag of class $c$ is $T_c=\max(0,\,t_{\mathrm{vis}}-r_e)$ and its tail is
 $G_c(w)=\PP(T_c>w\mid X{=}1,\text{class }c)$, with $G_c(w)\to0$ as $w\to\infty$ by definition of $X$. An effect waits until the deadline $r_e+w_c$.
 If the class is unknown, the planner uses the latest deadline over the classes. If an anchor it needs was not observed, it asks.
+Waiting from $t_0$ instead waits too little after an outage. In measured-parameter simulation on Element with a 15\,s outage, product certification then retries
+\CertClockTzeroDownFifteenProdPv\% of committed effects, against \CertClockDownFifteenProdPv\% when it waits from $r_e$ (Table~\ref{tab:cert-clock} in the appendix).
 We write $T$ and $G$ for $T_c$ and $G_c$ when the class is fixed. Recovery ends with $C_e$ applied copies: a \emph{duplicate} is $C_e\ge2$
 (retrying when $X{=}1$) and a \emph{loss} is $C_e=0$ (not retrying when $X{=}0$). Partial effects are modeled as several effects.
 
