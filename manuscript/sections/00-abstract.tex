@@ -1,13 +1,7 @@
 \begin{abstract}
-Mobile GUI agents send messages, mail and calendar entries by tapping through apps. If the agent, the app or the network is interrupted between a commit tap and its
-confirmation, the effect becomes a \emph{ghost}: it may have happened, and redoing it through the GUI creates a new request that nothing deduplicates. On Android~13
-emulators with self-hosted servers we observe this directly. After a lost SMTP reply, K-9~Mail keeps the accepted mail in its Outbox in a permanent error state, and a
-scripted GUI redo duplicated \RealKRecDup/\RealKRecN{} K-9 and \RealCalRecDup/\RealCalRecN{} CalDAV sends; Element and DAVx5 resolved the same fault exactly once
-(\RealElemRL/\RealElemRL, \RealCalN/\RealCalN) through their own idempotent retries, within the server's dedup horizon. \sys decides ghost effects against a
-duplicate/loss budget $(\alpha,\beta)$ with a write-ahead ledger outside the agent, accessibility-text evidence (outbox, a content-carried nonce, a history digest), a
-certified wait for visibility lag, and asking the user when nothing certifies. Verdicts are calibrated on whole fault-injected effects, keyed by fault class; the joint
-mode we recommend assumes no independence between evidence families. A two-hop decomposition hands late commits to apps that retry idempotently. With measured parameters,
-joint certification retries no committed Element send at \RsimFiveJointAsk\% escalations (5{,}000 labels per class) and asks on every interrupted K-9 send. Passive labels break every certified mode on Element, and an unlogged lag tail breaks the product mode. In model-based simulation joint
-certification retries \SimJointPv\% of committed effects (budget 1\%) at \SimJointAsk\% escalations with 2{,}000 labels; the product mode, which assumes independence,
-escalates \SimGhostAsk\%.
+Mobile GUI agents send messages, mail, and calendar entries by tapping through apps. An interruption after the commit tap can leave the outcome hidden. Redoing such a \emph{ghost effect} creates a new request that nothing deduplicates.
+On Android emulators, a lost SMTP reply left accepted K-9~Mail in a permanent Outbox error state. Scripted GUI redo duplicated every tested K-9 and CalDAV send. Element and DAVx5 instead resolved the fault exactly once through idempotent retries within the server's dedup horizon.
+\sys combines a write-ahead ledger, accessibility-text evidence, calibrated visibility waits, and asking. Whole-effect calibration can certify product or joint decisions against duplicate and loss budgets. A two-hop reduction hands late commits to apps with idempotent retries.
+With measured parameters, joint certification retries no committed Element send while asking \RsimFiveJointAsk\% of workflows with \RsimFiveLabelN{} labels per class. It asks on every interrupted K-9 send. Passive labels break every certified mode on Element, and an unlogged lag tail breaks product certification.
+In model-based simulation, joint certification retries \SimJointPv\% of committed effects and asks \SimJointAsk\% of workflows. LLM agents and physical phones remain to be measured.
 \end{abstract}

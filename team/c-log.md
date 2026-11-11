@@ -500,3 +500,11 @@ C-12 precheck trên toàn artifact/testbed báo email và internal runs, nên ch
 không sửa raw dữ liệu và không tự coi mọi chuỗi giống email là danh tính thật.
 Tiếp theo: C-07 kiểm nguồn related work, C-11 readability và C-12 bundle;
 C-08/C-09 chỉ chốt các nhận định agent sau khi B có kết quả thật.
+
+## 11/11/2026 — C-08 abstract draft
+
+Rewrote the abstract to 183 words with four result-number macros. It distinguishes
+emulator measurements, measured-parameter simulation, and model-based simulation.
+It explicitly says that LLM agents and physical phones remain unmeasured. This is a
+scope-safe draft only: any later agent-performance conclusion still depends on B's
+real agent evidence and the team's approval.
