@@ -148,3 +148,21 @@ Tổng 105 macro (24 + 12 + 16 + 18 + 7 + 24 + 2 + 2). Phần A không dùng mac
 **Chưa làm và lý do:** chưa commit file sinh ra trong `manuscript/generated/`, vì `render.py` trên `main` thay cả thư mục khi build và sẽ xóa chúng; chưa input bảng vào `.tex`. Cả hai làm sau khi C-01 merge: C gọi `render_guarantee.render()` thay cho `exec` (YC-A9), rồi A input bảng vào §5.3, §3 và phụ lục.
 
 **Trạng thái task:** A-09 giá trị xong (chờ nối sau C-01). A-01 bảng đã sinh được. A-02, A-03, A-04: số liệu và bảng xong, còn câu chữ trong §5.3 và §4.
+
+## 11/11/2026 (trưa)
+
+**Bối cảnh:** C-01 (#10) đã merge vào `main` lúc sáng. Pull về `dfd910a`.
+
+**Đã làm:**
+- A-09 (#20): merge `main` vào `a/a09-render`, giải xung đột add/add với file khung `render_guarantee.py` của C-01 (giữ bản của A). `render.py` của C chạy file này bằng `exec` trong namespace của nó, nên thêm khối cuối: khi chạy trong `render.py` thì ghi qua `W()` vào thư mục staging của C; chạy độc lập thì như cũ. Đổi tên các tên trùng với `render.py` (`HERE`, `f1`, `f2`, `sci`, `main`, `_half_up`, `col`) sang tiền tố `cert_`. Đầu ra qua pipeline và chạy độc lập giống hệt. Đã commit `macros_guarantee.tex` và bốn `tab_cert_*.tex`. Trên Windows, `render.py` tái tạo đúng mọi file `generated/` khác của C (chỉ khác ký tự xuống dòng).
+- A-02, A-03, A-08 (một phần), nhánh `a/a02-label-budget`, sửa §5.3 (`05-design.tex`) và phụ lục (`appendix-proofs.tex`):
+  - A-08: câu hop 1 giờ nói đọc màn hình Outbox qua cây accessibility, không đọc database. Thay "≈15 s" bằng `\CertLabelMedS` và `\CertDeviceHoursFive` (đang `??`, chờ `label_cost.csv` của B ngày 18/11). Table 1 (`tab_nsize`) chuyển xuống phụ lục mới `app:labels`.
+  - A-02: đoạn mới nêu riêng bốn con số bằng macro (101 lượt đo emulator; 2.000 và 5.000 nhãn mỗi lớp và kết quả; pilot 500 và holdout 4.500; 20.000 mẫu lag bootstrap). Bảng `tab_cert_budget` vào §5.3, `tab_cert_lagapp` vào phụ lục. Câu về tỉ lệ hỏi ở mốc 5.000 luôn nói rõ kích thước bảng lag.
+  - A-03: đoạn đuôi trễ: product vượt ngân sách; joint chỉ giữ ngân sách khi còn hỏi đủ nhiều (2.000 nhãn: hỏi 74,4%, giữ; 5.000 nhãn: hỏi 13,7%, `P_v` 2,01, CP 2,32, vượt); bảng lag tied cũng không cứu.
+  - Bỏ "escalations" trong đoạn này (dùng "asks" theo C-02).
+
+**Kiểm:** `grep -n 'local database' manuscript/sections/05-design.tex` và `grep -n 'tab_nsize' manuscript/sections/05-design.tex` rỗng. Build thoát 0, 21 trang (thêm trang phụ lục), kết luận vẫn ở trang 13 như trước thay đổi. Độ dễ đọc trên `05-design` và `appendix-proofs`: trước `para 14, emph 19, câu dài 10, đoạn chấm phẩy 13`; sau `14, 18, 8, 12`.
+
+**Cho C:** caption của `tab_nsize` (do `render.py` sinh) còn ghi `δ = min(α,β)/(10K)`; theo §4.3 mới (A-05) phải là `min(α,β)/(10·K·n_cls)`. Dòng 16 của `07-evaluation.tex` cũng vậy.
+
+**Trạng thái task:** A-02, A-03 xong phần văn bản và bảng (chờ nghiệm thu). A-08 còn chờ số đo của B.

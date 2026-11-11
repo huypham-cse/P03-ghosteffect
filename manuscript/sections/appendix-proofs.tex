@@ -131,3 +131,11 @@ and is sometimes worse than uniform (Table~\ref{tab:saga}).
 \emph{Optimum.} $J=\sum_iw_i\log\frac1{\alpha_i}+\sum_iv_i\log\frac1{\beta_i}$ is strictly convex on the open orthant and decreasing in each variable, so the constraints are active.
 Stationarity, $-w_i/\alpha_i+\lambda=0$, gives $\alpha_i=w_i/\lambda$ with $\lambda=W/\alpha$; $\beta_i$ is analogous.
 \emph{Saving.} $J_{\mathrm{unif}}-J^\star=\sum_iw_i\big[\log\frac k\alpha-\log\frac{W}{\alpha w_i}\big]=\sum_iw_i\log\frac{kw_i}{W}=W\,\KL(\hat w\|u_k)$, plus the analogous $\beta$ term.
+
+\subsection{Label budgets}
+\label{app:labels}
+Table~\ref{tab:nsize} gives the calibration sizes that make certification possible (\S\ref{sec:design-probes}). Table~\ref{tab:cert-lagapp} extends the label budget of
+Table~\ref{tab:cert-budget} to larger tied budgets and to a bootstrap lag table at the larger label count.
+
+\input{generated/tab_nsize}
+\input{generated/tab_cert_lagapp}

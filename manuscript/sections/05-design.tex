@@ -43,8 +43,8 @@ Each probe is a short navigation script plus a reader, grouped into families:
 (3)~\emph{digest}: before the tap the ledger stores a digest of matching history items; after recovery the probe counts matching items in the history list and in search results
 and reports whether a new one appeared. This answers look-alikes without a nonce, since last month's transfer is already in the digest;
 (4)~\emph{VLM}: a yes/no question about the ledger description, asked once each of the list, detail and search views. The VLM family is skipped when the digest shows a look-alike.
-Hop~1 reads the app's local database, and an app whose status is drawn only with the rendered history (Element) has no hop-1 family; the other three read the history as
-the app renders it, and in-app search often queries the server. They are therefore one
+Hop~1 reads the app's Outbox screen through the accessibility tree, like every other probe, and never the app's database. An app whose status is drawn only with the
+rendered history (Element) has no hop-1 family. The other three families read the history as the app renders it, and in-app search often queries the server. They are therefore one
 \emph{evidence source}, and a stale history after a restart can fool all three at once. A server-backed search view inherits the hop-2 lag, so it counts toward ``absent'' only after the wait.
 
 \para{Calibration labels.} For each (app version, family, verdict level or region) the store holds one-sided Clopper--Pearson bounds (Lemma~\ref{lem:calib}(ii)) from calibration
@@ -52,19 +52,36 @@ the app renders it, and in-app search often queries the server. They are therefo
 the controller injects the fault classes of \S\ref{sec:impl} at the commit point, records the true outcome from the test backend, runs every family once per view on recovery, and logs the
 lag $T_c$ from the anchor $r_e$ to visibility. Bounds and lag tables are keyed by the observable fault class (Lemma~\ref{lem:calib}(ii)), so the lab's fault mix need not match deployment's;
 an effect whose class the controller cannot tell uses the per-class maximum. Passive labels (confirmed sends, abandoned forms) are cheaper but miss cached history after a
-kill, optimistic entries and restart lags (\S\ref{sec:eval-pop},~\S\ref{sec:eval-real}). A label costs a fault-injected effect plus one read of every view ($\approx$15\,s), on test
-devices.
+kill, optimistic entries and restart lags (\S\ref{sec:eval-pop},~\S\ref{sec:eval-real}). A label costs one fault-injected trial on a test device: reset, compose, fault,
+relaunch, one read of every view, and grading. In our emulator measurements the median trial took \CertLabelMedS\,s. At that rate, \CertLabelsFive labels per class and outcome
+for \CertClassesN classes take about \CertDeviceHoursFive device-hours (computed from the measured median).
 
-\para{How many labels.} Validity holds at any sample size; small samples only widen the bounds and raise escalations (\S\ref{sec:eval-pop}). Table~\ref{tab:nsize} gives the sizes that
-make certification \emph{possible}. Product certification needs a few hundred effects per stratum at $\alpha{=}1\%$, because per-family bounds multiply. Joint certification and the waits
-need about $\ln(1/\delta)/\alpha_{\mathrm{test}}$ samples even with zero events, i.e.\ thousands at $\alpha{=}1\%$ and tens of thousands at $10^{-3}$, about twice that if the region's true
-rate is a quarter of $\alpha_{\mathrm{test}}$, and four times that when keyed by fault class. A single user produces nowhere near this per app version, so the store is
-pooled: lag tables per app and backend across versions (lag is a property of the network path and the app's sync, not its UI), and verdict bounds per app across versions and devices,
-with a shift test on a small sample of the new version that falls back to that sample's own bounds (more escalations, not fewer guarantees) when it detects an increase.
-The shift test is per family and level; pooling \emph{joint} regions across versions needs a region-level test, which we have not built. The nonce's
-false-match bound is analytic. Pooling across devices assumes the devices are exchangeable within a stratum (app version, locale, VLM); per-device drift is not detected yet.
+\para{How many labels.} Validity holds at any sample size. Small samples only widen the bounds, so the planner asks more often, not retries more often (\S\ref{sec:eval-pop}).
+Table~\ref{tab:nsize} in the appendix gives the exact sizes that make certification possible. Product certification needs a few hundred effects per stratum at $\alpha{=}1\%$,
+because per-family bounds multiply. Joint certification and each wait need about $\ln(1/\delta)/\alpha_{\mathrm{test}}$ samples even with zero events, which is thousands at $\alpha{=}1\%$.
 
-\input{generated/tab_nsize}
+Four different counts make up the label budget of our measured-parameter simulations (Table~\ref{tab:cert-budget}). The Element profile rests on \CertElemTrialsN emulator trials.
+Each simulation draws \CertLabelsBase or \CertLabelsFive labels per fault class and outcome from that profile. Joint certification splits each set into a pilot that fixes the score
+and a holdout that tests it, \CertPilotFive and \CertHoldoutFive labels at the larger size. The lag tables hold \CertLagBootN entries per class, drawn by bootstrap from the measured lags,
+unless a row ties them to the label count.
+
+The lag table is the costly part. In these simulations, joint certification with \CertLabelsFive labels and \CertLagBootN lag entries asks on \RsimFiveJointAsk\% of workflows.
+When the lag table also holds only \CertLabelsFive entries per class, the simulated joint mode asks on \CertTiedFiveJointAsk\% and the product mode on \CertTiedFiveProdAsk\%.
+With \CertLabelsBase tied entries no wait certifies, and both simulated modes ask on every workflow (\CertTiedTwoJointAsk\%). Larger tied budgets are in Table~\ref{tab:cert-lagapp}.
+
+A lag tail that no label sees breaks the budget. In the tail rows, \RsimTail\% of committed effects become visible only after every logged lag. The simulated product mode then
+retries \CertTailFiveProdPv\% of committed effects at \CertLabelsFive labels (CP \CertTailFiveProdPvHi\%, \CertTailFiveProdOver). Joint certification keeps the budget only while it still
+asks often enough. At \CertLabelsBase labels it asks on \RsimTailJointAsk\% of simulated workflows and retries \RsimTailJointPv\% of committed effects. At \CertLabelsFive labels it asks on
+\CertTailFiveJointAsk\% and retries \CertTailFiveJointPv\% (CP \CertTailFiveJointPvHi\%), which is \CertTailFiveJointOver. A tied lag table does not help: both simulated modes stay
+over budget (Table~\ref{tab:cert-budget}).
+
+\input{generated/tab_cert_budget}
+
+A single user produces nowhere near these counts per app version, so the store is pooled. Lag tables are pooled per app and backend across versions, because lag
+is a property of the network path and the app's sync, not its UI. Verdict bounds are pooled per app across versions and devices, with a shift test on a small sample of the new version.
+When the test detects an increase, the planner falls back to that sample's own bounds, which means more asks, not fewer guarantees. The shift test is per family and level.
+Pooling \emph{joint} regions across versions needs a region-level test, which we have not built. The nonce's false-match bound is analytic. Pooling across devices assumes the devices
+are exchangeable within a stratum (app version, locale, VLM), and per-device drift is not detected yet.
 
 \subsection{The \alg planner}
 \label{sec:design-planner}
