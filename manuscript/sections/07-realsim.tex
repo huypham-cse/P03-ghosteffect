@@ -1,0 +1,13 @@
+\input{generated/tab_realsim}
+
+\para{Measured-parameter simulation.} Table~\ref{tab:realsim} reruns every mode on profiles built from these measurements (\texttt{params.csv} records each value's source), with per-class lags
+and $\bot$ as no observation. On \emph{Element} every certified mode stays within budget (CP upper \RsimElemJointPvHi\%): the certified wait reaches the measured maximum. The product mode escalates \RsimElemProdAsk\%; joint certification, which needs no cross-family
+independence, \RsimElemJointAsk\% with 2{,}000 labels per class and \RsimFiveJointAsk\% with 5{,}000. Keying by class matters little here: with a net-heavy lab mix the pooled wait still reaches the maximum. Simpler mechanisms also hold: Theorem~\ref{thm:twohop} alone (\RsimElemGtwoAsk\%
+escalations) and rules with a 10 or 30\,s wait (\RsimElemRulesAsk\% and \RsimElemRulesThirtyAsk\%), whereas trusting the app's status right after relaunch retries
+\RsimElemAppPv\% (the lag-blind reads). Two departures break the budget. Passive labels, whose lag logs come from uninterrupted sends, give product \RsimPassProdPv\% and joint
+\RsimPassJointPv\%; a tail of \RsimTail\% beyond 14\,s that the logs miss gives product and rules \RsimTailProdPv\% (joint holds only because it asks \RsimTailJointAsk\%), and if the logs contain it, every mode asks on every
+interrupted Element send. On \emph{K-9} no family can certify, so every mode, like Theorem~\ref{thm:twohop}, asks on every interrupted send; trusting K-9's status retries
+\RsimKnineAppPv\% of committed mail (and loses \RsimKnineAppLoss\% of workflows), rules \RsimKnineRulesPv\%. With a \emph{Sent folder} fault-injected labels
+show committed mail that never becomes visible, so no wait certifies and \sys asks, while rules, which trust the Sent folder, retry \RsimKsentRulesPv\%, and passive labels
+lead joint certification to retry \RsimKsentPassJointPv\% (\RsimKsentPassFiveProdPv\% for the product mode with 5{,}000 labels). On real apps the decisive pieces are G2 classification, fault-injected labels, and asking when the GUI cannot reveal the outcome; calibration adds a guarantee that follows
+the labels.

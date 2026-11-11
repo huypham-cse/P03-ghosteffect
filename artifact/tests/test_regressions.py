@@ -320,6 +320,48 @@ class RendererTests(unittest.TestCase):
             self.assertIn('tail5tied', real4)
             self.assertIn('not fresh device or agent runs', real4)
 
+    def test_split_macro_ownership_and_deterministic_output(self):
+        with tempfile.TemporaryDirectory() as temp:
+            work = Path(temp)
+            outputs = [work / 'first', work / 'second']
+            for output in outputs:
+                result = self.render(ARTIFACT / 'results', output)
+                self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+            first = {p.name: p.read_bytes() for p in outputs[0].iterdir()}
+            second = {p.name: p.read_bytes() for p in outputs[1].iterdir()}
+            self.assertEqual(first, second)
+            import re
+            seen = set()
+            for filename, producer in (('macros.tex', 'render.py'),
+                                       ('macros_real.tex', 'render_real.py'),
+                                       ('macros_guarantee.tex', 'render_guarantee.py')):
+                source = first[filename].decode('utf-8')
+                self.assertIn(producer, source.splitlines()[0])
+                names = re.findall(r'\\newcommand\{\\(\w+)\}', source)
+                self.assertFalse(seen.intersection(names))
+                seen.update(names)
+                for name in names:
+                    if filename == 'macros_real.tex':
+                        self.assertTrue(name.startswith(('Real', 'Agent', 'Ledger', 'LabelTrial')), name)
+                    elif filename == 'macros.tex':
+                        self.assertFalse(name.startswith(('Real', 'Agent', 'Ledger', 'LabelTrial', 'Cert')), name)
+            self.assertIn('RsimElemJointAsk', seen)
+            self.assertIn('RealElemN', seen)
+            self.assertIn('LedgerPfifty', seen)
+
+    def test_measurement_failure_after_simulation_tables_preserves_all_macro_files(self):
+        with tempfile.TemporaryDirectory() as temp:
+            work = Path(temp)
+            inputs, output = work / 'inputs', work / 'generated'
+            shutil.copytree(ARTIFACT / 'results', inputs)
+            result = self.render(inputs, output)
+            self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+            before = {p.name: p.read_bytes() for p in output.iterdir()}
+            (inputs / 'real/campaign2/c2_element_first_visible.csv').unlink()
+            result = self.render(inputs, output)
+            self.assertNotEqual(0, result.returncode)
+            self.assertEqual(before, {p.name: p.read_bytes() for p in output.iterdir()})
+
     def test_failed_publication_restores_the_original_directory(self):
         with tempfile.TemporaryDirectory() as temp:
             output = Path(temp) / 'generated'
