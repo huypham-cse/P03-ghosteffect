@@ -166,3 +166,16 @@ Tổng 105 macro (24 + 12 + 16 + 18 + 7 + 24 + 2 + 2). Phần A không dùng mac
 **Cho C:** caption của `tab_nsize` (do `render.py` sinh) còn ghi `δ = min(α,β)/(10K)`; theo §4.3 mới (A-05) phải là `min(α,β)/(10·K·n_cls)`. Dòng 16 của `07-evaluation.tex` cũng vậy.
 
 **Trạng thái task:** A-02, A-03 xong phần văn bản và bảng (chờ nghiệm thu). A-08 còn chờ số đo của B.
+
+## 11/11/2026 (chiều)
+
+**Đã làm:** A-04, nhánh `a/a04-composed-bound` (dựng trên `a/a02-label-budget`):
+- §3 (`03-model.tex`): đoạn mới định nghĩa `q_x`, `ε_x`, `r_x` và Eq. `eq:composed`: `P(dup∣X=1) ≤ min(1, α + q1·ε1 + r1)`, `P(loss∣X=0) ≤ min(1, β + q0·ε0 + r0)`, chứng minh một câu (union bound qua ba nguồn lỗi: planner, người dùng, app). Câu cho người triển khai: đọc cận tổng hợp, không chỉ `P_v`. Giá trị Element bằng macro: product 1,19%, joint 5,12% (joint hỏi 65,06% effect đã commit).
+- `r1 = r0 = 0`: đã kiểm trong `planner_sim.py`, `g2_nodedup = 0` ở cả hồ sơ Element (`params.csv`) và thế giới mặc định, nên không app nào retransmit mà không dedup. Câu trong bài nói đúng điều đó.
+- `ε`: nêu là tỉ lệ sai quan sát được trong mô phỏng (người dùng giả sai 5%, 10% khi có look-alike, `user_err = 0.05` trong `planner_sim.py`).
+- Phụ lục `app:composed` với `tab_cert_bound` (Element và thế giới mặc định, mẫu số 0 in N/A).
+- Phương trình hai vế ban đầu tràn 39 pt; tách thành hai dòng bằng `gathered`, hết tràn. Eq. của lag split giờ là (3); không chỗ nào ghi cứng số phương trình.
+
+**Kiểm:** build thoát 0, overfull lớn nhất 3,46 pt, không tham chiếu thiếu. Độ dễ đọc trên `03-model` và `appendix-proofs` không tăng (8, 25, 2, 10 trước và sau).
+
+**Trạng thái task:** A-04 xong (chờ nghiệm thu).

@@ -139,3 +139,11 @@ Table~\ref{tab:cert-budget} to larger tied budgets and to a bootstrap lag table 
 
 \input{generated/tab_nsize}
 \input{generated/tab_cert_lagapp}
+
+\subsection{Composed error bounds}
+\label{app:composed}
+Table~\ref{tab:cert-bound} evaluates Eq.~\eqref{eq:composed} with the budgets in place of the planner's own error rates. The $q_x$ and $\epsilon_x$ columns are rates the
+simulations observed. The simulated user errs on 5\% of asks, or 10\% with a look-alike on screen, so $\epsilon_x$ depends on which effects a mode asks about. Neither
+simulated world has an app that retransmits without dedup ($r_1{=}r_0{=}0$).
+
+\input{generated/tab_cert_bound}
