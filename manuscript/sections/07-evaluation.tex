@@ -29,8 +29,10 @@ The default world satisfies A2 by construction, favouring product certification.
 
 Same-evidence rules ask \SimRulesAsk\% but retry \SimRulesPv\% of committed effects (CP upper \SimRulesPvHi\%).
 Tuned rules can outperform certification in asking cost; the full comparison and adverse results remain in Appendix~\ref{app:extra}.
-Vetted rules with identical calibration records and lag tables are evaluated separately in Table~\ref{tab:matched}.
-The model-based CSV has no matched vetted row; we do not substitute a result from a different fitted-law experiment.
+In the default model, vetted rules receive the same passive calibration records and lag tables as joint certification.
+They ask \SimModelVettedAsk\% and retry \SimModelVettedPv\% of committed effects (CP upper \SimModelVettedPvHi\%).
+Zero observed retries do not give vetted rules a certificate.
+The fitted-law comparison with fault-injected labels remains separate in Table~\ref{tab:matched}.
 
 \para{Stress and calibration population.}
 The product mode exceeds its CP budget in \StressNover{} stress rows; rules exceed their observed retry budget in \StressRulesOver{} rows (Table~\ref{tab:stress}).

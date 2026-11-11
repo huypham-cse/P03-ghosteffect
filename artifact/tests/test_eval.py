@@ -69,6 +69,40 @@ class MatchedInputTests(unittest.TestCase):
             self.assertIs(call.args[2], e1)
             self.assertIs(call.args[3], e0)
 
+    def test_default_model_shares_actual_records_and_lag_objects(self):
+        overrides = dict(ncal_scale=.025, nlag=planner.N_LAG, matched_inputs=True, matched_model=True)
+        with patch.object(planner, 'cal_effects', wraps=planner.cal_effects) as effects, \
+             patch.object(planner, 'matched_labels', wraps=planner.matched_labels) as labels, \
+             patch.object(planner, 'joint_calibration', wraps=planner.joint_calibration) as joint, \
+             patch.object(planner, 'lag_tables', wraps=planner.lag_tables) as lags, \
+             patch.object(planner, 'vetting', wraps=planner.vetting) as vetted, \
+             patch.object(planner, 'resolve_v2', wraps=planner.resolve_v2) as resolve:
+            planner.run(['rules-vetted', 'ghost-joint'], seeds=[101], n_per_seed=8, overrides=overrides)
+        self.assertEqual(1, labels.call_count)
+        self.assertEqual(1, lags.call_count)
+        shared = vetted.call_args.kwargs['labels']
+        self.assertEqual(2 * sum(len(per) for per in shared.values()), effects.call_count)
+        shared_lags = vetted.call_args.kwargs['lagx']
+        self.assertIsNotNone(shared_lags)
+        self.assertTrue(resolve.call_count)
+        self.assertTrue(all(call.args[6] is shared_lags for call in resolve.call_args_list))
+        all_labels = [pair for per in shared.values() for pair in per.values()]
+        self.assertEqual(len(all_labels), joint.call_count)
+        for call, (e1, e0) in zip(joint.call_args_list, all_labels):
+            self.assertIs(call.args[2], e1)
+            self.assertIs(call.args[3], e0)
+
+    def test_matched_model_preserves_existing_joint_and_product_decisions(self):
+        controls = ['ghost', 'ghost-joint']
+        settings = dict(ncal_scale=.025, nlag=planner.N_LAG)
+        reference, effects = planner.run(controls, seeds=[101], n_per_seed=24, overrides=settings)
+        actual, actual_effects = planner.run(['rules-vetted'] + controls, seeds=[101], n_per_seed=24,
+                                           overrides=dict(settings, matched_inputs=True, matched_model=True))
+        for policy in controls:
+            self.assertEqual(reference[policy], actual[policy])
+            for metric in ('n1', 'n0', 'd1', 'l0', 'ask1', 'ask0'):
+                self.assertEqual(effects[policy][metric], actual_effects[policy][metric])
+
     def test_new_tags_use_equal_explicit_budgets_and_all_profiles(self):
         for tag, app, budget in (('match2k', 'element', 2000), ('match5k', 'element', 5000),
                                  ('matchk9', 'k9', 2000), ('matchk9sent', 'k9sent', 2000)):
@@ -110,6 +144,96 @@ class MatchedInputTests(unittest.TestCase):
             self.assertIn('matched input metadata disagree', result.stderr)
             self.assertEqual(b'previously reviewed output', published.read_bytes())
             self.assertEqual([published], list(output.iterdir()))
+
+
+ 
+    def test_table_caption_rejects_mixed_label_budgets(self):
+        with tempfile.TemporaryDirectory() as temp:
+            work = Path(temp)
+            inputs, output = work / 'results', work / 'generated'
+            shutil.copytree(ROOT / 'artifact/results', inputs)
+            source = inputs / 'planner_real.csv'
+            with source.open(newline='') as stream:
+                reader = csv.DictReader(stream)
+                header, rows = reader.fieldnames, list(reader)
+            rows[1]['ncal'] = str(int(rows[0]['ncal']) + 1)
+            with source.open('w', newline='') as stream:
+                writer = csv.DictWriter(stream, fieldnames=header)
+                writer.writeheader()
+                writer.writerows(rows)
+            output.mkdir()
+            published = output / 'macros.tex'
+            published.write_bytes(b'previously reviewed output')
+            result = subprocess.run([sys.executable, str(ROOT / 'artifact/scripts/render.py'),
+                                     '--results-dir', str(inputs), '--output-dir', str(output)],
+                                    text=True, capture_output=True)
+            self.assertNotEqual(0, result.returncode)
+            self.assertIn('inconsistent reporting count', result.stderr)
+            self.assertEqual(b'previously reviewed output', published.read_bytes())
+            self.assertEqual([published], list(output.iterdir()))
+
+    def test_renderer_rejects_duplicate_seeds(self):
+        with tempfile.TemporaryDirectory() as temp:
+            work = Path(temp)
+            inputs, output = work / 'results', work / 'generated'
+            shutil.copytree(ROOT / 'artifact/results', inputs)
+            source = inputs / 'planner_seed_variance.csv'
+            with source.open(newline='') as stream:
+                reader = csv.DictReader(stream)
+                header, rows = reader.fieldnames, list(reader)
+            rows[1] = dict(rows[0])
+            with source.open('w', newline='') as stream:
+                writer = csv.DictWriter(stream, fieldnames=header)
+                writer.writeheader()
+                writer.writerows(rows)
+            output.mkdir()
+            published = output / 'macros.tex'
+            published.write_bytes(b'previously reviewed output')
+            result = subprocess.run([sys.executable, str(ROOT / 'artifact/scripts/render.py'),
+                                     '--results-dir', str(inputs), '--output-dir', str(output)],
+                                    text=True, capture_output=True)
+            self.assertNotEqual(0, result.returncode)
+            self.assertIn('incomplete or duplicate seed variance rows', result.stderr)
+            self.assertEqual(b'previously reviewed output', published.read_bytes())
+            self.assertEqual([published], list(output.iterdir()))
+
+
+    def test_renderer_rejects_changed_model_control(self):
+        with tempfile.TemporaryDirectory() as temp:
+            work = Path(temp)
+            inputs, output = work / 'results', work / 'generated'
+            shutil.copytree(ROOT / 'artifact/results', inputs)
+            source = inputs / 'planner_model_matched.csv'
+            with source.open(newline='') as stream:
+                reader = csv.DictReader(stream)
+                header, rows = reader.fieldnames, list(reader)
+            rows[1]['ask'] = str(float(rows[1]['ask']) + 1)
+            with source.open('w', newline='') as stream:
+                writer = csv.DictWriter(stream, fieldnames=header)
+                writer.writeheader()
+                writer.writerows(rows)
+            output.mkdir()
+            published = output / 'macros.tex'
+            published.write_bytes(b'previously reviewed output')
+            result = subprocess.run([sys.executable, str(ROOT / 'artifact/scripts/render.py'),
+                                     '--results-dir', str(inputs), '--output-dir', str(output)],
+                                    text=True, capture_output=True)
+            self.assertNotEqual(0, result.returncode)
+            self.assertIn('matched model control differs', result.stderr)
+            self.assertEqual(b'previously reviewed output', published.read_bytes())
+            self.assertEqual([published], list(output.iterdir()))
+
+
+class SeedReportingTests(unittest.TestCase):
+    def test_partition_preserves_original_workflows_and_effect_counts(self):
+        policies = ['ghost', 'ghost-joint']
+        options = dict(n_per_seed=12, overrides=dict(ncal_scale=.025, nlag=64))
+        pooled, counts = planner.run(policies, seeds=[101, 202], **options)
+        split = [planner.run(policies, seeds=[seed], **options) for seed in (101, 202)]
+        for policy in policies:
+            self.assertEqual(pooled[policy], split[0][0][policy] + split[1][0][policy])
+            for metric in ('n1', 'n0', 'd1', 'l0', 'ask1', 'ask0'):
+                self.assertEqual(counts[policy][metric], sum(part[1][policy][metric] for part in split))
 
 
 class ReadabilityTests(unittest.TestCase):

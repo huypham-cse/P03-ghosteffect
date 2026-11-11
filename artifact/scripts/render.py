@@ -446,11 +446,72 @@ M('VlmEN', f1(nb['vlm_EN']))
 # ===================================================================== planner simulation
 ps = rd('planner_sim.csv')
 P = {r['policy']: r for r in ps}
+ 
+
+# C-06: the new vetted row belongs to the same default model, checked by controls.
+_model_match = {r['policy']: r for r in rd('planner_model_matched.csv')}
+if set(_model_match) != {'rules-vetted', 'ghost', 'ghost-joint'}:
+    raise ValueError('incomplete matched model policies')
+for _control in ('ghost', 'ghost-joint'):
+    for _metric in ('n', 'n1', 'n0', 'dup', 'loss', 'ask', 'cdup', 'cdup_hi', 'closs', 'closs_hi', 'secs'):
+        if abs(float(_model_match[_control][_metric]) - float(P[_control][_metric])) > 1e-10:
+            raise ValueError('matched model control differs: ' + _control + '/' + _metric)
+for _row in _model_match.values():
+    if (_row['profile'], _row['cal_pop'], int(_row['ncal']), int(_row['nlag'])) != ('default-model', 'passive', 2000, 20000):
+        raise ValueError('matched model reporting budget differs')
+P['rules-vetted'] = _model_match['rules-vetted']
+for _suffix, _column, _fmt in (('Ask', 'ask', f1), ('Pv', 'cdup', f2), ('PvHi', 'cdup_hi', f2)):
+    M('SimModelVetted' + _suffix, _fmt(P['rules-vetted'][_column]))
+
+# C-05: variability across fixed original seeds, not confidence intervals.
+import statistics as _statistics
+import importlib.util as _seed_import
+_seed_spec = _seed_import.spec_from_file_location('_seed_report_plan', os.path.join(HERE, 'planner_sim.py'))
+_seed_plan = _seed_import.module_from_spec(_seed_spec)
+_seed_spec.loader.exec_module(_seed_plan)
+_report_seeds, _seed_cases = _seed_plan.SEEDS, _seed_plan.SEED_CASES
+_seed_rows = rd('planner_seed_variance.csv')
+_seed_index = {(r['case'], r['policy'], int(r['seed'])): r for r in _seed_rows}
+_expected_seed_rows = {(case, policy, seed) for case, (policies, _) in _seed_cases.items()
+                       for policy in policies for seed in _report_seeds}
+if set(_seed_index) != _expected_seed_rows or len(_seed_rows) != len(_seed_index):
+    raise ValueError('incomplete or duplicate seed variance rows')
+if any(int(r['n']) != 2400 for r in _seed_rows):
+    raise ValueError('unexpected seed workflow budget')
+M('SimSeedCount', str(len(_report_seeds)))
+_seed_lines = []
+for _case, (_policies, _) in _seed_cases.items():
+    for _policy in _policies:
+        _rows = [_seed_index[(_case, _policy, _seed)] for _seed in _report_seeds]
+        _ask = [float(r['ask']) for r in _rows]
+        _pv = [float(r['cdup']) for r in _rows if int(r['n1']) > 0]
+        _name = {'ghost': 'product', 'ghost-joint': 'joint', 'g2-only': 'theorem-only'}.get(_policy, _policy)
+        _spread = lambda values: (f'{_statistics.mean(values):.2f} $\\pm$ {_statistics.stdev(values):.2f}'
+                                  if len(values) == len(_report_seeds) else 'N/A')
+        _seed_lines.append(' & '.join([_case, _name, _spread(_ask),
+                           f'{min(_ask):.2f}--{max(_ask):.2f}', _spread(_pv)]) + r' \\')
+W('tab_seed_variance.tex', r"""\begin{table*}[t]
+\centering
+\caption{Across-seed variability for the original model-based and measured-parameter simulations.
+Each row reports the same \SimSeedCount{} original seeds with unchanged per-seed workflow and calibration budgets.
+Values are percentages: arithmetic mean $\pm$ sample standard deviation across seeds, and the asking-rate range.
+Standard deviation is not a confidence interval; aggregate CP bounds remain in the original result tables.}
+\label{tab:seedvariance}
+\small
+\begin{tabular}{@{}llrrr@{}}
+\toprule
+Profile & Policy & ask mean $\pm$ SD & ask range & $P_{\mathrm v}$ mean $\pm$ SD \\
+\midrule
+""" + '\n'.join(_seed_lines) + r"""
+\bottomrule
+\end{tabular}
+\end{table*}
+""")
 names = {'redo': 'Redo (AgentProg-style)', 'ckpt': 'Checkpoint-resume', 'atomix': 'Atomix-style, in-memory',
          'atomix-durable': 'Atomix-style, durable log', 'verify': 'Verify-before-retry', 'key': 'Ledger + key',
          'key-ask': 'Ledger + key + ask (look-alike)', 'always-ask': 'Ledger + always ask', 'nonce-ask': 'Ledger + nonce + ask',
          'maj3-ask': 'Ledger + 3 VLM views + ask', 'rules': 'Same evidence, rules (all agree)',
-         'rules-lenient': 'Same evidence, rules (lenient)', 'ghost-v1': 'Re-read SPRT (earlier design)',
+         'rules-lenient': 'Same evidence, rules (lenient)', 'rules-vetted': 'Vetted rules (matched inputs)', 'ghost-v1': 'Re-read SPRT (earlier design)',
          'ghost': r'\textbf{GhostEffect} (product, A2)', 'ghost-src': r'\textbf{GhostEffect} (source families)',
          'ghost-joint': r'\textbf{GhostEffect} (joint, no A2)',
          'ghost-nononce': '\\quad $-$ nonce', 'ghost-nohop1': '\\quad $-$ hop-1 probe',
@@ -464,7 +525,7 @@ def prow(r):
 
 
 order_b = ['redo', 'ckpt', 'atomix', 'atomix-durable', 'verify', 'key', 'key-ask', 'nonce-ask', 'maj3-ask', 'always-ask', 'g2-only', 'ghost-v1',
-           'rules', 'rules-lenient', 'ghost', 'ghost-src', 'ghost-joint']
+           'rules', 'rules-lenient', 'rules-vetted', 'ghost', 'ghost-src', 'ghost-joint']
 order_a = ['ghost-nononce', 'ghost-nohop1', 'ghost-nodigest', 'ghost-nocal', 'ghost-uniform', 'ghost-noask', 'ghost-visible']
 hw = max(max(float(P[p]['dup_hi']) - float(P[p]['dup']), float(P[p]['dup']) - float(P[p]['dup_lo'])) for p in P)
 M('SimHalfWidth', f1(hw))
@@ -490,7 +551,7 @@ Policy & dup & loss & ask & $P_{\mathrm{v}}$ & s \\
 """
 )
 W('tab_planner_extended.tex', _planner_full.replace('tab:planner}', 'tab:planner-extended}'))
-_main_rows = '\n'.join(prow(P[p]) for p in ('redo', 'g2-only', 'always-ask', 'rules', 'ghost', 'ghost-joint'))
+_main_rows = '\n'.join(prow(P[p]) for p in ('redo', 'g2-only', 'always-ask', 'rules', 'rules-vetted', 'ghost', 'ghost-joint'))
 _full_rows = '\n'.join(prow(P[p]) for p in order_b[:12]) + '\n\\midrule\n' + '\n'.join(prow(P[p]) for p in order_b[12:]) + '\n\\midrule\n' + '\n'.join(prow(P[p]) for p in order_a)
 _planner_main = _planner_full.replace(_full_rows, _main_rows)
 _caption_start = _planner_main.index(r'\caption{')

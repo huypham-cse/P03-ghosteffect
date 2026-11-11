@@ -474,3 +474,30 @@ chỉ publish nếu hai control product/joint khớp CSV cũ. C-06 vẫn đang l
 C-06 lần chạy đầu dừng ở guard measured-only trong vetting, chưa sinh CSV.
 Đã mở guard C-owned chỉ khi matched_model; không đổi seed/budget. Giữ receipt
 FAIL tại workspace c06-model-20261111, commit sửa trước lần chạy v2.
+
+
+## 11/11/2026 — C-06 model-vetted và hoàn thiện baseline
+
+Run v2 từ commit 206a7cfd3c052997dad2de90f3b92b463fb67f39 thành công.
+Vetted dùng cùng passive label records/lag objects với joint trong default
+model; không đánh đồng với measured/fault-injected experiment của C-03.
+Vetted hỏi 100%, P_v 0% (CP upper 0,0446064%); product/joint khớp CSV cũ về
+n,n1,n0,dup,loss,ask,cdup/closs và CP bounds, thời gian (tol 1e-10).
+Giữ nguyên raw/aggregate cũ, thêm planner_model_matched.csv cùng .meta.json.
+Receipt PASS và receipt FAIL đầu ở artifact/runs/2026-11-11/C06-*.json.
+
+Đưa đủ 7 baseline chính vào bảng model; renderer kiểm control tương đương
+trước khi publish. Thêm 3 SimModelVetted* macro, không đổi giá trị macro cũ.
+Test kiểm cùng record objects/lag object, control decisions không đổi và
+renderer rollback khi control khác. Lần test đầu dùng lag budget nhỏ cho
+model nhưng lag_tables model cố định 20k; đã sửa fixture dùng ngân sách thật,
+không sửa A-owned lag_tables hoặc số liệu để né lỗi. Bản cuối 52 test qua;
+build 22 trang không ref/cite thiếu, overfull 3,46388 pt; scrub trên manuscript,
+scripts/tests/receipts PASS. notes.md sinh lại. C-06 xong triển khai, chờ review
+và nghiệm thu độc lập, kể cả A review công thức delta và thuật ngữ.
+
+C-12 precheck trên toàn artifact/testbed báo email và internal runs, nên chưa
+đóng gói/phát hành. Cần phân loại địa chỉ giả/Message-ID trước khi làm gói;
+không sửa raw dữ liệu và không tự coi mọi chuỗi giống email là danh tính thật.
+Tiếp theo: C-07 kiểm nguồn related work, C-11 readability và C-12 bundle;
+C-08/C-09 chỉ chốt các nhận định agent sau khi B có kết quả thật.
