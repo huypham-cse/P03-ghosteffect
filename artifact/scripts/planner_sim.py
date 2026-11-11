@@ -918,7 +918,7 @@ def vetting(wrng, app_eps, S, policy, labels=None, lagx=None):
     and set the wait to the longest logged lag of the class (at least 30 s); if a logged lag exceeds W_MAX or never
     became visible, the rule never retries on end-to-end absence.  'rules-vetted' uses as many labels as GhostEffect,
     'rules-vetted-small' 30 per class and outcome (the size of an emulator campaign cell).  No guarantee is computed."""
-    assert S.get('catalog') == 'measured'
+    assert S.get('catalog') == 'measured' or S.get('matched_model')
     if (labels is None) != (lagx is None):
         raise ValueError('matched vetting needs both shared labels and lag tables')
     if labels is not None and policy.endswith('-small'):
