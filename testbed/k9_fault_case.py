@@ -7,19 +7,26 @@ error, force-stop K-9 and relaunch it (campaign 2 order). After
 --observe seconds, grade from the server (bob's Inbox copies, alice's Sent)
 and read K-9's own store (root). Expected: one server copy, K-9 keeps the mail
 in its Outbox with an error, and with config sent the Sent folder stays empty.
-Needs the SMTP fault proxy (listen 14025, control 19025) already running.
+Runs its own SMTP fault proxy (listen 14025, control 19025) with the journal in
+the output, so a failed trial never leaves an armed proxy behind; do not run
+another proxy on those ports at the same time. A failed trial still writes
+RESULT.json with verdict INVALID.
 """
 import argparse
 import json
 import os
 import random
+import re
 import subprocess
+import threading
 import time
+import xml.etree.ElementTree as ET
 from argparse import Namespace
 from pathlib import Path
 
 import k9_reset
 import run_case
+from faultproxy import Journal, Faults, smtp_proxy, control_server
 from grader import imap_count
 
 # Tap targets on the 1080x2400 test AVD.
@@ -28,18 +35,83 @@ SEND_AND_DELETE = (733, 1423)    # "Sent folder not found" dialog, config nosent
 CROCKFORD = '0123456789ABCDEFGHJKMNPQRSTVWXYZ'
 
 
+ACTIONS = ('none', 'sync', 'send_messages', 'recompose')
+
+
+def tap_text(shell, *labels):
+    """Tap the first node whose text or content-desc equals one of the labels; return the UI receipt."""
+    shell('uiautomator dump /sdcard/gx_ui.xml')
+    xml = shell('cat /sdcard/gx_ui.xml')
+    root = ET.fromstring(xml[xml.index('<'):])
+    for label in labels:
+        for node in root.iter('node'):
+            if label in (node.get('text'), node.get('content-desc')):
+                x1, y1, x2, y2 = map(int, re.findall(r'\d+', node.get('bounds')))
+                shell('input tap %d %d' % ((x1 + x2) // 2, (y1 + y2) // 2))
+                time.sleep(2)
+                return dict(label=label, bounds=[x1, y1, x2, y2], utc_ns=time.time_ns())
+    raise RuntimeError('UI element not found: ' + ' / '.join(labels))
+
+
+def audit(args, shell, nonce, outbox):
+    """B-12: after the lost reply, do one action, wait, and count what reached the server (R19)."""
+    from agent_episode import backend_copies
+    start = time.time_ns()
+    taps = []
+    if args.action == 'sync':
+        taps += [tap_text(shell, 'Navigate up'), tap_text(shell, 'Sync account')]
+    elif args.action == 'send_messages':
+        taps += [tap_text(shell, 'Navigate up'), tap_text(shell, 'Outbox'), tap_text(shell, 'More options'),
+                 tap_text(shell, 'Send messages')]
+    elif args.action == 'recompose':
+        shell(f"am start -W -a android.intent.action.SENDTO -d 'mailto:bob@test.invalid?subject={nonce}' "
+              f"--es android.intent.extra.TEXT 'synthetic test message' -n {k9_reset.PACKAGE}/.activity.MessageCompose")
+        time.sleep(3)
+        taps.append(tap_text(shell, 'Send'))
+        if args.config == 'nosent':
+            taps.append(tap_text(shell, 'Send and Delete'))
+    time.sleep(args.action_window)
+    events = [json.loads(line) for line in args.journal.read_text(encoding='utf-8').splitlines()]
+    copies, ids = backend_copies(nonce)
+    return dict(action=args.action, taps=taps, action_start_utc_ns=start, window_s=args.action_window,
+                smtp_data_after_action=sum(1 for e in events if e['event'] == 'SMTP_DATA' and e['utc_ns'] >= start),
+                server_copies_after_action=copies, distinct_message_ids_after_action=len(ids),
+                k9_outbox_after_action=shell(outbox))
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--config', choices=['nosent', 'sent'], required=True)
     parser.add_argument('--adb', required=True)
     parser.add_argument('--adb-server-port', default='5038')
     parser.add_argument('--serial', default='emulator-5580')
-    parser.add_argument('--control', default='http://127.0.0.1:19025')
     parser.add_argument('--java', default='java')
     parser.add_argument('--observe', type=float, default=60, help='seconds after relaunch before grading')
     parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--action', choices=ACTIONS, help='B-12 audit: one user action after the fault')
+    parser.add_argument('--action-window', type=float, default=60, help='seconds after the action before grading')
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=False)
+    args.control, args.journal = 'http://127.0.0.1:19025', args.output / 'proxy.jsonl'
+    faults = Faults(Journal(args.journal), barrier_timeout=60)
+    servers = [smtp_proxy(('127.0.0.1', k9_reset.SMTP_PORT), faults, listen=('127.0.0.1', 14025)),
+               control_server(faults, listen=('127.0.0.1', 19025))]
+    for server in servers:
+        threading.Thread(target=server.serve_forever, kwargs={'poll_interval': .05}, daemon=True).start()
+    try:
+        trial(args)
+    except Exception as exc:
+        (args.output / 'RESULT.json').write_text(json.dumps(dict(
+            verdict='INVALID', config=args.config, action=args.action, error_type=type(exc).__name__,
+            reason=str(exc), utc_ns=time.time_ns()), indent=2))
+        raise
+    finally:
+        for server in servers:
+            server.shutdown()
+            server.server_close()
+
+
+def trial(args):
     os.environ['ANDROID_ADB_SERVER_PORT'] = args.adb_server_port   # ui.ADB reads the server port from env
     adb = [str(Path(args.adb).resolve()), '-P', args.adb_server_port, '-s', args.serial]
 
@@ -48,7 +120,7 @@ def main():
 
     reset = k9_reset.reset(args.adb, args.serial, args.config, args.output, args.adb_server_port, args.java)
     if reset['verdict'] != 'PASS':
-        raise SystemExit('reset failed: ' + json.dumps(reset['checks']))
+        raise RuntimeError('reset failed: ' + json.dumps(reset['checks']))
     nonce = 'gx:' + ''.join(random.SystemRandom().choice(CROCKFORD) for _ in range(6))
     shell(f"am start -W -a android.intent.action.SENDTO -d 'mailto:bob@test.invalid?subject={nonce}' "
           f"--es android.intent.extra.TEXT 'synthetic test message' -n {k9_reset.PACKAGE}/.activity.MessageCompose")
@@ -93,6 +165,8 @@ def main():
                   k9_outbox_state=k9_outbox, k9_outbox_before_fault=pre_fault, fault=fault,
                   observe_s=args.observe, request_id=case.get('request_id'),
                   reset_archive_sha256=reset['archive_sha256'], utc_ns=time.time_ns())
+    if args.action:
+        result['audit'] = audit(args, shell, nonce, outbox)
     (args.output / 'RESULT.json').write_text(json.dumps(result, indent=2))
     print(json.dumps(result, indent=2))
     raise SystemExit(0 if result['verdict'] == 'REPRODUCED' else 1)

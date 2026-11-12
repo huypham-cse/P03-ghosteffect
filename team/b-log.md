@@ -170,3 +170,46 @@ A đọc thẳng `label_cost.csv` cho `\CertLabelMedS` (theo hợp đồng của
 **Cần C làm:** `01-introduction.tex` dòng 39 còn "p90 \RealLagNetNinety--\RealLagFsNinety"; đổi sang median hoặc max cho khớp Table 3b mới.
 
 **Trạng thái task:** B-13 xong, chờ nghiệm thu.
+
+## 12/11/2026 (B-12, thiết kế chốt trước khi chạy)
+
+**Thiết kế audit thao tác K-9 (R19, YC-B8), commit trước khi có kết quả:**
+- Lý do: `c2_k9_nosent_trials.csv` có `sendmsgs_tapped=0` ở cả 12 dòng lost-reply không Sent, nên câu "Send messages: no new DATA (0/12)" trong `SUMMARY.md` không có biên nhận thao tác. Ghép hai cấu hình: Sync được bấm 20/20, Send messages 8/20 (chỉ ở cấu hình có Sent).
+- Cấu hình: K-9 không Sent, lỗi mất phản hồi theo thứ tự campaign 2 (`k9_fault_case.py`: reset, gửi, proxy bỏ phản hồi sau 250, K-9 ghi lỗi, force-stop, mở lại, chờ 10 s).
+- Thao tác sau lỗi: `sync` (menu, Sync account), `send_messages` (menu, Outbox, More options, Send messages), `none`, `recompose` (soạn lại cùng subject và nội dung, Send, Send and Delete). Mỗi lần bấm lưu biên nhận giao diện (chữ của nút, toạ độ, thời điểm).
+- Số lượt: 4 thao tác, mỗi thao tác 5 lượt, tổng 20, xếp xen kẽ theo vòng sync, send_messages, none, recompose. Không bỏ lượt nào; lượt hỏng do đo được ghi lại và không thay thế.
+- Đo sau thao tác, cửa sổ 60 s: số DATA mới ở proxy, số bản và số Message-ID khác nhau ở hộp thư bob, trạng thái Outbox của K-9.
+- Kỳ vọng nêu trước (từ cơ chế K-9 đã mô tả ở §7): sync, send_messages, none không tạo DATA mới và thư vẫn ở Outbox với lỗi; recompose tạo bản thứ hai với Message-ID mới. Kết quả nào khác cũng được báo đúng như đo.
+- Ngoài phạm vi lần này: theo dõi không người dùng từ 20 phút trở lên (phần còn lại của R19), ghi là chưa làm.
+- Đầu ra: `artifact/results/real/audit/k9_action_audit.csv` (file mới, cột `action`), sinh bằng `testbed/k9_audit_table.py`; receipt từng lượt ở `testbed/runs/b12/` (không commit).
+
+## 12/11/2026 (B-12, điều chỉnh trước khi chạy bổ sung)
+
+**Sự cố ở lượt chạy đầu (t01 đến t20):** t01 đến t04 hợp lệ. Ở t05, hộp thoại "accessibilityforwarder keeps stopping" của AndroidWorld (dịch vụ còn bật từ lần chạy thử B-06) che K-9, nên `run_case.py` dừng ở bước chụp màn hình trước khi bấm Send, sau khi đã arm proxy. Proxy ngoài giữ arm chưa nhả, nên t06 đến t20 đều bị từ chối arm (HTTP 400). Cả 16 lượt hỏng **trước thao tác**, không mang thông tin kết quả.
+
+**Sửa:** `k9_reset.py` tắt dịch vụ forwarder, đóng hộp thoại lỗi còn sót và kiểm thêm điều kiện K-9 giữ focus (9 điều kiện). `k9_fault_case.py` tự chạy proxy và control riêng cho từng lượt (journal trong thư mục lượt), lượt hỏng vẫn ghi `RESULT.json` với `INVALID`; bỏ tham số `--control`, `--journal`.
+
+**Điều chỉnh thiết kế (ghi trước khi chạy bổ sung):** 16 lượt hỏng giữ trong CSV với `valid=0` và lý do; chạy bổ sung t21 đến t36 theo đúng vòng xen kẽ sync, send_messages, none, recompose (4 vòng) để mỗi thao tác đủ 5 lượt hợp lệ. Cửa sổ, cấu hình và kỳ vọng không đổi. Nếu bổ sung có lượt hỏng nữa thì cũng giữ lại và báo, không chạy thêm quá một vòng.
+
+## 12/11/2026 (B-12 kết quả, B-16, B-15)
+
+**B-12 kết quả:** 36 lượt, 20 hợp lệ (5 mỗi thao tác), 16 hỏng trước thao tác (giữ trong CSV với `valid=0`). Lượt bổ sung t21 đến t36 không hỏng lượt nào.
+
+| Thao tác | DATA mới sau thao tác | Bản trên server | Message-ID khác nhau | Vẫn `error` trong Outbox |
+|---|---|---|---|---|
+| sync | 0/5 | 1 | 1 | 5/5 |
+| send_messages | 0/5 | 1 | 1 | 5/5 |
+| none | 0/5 | 1 | 1 | 5/5 |
+| recompose | 5/5 | 2 | 2 | 5/5 |
+
+Khớp kỳ vọng đã ghi trước. Dữ liệu: `artifact/results/real/audit/k9_action_audit.csv` (file mới) và `.meta.json`. `render_real.py` sinh `\RealAudit*` và `\RealKSyncTapped` (20), `\RealKSendmsgsTapped` (8); §7 viết lại câu về các lượt gửi lại của K-9 bằng các macro đó (YC-B8). `SUMMARY.md` chỉ thêm một đoạn đính chính và bảng audit, không sửa dòng cũ. Chưa làm: theo dõi không người dùng từ 20 phút trở lên và cấu hình có Sent.
+
+**B-16 (phần tài liệu):** `testbed/README.md` viết mới bằng tiếng Anh; bản tiếng Việt đổi tên thành `testbed/README.vi.md`. Còn lại: `team/scrub_check.sh` vẫn báo nhầm `email` với địa chỉ `@test.invalid` (README, CSV audit), chờ C sửa theo review #12; `make_bundle.sh` (C-12) cần loại `testbed/README.vi.md` và `testbed/RUNBOOK_B.md` (tiếng Việt, có IP server).
+
+**B-15:** `bench_ledger.py` dùng `signal.SIGKILL`, không chạy trên Windows; máy B chưa có WSL (`wsl --status`: chưa cài). Cần trưởng nhóm cài WSL bằng quyền admin rồi khởi động lại máy; sau đó B đo lại ledger và viết lại §6.
+
+## 12/11/2026 (B-12, sau review độc lập của PR #36)
+
+- Trước khi chốt thiết kế, có một lượt dò đường `testbed/runs/b12/explore-01` (lỗi mất phản hồi không kèm thao tác, rồi bấm tay vào Outbox để tìm nút "Send messages"). Lượt này không có kết quả thao tác nào và không nằm trong CSV.
+- B-12 ghi là chạy sau B-09 để không tranh AVD; vì B-09 đang bị chặn (server không vào được) nên audit chạy trước, trên cùng AVD nhưng không có episode agent nào chạy song song.
+- Sửa theo review: README bỏ bước bật proxy ngoài (trùng cổng với proxy riêng của `k9_fault_case.py`) và bỏ chữ `--journal`; lỗi reset giờ cũng ghi `RESULT.json` INVALID; reset chỉ bấm BACK khi đúng là hộp thoại lỗi; `render_real.py` kiểm cấu hình nosent và chuỗi bấm của từng thao tác; §7 nói rõ cửa sổ 60 s không phủ poll 15 phút và số lượt hợp lệ trên số lượt thử (macro `\RealAuditAttemptsN`); `SUMMARY.md` (đoạn mới) ghi bản điều chỉnh và hai phiên bản code; `.meta.json` ghi đủ lệnh; thêm test cho `k9_audit_table.py`.

@@ -1,0 +1,37 @@
+trial,config,action,valid,invalid_reason,nonce,request_id,fault_reproduced,k9_state_before_fault,server_copies_before_action,taps,window_s,smtp_data_after_action,server_copies_after_action,distinct_message_ids_after_action,k9_outbox_after_action,still_in_outbox_error,action_start_utc_ns
+t01-sync,nosent,sync,1,,gx:AN25VF,<5AFC8529-285A-4762-BC1B-D8F7333EDB07@test.invalid>,1,error|1|Unable to send message,1,Navigate up|Sync account,60.0,0,1,1,error|1|Unable to send message,1,1794466939308713800
+t02-send_messages,nosent,send_messages,1,,gx:EREGTW,<7FD4C356-D5F8-4B94-8E1F-93CC78FD7DDA@test.invalid>,1,error|1|Unable to send message,1,Navigate up|Outbox|More options|Send messages,60.0,0,1,1,error|1|Unable to send message,1,1794467040101138900
+t03-none,nosent,none,1,,gx:HQ4PW5,<065828CB-486E-4CA7-89B6-DB89C227A775@test.invalid>,1,error|1|Unable to send message,1,,60.0,0,1,1,error|1|Unable to send message,1,1794467148166019100
+t04-recompose,nosent,recompose,1,,gx:CW780T,<CAA2B320-B517-4CC1-9348-3CC22C5FCAEB@test.invalid>,1,error|1|Unable to send message,1,Send|Send and Delete,60.0,1,2,2,error|1|Unable to send message,1,1794467239489746000
+t05-sync,,sync,0,RuntimeError: focused application window cannot be verified,,,0,,,,,,,,,,
+t06-send_messages,,send_messages,0,urllib.error.HTTPError: HTTP Error 400: Bad Request,,,0,,,,,,,,,,
+t07-none,,none,0,urllib.error.HTTPError: HTTP Error 400: Bad Request,,,0,,,,,,,,,,
+t08-recompose,,recompose,0,urllib.error.HTTPError: HTTP Error 400: Bad Request,,,0,,,,,,,,,,
+t09-sync,,sync,0,urllib.error.HTTPError: HTTP Error 400: Bad Request,,,0,,,,,,,,,,
+t10-send_messages,,send_messages,0,urllib.error.HTTPError: HTTP Error 400: Bad Request,,,0,,,,,,,,,,
+t11-none,,none,0,urllib.error.HTTPError: HTTP Error 400: Bad Request,,,0,,,,,,,,,,
+t12-recompose,,recompose,0,urllib.error.HTTPError: HTTP Error 400: Bad Request,,,0,,,,,,,,,,
+t13-sync,,sync,0,urllib.error.HTTPError: HTTP Error 400: Bad Request,,,0,,,,,,,,,,
+t14-send_messages,,send_messages,0,urllib.error.HTTPError: HTTP Error 400: Bad Request,,,0,,,,,,,,,,
+t15-none,,none,0,urllib.error.HTTPError: HTTP Error 400: Bad Request,,,0,,,,,,,,,,
+t16-recompose,,recompose,0,urllib.error.HTTPError: HTTP Error 400: Bad Request,,,0,,,,,,,,,,
+t17-sync,,sync,0,urllib.error.HTTPError: HTTP Error 400: Bad Request,,,0,,,,,,,,,,
+t18-send_messages,,send_messages,0,urllib.error.HTTPError: HTTP Error 400: Bad Request,,,0,,,,,,,,,,
+t19-none,,none,0,urllib.error.HTTPError: HTTP Error 400: Bad Request,,,0,,,,,,,,,,
+t20-recompose,,recompose,0,urllib.error.HTTPError: HTTP Error 400: Bad Request,,,0,,,,,,,,,,
+t21-sync,nosent,sync,1,,gx:7E4MGN,<14367707-87B1-41A0-9FE1-2A6CE0066C2A@test.invalid>,1,error|1|Unable to send message,1,Navigate up|Sync account,60.0,0,1,1,error|1|Unable to send message,1,1794467660250917600
+t22-send_messages,nosent,send_messages,1,,gx:TF159R,<B83619F3-AA42-4BB4-836A-DA284ED4E217@test.invalid>,1,error|1|Unable to send message,1,Navigate up|Outbox|More options|Send messages,60.0,0,1,1,error|1|Unable to send message,1,1794467760931254000
+t23-none,nosent,none,1,,gx:FNJQ66,<71AF4EB1-BDB2-4005-934A-F96D25B47838@test.invalid>,1,error|1|Unable to send message,1,,60.0,0,1,1,error|1|Unable to send message,1,1794467869705303000
+t24-recompose,nosent,recompose,1,,gx:CBBMS8,<7B477467-39C2-49FF-A3A1-1E6B3D026A92@test.invalid>,1,error|1|Unable to send message,1,Send|Send and Delete,60.0,1,2,2,error|1|Unable to send message,1,1794467961523590200
+t25-sync,nosent,sync,1,,gx:VB2NZB,<FEC06F1E-8765-4D87-A1D9-57B07E20574A@test.invalid>,1,error|1|Unable to send message,1,Navigate up|Sync account,60.0,0,1,1,error|1|Unable to send message,1,1794468064328952800
+t26-send_messages,nosent,send_messages,1,,gx:T3V87J,<85B9C858-BFB5-4734-9A51-7D9BD94B20D9@test.invalid>,1,error|1|Unable to send message,1,Navigate up|Outbox|More options|Send messages,60.0,0,1,1,error|1|Unable to send message,1,1794468163203573800
+t27-none,nosent,none,1,,gx:7KPMJN,<2E14F293-BBFA-486C-A4E6-87325ECACBB3@test.invalid>,1,error|1|Unable to send message,1,,60.0,0,1,1,error|1|Unable to send message,1,1794468271256974800
+t28-recompose,nosent,recompose,1,,gx:4V156V,<8DC9F320-8BA2-4DF5-9B11-C5E878A7C9BE@test.invalid>,1,error|1|Unable to send message,1,Send|Send and Delete,60.0,1,2,2,error|1|Unable to send message,1,1794468363586160600
+t29-sync,nosent,sync,1,,gx:BZXABQ,<3F3951B0-5594-4C56-A2B0-F8D163CB84FB@test.invalid>,1,error|1|Unable to send message,1,Navigate up|Sync account,60.0,0,1,1,error|1|Unable to send message,1,1794468465826036600
+t30-send_messages,nosent,send_messages,1,,gx:JVT40R,<D348370F-5A39-4443-94C7-B1F5819D6FA6@test.invalid>,1,error|1|Unable to send message,1,Navigate up|Outbox|More options|Send messages,60.0,0,1,1,error|1|Unable to send message,1,1794468565351911900
+t31-none,nosent,none,1,,gx:RQWNFK,<8228DAAE-2F64-45A6-96B1-0BD30C7A84A7@test.invalid>,1,error|1|Unable to send message,1,,60.0,0,1,1,error|1|Unable to send message,1,1794468672761872700
+t32-recompose,nosent,recompose,1,,gx:G2Q8WH,<2CED333D-9045-4664-B392-7BCD29783C4A@test.invalid>,1,error|1|Unable to send message,1,Send|Send and Delete,60.0,1,2,2,error|1|Unable to send message,1,1794468763708606300
+t33-sync,nosent,sync,1,,gx:AW3BR4,<D74A7C56-7572-45C1-B5B1-7C9D8B49140A@test.invalid>,1,error|1|Unable to send message,1,Navigate up|Sync account,60.0,0,1,1,error|1|Unable to send message,1,1794468865713283000
+t34-send_messages,nosent,send_messages,1,,gx:2JMF18,<A76BB8A1-229B-492D-BFB3-53054FA9D536@test.invalid>,1,error|1|Unable to send message,1,Navigate up|Outbox|More options|Send messages,60.0,0,1,1,error|1|Unable to send message,1,1794468964455770000
+t35-none,nosent,none,1,,gx:3SPFZG,<6314C163-7226-45E8-AF48-F19B5891F2CF@test.invalid>,1,error|1|Unable to send message,1,,60.0,0,1,1,error|1|Unable to send message,1,1794469071291225400
+t36-recompose,nosent,recompose,1,,gx:R0S4T6,<5D538FC0-25ED-46AB-842E-A517E2C6C067@test.invalid>,1,error|1|Unable to send message,1,Send|Send and Delete,60.0,1,2,2,error|1|Unable to send message,1,1794469162023559200

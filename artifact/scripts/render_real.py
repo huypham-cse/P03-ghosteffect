@@ -211,6 +211,25 @@ App, condition & $n$ & Re-sent & Once & Later & Unsent \\
     M('RealKRd', len(_krd))
     M('RealKRecDup', len(_rec))
     M('RealKRecN', len(_krd))
+    # Which send passes campaign 2 actually tapped (R19): Sync in every lost-reply trial, Send messages only in some.
+    M('RealKSyncTapped', sum(1 for r in _krd if r['sync_tapped'] == '1'))
+    M('RealKSendmsgsTapped', sum(1 for r in _krd if r['sendmsgs_tapped'] == '1'))
+    # Action audit (B-12, audit/k9_action_audit.csv): one scripted action after a lost reply, K-9 without a
+    # Sent folder; only valid trials (fault reproduced, action receipts written) are counted.
+    _aall = _rr('k9_action_audit.csv', os.path.join(REAL, 'audit'))
+    _au = [r for r in _aall if r['valid'] == '1']
+    _win = {r['window_s'] for r in _au}
+    _taps = {'sync': 'Navigate up|Sync account', 'send_messages': 'Navigate up|Outbox|More options|Send messages',
+             'none': '', 'recompose': 'Send|Send and Delete'}
+    assert len(_win) == 1 and all(r['config'] == 'nosent' and r['taps'] == _taps[r['action']] for r in _au)
+    M('RealAuditN', len(_au))
+    M('RealAuditAttemptsN', len(_aall))
+    M('RealAuditWindow', f1(_win.pop()).rstrip('0').rstrip('.'))
+    for _act, _nm in (('sync', 'Sync'), ('send_messages', 'Sendmsgs'), ('none', 'None'), ('recompose', 'Recompose')):
+        _xs = [r for r in _au if r['action'] == _act]
+        M(f'RealAudit{_nm}N', len(_xs))
+        M(f'RealAudit{_nm}Data', sum(1 for r in _xs if int(r['smtp_data_after_action']) > 0))
+        M(f'RealAudit{_nm}Dup', sum(1 for r in _xs if int(r['distinct_message_ids_after_action']) >= 2))
     M('RealKNotifNosent', _kf[('nosent', 'b_failnotif_late', 'respdrop')]['wrong'])
     M('RealKNotifSent', _kf[('sent', 'b_failnotif_late', 'respdrop')]['wrong'])
     M('RealKNotifWrong', int(_kf[('nosent', 'b_failnotif_late', 'respdrop')]['wrong']) +
