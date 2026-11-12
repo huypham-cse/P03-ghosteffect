@@ -132,15 +132,36 @@ App, condition & $n$ & Re-sent & Once & Later & Unsent \\
     _present = sum(int(r['present']) for r in _pv)
     M('RealElemSentPolls', f"{_present:,}".replace(',', '{,}'))
     _lag = lambda c: _el[(c, 'row_visible')]
+    # Per-trial lags (upper ends of the first-visible interval); the minimum is not in the aggregate CSV.
+    _vis = {}
+    for r in _fv:
+        _vis.setdefault(r['cell'], []).append(float(r['row_first_visible_hi_s']))
+    _vis['ALL_interrupted(respdrop)'] = [x for c, xs in _vis.items() if c.endswith('/respdrop') for x in xs]
     for c, nm in (('none/nofault', 'Nofault'), ('bg_kill9/respdrop', 'Kill'), ('force_stop/respdrop', 'Fs'),
                   ('netcut/respdrop', 'Net'), ('bg_kill9_sticky/respdrop', 'SKill'), ('force_stop_sticky/respdrop', 'SFs'),
                   ('bg_kill9/acked', 'Acked'), ('ALL_interrupted(respdrop)', 'All')):
         r = _lag(c)
         assert r['n_censored_final'] == '0'
+        assert len(_vis[c]) == int(r['n_committed']) and max(_vis[c]) == float(r['max'])
+        M(f'RealLag{nm}Min', f1(min(_vis[c])))
         M(f'RealLag{nm}Med', f1(r['p50']))
-        M(f'RealLag{nm}Ninety', f1(r['p90']))
+        M(f'RealLag{nm}Ninety', f1(r['p90']))   # kept for existing prose; Table 3b reports min/median/max
         M(f'RealLag{nm}Max', f1(r['max']))
         M(f'RealLag{nm}N', r['n_committed'])
+    # Pilot (not in the 101): a stale room-list digest is a verified screen that shows an older message although
+    # the server holds this trial's copy (SUMMARY.md, "Pilot only").
+    _pil = _rr('pilot_element.csv', C2)
+    M('RealPilotN', len(_pil))
+    M('RealPilotStaleDigest', sum(1 for r in _pil if r['server_copies'] != '0' and r['n_bot_wrong_screen'] == '0'
+                                  and r['nonce'] not in r['digest_text']))
+    # Host conditions of campaign 2, recorded only in SUMMARY.md; the asserts keep these in step with it.
+    _summary = open(os.path.join(REAL, 'SUMMARY.md'), encoding='utf-8').read()
+    assert 'The host load average was 3–11 on 18 cores' in _summary and 'One uiautomator dump takes ≈2–2.5 s' in _summary
+    M('RealHostLoadLo', 3)
+    M('RealHostLoadHi', 11)
+    M('RealHostCores', 18)
+    M('RealDumpLo', '2')
+    M('RealDumpHi', '2.5')
     M('RealCensored', sum(int(r['censored_final']) for r in _fv))
     _fr, _fo, _lt, _dg = _ef['a_indicator_first'], _ef['a_indicator_early'], _ef['a_indicator_late'], _ef['c_digest_late']
     assert _ef['b_row_first']['wrong'] == _fr['wrong'] and _ef['b_row_late']['wrong'] == _lt['wrong'] == '0' == _dg['wrong']
@@ -212,12 +233,12 @@ App, condition & $n$ & Re-sent & Once & Later & Unsent \\
     M('RealGuiN', len(_krd) + sum(1 for r in _cd if r['recompose_server_copies'] != ''))
     M('RealTwoN', _nEl + len(_kn) + len(_ks) + len(_cd) + len(_tt))
 
-    _lagrow = lambda lab, nm: (f"{lab} & \\RealLag{nm}N & \\RealLag{nm}Med & \\RealLag{nm}Ninety & \\RealLag{nm}Max \\\\")
+    _lagrow = lambda lab, nm: (f"{lab} & \\RealLag{nm}N & \\RealLag{nm}Min & \\RealLag{nm}Med & \\RealLag{nm}Max \\\\")
     W('tab_real.tex', r'''\begin{table*}[t]
 \centering
 \caption{Emulator measurements, campaign 2 (Android~13 emulators, self-hosted servers, scripted driver; ground truth = server copies). (a)~After a commit whose reply was
 lost (TCP reset after the server committed), under no fault, background + \texttt{kill -9}, force-stop or a 20\,s network cut. App re-send: how the app resolved it; GUI redo:
-a scripted agent recomposes and re-sends the same content. (b)~Element's recovery-to-visible lag (s; upper end of a one-dump $\approx$2\,s interval; first visibility was observed
+a scripted agent recomposes and re-sends the same content. (b)~Element's recovery-to-visible lag: minimum, median and maximum over the $n$ trials of each class (s; upper end of a one-dump $\approx$2\,s interval; first visibility was observed
 in all recorded trials, with trial-specific follow-up windows). This is not a uniform late-duplicate follow-up. Sticky: every reply dropped until the fault.
 (c)~Family errors against the server, wrong/observed, with no-observation ($\bot$, wrong screen) separated;
 Element's send-state indicator appears in the same dump as the row in \RealElemN/\RealElemN{} trials, so the two are one reading.}
@@ -240,7 +261,7 @@ K-9 + Sent & \RealKRdSent & none (error) & \RealKRdSent & Outbox only & dup \\
 \begin{tabular}{@{}l cccc@{}}
 \toprule
 \multicolumn{5}{@{}l}{(b) Element lag by fault class (s)} \\
-Fault & $n$ & p50 & p90 & max \\
+Fault & $n$ & min & median & max \\
 \midrule
 ''' + '\n'.join([_lagrow('none (reader floor; from \\emph{Send})', 'Nofault'), _lagrow('background + \\texttt{kill -9}', 'Kill'),
                      _lagrow('force-stop (relaunch lands off the room)', 'Fs'), _lagrow('network cut, app in foreground', 'Net'),

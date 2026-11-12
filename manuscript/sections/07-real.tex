@@ -5,8 +5,10 @@
 \para{Setup.} Campaign~2 on the testbed of \S\ref{sec:impl} ran \RealElemN{} Element~1.6.62~\cite{element_android} trials against Synapse~1.164.2~\cite{synapse}
 (\RealElemNofaultN{} without fault, \RealElemRL{} with a lost reply, \RealElemAckedN{} acknowledged then killed) plus \RealTimeoutN{} with a withheld reply; K-9~Mail~24.0~\cite{k9mail}
 against GreenMail~2.1.2~\cite{greenmail} without and with an IMAP Sent folder (nonce in the subject, which the recipient sees, on test accounts that opted in); Etar, DAVx5 and Radicale (CalDAV); and a Synapse transaction-id sequence (Table~\ref{tab:real}).
-Campaign~1 (\RealOneN{} trials, no screen check) agrees on every G2 classification (Table~\ref{tab:realcone}, appendix). Seven Element trials were lost before writing a row (six to a system ANR dialog); four campaign-1 trials were discarded because Android had re-spawned
-Element (in two, a queued message stayed unsent for 45\,s). Outside Element $n$ is small (2--4 per K-9 cell), so these are characterizations; lags are upper bounds (one read is a $\approx$2\,s dump).
+Campaign~1 (\RealOneN{} trials, no screen check) agrees on every G2 classification (Table~\ref{tab:realcone}, appendix). Seven Element attempts left no row: six failed at trial start, before any send, behind a system ANR dialog of an unused accessibility service, so none committed a
+message and none adds a lag, observed or censored; the operator stopped the seventh. Four campaign-1 trials were discarded because Android had re-spawned
+Element (in two, a queued message stayed unsent for 45\,s). Outside Element $n$ is small (from 2 to 4 per K-9 cell), so these are characterizations. Lags are upper bounds:
+one read is a uiautomator dump of \RealDumpLo{} to \RealDumpHi\,s, on a host with load average \RealHostLoadLo{} to \RealHostLoadHi{} on \RealHostCores{} cores.
 
 \input{generated/tab_real}
 
@@ -24,8 +26,10 @@ Figure~\ref{fig:teaser}a, measured with a scripted rather than an LLM agent.
 \para{Evidence families and lag.} Element's first read was $\bot$ in \RealFirstBot/\RealElemN{} trials, mostly because a force-stop relaunch lands off the room (\RealFsFirstBot/\RealFsN); first observed reads
 were wrong in \RealFirstWrong/\RealFirstObs, all lag-blind. Late reads were never wrong, never two families together (0/\RealCoN, CI 0--\RealLateHi\%). Campaign~1's five ``co-failures'' rendered
 no contradicting state (\RealOneCoContra/\RealOneCoN), the digest showed the nonce in \RealOneCoDigest/\RealOneCoN, and screen identity was not logged, so we re-score them as
-no-observation: they are not evidence against A2, which now rests on the model and VP-CONTROL~\cite{zheng2026vpcontrol}. Element's send-state indicator appeared with its row in every trial and read \emph{Sent} in all \RealElemSentPolls{} sightings: not a lag-free hop-1 view. Lag depends on the fault class
-(Table~\ref{tab:real}b): a network cut adds nothing over the \RealLagNofaultMed\,s reader floor, \texttt{kill -9} gives p90 \RealLagKillNinety\,s, and force-stop \RealLagFsMed\,s,
+no-observation: they are not evidence against A2, which now rests on the model and VP-CONTROL~\cite{zheng2026vpcontrol}. Stale screens do occur: in \RealPilotStaleDigest{} of \RealPilotN{} pilot trials (not among the
+\RealElemN) the room-list digest on a verified screen showed an older message while the server held the copy, and in campaign~1 AndroidWorld's accessibility forwarder
+returned a minutes-old tree after network toggles (those runs were discarded; their logs are not kept). Element's send-state indicator appeared with its row in every trial and read \emph{Sent} in all \RealElemSentPolls{} sightings: not a lag-free hop-1 view. Lag depends on the fault class
+(Table~\ref{tab:real}b): a network cut adds nothing over the \RealLagNofaultMed\,s reader floor, \texttt{kill -9} gives a median of \RealLagKillMed\,s (at most \RealLagKillMax\,s), and force-stop \RealLagFsMed\,s,
 mostly navigation. No trial was censored (\RealCensored/\RealElemN{} beyond the $\ge$120\,s window), which bounds an unseen tail only by 2.9\% (95\%).
 \texttt{am kill} after HOME was a no-op for Element (\RealAmkillNoopElem/\RealAmkillNoopElem) but killed K-9 (\RealAmkillKnine/\RealAmkillKnine). Under a SIGKILL of the
 emulator's qemu process (the guest loses its page cache) the WAL ledger lost no acknowledged row with \texttt{synchronous=FULL} (\RealLedgerFullN{} trials), \texttt{OFF} lost
