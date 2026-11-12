@@ -12,8 +12,8 @@ nonce_persist,0.0,Element committed side: 0 wrong late reads among 99 observed (
 nonce_view,0.0,Element committed side: 0 wrong late reads among 99 observed (c2_element_families.csv); bounds still come from CP on simulated labels
 digest_persist,0.0,Element committed side: 0 wrong late reads among 99 observed (c2_element_families.csv); bounds still come from CP on simulated labels
 digest_view,0.0,Element committed side: 0 wrong late reads among 99 observed (c2_element_families.csv); bounds still come from CP on simulated labels
-elem_tail_ub,0.029225153539039095,one-sided 95% CP upper bound on P(not visible within the window) from 0/101 censored (used only for the lag-tail sensitivity rows; not a measurement)
-k9_failed_commit,1.0,"K-9 (campaign 2): after a lost SMTP reply the mail stays in the Outbox with send_state=error, 0 new DATA on Sync or Send-messages, in 20/20 (c2_k9_summary.csv)"
+elem_tail_ub,0.029225153539039095,"one-sided 95% zero-exceedance/order-statistic reference from 101 recorded first-visibility endpoints (not a common follow-up window; missing attempts not characterized); used only for lag-tail sensitivity under the sampling assumptions, not a measured tail rate"
+k9_failed_commit,1.0,"K-9 campaign-2 plug-in: Outbox:error persists over the observed windows in 20/20 lost-reply cases, with no new DATA observed. Sync tap recorded 20/20; explicit Send-messages tap recorded 8/20, not verified for the remaining cases (per-trial CSVs). Unattended permanent failure was not measured."
 k9_queued_delivered,1.0,K-9 (campaign 1): queued (offline) mail delivered exactly once after a sync in 15/15 (e4_outcomes.csv); campaign 2 net_pre 3/3 after Sync
 k9_lag_lo,45.0,"K-9 queued-mail delivery lag, lower end: the 45 s window (campaign 1, measured)"
 k9_lag_hi,900.0,"K-9 queued-mail delivery lag, upper end: K-9's 15-min poll interval (assumption: uniform law; the unattended poll was not measured)"
