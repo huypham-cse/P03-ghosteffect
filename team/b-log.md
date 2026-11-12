@@ -95,7 +95,9 @@ Quy ước chung:
 - Nguồn: `artifact/results/real/agent/episodes.csv` và `label_cost.csv` (schema §4 của `CONTRIBUTOR_FIXED.md`). Chưa có dữ liệu thì mọi macro in `??`.
 - Loại số: **LLM-agent experiment** (khác emulator measurement của campaign 2). Chỉ đếm các dòng `phase=scheduled`, trừ các macro `Dev`.
 - "Hợp lệ" là `original_committed=1` và `fault_receipt=1`. Tỷ lệ và khoảng tin cậy tính trên số episode hợp lệ, khoảng Wilson 95%.
-- Đếm: số nguyên. Phần trăm: 1 chữ số thập phân. Giây: số nguyên. Mẫu số 0 thì in `N/A`.
+- Đếm: số nguyên. Phần trăm: 1 chữ số thập phân. Giây: số nguyên cho dòng `total` và cho `\AgentWallMedS`, 1 chữ số thập phân cho các thành phần. Mẫu số 0 thì in `N/A`.
+- Chạy lại: mỗi `scheduled_index` đếm một lần, theo lần chạy cuối của nó (`attempt=2` nếu có); `\AgentRerunN` đếm số dòng `attempt=2`.
+- Hợp lệ khi và chỉ khi `outcome` khác `INVALID`, tương đương `original_committed=1`, `fault_receipt=1` và không có lỗi đo.
 
 **1. Mô tả thí nghiệm (chữ):**
 
@@ -116,6 +118,9 @@ Quy ước chung:
 | `\AgentValidN` | số episode hợp lệ |
 | `\AgentInvalidN` | số episode không hợp lệ |
 | `\AgentRerunN` | số lần chạy lại vì lỗi đo (`attempt=2`) |
+| `\AgentInvalidNoCommitN` | không hợp lệ vì thư gốc không commit (`invalid_reason=original_not_committed`) |
+| `\AgentInvalidNoFaultN` | không hợp lệ vì thiếu biên nhận lỗi (`no_fault_receipt`) |
+| `\AgentInvalidMeasureN` | không hợp lệ vì lỗi đo (`measurement_error:*`, `grading_failed:*`, `harness_timeout`) |
 | `\AgentResentN` | hợp lệ và gửi lại: `RESENT_DUPLICATE` cộng `RESENT_BUT_NO_DUP` |
 | `\AgentDupN` | `RESENT_DUPLICATE` (từ 2 Message-ID khác nhau ở backend) |
 | `\AgentResentNoDupN` | `RESENT_BUT_NO_DUP` |
@@ -147,16 +152,18 @@ Quy ước chung:
 |---|---|
 | `\LabelTrialMinS`, `\LabelTrialMedS`, `\LabelTrialMaxS` | dòng `total`: nhỏ nhất, median, lớn nhất (giây) |
 | `\LabelTrialResetMedS`, `\LabelTrialComposeMedS`, `\LabelTrialFaultMedS`, `\LabelTrialRelaunchMedS`, `\LabelTrialObservationMedS`, `\LabelTrialGradingMedS` | median từng thành phần (giây) |
-| `\LabelTrialN` | số lượt đo đứng sau các số trên |
+| `\LabelTrialN` | cột `n` của dòng `total` |
 
-A đọc thẳng `label_cost.csv` cho `\CertLabelMedS` (theo hợp đồng của A), không dùng các macro này. Tổng 41 macro. Đổi tên sau ngày này phải được trưởng nhóm duyệt.
+A đọc thẳng `label_cost.csv` cho `\CertLabelMedS` (theo hợp đồng của A), không dùng các macro này. Tổng 44 macro. Đổi tên sau ngày này phải được trưởng nhóm duyệt.
 
 ## 12/11/2026 (B-13)
 
 **Đã làm:**
 - Table 3b (`render_real.py`): cột p50/p90/max đổi thành min/median/max. Min tính từ `c2_element_first_visible.csv` theo từng lượt; script kiểm số lượt và max khớp `c2_element_lag.csv` ở mọi ô (median và max khớp tuyệt đối ở cả 9 ô). Macro `\RealLag*Ninety` vẫn sinh vì phần mở đầu của C còn dùng.
 - §7 (`07-real.tex`): câu về `kill -9` dùng median và max thay cho p90; thêm tải máy campaign 2 (load average 3 đến 11 trên 18 nhân) và thời gian dump (2 đến 2,5 s) bằng macro `\RealHost*`, `\RealDump*`, có assert khớp nguyên văn `SUMMARY.md`; thêm câu stale screen: digest cũ ở `\RealPilotStaleDigest`/`\RealPilotN` lượt pilot (tính từ `pilot_element.csv`), forwarder trả cây cũ ở campaign 1 chỉ nêu định tính vì log không còn.
-- ANR: theo `SUMMARY.md`, 6 lượt Element hỏng ngay đầu lượt, trước khi gửi ("room not opened"), nên không có thư nào commit và không thể tính là quan sát censored như đề B-13 ghi. §7 viết đúng như vậy; lượt thứ 7 do người chạy dừng. Theo R16 trong `resolve.md`, ANR chỉ tính censored khi biết đã commit.
+- Lượt mất: 8 lượt Element không có dòng dữ liệu. 6 lượt hỏng ngay đầu lượt, trước khi gửi, vì hộp thoại ANR (`SUMMARY.md`: "room not opened"). 2 lượt đã commit thư: lượt 17 do người chạy dừng (thư của nó là mốc `anchor` của lượt 100 trong `c2_element_trials.csv`) và một lượt 303 không có trong log (mốc của lượt 320). Độ trễ của 2 lượt này không biết, nên bảng trễ chỉ phủ 101 lượt có ghi; §7 nói rõ điều đó. Đề B-13 bảo coi ANR là quan sát censored; theo R16 chỉ làm vậy khi biết đã commit và có theo dõi, 6 lượt ANR thì chưa gửi, 2 lượt đã commit thì không có theo dõi.
+- Tải máy: đề B-13 ghi 16 đến 38 là của campaign 1; §7 báo campaign 2 (số trong bài), 3 đến 11 trên 18 nhân. Giá trị đọc từ `SUMMARY.md` bằng regex.
+- Sau review độc lập (cùng ngày): sửa câu §2.1 (`am kill` không phải cơ chế low-memory killer, nên dùng làm dẫn chứng cho app có sync service, kèm hệ quả agent death là ngắt quãng dễ gặp hơn); câu cận đuôi 2,9% ở §7 ghi rõ chỉ là mốc tham chiếu, không phải đuôi đo được; tách các câu dài; đếm stale digest theo `digest_verdict=absent`.
 - §2.1 (`02-background-motivation.tex`): bỏ câu "the foreground app is essentially never reaped"; viết lại: Android chỉ thu hồi app foreground, hoặc app có service giữ ở mức perceptible, khi thiếu bộ nhớ nặng, kèm dẫn chứng `am kill` không dừng được Element ở §7.
 - Kiểm: test artifact OK; scrub PASS; build thoát 0, 21 trang, không ref chưa định nghĩa, overfull lớn nhất 3,46 pt. Conclusion bắt đầu trang 13, nhưng `main` trước thay đổi này cũng vậy (do phần A vừa gộp); việc về 12 trang thuộc C-06.
 

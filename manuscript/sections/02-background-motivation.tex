@@ -10,8 +10,9 @@ confirmation. We call the action sequence that ends at a commit point an \emph{e
 
 Research agents (M3A, T3A, UI-TARS, Mobile-Agent) are host processes that drive a phone over adb~\cite{rawles2025androidworld}; on-device agents are apps with an
 accessibility service~\cite{wen2024autodroid}. Interruptions are of four kinds. (1)~\emph{Agent death}: a host agent crashes, or the low-memory killer reaps an on-device
-agent~\cite{android_lmkd}. (2)~\emph{App death}: Android reaps the foreground app, or one that a service keeps perceptible, only under severe memory pressure (\texttt{am kill} spared Element,
-\S\ref{sec:eval-real}), so the realistic case is \emph{background-then-kill}, which keeps scheduled
+agent~\cite{android_lmkd}. (2)~\emph{App death}: the low-memory killer reaps the foreground app last~\cite{android_lmkd}, so the realistic case is \emph{background-then-kill}. Even that may be
+rare for an app that a sync service keeps perceptible: \texttt{am kill} spared Element in every trial (\S\ref{sec:eval-real}), so for such apps agent death is the likelier
+interruption. Background-then-kill keeps scheduled
 WorkManager jobs; a crash or force-stop cancels alarms and jobs~\cite{android_workmanager}, and unpreserved state is lost~\cite{farooq2020livedroid}. (3)~\emph{Deferral}:
 App Standby, background restrictions and Doze batch network access and defer jobs~\cite{android_doze,android_standby}. (4)~\emph{Connectivity loss}~\cite{sentosa2025cellreplay}:
 an app may send a request and lose the acknowledgement. Each can leave the effect absent, committed, or still in flight.

@@ -152,16 +152,19 @@ App, condition & $n$ & Re-sent & Once & Later & Unsent \\
     # the server holds this trial's copy (SUMMARY.md, "Pilot only").
     _pil = _rr('pilot_element.csv', C2)
     M('RealPilotN', len(_pil))
-    M('RealPilotStaleDigest', sum(1 for r in _pil if r['server_copies'] != '0' and r['n_bot_wrong_screen'] == '0'
-                                  and r['nonce'] not in r['digest_text']))
-    # Host conditions of campaign 2, recorded only in SUMMARY.md; the asserts keep these in step with it.
+    M('RealPilotStaleDigest', sum(1 for r in _pil if r['digest_verdict'] == 'absent' and r['server_copies'] != '0'
+                                  and r['digest_text'] and r['nonce'] not in r['digest_text']))
+    # Host conditions of campaign 2 (not campaign 1's 16-38), recorded only in SUMMARY.md: parsed from its text.
+    import re as _re
     _summary = open(os.path.join(REAL, 'SUMMARY.md'), encoding='utf-8').read()
-    assert 'The host load average was 3–11 on 18 cores' in _summary and 'One uiautomator dump takes ≈2–2.5 s' in _summary
-    M('RealHostLoadLo', 3)
-    M('RealHostLoadHi', 11)
-    M('RealHostCores', 18)
-    M('RealDumpLo', '2')
-    M('RealDumpHi', '2.5')
+    _load = _re.search(r'The host load average was (\d+)–(\d+) on (\d+) cores', _summary)
+    _dump = _re.search(r'One uiautomator dump takes ≈([\d.]+)–([\d.]+) s', _summary)
+    assert _load and _dump, 'campaign 2 host load or dump time missing from SUMMARY.md'
+    M('RealHostLoadLo', _load.group(1))
+    M('RealHostLoadHi', _load.group(2))
+    M('RealHostCores', _load.group(3))
+    M('RealDumpLo', _dump.group(1))
+    M('RealDumpHi', _dump.group(2))
     M('RealCensored', sum(int(r['censored_final']) for r in _fv))
     _fr, _fo, _lt, _dg = _ef['a_indicator_first'], _ef['a_indicator_early'], _ef['a_indicator_late'], _ef['c_digest_late']
     assert _ef['b_row_first']['wrong'] == _fr['wrong'] and _ef['b_row_late']['wrong'] == _lt['wrong'] == '0' == _dg['wrong']
