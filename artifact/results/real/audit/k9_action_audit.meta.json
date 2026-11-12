@@ -1,0 +1,21 @@
+{
+  "file": "k9_action_audit.csv",
+  "sha256": "06bdf3101f17e488bdc619cb8e8eb32f49873ebbca2db4f696058dc648913f3b",
+  "kind": "emulator measurement (scripted actions, no LLM)",
+  "task": "B-12 (R19, YC-B8)",
+  "design": "frozen in team/b-log.md at commit bd52fe1 before any result; amendment for 16 make-up trials logged at commit d3637de before they ran",
+  "command": "python testbed/k9_fault_case.py --config nosent --observe 10 --action <action> --action-window 60 --output testbed/runs/b12/audit/tNN-<action>; python testbed/k9_audit_table.py testbed/runs/b12/audit --output <this file>",
+  "order": "interleaved rounds of sync, send_messages, none, recompose; t01 to t20 first run, t21 to t36 make-up run",
+  "trials": 36,
+  "valid": 20,
+  "invalid_note": "t05 to t20 failed before the action: an AndroidWorld forwarder crash dialog covered K-9 at t05 after the proxy was armed, and the stale arm made the external proxy reject t06 to t20",
+  "setup": {
+    "app": "K-9 Mail 24.0",
+    "server": "GreenMail 2.1.2 (in-memory, restarted empty per trial)",
+    "config": "no Sent folder",
+    "fault": "SMTP reply dropped after 250, K-9 records the error, force-stop, relaunch (campaign 2 order)",
+    "avd": "API 33 r17 x86_64, emulator 37.2.13, -gpu host, Windows 11 WHPX host",
+    "window_s": 60
+  },
+  "date": "2026-11-12"
+}

@@ -111,7 +111,7 @@ Qua khi episode chạy hết mà không lỗi kết nối hay lỗi model (task 
 
 ## 6b. K-9: hai cấu hình và cách reset (B-03)
 
-**Proxy SMTP** (giữ chạy suốt buổi; GreenMail thì để `k9_reset.py` tự bật lại mỗi lần):
+**Proxy SMTP** (chỉ cần khi tự gửi thư bằng tay; `k9_fault_case.py` và `agent_episode.py` tự chạy proxy riêng cho từng lượt trên cùng cổng 14025, nên tắt proxy này trước khi chạy chúng; GreenMail thì để `k9_reset.py` tự bật lại mỗi lần):
 
 ```bash
 python testbed/faultproxy.py --protocol smtp --upstream smtp://127.0.0.1:3025 --listen-port 14025 --control-port 19025 --journal testbed/runs/<ngày>/proxy.jsonl
@@ -134,7 +134,7 @@ Bản không Sent làm từ bản có Sent bằng đúng hai lệnh `sqlite3` tr
 python testbed/k9_reset.py --config nosent --adb runtime/android-sdk/platform-tools/adb.exe --output testbed/runs/<lượt>
 ```
 
-Script chép lại bản sao, gán lại nhãn SELinux (`chcon` theo nhãn của thư mục gốc; chỉ `restorecon` là K-9 crash vì không mở được database), bật lại GreenMail (lưu trong bộ nhớ nên trống), tạo thư mục Sent của alice nếu là cấu hình có Sent, mở K-9 rồi kiểm 8 điều kiện trong `RESET.json`. Qua khi `verdict` là PASS. adbd được để ở chế độ root.
+Script tắt dịch vụ forwarder của AndroidWorld (nó crash và hiện hộp thoại "keeps stopping" đè lên K-9 khi không có phiên AndroidWorld), chép lại bản sao, gán lại nhãn SELinux (`chcon` theo nhãn của thư mục gốc; chỉ `restorecon` là K-9 crash vì không mở được database), bật lại GreenMail (lưu trong bộ nhớ nên trống), tạo thư mục Sent của alice nếu là cấu hình có Sent, mở K-9 rồi kiểm 9 điều kiện (thêm K-9 giữ focus) trong `RESET.json`. Qua khi `verdict` là PASS. adbd được để ở chế độ root.
 
 Ba cách đã thử và bỏ:
 - **Snapshot AVD:** sau khi load với `-gpu host`, các tiến trình được khôi phục không vẽ chữ (ảnh chụp màn hình trống chữ) và đồng hồ máy ảo lệch 80 s.
@@ -190,3 +190,12 @@ runtime/agent-venv/Scripts/python.exe testbed/agent_episode.py --framework m3a -
 - **Server không mở trong đợt:** báo ngay, xin đổi lịch hoặc thêm ngày. Server 40GB không dùng thay được nếu không sửa code, vì `serve_model.py` chỉ chấp nhận một H100 từ 75 GB trở lên.
 - **vLLM báo lỗi CUDA hoặc driver:** ghi lại `nvidia-smi` và log trong `testbed/runs/serve-*/server.log`; không đổi phiên bản vLLM hay model khi chưa báo trưởng nhóm.
 - **Hết dung lượng:** trọng số Qwen khoảng 16,6 GB, venv vLLM khoảng 10 GB.
+
+## 6e. Audit thao tác K-9 (B-12)
+
+```bash
+python testbed/k9_fault_case.py --config nosent --adb runtime/android-sdk/platform-tools/adb.exe --observe 10 --action sync --action-window 60 --output testbed/runs/b12/audit/t01-sync
+python testbed/k9_audit_table.py testbed/runs/b12/audit --output artifact/results/real/audit/k9_action_audit.csv
+```
+
+`--action` là `sync`, `send_messages`, `none` hoặc `recompose`; mỗi lần bấm có biên nhận giao diện. Kết quả 12/11: mỗi thao tác 5 lượt hợp lệ; sync, send_messages, none không tạo DATA mới, recompose tạo bản thứ hai với Message-ID mới. Tạo thư mục output cha trước khi chuyển log của từng lượt vào đó.

@@ -533,3 +533,27 @@ RST. Faults on the DAVx5 process: none / `kill -9` / `am force-stop`. The kill a
 * End state (≈08:10 +07): emulators 5570, 5580 and 5590 were stopped, along with Synapse, GreenMail, Radicale and all
   three fault proxies. Two other emulators (5584, 5586) belong to another agent and were not touched. Colima was not
   touched.
+
+## Addendum (2026-11-12): K-9 action audit and a correction
+
+**Correction.** The bullet "Outbox → "Send messages" (+20 s): no new DATA (0/12)" in the campaign 2 K-9 section has no tap
+receipt behind it: `c2_k9_nosent_trials.csv` records `sendmsgs_tapped=0` in all 12 no-Sent lost-reply trials. Across both
+configurations, Sync was recorded as tapped in 20/20 lost-reply trials and Send messages in 8/20 (all with a Sent folder).
+The 12 rows are left unchanged; the statement is superseded by the audit below.
+
+**Action audit** (`audit/k9_action_audit.csv`, metadata in `audit/k9_action_audit.meta.json`). K-9 Mail 24.0 without a
+Sent folder, GreenMail 2.1.2 restarted empty per trial, the SMTP reply dropped after 250 and K-9's error recorded before a
+force-stop and relaunch (the campaign 2 order). Then one scripted action, with a UI receipt for every tap, and a 60 s
+window: `sync` (menu, Sync account), `send_messages` (menu, Outbox, More options, Send messages), `none`, `recompose`
+(same subject and text, Send, Send and Delete). Interleaved, 5 valid trials per action; the design was committed before
+any result. 16 further trials failed before their action (an AndroidWorld forwarder crash dialog, then a stale proxy arm)
+and are kept with `valid=0`.
+
+| Action | Valid | New DATA after the action | Server copies | Distinct Message-IDs | Still `error` in the Outbox |
+|---|---|---|---|---|---|
+| sync | 5 | 0/5 | 1 | 1 | 5/5 |
+| send_messages | 5 | 0/5 | 1 | 1 | 5/5 |
+| none | 5 | 0/5 | 1 | 1 | 5/5 |
+| recompose | 5 | 5/5 | 2 | 2 | 5/5 (the original) |
+
+Not covered: unattended follow-up of 20 min or more (K-9's 15-min poll), and the configuration with a Sent folder.

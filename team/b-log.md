@@ -190,3 +190,20 @@ A đọc thẳng `label_cost.csv` cho `\CertLabelMedS` (theo hợp đồng của
 **Sửa:** `k9_reset.py` tắt dịch vụ forwarder, đóng hộp thoại lỗi còn sót và kiểm thêm điều kiện K-9 giữ focus (9 điều kiện). `k9_fault_case.py` tự chạy proxy và control riêng cho từng lượt (journal trong thư mục lượt), lượt hỏng vẫn ghi `RESULT.json` với `INVALID`; bỏ tham số `--control`, `--journal`.
 
 **Điều chỉnh thiết kế (ghi trước khi chạy bổ sung):** 16 lượt hỏng giữ trong CSV với `valid=0` và lý do; chạy bổ sung t21 đến t36 theo đúng vòng xen kẽ sync, send_messages, none, recompose (4 vòng) để mỗi thao tác đủ 5 lượt hợp lệ. Cửa sổ, cấu hình và kỳ vọng không đổi. Nếu bổ sung có lượt hỏng nữa thì cũng giữ lại và báo, không chạy thêm quá một vòng.
+
+## 12/11/2026 (B-12 kết quả, B-16, B-15)
+
+**B-12 kết quả:** 36 lượt, 20 hợp lệ (5 mỗi thao tác), 16 hỏng trước thao tác (giữ trong CSV với `valid=0`). Lượt bổ sung t21 đến t36 không hỏng lượt nào.
+
+| Thao tác | DATA mới sau thao tác | Bản trên server | Message-ID khác nhau | Vẫn `error` trong Outbox |
+|---|---|---|---|---|
+| sync | 0/5 | 1 | 1 | 5/5 |
+| send_messages | 0/5 | 1 | 1 | 5/5 |
+| none | 0/5 | 1 | 1 | 5/5 |
+| recompose | 5/5 | 2 | 2 | 5/5 |
+
+Khớp kỳ vọng đã ghi trước. Dữ liệu: `artifact/results/real/audit/k9_action_audit.csv` (file mới) và `.meta.json`. `render_real.py` sinh `\RealAudit*` và `\RealKSyncTapped` (20), `\RealKSendmsgsTapped` (8); §7 viết lại câu về các lượt gửi lại của K-9 bằng các macro đó (YC-B8). `SUMMARY.md` chỉ thêm một đoạn đính chính và bảng audit, không sửa dòng cũ. Chưa làm: theo dõi không người dùng từ 20 phút trở lên và cấu hình có Sent.
+
+**B-16 (phần tài liệu):** `testbed/README.md` viết mới bằng tiếng Anh; bản tiếng Việt đổi tên thành `testbed/README.vi.md`. Còn lại: `team/scrub_check.sh` vẫn báo nhầm `email` với địa chỉ `@test.invalid` (README, CSV audit), chờ C sửa theo review #12; `make_bundle.sh` (C-12) cần loại `testbed/README.vi.md` và `testbed/RUNBOOK_B.md` (tiếng Việt, có IP server).
+
+**B-15:** `bench_ledger.py` dùng `signal.SIGKILL`, không chạy trên Windows; máy B chưa có WSL (`wsl --status`: chưa cài). Cần trưởng nhóm cài WSL bằng quyền admin rồi khởi động lại máy; sau đó B đo lại ledger và viết lại §6.
