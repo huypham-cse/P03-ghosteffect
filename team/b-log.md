@@ -170,3 +170,15 @@ A đọc thẳng `label_cost.csv` cho `\CertLabelMedS` (theo hợp đồng của
 **Cần C làm:** `01-introduction.tex` dòng 39 còn "p90 \RealLagNetNinety--\RealLagFsNinety"; đổi sang median hoặc max cho khớp Table 3b mới.
 
 **Trạng thái task:** B-13 xong, chờ nghiệm thu.
+
+## 12/11/2026 (B-12, thiết kế chốt trước khi chạy)
+
+**Thiết kế audit thao tác K-9 (R19, YC-B8), commit trước khi có kết quả:**
+- Lý do: `c2_k9_nosent_trials.csv` có `sendmsgs_tapped=0` ở cả 12 dòng lost-reply không Sent, nên câu "Send messages: no new DATA (0/12)" trong `SUMMARY.md` không có biên nhận thao tác. Ghép hai cấu hình: Sync được bấm 20/20, Send messages 8/20 (chỉ ở cấu hình có Sent).
+- Cấu hình: K-9 không Sent, lỗi mất phản hồi theo thứ tự campaign 2 (`k9_fault_case.py`: reset, gửi, proxy bỏ phản hồi sau 250, K-9 ghi lỗi, force-stop, mở lại, chờ 10 s).
+- Thao tác sau lỗi: `sync` (menu, Sync account), `send_messages` (menu, Outbox, More options, Send messages), `none`, `recompose` (soạn lại cùng subject và nội dung, Send, Send and Delete). Mỗi lần bấm lưu biên nhận giao diện (chữ của nút, toạ độ, thời điểm).
+- Số lượt: 4 thao tác, mỗi thao tác 5 lượt, tổng 20, xếp xen kẽ theo vòng sync, send_messages, none, recompose. Không bỏ lượt nào; lượt hỏng do đo được ghi lại và không thay thế.
+- Đo sau thao tác, cửa sổ 60 s: số DATA mới ở proxy, số bản và số Message-ID khác nhau ở hộp thư bob, trạng thái Outbox của K-9.
+- Kỳ vọng nêu trước (từ cơ chế K-9 đã mô tả ở §7): sync, send_messages, none không tạo DATA mới và thư vẫn ở Outbox với lỗi; recompose tạo bản thứ hai với Message-ID mới. Kết quả nào khác cũng được báo đúng như đo.
+- Ngoài phạm vi lần này: theo dõi không người dùng từ 20 phút trở lên (phần còn lại của R19), ghi là chưa làm.
+- Đầu ra: `artifact/results/real/audit/k9_action_audit.csv` (file mới, cột `action`), sinh bằng `testbed/k9_audit_table.py`; receipt từng lượt ở `testbed/runs/b12/` (không commit).
