@@ -120,7 +120,7 @@ def trial(args):
 
     reset = k9_reset.reset(args.adb, args.serial, args.config, args.output, args.adb_server_port, args.java)
     if reset['verdict'] != 'PASS':
-        raise SystemExit('reset failed: ' + json.dumps(reset['checks']))
+        raise RuntimeError('reset failed: ' + json.dumps(reset['checks']))
     nonce = 'gx:' + ''.join(random.SystemRandom().choice(CROCKFORD) for _ in range(6))
     shell(f"am start -W -a android.intent.action.SENDTO -d 'mailto:bob@test.invalid?subject={nonce}' "
           f"--es android.intent.extra.TEXT 'synthetic test message' -n {k9_reset.PACKAGE}/.activity.MessageCompose")

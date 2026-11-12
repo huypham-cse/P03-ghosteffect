@@ -4,7 +4,7 @@
   "kind": "emulator measurement (scripted actions, no LLM)",
   "task": "B-12 (R19, YC-B8)",
   "design": "frozen in team/b-log.md at commit bd52fe1 before any result; amendment for 16 make-up trials logged at commit d3637de before they ran",
-  "command": "python testbed/k9_fault_case.py --config nosent --observe 10 --action <action> --action-window 60 --output testbed/runs/b12/audit/tNN-<action>; python testbed/k9_audit_table.py testbed/runs/b12/audit --output <this file>",
+  "command": "python testbed/k9_fault_case.py --config nosent --adb runtime/android-sdk/platform-tools/adb.exe --observe 10 --action <action> --action-window 60 --output testbed/runs/b12/audit/tNN-<action> (t01 to t20 at commit bd52fe1 also passed --journal testbed/runs/b12/proxy.jsonl, the journal of one external proxy; t21 to t36 at commit d3637de run their own proxy per trial); then python testbed/k9_audit_table.py testbed/runs/b12/audit --output <this file>",
   "order": "interleaved rounds of sync, send_messages, none, recompose; t01 to t20 first run, t21 to t36 make-up run",
   "trials": 36,
   "valid": 20,
@@ -17,5 +17,9 @@
     "avd": "API 33 r17 x86_64, emulator 37.2.13, -gpu host, Windows 11 WHPX host",
     "window_s": 60
   },
-  "date": "2026-11-12"
+  "date": "2026-11-12",
+  "code_versions": {
+    "t01-t20": "bd52fe1 (external proxy, forwarder not disabled)",
+    "t21-t36": "d3637de (per-trial proxy, forwarder disabled and focus checked at reset)"
+  }
 }

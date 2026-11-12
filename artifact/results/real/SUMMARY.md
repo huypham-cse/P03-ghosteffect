@@ -547,7 +547,9 @@ force-stop and relaunch (the campaign 2 order). Then one scripted action, with a
 window: `sync` (menu, Sync account), `send_messages` (menu, Outbox, More options, Send messages), `none`, `recompose`
 (same subject and text, Send, Send and Delete). Interleaved, 5 valid trials per action; the design was committed before
 any result. 16 further trials failed before their action (an AndroidWorld forwarder crash dialog, then a stale proxy arm)
-and are kept with `valid=0`.
+and are kept with `valid=0`. The design said failed trials are not replaced; an amendment, committed before they ran,
+added 16 make-up trials in the same order. t01 to t04 ran with one external proxy for all trials, t21 to t36 with a
+fresh in-process proxy per trial and the forwarder disabled at reset; the fault order, window and actions are the same.
 
 | Action | Valid | New DATA after the action | Server copies | Distinct Message-IDs | Still `error` in the Outbox |
 |---|---|---|---|---|---|

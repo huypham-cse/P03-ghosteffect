@@ -52,16 +52,20 @@ folder assigned manually) and `k9-nosent.tar` (made from it by removing the Sent
 Without a Sent folder, K-9 24.0 asks "Sent folder not found" on every send and sends only after "Send and Delete".
 
 ```bash
-python testbed/faultproxy.py --protocol smtp --upstream smtp://127.0.0.1:3025 --listen-port 14025 --control-port 19025 --journal testbed/runs/proxy.jsonl
 python testbed/k9_reset.py --config nosent --adb runtime/android-sdk/platform-tools/adb.exe --output testbed/runs/reset-01
 python testbed/k9_fault_case.py --config sent --adb runtime/android-sdk/platform-tools/adb.exe --output testbed/runs/fault-01
 ```
 
-`k9_reset.py` restores the clean copy, relabels it for SELinux, restarts GreenMail empty and checks nine
-conditions, including that K-9 holds the focus. `k9_fault_case.py` runs its own SMTP proxy and drops the SMTP reply after GreenMail returned 250, waits until K-9 records the
-error, force-stops and relaunches K-9, then grades from the server. With `--action` (`sync`, `send_messages`,
-`none`, `recompose`) and `--journal` it also performs one user action and counts what reaches the server;
-`k9_audit_table.py` collects those receipts into a CSV.
+`k9_reset.py` disables the AndroidWorld accessibility forwarder (its crash dialog otherwise covers K-9), restores
+the clean copy, relabels it for SELinux, restarts GreenMail empty and checks nine conditions, including that K-9
+holds the focus. `k9_fault_case.py` runs its own SMTP fault proxy and control server on ports 14025 and 19025,
+so no other proxy may listen there; it drops the SMTP reply after GreenMail returned 250, waits until K-9 records
+the error, force-stops and relaunches K-9, then grades from the server. With `--action` (`sync`, `send_messages`,
+`none`, `recompose`) it also performs one user action, with a UI receipt per tap, and counts what reaches the
+server in `--action-window` seconds; `k9_audit_table.py` collects those receipts into a CSV. A failed trial writes
+`RESULT.json` with verdict `INVALID`. To send mail by hand through the proxy, run `faultproxy.py` yourself
+(`--protocol smtp --upstream smtp://127.0.0.1:3025 --listen-port 14025 --control-port 19025`) and stop it before
+running these scripts.
 
 ## LLM-agent episodes
 

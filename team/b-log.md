@@ -207,3 +207,9 @@ Khớp kỳ vọng đã ghi trước. Dữ liệu: `artifact/results/real/audit/
 **B-16 (phần tài liệu):** `testbed/README.md` viết mới bằng tiếng Anh; bản tiếng Việt đổi tên thành `testbed/README.vi.md`. Còn lại: `team/scrub_check.sh` vẫn báo nhầm `email` với địa chỉ `@test.invalid` (README, CSV audit), chờ C sửa theo review #12; `make_bundle.sh` (C-12) cần loại `testbed/README.vi.md` và `testbed/RUNBOOK_B.md` (tiếng Việt, có IP server).
 
 **B-15:** `bench_ledger.py` dùng `signal.SIGKILL`, không chạy trên Windows; máy B chưa có WSL (`wsl --status`: chưa cài). Cần trưởng nhóm cài WSL bằng quyền admin rồi khởi động lại máy; sau đó B đo lại ledger và viết lại §6.
+
+## 12/11/2026 (B-12, sau review độc lập của PR #36)
+
+- Trước khi chốt thiết kế, có một lượt dò đường `testbed/runs/b12/explore-01` (lỗi mất phản hồi không kèm thao tác, rồi bấm tay vào Outbox để tìm nút "Send messages"). Lượt này không có kết quả thao tác nào và không nằm trong CSV.
+- B-12 ghi là chạy sau B-09 để không tranh AVD; vì B-09 đang bị chặn (server không vào được) nên audit chạy trước, trên cùng AVD nhưng không có episode agent nào chạy song song.
+- Sửa theo review: README bỏ bước bật proxy ngoài (trùng cổng với proxy riêng của `k9_fault_case.py`) và bỏ chữ `--journal`; lỗi reset giờ cũng ghi `RESULT.json` INVALID; reset chỉ bấm BACK khi đúng là hộp thoại lỗi; `render_real.py` kiểm cấu hình nosent và chuỗi bấm của từng thao tác; §7 nói rõ cửa sổ 60 s không phủ poll 15 phút và số lượt hợp lệ trên số lượt thử (macro `\RealAuditAttemptsN`); `SUMMARY.md` (đoạn mới) ghi bản điều chỉnh và hai phiên bản code; `.meta.json` ghi đủ lệnh; thêm test cho `k9_audit_table.py`.

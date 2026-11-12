@@ -127,11 +127,12 @@ def reset(adb_path, serial, config, output, adb_server_port='5038', java='java')
             break
         time.sleep(.5)
     focus = ''
-    for _ in range(3):   # a system error dialog left over K-9 takes the focus; BACK closes it
+    for _ in range(4):   # a system error dialog left over K-9 takes the focus; BACK closes only that dialog
         focus = next((l.strip() for l in run('shell', 'dumpsys', 'window').splitlines() if 'mCurrentFocus' in l), '')
         if PACKAGE + '/' in focus:
             break
-        run('shell', 'input', 'keyevent', 'KEYCODE_BACK')
+        if 'Application Error' in focus or 'Application Not Responding' in focus:
+            run('shell', 'input', 'keyevent', 'KEYCODE_BACK')
         time.sleep(1)
     notifications = run('shell', 'dumpsys', 'notification').count(f'pkg={PACKAGE}')
     reverse = run('reverse', '--list')
