@@ -28,6 +28,7 @@ from setup_assets import sha
 ROOT = Path(__file__).resolve().parents[1]
 PACKAGE = 'com.fsck.k9'
 LAUNCH = PACKAGE + '/.activity.MessageHomeActivity'
+FORWARDER = 'com.google.androidenv.accessibilityforwarder'
 DATA = '/data/data/' + PACKAGE
 ARCHIVE = '/data/local/tmp/ghosteffect/k9-%s.tar'
 GREENMAIL_PID = ROOT / 'runtime' / 'greenmail.pid'
@@ -100,6 +101,9 @@ def reset(adb_path, serial, config, output, adb_server_port='5038', java='java')
     if run('shell', 'whoami') != 'root':
         run('root')
         run('wait-for-device')
+    # AndroidWorld's accessibility forwarder crashes ("keeps stopping") whenever no AndroidWorld session holds
+    # its gRPC server, and the dialog covers K-9 (b-log 12/11). agent_episode.py re-enables it after this reset.
+    run('shell', 'settings put secure enabled_accessibility_services "" && am force-stop ' + FORWARDER)
     archive = ARCHIVE % config
     restore = (f'am force-stop {PACKAGE} && test -f {archive} && rm -rf {DATA}/* && '
                f'tar -xpf {archive} -C /data/data && chcon -R "$(stat -c %C {DATA})" {DATA} && '
@@ -122,6 +126,13 @@ def reset(adb_path, serial, config, output, adb_server_port='5038', java='java')
         if PACKAGE + '/' in top:
             break
         time.sleep(.5)
+    focus = ''
+    for _ in range(3):   # a system error dialog left over K-9 takes the focus; BACK closes it
+        focus = next((l.strip() for l in run('shell', 'dumpsys', 'window').splitlines() if 'mCurrentFocus' in l), '')
+        if PACKAGE + '/' in focus:
+            break
+        run('shell', 'input', 'keyevent', 'KEYCODE_BACK')
+        time.sleep(1)
     notifications = run('shell', 'dumpsys', 'notification').count(f'pkg={PACKAGE}')
     reverse = run('reverse', '--list')
     checks = dict(archive_restored=len(archive_sha) == 64,
@@ -130,11 +141,12 @@ def reset(adb_path, serial, config, output, adb_server_port='5038', java='java')
                   mailboxes_empty=all(n == 0 for boxes in mailboxes.values() for n in boxes.values()),
                   server_sent_folder=('Sent' in mailboxes['alice']) == (config == 'sent'),
                   k9_on_top=PACKAGE + '/' in top,
+                  k9_focused=PACKAGE + '/' in focus,
                   no_k9_notifications=notifications == 0,
                   reverse_ports=all(f'tcp:{p}' in reverse for p in REVERSE_PORTS))
     return dict(verdict='PASS' if all(checks.values()) else 'FAIL', config=config, checks=checks,
                 archive=archive, archive_sha256=archive_sha, k9_messages_outbox_pending=k9_rows,
-                greenmail_pid=pid, mailboxes=mailboxes, top_activity=top, utc_ns=time.time_ns())
+                greenmail_pid=pid, mailboxes=mailboxes, top_activity=top, focus=focus, utc_ns=time.time_ns())
 
 
 def main():

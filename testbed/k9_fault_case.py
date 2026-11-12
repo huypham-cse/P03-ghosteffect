@@ -7,7 +7,10 @@ error, force-stop K-9 and relaunch it (campaign 2 order). After
 --observe seconds, grade from the server (bob's Inbox copies, alice's Sent)
 and read K-9's own store (root). Expected: one server copy, K-9 keeps the mail
 in its Outbox with an error, and with config sent the Sent folder stays empty.
-Needs the SMTP fault proxy (listen 14025, control 19025) already running.
+Runs its own SMTP fault proxy (listen 14025, control 19025) with the journal in
+the output, so a failed trial never leaves an armed proxy behind; do not run
+another proxy on those ports at the same time. A failed trial still writes
+RESULT.json with verdict INVALID.
 """
 import argparse
 import json
@@ -15,6 +18,7 @@ import os
 import random
 import re
 import subprocess
+import threading
 import time
 import xml.etree.ElementTree as ET
 from argparse import Namespace
@@ -22,6 +26,7 @@ from pathlib import Path
 
 import k9_reset
 import run_case
+from faultproxy import Journal, Faults, smtp_proxy, control_server
 from grader import imap_count
 
 # Tap targets on the 1080x2400 test AVD.
@@ -80,17 +85,33 @@ def main():
     parser.add_argument('--adb', required=True)
     parser.add_argument('--adb-server-port', default='5038')
     parser.add_argument('--serial', default='emulator-5580')
-    parser.add_argument('--control', default='http://127.0.0.1:19025')
     parser.add_argument('--java', default='java')
     parser.add_argument('--observe', type=float, default=60, help='seconds after relaunch before grading')
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--action', choices=ACTIONS, help='B-12 audit: one user action after the fault')
     parser.add_argument('--action-window', type=float, default=60, help='seconds after the action before grading')
-    parser.add_argument('--journal', type=Path, help='journal of the running SMTP fault proxy (counts DATA)')
     args = parser.parse_args()
-    if args.action and not args.journal:
-        parser.error('--action needs --journal to count new DATA')
     args.output.mkdir(parents=True, exist_ok=False)
+    args.control, args.journal = 'http://127.0.0.1:19025', args.output / 'proxy.jsonl'
+    faults = Faults(Journal(args.journal), barrier_timeout=60)
+    servers = [smtp_proxy(('127.0.0.1', k9_reset.SMTP_PORT), faults, listen=('127.0.0.1', 14025)),
+               control_server(faults, listen=('127.0.0.1', 19025))]
+    for server in servers:
+        threading.Thread(target=server.serve_forever, kwargs={'poll_interval': .05}, daemon=True).start()
+    try:
+        trial(args)
+    except Exception as exc:
+        (args.output / 'RESULT.json').write_text(json.dumps(dict(
+            verdict='INVALID', config=args.config, action=args.action, error_type=type(exc).__name__,
+            reason=str(exc), utc_ns=time.time_ns()), indent=2))
+        raise
+    finally:
+        for server in servers:
+            server.shutdown()
+            server.server_close()
+
+
+def trial(args):
     os.environ['ANDROID_ADB_SERVER_PORT'] = args.adb_server_port   # ui.ADB reads the server port from env
     adb = [str(Path(args.adb).resolve()), '-P', args.adb_server_port, '-s', args.serial]
 

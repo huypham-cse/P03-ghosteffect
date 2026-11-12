@@ -182,3 +182,11 @@ A đọc thẳng `label_cost.csv` cho `\CertLabelMedS` (theo hợp đồng của
 - Kỳ vọng nêu trước (từ cơ chế K-9 đã mô tả ở §7): sync, send_messages, none không tạo DATA mới và thư vẫn ở Outbox với lỗi; recompose tạo bản thứ hai với Message-ID mới. Kết quả nào khác cũng được báo đúng như đo.
 - Ngoài phạm vi lần này: theo dõi không người dùng từ 20 phút trở lên (phần còn lại của R19), ghi là chưa làm.
 - Đầu ra: `artifact/results/real/audit/k9_action_audit.csv` (file mới, cột `action`), sinh bằng `testbed/k9_audit_table.py`; receipt từng lượt ở `testbed/runs/b12/` (không commit).
+
+## 12/11/2026 (B-12, điều chỉnh trước khi chạy bổ sung)
+
+**Sự cố ở lượt chạy đầu (t01 đến t20):** t01 đến t04 hợp lệ. Ở t05, hộp thoại "accessibilityforwarder keeps stopping" của AndroidWorld (dịch vụ còn bật từ lần chạy thử B-06) che K-9, nên `run_case.py` dừng ở bước chụp màn hình trước khi bấm Send, sau khi đã arm proxy. Proxy ngoài giữ arm chưa nhả, nên t06 đến t20 đều bị từ chối arm (HTTP 400). Cả 16 lượt hỏng **trước thao tác**, không mang thông tin kết quả.
+
+**Sửa:** `k9_reset.py` tắt dịch vụ forwarder, đóng hộp thoại lỗi còn sót và kiểm thêm điều kiện K-9 giữ focus (9 điều kiện). `k9_fault_case.py` tự chạy proxy và control riêng cho từng lượt (journal trong thư mục lượt), lượt hỏng vẫn ghi `RESULT.json` với `INVALID`; bỏ tham số `--control`, `--journal`.
+
+**Điều chỉnh thiết kế (ghi trước khi chạy bổ sung):** 16 lượt hỏng giữ trong CSV với `valid=0` và lý do; chạy bổ sung t21 đến t36 theo đúng vòng xen kẽ sync, send_messages, none, recompose (4 vòng) để mỗi thao tác đủ 5 lượt hợp lệ. Cửa sổ, cấu hình và kỳ vọng không đổi. Nếu bổ sung có lượt hỏng nữa thì cũng giữ lại và báo, không chạy thêm quá một vòng.
