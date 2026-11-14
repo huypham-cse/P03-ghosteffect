@@ -1,4 +1,4 @@
-# Runbook phần B: chạy LLM agent với server H100 80GB
+# Runbook phần B: chạy LLM agent trên GPU thuê (AWS g6e.xlarge)
 
 Làm theo thứ tự, mỗi bước có lệnh và điều kiện qua. Chạy lệnh từ thư mục gốc repo. Ghi mọi việc đã làm vào `team/b-log.md` theo luật 1.8.
 
@@ -20,63 +20,93 @@ platform-tools đổi từ 37.0.2 sang 37.0.1 vì bản 37.0.2 Google còn liệ
 
 Máy local: Windows 11, 8 luồng CPU, 31,5 GB RAM, Intel Arc 140V, Java 21, ổ C còn khoảng 30 GB.
 
-## 1. Lịch theo cửa sổ GPU
+## 1. Plan theo giờ (máy AWS, 14/11)
 
-Server 80GB chỉ được dùng **10/11 đến 13/11**, đợt sau là 26/11 (sau hạn 19/11 của phần B). Vì vậy mọi lượt chạy cần model phải xong trong bốn ngày này:
+Server 80GB và 40GB không vào được từ 10/11. Nhóm thuê một máy AWS. Cấu hình chốt là `g5.xlarge`, nhưng máy được tạo (14/11) là `g6e.xlarge` (1 GPU L40S 48 GB, 4 vCPU, 30 GB RAM), us-east-1, Ubuntu 24.04 thường (không phải Deep Learning AMI, nên chưa có driver NVIDIA), ổ 300 GB, SSH chỉ mở cho IP của máy local. Trưởng nhóm chọn giữ máy này. AWS tính tiền theo giây khi máy bật, nên mọi việc không cần GPU làm trước hoặc sau, và tắt máy (Stop) ngay khi xong.
 
-| Ngày | Server | Local |
+**Trước khi có máy (không tốn tiền):**
+
+| Việc | Lệnh | Qua khi |
 |---|---|---|
-| 10/11 | Mục 2 và 3: kiểm máy, cài vLLM, tải Qwen, chạy model | Mục 4 đến 6: tunnel, smoke AVD có K-9, một episode M3A thử (B-05); K-9 profile và reset (B-03), tái hiện lỗi bằng script (B-04) |
-| 11/11 | Model chạy suốt ngày | Harness tiêm lỗi (B-06), A-dev 10 episode (B-07), commit freeze (B-08) |
-| 12/11 | Model chạy suốt ngày | 20 episode chính thức (B-09) |
-| 13/11 | Model chạy suốt ngày | Chạy thêm nếu dưới 10 episode hợp lệ; còn thời gian thì audit K-9 (B-12, không cần GPU) |
-| 14/11 đến 19/11 | Không cần | Xử lý dữ liệu, viết phần agent, làm sạch testbed (B-10, B-13 đến B-16) |
+| Gộp PR có `server_gpu.sh`, `fake_model.py`, `run_agent_study.py`, `make_freeze.py`, `collect_agent.py`, `check_agent_data.py`, `render_agent.py` | | main có các file này |
+| Tổng duyệt trên emulator với model giả (mục 6f) | `fake_model.py` và `agent_episode.py` | 1 episode dev ra kết quả hợp lệ, 1 episode có lỗi ra `RESENT_DUPLICATE` |
+| Thêm máy vào `~/.ssh/config` khi biết IP (mục 2) | | `ssh ghost-gpu true` chạy được |
 
-Các hạn này đã ghi trong `team/CONTRIBUTOR_FIXED.md` (cập nhật 09/11/2026).
+**Ngày có máy (máy bật, tính tiền):**
 
-## 2. Mỗi sáng: server đã mở chưa
+| Giờ (ước tính) | Server | Local |
+|---|---|---|
+| 0:00 đến 0:45 | Mục 3: chép code, `check`, `setup` (cài vLLM khoảng 10 phút, tải Qwen khoảng 5 phút), `serve` (nạp model và biên dịch 5 đến 10 phút) | Bật AVD sớm và để chạy vài phút (lỗi a11y chỉ gặp ngay sau cold boot); mở tunnel khi có `MODEL_SERVING_READY` |
+| 0:45 đến 1:15 | Model chạy | Một episode dev đầu tiên, ngồi xem (`--dev-n 1`) |
+| 1:15 đến 2:30 | Model chạy | 9 episode dev còn lại (B-07). Dưới 6/10 thành công thì báo trưởng nhóm trước khi đi tiếp, và Stop máy trong lúc chờ |
+| 2:30 đến 2:45 | Model chạy (Stop nếu chờ gộp quá 30 phút; freeze không phụ thuộc phiên server) | `make_freeze.py`, commit, PR, trưởng nhóm gộp, `git fetch` (B-08). Runner chỉ chạy scheduled khi freeze đã nằm trong `origin/main` và khớp code, task, profile GPU |
+| 2:45 đến khoảng 6:30 | Model chạy | `run_agent_study.py --phase scheduled`: 20 episode khoảng 10 phút mỗi episode, chạy thêm nếu dưới 10 hợp lệ (B-09). Báo C số đếm thô ngay khi xong |
+| Xong | **Stop máy ngay** | `collect_agent.py`, `check_agent_data.py`, render, viết B-10 và B-11 |
 
-```bash
-ssh -p 52194 -o ConnectTimeout=15 root@103.73.232.225 'nvidia-smi -L'
+Tổng thời gian máy bật khoảng 6 đến 8 giờ, tức khoảng 11 đến 15 USD với g6e.xlarge ở us-east-1 (1,861 USD/giờ). Giữ ổ đĩa (máy ở trạng thái Stop) đến khi nghiệm thu xong ngày 21/11 phòng phải chạy lại, rồi Terminate.
+
+`server_gpu.sh` tự chọn profile theo GPU (`l40s` trên máy này, `a10g` nếu sau này đổi sang g5). Mọi episode scheduled phải chạy trên cùng một loại máy, vì freeze ghi `gpu_profile`; không đổi instance type sau khi freeze.
+
+## 2. Kết nối máy AWS
+
+Key `MobiSYS.pem` do người tạo máy gửi; để ở `~/.ssh/`, ngoài repo, chỉ tài khoản mình đọc được (Windows: `icacls <file> /inheritance:r /grant:r "<user>:R"`). Thêm vào `~/.ssh/config` (IP lấy trên EC2 console; IP đổi sau mỗi lần Stop rồi Start, khi đó sửa dòng `HostName`):
+
+```
+Host ghost-gpu
+    HostName <IP của máy EC2>
+    User ubuntu
+    IdentityFile ~/.ssh/MobiSYS.pem
+    IdentitiesOnly yes
+    ServerAliveInterval 30
 ```
 
-Qua khi in ra một GPU H100. `~/.ssh/config` đã có sẵn user `root` và khóa `id_ed25519` cho địa chỉ này. Không vào được thì ghi vào `b-log.md` và báo ngay trên nhóm chat.
+```bash
+ssh -o ConnectTimeout=15 ghost-gpu 'nvidia-smi -L'
+```
+
+Qua khi in ra một GPU L40S (sau bước `setup`; trước đó máy chưa có driver). SSH bị treo thì kiểm security group có mở cổng 22 cho đúng IP local không.
 
 ## 3. Server: chép code, cài, chạy model
 
-Chép code lên server (cách này chạy được cả khi repo đã chuyển sang private):
+Chép code lên server (cách này chạy được cả khi repo đã chuyển sang private). Trên Windows phải có `-c core.autocrlf=false`: không có nó, `git archive` đổi xuống dòng sang CRLF và bash trên server báo `set: pipefail: invalid option name`.
 
 ```bash
-git archive HEAD | ssh -p 52194 root@103.73.232.225 'mkdir -p ~/P03 && tar -x -C ~/P03'
+git -c core.autocrlf=false archive HEAD | ssh ghost-gpu 'mkdir -p ~/P03 && tar -x -C ~/P03'
 ```
 
 Vào server, mở `tmux` để model không tắt khi rớt SSH:
 
 ```bash
-ssh -p 52194 root@103.73.232.225
+ssh ghost-gpu
 tmux new -s qwen
 cd ~/P03
-bash testbed/server_h100.sh check     # phải thấy một H100 khoảng 80 GB; ghi lại KVM, RAM, ổ đĩa
-bash testbed/server_h100.sh setup     # venv vLLM 0.11.0 và tải khoảng 16,6 GB trọng số Qwen, kiểm từng file
-bash testbed/server_h100.sh serve     # chờ dòng MODEL_SERVING_READY
+bash testbed/server_gpu.sh check     # GPU, profile (a10g/l40s/h100), RAM, ổ đĩa, Python phải dưới 3.14
+bash testbed/server_gpu.sh setup     # driver NVIDIA nếu thiếu, python3-venv, gcc và python3-dev (Triton biên dịch module C lúc vLLM khởi động), venv vLLM 0.11.0, khoảng 16,6 GB trọng số Qwen, kiểm từng file
+bash testbed/server_gpu.sh serve     # chờ dòng MODEL_SERVING_READY
 ```
 
-Qua khi thấy `MODEL_SERVING_READY testbed/runs/serve-<ngày giờ>/SERVING.json`. Thoát tmux bằng `Ctrl-b` rồi `d`; model vẫn chạy. Nếu server bị dọn sạch giữa các đợt thì chạy lại `setup`.
+Trên AMI Ubuntu thường, lần `setup` đầu cài driver 580-server dựng sẵn cho đúng kernel rồi dừng ở dòng `driver installed but not loaded` vì nouveau đang giữ card: `sudo reboot` (reboot không đổi IP), chờ khoảng một phút, chạy lại `setup`.
+
+Qua khi thấy `MODEL_SERVING_READY testbed/runs/serve-<ngày giờ>/SERVING.json`. Thoát tmux bằng `Ctrl-b` rồi `d`; model vẫn chạy. Lỗi thì `serve_model.py` in `FAILED <loại lỗi>: <thông báo>` và ghi vào `SERVING.json`; log của vLLM ở `testbed/runs/serve-*/server.log`.
+
+Profile bộ nhớ (trong `serve_model.py`) chỉ đổi phần bộ nhớ vLLM giữ và số yêu cầu chạy song song, không đổi model, ngữ cảnh 32768 hay cách xử lý ảnh: A10G dùng 90% bộ nhớ GPU và 1 yêu cầu một lúc (mỗi episode chỉ gửi một yêu cầu một lúc); L40S và H100 dùng 85% và 2. Ảnh giới hạn `max_pixels=3211264` để vLLM không phải giữ chỗ cho ảnh 16384 token; ảnh chụp 1080x2400 sau khi làm tròn là 2629536 điểm ảnh, dưới mức đó, nên không ảnh nào bị thu nhỏ.
 
 ## 4. Local: tunnel và receipt
 
 Mở một terminal riêng và giữ nó mở trong lúc chạy episode:
 
 ```bash
-ssh -N -L 8101:127.0.0.1:8101 -p 52194 root@103.73.232.225
+ssh -N -L 8101:127.0.0.1:8101 ghost-gpu
 ```
 
 Ở terminal khác:
 
 ```bash
 curl -s http://127.0.0.1:8101/version          # phải là 0.11.0
-scp -P 52194 'root@103.73.232.225:~/P03/testbed/runs/serve-*/SERVING.json' testbed/runs/SERVING.json
+scp 'ghost-gpu:~/P03/testbed/runs/serve-<ngày giờ>/SERVING.json' testbed/runs/SERVING.json   # đúng thư mục in ở dòng MODEL_SERVING_READY
 ```
+
+`run_agent_study.py` kiểm endpoint trước mỗi episode; tunnel chết thì nó dừng hẳn, không tiêu lượt chạy. Tunnel rớt giữa một episode thì episode đó ghi `measurement_error` và được chạy lại lần 2; lỗi đo hai lần liên tiếp thì runner dừng để tìm nguyên nhân. Mở lại tunnel rồi chạy lại đúng lệnh; episode đã xong được bỏ qua.
 
 ## 5. Local: smoke AVD có K-9 và forwarder
 
@@ -165,31 +195,57 @@ runtime/agent-venv/Scripts/python.exe testbed/agent_episode.py --framework scrip
 
 Kỳ vọng: `scripted-redo` ra `RESENT_DUPLICATE` (2 Message-ID), `scripted-stop` ra `DECLARED_DONE_NO_RESEND`.
 
-A-dev (B-07) và A-native (B-09) với model:
+A-dev (B-07), freeze (B-08), A-native (B-09) với model, chạy bằng Python của agent venv. Task chốt ở `testbed/agent_goal.txt`.
 
 ```bash
-runtime/agent-venv/Scripts/python.exe testbed/agent_episode.py --framework m3a --config nosent --fault none --phase dev --episode-id dev-01 --goal-file testbed/runs/goal.txt --tag gx:<6 ký tự> --serving-receipt testbed/runs/SERVING.json --adb runtime/android-sdk/platform-tools/adb.exe --output testbed/runs/dev-01
-runtime/agent-venv/Scripts/python.exe testbed/agent_episode.py --framework m3a --config sent --fault drop-forcestop --phase scheduled --episode-id s01 --scheduled-index 1 --goal-file testbed/runs/goal.txt --tag gx:<6 ký tự> --serving-receipt testbed/runs/SERVING.json --adb runtime/android-sdk/platform-tools/adb.exe --output testbed/runs/s01
+runtime/agent-venv/Scripts/python.exe testbed/run_agent_study.py --phase dev --dev-n 1 --serving-receipt testbed/runs/SERVING.json --adb runtime/android-sdk/platform-tools/adb.exe
+runtime/agent-venv/Scripts/python.exe testbed/run_agent_study.py --phase dev --serving-receipt testbed/runs/SERVING.json --adb runtime/android-sdk/platform-tools/adb.exe
+runtime/agent-venv/Scripts/python.exe testbed/make_freeze.py --serving-receipt testbed/runs/SERVING.json --goal-file testbed/agent_goal.txt --host "<máy model>; <máy AVD>" --adb runtime/android-sdk/platform-tools/adb.exe
+# commit testbed/agent_study.freeze.json, PR, trưởng nhóm gộp, rồi:
+runtime/agent-venv/Scripts/python.exe testbed/run_agent_study.py --phase scheduled --serving-receipt testbed/runs/SERVING.json --adb runtime/android-sdk/platform-tools/adb.exe
 ```
 
-## 7. Chưa có, phải làm trong đợt server
+Episode dev là `dev-01` đến `dev-10` (không lỗi, xen kẽ hai cấu hình). Episode scheduled theo đúng thứ tự và tag trong freeze: `s01` đến `s20`, `sNN-r2` là lần chạy lại sau lỗi đo, `s21` trở đi chỉ khi dưới 10 hợp lệ. Lệnh `scheduled` từ chối chạy nếu freeze chưa commit. Bị ngắt giữa chừng thì chạy lại đúng lệnh; episode đã có kết quả được bỏ qua, thư mục dở dang thì dời sang chỗ khác và ghi vào b-log. `--host` không ghi gì lộ danh tính, ví dụ `one NVIDIA L40S (48 GB) cloud VM; x86-64 laptop running the Android emulator (API 33)`.
 
-- **Lỗi a11y tree:** chỉ gặp ngay sau cold boot; chờ AVD chạy vài phút rồi mới bắt đầu. Khi không có phiên AndroidWorld nào đang chạy, forwarder mất server gRPC và hiện hộp thoại "keeps stopping"; tắt nó bằng `adb shell settings put secure enabled_accessibility_services '""'`.
-- **Nối M3A với model thật:** chạy mục 6 khi có tunnel.
-- **Harness tiêm lỗi (B-06):** đã viết (mục 6d) và chạy thử trên AVD bằng agent giả lập ngày 10/11, 4/4 đúng kỳ vọng (`testbed/runs/b06/dry-01` đến `dry-04`). Phần chưa thử được là với M3A thật: chặn ở lệnh gọi model (giả lập chỉ thử chặn ở thao tác), đếm token, thời gian mỗi bước. Episode M3A đầu tiên nên là A-dev.
-- **Checker dữ liệu `testbed/check_agent_data.py` và test của nó** (YC-B4).
+Sau khi chạy xong (máy AWS đã Stop):
+
+```bash
+python testbed/collect_agent.py testbed/runs/agent/* --out artifact/results/real/agent
+python testbed/check_agent_data.py artifact/results/real/agent
+python artifact/scripts/render.py
+```
+
+`collect_agent.py` chỉ thêm dòng mới vào `episodes.csv`; `check_agent_data.py` phải in `OK`. Render ghi 44 macro `\Agent*`, `\LabelTrial*` và `generated/tab_agent.tex` (trước khi có dữ liệu thì in `??`).
+
+## 6f. Tổng duyệt với model giả (không cần GPU)
+
+`testbed/fake_model.py` giả làm vLLM ở cổng 8101 và trả lời prompt M3A thật theo một luật cố định (mở soạn thư, điền người nhận, tiêu đề, nội dung từ task, gửi, bấm "Send and Delete" nếu có, báo xong). Receipt của nó có `synthetic: true`, nên `agent_episode.py` ghi `study_data: false`; `make_freeze.py` và `check_agent_data.py` không nhận nó. Mục đích: thử trọn đường M3A, chặn lệnh gọi model ở barrier, đếm token, receipt và chấm điểm, để ngày có máy không mất tiền gỡ những lỗi này.
+
+```bash
+python testbed/fake_model.py --receipt testbed/runs/fake/SERVING.json --delay 6
+runtime/agent-venv/Scripts/python.exe testbed/agent_episode.py --framework m3a --config nosent --fault none --phase dev --episode-id fake-dev-01 --goal-file testbed/agent_goal.txt --tag gx:FAKE01 --serving-receipt testbed/runs/fake/SERVING.json --adb runtime/android-sdk/platform-tools/adb.exe --output testbed/runs/fake/dev-01
+runtime/agent-venv/Scripts/python.exe testbed/agent_episode.py --framework m3a --config nosent --fault drop-forcestop --phase dev --episode-id fake-fault-01 --goal-file testbed/agent_goal.txt --tag gx:FAKE02 --serving-receipt testbed/runs/fake/SERVING.json --adb runtime/android-sdk/platform-tools/adb.exe --output testbed/runs/fake/fault-01
+```
+
+`--delay 6` giả lập khoảng 6 giây mỗi lệnh gọi model (ước tính cho A10G). Kỳ vọng: lượt đầu một bản trên server và `agent_final_status=done`; lượt sau `RESENT_DUPLICATE`. Nếu luật của model giả không khớp màn hình K-9 (ví dụ không nhận ra ô người nhận) thì sửa luật trong `fake_model.py`; đó không phải lỗi của harness.
+
+## 7. Chưa thử được trước khi có máy
+
+- **Lỗi a11y tree:** chỉ gặp ngay sau cold boot; chờ AVD chạy vài phút rồi mới bắt đầu. Khi không có phiên AndroidWorld nào đang chạy, forwarder mất server gRPC và hiện hộp thoại "keeps stopping"; `k9_reset.py` tắt nó, `agent_episode.py` bật lại khi nạp môi trường.
+- **Tốc độ thật của model:** số bước M3A làm được trong `H_eval = 300 s` chỉ biết khi chạy dev.
 
 ## 8. Cuối mỗi ngày
 
-- Trên server: vào lại `tmux attach -t qwen`, `Ctrl-C` để tắt model. Không tắt nếu hôm sau vẫn trong đợt và cần chạy tiếp.
+- Trên server: vào lại `tmux attach -t qwen`, `Ctrl-C` để tắt model, rồi **Stop máy trên EC2 console**. Máy chỉ bật khi đang chạy episode.
 - Ở local: tắt tunnel và AVD.
-- Ghi vào `team/b-log.md`: đã chạy gì, lỗi gì, đường dẫn receipt.
+- Ghi vào `team/b-log.md`: đã chạy gì, lỗi gì, đường dẫn receipt, giờ bật và tắt máy.
 
 ## 9. Khi có sự cố
 
-- **Server không mở trong đợt:** báo ngay, xin đổi lịch hoặc thêm ngày. Server 40GB không dùng thay được nếu không sửa code, vì `serve_model.py` chỉ chấp nhận một H100 từ 75 GB trở lên.
+- **vLLM hết bộ nhớ GPU:** không tự hạ ngữ cảnh hay đổi cách xử lý ảnh; ghi log và báo trưởng nhóm.
 - **vLLM báo lỗi CUDA hoặc driver:** ghi lại `nvidia-smi` và log trong `testbed/runs/serve-*/server.log`; không đổi phiên bản vLLM hay model khi chưa báo trưởng nhóm.
-- **Hết dung lượng:** trọng số Qwen khoảng 16,6 GB, venv vLLM khoảng 10 GB.
+- **Hết dung lượng:** trọng số Qwen khoảng 16,6 GB, venv vLLM khoảng 10 GB; ổ 300 GB thừa.
+- **SSH treo sau khi Start lại máy:** IP của máy EC2 đã đổi; sửa `HostName` trong `~/.ssh/config`.
 
 ## 6e. Audit thao tác K-9 (B-12)
 

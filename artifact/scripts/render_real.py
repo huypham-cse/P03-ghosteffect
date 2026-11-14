@@ -317,6 +317,8 @@ $^{\S}$Force-stop clears the app's notifications. The shade was cleared between 
 
     # ------------------------------------------------------------------ prose hooks
     M('RealDataLimitation', r'Emulator measurements (\S\ref{sec:eval-real}) cover three apps on an emulator, with $n$ small outside Element; agents, physical phones, VLMs and the commit classifier are not measured.')
+    exec(open(os.path.join(HERE, 'render_agent.py'), encoding='utf-8').read(), globals())
+    render_agent()   # \Agent*, \LabelTrial* (B-10, B-11); ?? until artifact/results/real/agent/ exists
     M('RealPresent', 'yes')
     W('real_section.tex', '% emulator measurements present (artifact/results/real/SUMMARY.md): prose in sections/07-real.tex\n'
       '\\input{sections/07-real}\n')
