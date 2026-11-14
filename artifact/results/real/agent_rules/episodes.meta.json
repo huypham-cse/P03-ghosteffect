@@ -1,0 +1,17 @@
+{
+  "file": "episodes.csv",
+  "sha256": "c1a48ec7f8cb2ef310520c4b5639b8bd0b1f7f20ef258f79d7c9bf5b4e23ef9c",
+  "kind": "LLM-agent experiment on the emulator, rules arm (M3A on Qwen2.5-VL-7B-Instruct with the same-evidence rule cascade at the action boundary)",
+  "task": "B-10 rules arm (lead request 15/11/2026)",
+  "freeze": "testbed/agent_study_rules.freeze.json, sha256 dea3e1feca4a2138ae5b483f7046501036e8be2371002b9fb5a888e9c7edafb0, merged in 543b895 before the first scheduled episode",
+  "episodes_command": "runtime/agent-venv/Scripts/python.exe testbed/run_agent_study.py --phase scheduled --guard rules --serving-receipt testbed/runs/SERVING.json --adb runtime/android-sdk/platform-tools/adb.exe --out testbed/runs/agent-rules (run three times: it stopped after two measurement errors at index 9, 10 and 12; see SUMMARY.md)",
+  "collect_command": "python testbed/collect_agent.py testbed/runs/agent-rules/* --out artifact/results/real/agent_rules --freeze testbed/agent_study_rules.freeze.json",
+  "check_command": "python testbed/check_agent_data.py artifact/results/real/agent_rules --freeze testbed/agent_study_rules.freeze.json",
+  "git_commit": "543b89588f90611d0a6bf2bdd6a13443d87d01c3 (the scheduled runs used branch b/rules-arm at 899e3cb, whose files the freeze hashes)",
+  "seed": "episode order, subject tags and simulated-user errors drawn once by make_freeze.py --guard rules; decoding temperature 0, top_p 1, server seed 0",
+  "python": "episodes: 3.11.8 (agent venv); collect: 3.14.0",
+  "date": "2026-11-15",
+  "host": "one NVIDIA L40S (48 GB) cloud VM serving the model (vLLM 0.11.0, BF16); x86-64 laptop running the Android emulator (API 33; 2 GB guest RAM up to index 12, 4 GB from index 13)",
+  "comparison": "artifact/results/real/agent_guarded, Sent-configuration episodes",
+  "rows": "24: rdev-01 (phase dev, with the fault, not a result), r01 to r20 with r09-r2, r10-r2, r12-r2 (phase scheduled)"
+}
