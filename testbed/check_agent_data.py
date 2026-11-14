@@ -67,7 +67,7 @@ def check(folder, freeze_file=TESTBED / 'agent_study.freeze.json'):
             err('%s: config or tag differs from the freeze order' % r['episode_id'])
         if r['invalid_reason'] != 'harness_timeout':
             if (receipt.get('native_source') != freeze['agent']['native_source']
-                    or receipt.get('goal_sha256') != freeze['task']['goal_file_sha256']
+                    or receipt.get('goal_sha256') != freeze['task']['goal_sha256']
                     or receipt.get('gpu_profile') != freeze['model']['gpu_profile']
                     or receipt.get('study_data') is not True or receipt.get('h_eval_s') != freeze['fault']['h_eval_s']
                     or any(receipt.get('source_sha256', {}).get(n) != freeze['testbed_code_sha256'][n] for n in CODE)):

@@ -41,7 +41,7 @@ def episode(fz, index, attempt=1, outcome='RESENT_DUPLICATE', reason='', phase='
                agent_final_status=copies[3], steps_before_fault=5, steps_after_restart=6, wall_clock_s=400 + index)
     row['outcome'], row['invalid_reason'] = classify('drop-forcestop', 1, 1, copies[1], copies[2], copies[3], reason)
     return dict(row=row, tag=planned['tags'][str(attempt)], native_source=fz['agent']['native_source'],
-                goal_sha256=fz['task']['goal_file_sha256'], gpu_profile='a10g', study_data=True, h_eval_s=300,
+                goal_sha256=fz['task']['goal_sha256'], gpu_profile='a10g', study_data=True, h_eval_s=300,
                 fault={'observed_class': 'app-force-stop'}, source_sha256=fz['testbed_code_sha256'],
                 label_cost=dict(reset=10, compose=60, fault=3, relaunch=2, observation=300, grading=1, total=400 + index))
 

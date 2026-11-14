@@ -144,7 +144,7 @@ def worker(args):
                original_committed=0, fault_receipt=0)
     receipt = dict(kind='agent fault-injection episode' if args.framework == 'm3a' else 'SYNTHETIC fixture dry run',
                    study_data=args.framework == 'm3a', fault=args.fault, tag=args.tag, h_eval_s=args.h_eval,
-                   goal_sha256=hashlib.sha256(args.goal_file.read_bytes()).hexdigest(),
+                   goal_sha256=hashlib.sha256(args.goal_file.read_text(encoding='utf-8').strip().encode()).hexdigest(),  # CRLF-proof
                    source_sha256={p.name: hashlib.sha256(p.read_bytes()).hexdigest()
                                   for p in sorted(Path(__file__).parent.glob('*.py'))})
     goal = args.goal_file.read_text(encoding='utf-8').strip().replace('{tag}', args.tag)
