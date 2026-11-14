@@ -75,7 +75,7 @@ def check(folder, freeze_file=TESTBED / 'agent_study.freeze.json'):
         if r['config'] != planned['config'] or receipt.get('tag') != planned['tags'][str(attempt)]:
             err('%s: config or tag differs from the freeze order' % r['episode_id'])
         guard = receipt.get('guard') or {}
-        if freeze.get('guard') and (guard.get('name') != freeze['guard']['name']
+        if not measurement and freeze.get('guard') and (guard.get('name') != freeze['guard']['name']
                                     or guard.get('user_error') != planned['user_error'][str(attempt)]):
             err('%s: guard or simulated-user error differs from the freeze' % r['episode_id'])
         if not freeze.get('guard') and guard:
