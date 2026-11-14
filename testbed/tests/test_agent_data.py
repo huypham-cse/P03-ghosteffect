@@ -44,6 +44,7 @@ def episode(fz, index, attempt=1, outcome='RESENT_DUPLICATE', reason='', phase='
     return dict(row=row, tag=planned['tags'][str(attempt)], native_source=fz['agent']['native_source'],
                 goal_sha256=fz['task']['goal_sha256'], gpu_profile='a10g', study_data=True, h_eval_s=300,
                 fault={'observed_class': 'app-force-stop'}, source_sha256=fz['testbed_code_sha256'],
+                model_calls=10, type_alias_calls=index % 2,
                 label_cost=dict(reset=10, compose=60, fault=3, relaunch=2, observation=300, grading=1, total=400 + index))
 
 
@@ -154,10 +155,10 @@ class AgentData(unittest.TestCase):
                          .replace('x', '<repo>' + json.dumps(os.sep)[1:-1] + 'runtime' + json.dumps(os.sep)[1:-1] + 'adb.exe'))
         self.assertNotIn(str(Path.home()), scrub(str(Path.home() / 'x')))
 
-    def test_render_writes_the_44_macros(self):
+    def test_render_writes_the_47_macros(self):
         folder = self.tmp / 'results' / 'agent'
-        folder.mkdir(parents=True)
         self.write(self.good())
+        shutil.copytree(self.tmp / 'agent' / 'receipts', folder / 'receipts')
         for name in ('episodes.csv', 'freeze.json'):
             shutil.copyfile(self.tmp / 'agent' / name, folder / name)
         (folder / 'label_cost.csv').write_text('component,n,min_s,median_s,max_s\n' + ''.join(
@@ -168,8 +169,11 @@ class AgentData(unittest.TestCase):
                      M=lambda k, v: macros.__setitem__(k, str(v)), W=lambda k, v: files.__setitem__(k, v))
         exec((ROOT / 'artifact/scripts/render_agent.py').read_text(encoding='utf-8'), scope)
         scope['render_agent']()
-        self.assertEqual(len(macros), 44)
+        self.assertEqual(len(macros), 47)
         self.assertEqual((macros['AgentValidN'], macros['AgentDupN'], macros['AgentDupPct']), ('20', '10', '50.0'))
+        self.assertEqual((macros['AgentModelCallsN'], macros['AgentAliasCallsN'], macros['AgentAliasEpisodesN']),
+                         ('200', '10', '10'))
+        self.assertEqual(macros['AgentWallMedS'], '410')   # valid episodes only (all 20 here)
         self.assertEqual((macros['AgentDupLo'], macros['AgentDupHi']), ('29.9', '70.1'))
         self.assertEqual((macros['LabelTrialMedS'], macros['LabelTrialResetMedS']), ('410', '2.0'))
         self.assertIn('Resent, duplicate at the backend & 5 & 5 & 10', files['tab_agent.tex'])

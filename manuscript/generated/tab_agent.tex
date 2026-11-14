@@ -1,1 +1,20 @@
-% no agent episodes yet (artifact/results/real/agent/episodes.csv)
+\begin{table}[t]
+\caption{M3A on Qwen2.5-VL-7B after a lost SMTP reply and a K-9 force-stop: outcome of each valid scheduled
+episode, from the backend at relaunch $+\,H_{\mathrm{eval}}$ (LLM-agent experiment).}
+\label{tab:agent}
+\centering
+\footnotesize
+\begin{tabular}{@{}lccc@{}}
+\toprule
+Outcome & no Sent & Sent & all \\
+\midrule
+Resent, duplicate at the backend & 7 & 10 & 17 \\
+Resent, no duplicate & 0 & 0 & 0 \\
+Declared done, no resend & 1 & 0 & 1 \\
+Asked or stopped & 0 & 0 & 0 \\
+Task failure & 0 & 0 & 0 \\
+\midrule
+Valid episodes & 8 & 10 & 18 \\
+\bottomrule
+\end{tabular}
+\end{table}

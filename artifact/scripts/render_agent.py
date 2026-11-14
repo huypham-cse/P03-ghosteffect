@@ -1,8 +1,10 @@
 # render_agent.py -- exec'd by render_real.py (B-10, B-11). Writes the \Agent* and \LabelTrial* macros of the
-# B contract (team/b-log.md, 12/11, 44 names) and generated/tab_agent.tex from artifact/results/real/agent/
-# (episodes.csv, label_cost.csv, freeze.json). Kind of number: LLM-agent experiment. Before the runs every
-# macro is ??. Counts use phase=scheduled rows, one per scheduled_index (its last attempt); Dev macros use
-# phase=dev rows. Valid means outcome != INVALID. Rates are over valid episodes with Wilson 95% intervals.
+# B contract (team/b-log.md, 12/11, 44 names; 14/11 adds the 3 alias counts) and generated/tab_agent.tex from
+# artifact/results/real/agent/ (episodes.csv, label_cost.csv, freeze.json, receipts/). Kind of number: LLM-agent
+# experiment. Before the runs every macro is ??. Counts use phase=scheduled rows, one per scheduled_index (its
+# last attempt); Dev macros use phase=dev rows. Valid means outcome != INVALID. Rates and medians are over valid
+# episodes, rates with Wilson 95% intervals. Alias counts (local_model.py renames "type" to "input_text") are
+# over all scheduled episodes, from the receipt counters model_calls and type_alias_calls.
 
 AGENT_TEXT = ('AgentFramework', 'AgentModel', 'AgentServing', 'AgentHost', 'AgentHEvalS', 'AgentMaxSteps')
 AGENT_COUNTS = ('AgentScheduledN', 'AgentValidN', 'AgentInvalidN', 'AgentRerunN', 'AgentInvalidNoCommitN',
@@ -11,11 +13,12 @@ AGENT_COUNTS = ('AgentScheduledN', 'AgentValidN', 'AgentInvalidN', 'AgentRerunN'
                 'AgentNosentDupN', 'AgentSentDupN', 'AgentDevN', 'AgentDevSuccessN')
 AGENT_RATES = ('AgentResentPct', 'AgentResentLo', 'AgentResentHi', 'AgentDupPct', 'AgentDupLo', 'AgentDupHi',
                'AgentAskedPct', 'AgentWallMedS', 'AgentStepsAfterMed')
+AGENT_ALIAS = ('AgentModelCallsN', 'AgentAliasCallsN', 'AgentAliasEpisodesN')
 LABEL_COMPONENTS = ('reset', 'compose', 'fault', 'relaunch', 'observation', 'grading')
 LABEL_MACROS = ('LabelTrialMinS', 'LabelTrialMedS', 'LabelTrialMaxS', 'LabelTrialN') + tuple(
     'LabelTrial%sMedS' % c.capitalize() for c in LABEL_COMPONENTS)
-AGENT_MACROS = AGENT_TEXT + AGENT_COUNTS + AGENT_RATES + LABEL_MACROS
-assert len(AGENT_MACROS) == 44
+AGENT_MACROS = AGENT_TEXT + AGENT_COUNTS + AGENT_RATES + AGENT_ALIAS + LABEL_MACROS
+assert len(AGENT_MACROS) == 47
 MEASUREMENT_REASONS = ('measurement_error:', 'grading_failed:', 'harness_timeout')
 
 
@@ -95,8 +98,17 @@ def render_agent():
     M('AgentDupLo', wilson(dup)[0])
     M('AgentDupHi', wilson(dup)[1])
     M('AgentAskedPct', pct(asked))
-    M('AgentWallMedS', median([r['wall_clock_s'] for r in final], 0))
+    M('AgentWallMedS', median([r['wall_clock_s'] for r in valid], 0))
     M('AgentStepsAfterMed', median([r['steps_after_restart'] for r in valid], 1))
+    paths = [os.path.join(folder, 'receipts', r['episode_id'] + '.json') for r in final]
+    receipts = [json.load(open(p, encoding='utf-8')) for p in paths if os.path.exists(p)]
+    if len(receipts) == len(final) and all('model_calls' in r for r in receipts):
+        M('AgentModelCallsN', sum(r['model_calls'] for r in receipts))
+        M('AgentAliasCallsN', sum(r['type_alias_calls'] for r in receipts))
+        M('AgentAliasEpisodesN', sum(r['type_alias_calls'] > 0 for r in receipts))
+    else:
+        for name in AGENT_ALIAS:
+            M(name, 'N/A')
     total = cost['total']
     if int(total['n']):
         M('LabelTrialMinS', str(int(round(float(total['min_s'])))))
