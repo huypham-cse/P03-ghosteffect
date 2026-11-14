@@ -97,11 +97,17 @@ def scheduled(args):
                                               planned['config'], planned['tags'][str(attempt)], 'scheduled',
                                               freeze['fault']['kind'], common + guard(attempt) +
                                               ['--scheduled-index', str(index), '--attempt', str(attempt)])
+        recorded = outcome(args.out / ('%s%02d-r2' % (prefix, index))) is not None   # both attempts from an earlier run
         row = run(1, '')
         if row['invalid_reason'].startswith(MEASUREMENT):
             row = run(2, '-r2')
             if row['invalid_reason'].startswith(MEASUREMENT):
-                raise SystemExit('two measurement errors in a row at index %d; find the cause first' % index)
+                if not recorded:
+                    raise SystemExit('two measurement errors in a row at index %d; find the cause first, then run the '
+                                     'same command: the index stays INVALID (one rerun per index) and the run goes on'
+                                     % index)
+                print('  index %d: both attempts were measurement errors in an earlier run; it stays INVALID' % index,
+                      flush=True)
         valid += row['outcome'] != 'INVALID'
         print('  valid so far: %d' % valid, flush=True)
     print('scheduled done: %d valid' % valid)
