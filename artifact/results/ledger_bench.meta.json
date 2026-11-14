@@ -1,0 +1,32 @@
+{
+  "command": [
+    "/usr/bin/python3",
+    "-I",
+    "artifact/scripts/bench_ledger.py"
+  ],
+  "git_commit": "76c8b24a0c7be2d08ec661b82d7d4fe43835cb26",
+  "python_version": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+  "sqlite_version": "3.45.1",
+  "date": "2026-11-14T09:53:47.225833+00:00",
+  "host": {
+    "os": "Linux",
+    "distribution": "Ubuntu 24.04.5 LTS",
+    "architecture": "x86_64",
+    "kernel": "7.0.0-1014-aws",
+    "cpus": 4,
+    "machine": "cloud VM (AWS EC2 g6e.xlarge); the benchmark uses no GPU",
+    "db_filesystem": "ext4   rw,relatime,discard,errors=remount-ro,commit=30",
+    "storage": "Amazon EBS volume, 300 GB (network-attached block storage); volume type not recorded"
+  },
+  "csv_sha256": "d19d4061d8fd199e08b7a24dbe94bdf1747d556d18277df8a8f2adad13b6aa83",
+  "script_sha256": "1fb04059c6e9c2a617fc35dbdc986be9ef076903ad2f8efdab0cd1b99dd5e25d",
+  "note": "B-15 rerun. Linux has no F_FULLFSYNC, so the fullfsync columns are nan by design. Run before the model server started, with no other job on the disk.",
+  "repeat_check": {
+    "note": "Second run right after, same host and command, not used for the paper",
+    "issue_p50_ms": 1.05,
+    "issue_p95_ms": 3.09,
+    "taps_checked": 4866,
+    "invariant_violations": 0,
+    "ghost_candidates": 118
+  }
+}

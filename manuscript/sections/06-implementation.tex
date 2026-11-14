@@ -3,8 +3,8 @@
 
 \para{Built.} The ledger, the family-verdict calibration (Clopper--Pearson), the certification tables of Proposition~\ref{prop:family}, the certified-wait lookup,
 the planner, the Bayes rule, and the KKT allocator are written in Python using only the standard library, together with the simulator of \S\ref{sec:eval}. The ledger is SQLite
-in WAL mode with \texttt{synchronous=FULL}, owned by a controller process. On the build host (a laptop running macOS), an \textsf{ISSUED} append takes \LedgerPfifty\,ms at the median
-and \LedgerPninetyfive\,ms at p95, or \LedgerFullPfifty/\LedgerFullPninetyfive\,ms with \texttt{F\_FULLFSYNC}, which forces the disk cache; a record takes \LedgerBytes\,bytes.
+in WAL mode with \texttt{synchronous=FULL}, owned by a controller process. On a Linux host (a 4-vCPU cloud VM, ext4 on network-attached block storage), an \textsf{ISSUED} append takes \LedgerPfifty\,ms at the median
+and \LedgerPninetyfive\,ms at p95; a record takes \LedgerBytes\,bytes.
 A host write-ordering test SIGKILLs a child that loops over \emph{plan, issue, tap, settle} at random times: over \LedgerTrials kills and \LedgerTaps taps, every tapped effect
 was \textsf{ISSUED} or later (\LedgerViol violations); SIGKILL keeps the page cache, so durability is tested on the emulator (\S\ref{sec:eval-real}). Host timings are not phone
 timings. A DTMC analyzer and a PRISM model~\cite{kwiatkowska2011prism} are in the artifact; we have not run PRISM or Storm~\cite{hensel2022storm}.

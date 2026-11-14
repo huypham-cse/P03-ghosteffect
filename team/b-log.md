@@ -279,3 +279,10 @@ Test: testbed 96 qua (4 bỏ qua), artifact 49 qua (1 bỏ qua); render không �
   ```
 - **Dữ liệu server kéo về laptop** (`testbed/runs/aws-1114/`, không commit): `server-snapshot-1.tgz` (17:00) và `server-snapshot-2.tgz` (19:45, sha256 `14d48674...28ac6`): `/metrics` của vLLM, `nvidia-smi` và `nvidia-smi -q`, `pip freeze` của venv serve, dòng lệnh vLLM đang chạy, `serve.log`, `server.log` và `SERVING.json` của hai lần serve, `SNAPSHOT.json` của Qwen (hash từng file), log setup, `dpkg` gói GPU, hai lần chạy ledger.
 - **Còn lại, không cần server:** B-10 (`07-agent.tex`, render macro, `SUMMARY.md`, nêu alias kèm số đếm), B-11 macro `\LabelTrial*`, §2.3 theo kết quả. Máy có thể Stop (giữ ổ tới 21/11 phòng khi cần chạy lại).
+
+## 14/11/2026 (B-15: đo lại ledger trên host Linux)
+
+- Host: máy AWS thuê cho B-09 (`g6e.xlarge`, us-east-1), Ubuntu 24.04.5 LTS, kernel 7.0.0-1014-aws, 4 vCPU, 30 GB RAM, ext4 trên ổ EBS 300 GB. Benchmark không dùng GPU. Chạy bằng `/usr/bin/python3 -I artifact/scripts/bench_ledger.py` (Python 3.12.3, SQLite 3.45.1) từ bản `git archive` của commit `76c8b24`, `TMPDIR` đặt trên ổ ext4 (không phải tmpfs), trước khi bật vLLM nên không có việc nào khác dùng ổ.
+- Kết quả (lần 1, dùng cho bài): ISSUED append p50 0,98 ms, p95 1,99 ms; 205 byte mỗi bản ghi; 300 lần SIGKILL, 4874 tap, 0 vi phạm thứ tự ghi, 112 ghost candidate. Lần 2 chạy ngay sau để kiểm độ lặp (không dùng cho bài, ghi trong `repeat_check` của `.meta.json`): p50 1,05 ms, p95 3,09 ms, 4866 tap, 0 vi phạm. Median ổn định; p95 dao động theo ổ mạng.
+- `artifact/results/ledger_bench.csv` thay bản cũ (1,70 / 4,05 ms, không rõ host); thêm `ledger_bench.meta.json` (lệnh, commit, host, sha256 của CSV và script). Linux không có `F_FULLFSYNC` nên hai cột fullfsync là `nan` đúng thiết kế.
+- §6 viết lại câu về host: "a Linux host (a 4-vCPU cloud VM, ext4 on network-attached block storage)", bỏ vế `F_FULLFSYNC`. Kiểm YC-B11: `grep -nE 'macOS|FULLFSYNC' manuscript/sections/06-implementation.tex` không ra dòng nào; thân bài không còn dùng `\LedgerFull*` (hai macro này vẫn sinh ra "--" trong `macros_real.tex` nhưng không xuất hiện trong PDF).
