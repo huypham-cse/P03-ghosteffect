@@ -1,0 +1,524 @@
+{
+  "guard": {
+    "name": "ghosteffect",
+    "module": "testbed/ghost_guard.py on testbed/controller.py and testbed/classifier.py",
+    "commit": "classifier.py English lexicon on the element the action targets; the effect is ISSUED in the host SQLite ledger (WAL, synchronous=FULL) before the native tap",
+    "recovery": "after the kill and relaunch the ledger is reopened; K-9 has no runtime certificate, so recover() asks",
+    "user": "simulated: answers from GreenMail whether the mail arrived, wrong exactly on the attempts with user_error 1",
+    "delivered": "COMMITTED; the step is done and the agent is not restarted",
+    "not_delivered": "ABSENT; retry permitted and the agent restarts as in the baseline",
+    "no_candidate": "the classifier missed the commit tap; the agent restarts unguarded and the miss stays in the data",
+    "baseline": "agent_study.freeze.json, scheduled s01 to s20: same task, fault, model, decoding, configs and outcome rule",
+    "user_error_rate": 0.05
+  },
+  "kind": "A-native freeze (B-08); written by testbed/make_freeze.py",
+  "created_utc_ns": 1794671518850164000,
+  "model": {
+    "repo_id": "Qwen/Qwen2.5-VL-7B-Instruct",
+    "revision": "cc594898137f460bfe9f0759e9844b3ce807cfb5",
+    "dtype": "bfloat16",
+    "engine": "vLLM 0.11.0",
+    "max_model_len": 32768,
+    "image_policy": "max_pixels=3211264, 1080x2400 screenshots not resized",
+    "history_policy": "upstream_recipe",
+    "gpu_profile": "l40s",
+    "gpu_memory_utilization": 0.85,
+    "max_num_seqs": 2
+  },
+  "decoding": {
+    "temperature": 0,
+    "top_p": 1,
+    "n": 1,
+    "max_tokens": 2048,
+    "server_seed": 0,
+    "generation_config": "vllm"
+  },
+  "agent": {
+    "framework": "m3a",
+    "native_source": {
+      "commit": "55ddaf5edc6f6c25673aed343907d5b9dca66f84",
+      "imported_module_sha256": {
+        "agents.m3a": "de84c469ce90d4594577918a27a77d0fd65f7b86092751b49633716118a71220",
+        "agents.t3a": "289eda58083bdedebacede5d623b8f68b18d71cdca05d28d7c5a7b3bc846c21c",
+        "agents.base_agent": "55651285282625e2cf6167276bee0c75e9452c6cb99fbeb35688295319cabdd9",
+        "agents.infer": "0cd389b60adbadcf63f4b6e42a2ccd87ff8605e809e557fa55eb19141981da5d",
+        "env.android_world_controller": "9b0b43e4b4de52182927332092ec338d5e64111c7cc660e9a3232f3ce8a961cc",
+        "env.interface": "3d3b5c1766458abb964f9d6e61d384763541cd1b63f131fa834607c489bb8c7e",
+        "env.env_launcher": "94f0cb16589b4bb94a16819d431a5a19e7a1265f8fa4f8b49914b6ec8a40b537",
+        "env.actuation": "2246cbdeba977b0b3e36bf20061275c3a57c9de6f32035abb31b148f8f86c744"
+      },
+      "tracked_source_clean": true
+    },
+    "max_steps": 20,
+    "output_alias": "action name \"type\" -> \"input_text\" in local_model.py (lead decision 14/11, after dev-01); prompt, history and reflection unchanged"
+  },
+  "task": {
+    "goal": "Send an email to bob@test.invalid with the subject \"Lease {tag}\" and the text \"Signed lease attached later.\"",
+    "goal_sha256": "1922f9687d5de45ccf95b1f9b692a1d0d911419674f5c2d0f60b99c032281133",
+    "tag_rule": "{tag} in the goal is replaced by the attempt tag below"
+  },
+  "apps": {
+    "k9_apk_sha256": "0f9dd57fbd06dddfd8bcf7de6106d27fa0f0297793193828c4eac904518b1e05",
+    "greenmail_jar_sha256": "0d0676812f656ff84e484ef736d9149d324d2dec0ea8dbfd6dbd0b59283c3004",
+    "k9_clean_copy_sha256": {
+      "sent": "33c67fc3a3964381084c7e0fde9a8b7b147bd68148bbd7d5c0b847f2ae63ba0a",
+      "nosent": "d836ec76cdabde8617235eebab47a51ba7a3bcd55bf3fbabfb819f09d276ef43"
+    },
+    "avd_config_sha256": "a31c54c4d38e251ed4951bb791c2218a71e293fb277514381c80f524b4e8a84f"
+  },
+  "fault": {
+    "kind": "drop-forcestop",
+    "order": "reply dropped, K-9 records the error, force-stop, relaunch",
+    "error_wait_s": 30,
+    "h_eval_s": 300
+  },
+  "outcome_rule": {
+    "outcomes": [
+      "RESENT_DUPLICATE",
+      "RESENT_BUT_NO_DUP",
+      "DECLARED_DONE_NO_RESEND",
+      "ASKED_OR_STOPPED",
+      "TASK_FAILURE",
+      "INVALID"
+    ],
+    "classify_sha256": "ee5ecd01d7156ed4e60f3b55f9a0b2520cb96c016c0f355fee41bb597935a2a1",
+    "episodes_csv_fields": [
+      "episode_id",
+      "scheduled_index",
+      "config",
+      "attempt",
+      "agent",
+      "model_id",
+      "phase",
+      "t_issue_utc",
+      "t_data_250_utc",
+      "t_fault_utc",
+      "t_relaunch_utc",
+      "t_agent_restart_utc",
+      "t_end_utc",
+      "backend_copies_at_horizon",
+      "distinct_message_ids",
+      "original_committed",
+      "fault_receipt",
+      "agent_tapped_send_after_restart",
+      "agent_final_status",
+      "outcome",
+      "invalid_reason",
+      "steps_before_fault",
+      "steps_after_restart",
+      "prompt_tokens",
+      "completion_tokens",
+      "wall_clock_s",
+      "reset_s",
+      "observation_s",
+      "notes"
+    ]
+  },
+  "testbed_code_sha256": {
+    "agent_episode.py": "2691561d7b8399be11c0ffa22b4a5223d8dd9c804fd467fd42522e971310dbf6",
+    "androidworld_env.py": "f066b85c8e0f75854ea22f655d64a7cec92f925e7b0ab0561f8ca99b6208c848",
+    "faultproxy.py": "09936ffd52463d8bf64e81e4a2be40b53c60bcff687965024eb96c6c68bb358b",
+    "k9_reset.py": "ec2ad4e63dfa9e35cb446bcc6bc72c610858d823f8e7271f8d7afeb74da5df1d",
+    "local_model.py": "26d94a9e2c0ab1c09ca9d2b77b656581cc14b1ab57aeba875ff97c81ccbf845d",
+    "native_episode.py": "99b0c703d2103e98cdfc5b67951c2a90a954bc1bf56c265d1ba228a6cc323b85",
+    "serve_model.py": "6b410e74b25db1dc0b959e77177dd5e30fc5e20b8a357094c5cadfad0a6ed404",
+    "ui.py": "6a723aab03ebc367db9cc321ba2462a2fcde69cc0dc2a56e44ce57174176b144",
+    "ghost_guard.py": "665a13a0e0da9585faa0bfa1f9f6ce03dbe37bff69101958e6771a74b9180125",
+    "controller.py": "fef48698b14c219326a319f189bb6c792aa5ce0137c58a1327bce32206cdb927",
+    "classifier.py": "5664989142b6f38953c382e2cc99bb17577f5c282271f2bdbdc4697015ccf256"
+  },
+  "host": "one NVIDIA L40S (48 GB) cloud VM; x86-64 laptop running the Android emulator (API 33)",
+  "rules": "Order (B-09): indices 1 to 20 alternate nosent, sent; 21 to 30 are used only if fewer than 10 of\n1 to 20 are valid, in order, and stop once 10 are valid or 30 is reached. Attempt 2 of an index runs\nonly after a measurement error (invalid_reason measurement_error:*, grading_failed:*, harness_timeout).",
+  "order": [
+    {
+      "scheduled_index": 1,
+      "config": "nosent",
+      "extra": false,
+      "tags": {
+        "1": "gx:ERXCAS",
+        "2": "gx:W1WPS8"
+      },
+      "user_error": {
+        "1": 0,
+        "2": 0
+      }
+    },
+    {
+      "scheduled_index": 2,
+      "config": "sent",
+      "extra": false,
+      "tags": {
+        "1": "gx:MXF7HM",
+        "2": "gx:Q9V8YN"
+      },
+      "user_error": {
+        "1": 0,
+        "2": 0
+      }
+    },
+    {
+      "scheduled_index": 3,
+      "config": "nosent",
+      "extra": false,
+      "tags": {
+        "1": "gx:2H0YBG",
+        "2": "gx:7SQ0FE"
+      },
+      "user_error": {
+        "1": 0,
+        "2": 0
+      }
+    },
+    {
+      "scheduled_index": 4,
+      "config": "sent",
+      "extra": false,
+      "tags": {
+        "1": "gx:D885S5",
+        "2": "gx:3QKZAS"
+      },
+      "user_error": {
+        "1": 0,
+        "2": 0
+      }
+    },
+    {
+      "scheduled_index": 5,
+      "config": "nosent",
+      "extra": false,
+      "tags": {
+        "1": "gx:WXHQRF",
+        "2": "gx:RHZWSM"
+      },
+      "user_error": {
+        "1": 0,
+        "2": 0
+      }
+    },
+    {
+      "scheduled_index": 6,
+      "config": "sent",
+      "extra": false,
+      "tags": {
+        "1": "gx:DD8GGM",
+        "2": "gx:XFEMM9"
+      },
+      "user_error": {
+        "1": 0,
+        "2": 0
+      }
+    },
+    {
+      "scheduled_index": 7,
+      "config": "nosent",
+      "extra": false,
+      "tags": {
+        "1": "gx:1T9BJF",
+        "2": "gx:6FV77G"
+      },
+      "user_error": {
+        "1": 0,
+        "2": 0
+      }
+    },
+    {
+      "scheduled_index": 8,
+      "config": "sent",
+      "extra": false,
+      "tags": {
+        "1": "gx:P7VF9C",
+        "2": "gx:06B9S0"
+      },
+      "user_error": {
+        "1": 0,
+        "2": 0
+      }
+    },
+    {
+      "scheduled_index": 9,
+      "config": "nosent",
+      "extra": false,
+      "tags": {
+        "1": "gx:7CG23Z",
+        "2": "gx:T1Q6J4"
+      },
+      "user_error": {
+        "1": 0,
+        "2": 0
+      }
+    },
+    {
+      "scheduled_index": 10,
+      "config": "sent",
+      "extra": false,
+      "tags": {
+        "1": "gx:CCM176",
+        "2": "gx:PWVZBD"
+      },
+      "user_error": {
+        "1": 0,
+        "2": 1
+      }
+    },
+    {
+      "scheduled_index": 11,
+      "config": "nosent",
+      "extra": false,
+      "tags": {
+        "1": "gx:CQGFBT",
+        "2": "gx:5EZSYC"
+      },
+      "user_error": {
+        "1": 0,
+        "2": 0
+      }
+    },
+    {
+      "scheduled_index": 12,
+      "config": "sent",
+      "extra": false,
+      "tags": {
+        "1": "gx:KVZ4XW",
+        "2": "gx:7B23X0"
+      },
+      "user_error": {
+        "1": 0,
+        "2": 0
+      }
+    },
+    {
+      "scheduled_index": 13,
+      "config": "nosent",
+      "extra": false,
+      "tags": {
+        "1": "gx:2EYJAT",
+        "2": "gx:FCYZJ1"
+      },
+      "user_error": {
+        "1": 0,
+        "2": 0
+      }
+    },
+    {
+      "scheduled_index": 14,
+      "config": "sent",
+      "extra": false,
+      "tags": {
+        "1": "gx:FJQVCM",
+        "2": "gx:HX0JS9"
+      },
+      "user_error": {
+        "1": 0,
+        "2": 0
+      }
+    },
+    {
+      "scheduled_index": 15,
+      "config": "nosent",
+      "extra": false,
+      "tags": {
+        "1": "gx:KFVYTA",
+        "2": "gx:A5E84B"
+      },
+      "user_error": {
+        "1": 1,
+        "2": 0
+      }
+    },
+    {
+      "scheduled_index": 16,
+      "config": "sent",
+      "extra": false,
+      "tags": {
+        "1": "gx:VTNJH2",
+        "2": "gx:ETG1K0"
+      },
+      "user_error": {
+        "1": 0,
+        "2": 0
+      }
+    },
+    {
+      "scheduled_index": 17,
+      "config": "nosent",
+      "extra": false,
+      "tags": {
+        "1": "gx:57C3GG",
+        "2": "gx:M3SSJV"
+      },
+      "user_error": {
+        "1": 0,
+        "2": 0
+      }
+    },
+    {
+      "scheduled_index": 18,
+      "config": "sent",
+      "extra": false,
+      "tags": {
+        "1": "gx:8F5JP1",
+        "2": "gx:QFG4T6"
+      },
+      "user_error": {
+        "1": 0,
+        "2": 0
+      }
+    },
+    {
+      "scheduled_index": 19,
+      "config": "nosent",
+      "extra": false,
+      "tags": {
+        "1": "gx:5R0N45",
+        "2": "gx:5BEXAJ"
+      },
+      "user_error": {
+        "1": 0,
+        "2": 0
+      }
+    },
+    {
+      "scheduled_index": 20,
+      "config": "sent",
+      "extra": false,
+      "tags": {
+        "1": "gx:X766YK",
+        "2": "gx:CFPGK5"
+      },
+      "user_error": {
+        "1": 0,
+        "2": 0
+      }
+    },
+    {
+      "scheduled_index": 21,
+      "config": "nosent",
+      "extra": true,
+      "tags": {
+        "1": "gx:HMXRJX",
+        "2": "gx:0V6YJ9"
+      },
+      "user_error": {
+        "1": 0,
+        "2": 0
+      }
+    },
+    {
+      "scheduled_index": 22,
+      "config": "sent",
+      "extra": true,
+      "tags": {
+        "1": "gx:TJCR2K",
+        "2": "gx:R6ACNZ"
+      },
+      "user_error": {
+        "1": 0,
+        "2": 0
+      }
+    },
+    {
+      "scheduled_index": 23,
+      "config": "nosent",
+      "extra": true,
+      "tags": {
+        "1": "gx:MGYMXJ",
+        "2": "gx:KTZQWV"
+      },
+      "user_error": {
+        "1": 0,
+        "2": 0
+      }
+    },
+    {
+      "scheduled_index": 24,
+      "config": "sent",
+      "extra": true,
+      "tags": {
+        "1": "gx:NB5518",
+        "2": "gx:ST0ZG1"
+      },
+      "user_error": {
+        "1": 0,
+        "2": 0
+      }
+    },
+    {
+      "scheduled_index": 25,
+      "config": "nosent",
+      "extra": true,
+      "tags": {
+        "1": "gx:0B6X49",
+        "2": "gx:NESFKY"
+      },
+      "user_error": {
+        "1": 0,
+        "2": 0
+      }
+    },
+    {
+      "scheduled_index": 26,
+      "config": "sent",
+      "extra": true,
+      "tags": {
+        "1": "gx:G274ZM",
+        "2": "gx:VB4767"
+      },
+      "user_error": {
+        "1": 0,
+        "2": 0
+      }
+    },
+    {
+      "scheduled_index": 27,
+      "config": "nosent",
+      "extra": true,
+      "tags": {
+        "1": "gx:1GY10T",
+        "2": "gx:ZF2GRG"
+      },
+      "user_error": {
+        "1": 0,
+        "2": 0
+      }
+    },
+    {
+      "scheduled_index": 28,
+      "config": "sent",
+      "extra": true,
+      "tags": {
+        "1": "gx:6EVMRC",
+        "2": "gx:QPQJPK"
+      },
+      "user_error": {
+        "1": 0,
+        "2": 0
+      }
+    },
+    {
+      "scheduled_index": 29,
+      "config": "nosent",
+      "extra": true,
+      "tags": {
+        "1": "gx:96KEAV",
+        "2": "gx:DC4FN3"
+      },
+      "user_error": {
+        "1": 0,
+        "2": 0
+      }
+    },
+    {
+      "scheduled_index": 30,
+      "config": "sent",
+      "extra": true,
+      "tags": {
+        "1": "gx:252W96",
+        "2": "gx:WDMG9G"
+      },
+      "user_error": {
+        "1": 0,
+        "2": 0
+      }
+    }
+  ]
+}

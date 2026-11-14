@@ -163,7 +163,7 @@ def fisher_two_sided(a, b, c, d):
 
 def render_guarded(base_final, base_valid, json):
     """Guarded arm (GhostEffect at the M3A boundary, agent_study_guarded.freeze.json), written only once its
-    data exist: \Guard* macros. Primary: RESENT_DUPLICATE over valid scheduled episodes, Wilson 95%, and the
+    data exist: the AgentGuard macros. Primary: RESENT_DUPLICATE over valid scheduled episodes, Wilson 95%, and the
     exact two-sided Fisher p against the baseline arm. Secondary: asks, classifier misses, simulated-user errors."""
     folder = os.path.join(REAL, 'agent_guarded')
     if not os.path.exists(os.path.join(folder, 'episodes.csv')):
@@ -191,11 +191,11 @@ def render_guarded(base_final, base_valid, json):
         lo = hi = pct = 'N/A'
     fisher = fisher_two_sided(dup, n - dup, base_dup, len(base_valid) - base_dup)
     for name, value in (
-            ('GuardScheduledN', len(final)), ('GuardValidN', n), ('GuardInvalidN', len(final) - n),
-            ('GuardDupN', dup), ('GuardDupPct', pct), ('GuardDupLo', lo), ('GuardDupHi', hi),
-            ('GuardAskN', sum(restart(r).get('decision') == 'ASK' for r in valid)),
-            ('GuardNoCandN', sum(restart(r).get('decision') == 'NO_CANDIDATE' for r in valid)),
-            ('GuardUserErrN', sum(receipts[r['episode_id']].get('user_error') == 1 and restart(r).get('decision') == 'ASK'
+            ('AgentGuardScheduledN', len(final)), ('AgentGuardValidN', n), ('AgentGuardInvalidN', len(final) - n),
+            ('AgentGuardDupN', dup), ('AgentGuardDupPct', pct), ('AgentGuardDupLo', lo), ('AgentGuardDupHi', hi),
+            ('AgentGuardAskN', sum(restart(r).get('decision') == 'ASK' for r in valid)),
+            ('AgentGuardNoCandN', sum(restart(r).get('decision') == 'NO_CANDIDATE' for r in valid)),
+            ('AgentGuardUserErrN', sum(receipts[r['episode_id']].get('user_error') == 1 and restart(r).get('decision') == 'ASK'
                                   for r in valid)),
-            ('GuardFisherP', f'{fisher:.3f}' if fisher >= 1e-3 else '{<}0.001')):
+            ('AgentGuardFisherP', f'{fisher:.3f}' if fisher >= 1e-3 else '$<$0.001')):
         M(name, value)

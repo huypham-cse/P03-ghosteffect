@@ -1,0 +1,17 @@
+{
+  "file": "label_cost.csv",
+  "sha256": "56a5092c5c0807525ac82dffd6685bf4327bb38b9f945e333d3e55077000fdd1",
+  "kind": "LLM-agent experiment on the emulator, guarded arm (M3A on Qwen2.5-VL-7B-Instruct with GhostEffect at the action boundary)",
+  "task": "B-10 guarded arm (lead request 14/11/2026)",
+  "freeze": "testbed/agent_study_guarded.freeze.json, sha256 54e174dcb6fc22d1b30eed679a30d001d85f0ad6b93b12bae6e348e7e6af40b1, merged in 55267ec before the first scheduled episode",
+  "episodes_command": "runtime/agent-venv/Scripts/python.exe testbed/run_agent_study.py --phase scheduled --guard ghosteffect --serving-receipt testbed/runs/SERVING.json --adb runtime/android-sdk/platform-tools/adb.exe --out testbed/runs/agent-guarded",
+  "collect_command": "python testbed/collect_agent.py testbed/runs/agent-guarded/* --out artifact/results/real/agent_guarded --freeze testbed/agent_study_guarded.freeze.json",
+  "check_command": "python testbed/check_agent_data.py artifact/results/real/agent_guarded --freeze testbed/agent_study_guarded.freeze.json",
+  "git_commit": "55267eccc783c2b9c5abffdd48fa7d7261dadb25 (the scheduled runs used branch b/guarded-arm at c694aa1, whose files the freeze hashes)",
+  "seed": "episode order, subject tags and simulated-user errors drawn once by make_freeze.py --guard (user error rate 0.05); decoding temperature 0, top_p 1, server seed 0",
+  "python": "episodes: 3.11.8 (agent venv); collect: 3.14.0",
+  "date": "2026-11-14 to 2026-11-15",
+  "host": "one NVIDIA L40S (48 GB) cloud VM serving the model (vLLM 0.11.0, BF16); x86-64 laptop running the Android emulator (API 33)",
+  "baseline": "artifact/results/real/agent (agent_study.freeze.json), scheduled s01 to s20, run the same day on the same server",
+  "rows": "seconds per component over the 19 valid guarded scheduled episodes"
+}
