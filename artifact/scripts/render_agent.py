@@ -149,7 +149,8 @@ Valid episodes & ''' + ' & '.join(str(len(rs)) for rs in (by_config('nosent'), b
 \end{tabular}
 \end{table}
 ''')
-    render_guarded(final, valid, json)
+    guarded = render_guarded(final, valid, json)
+    render_rules(guarded, json)
 
 
 def fisher_two_sided(a, b, c, d):
@@ -167,7 +168,7 @@ def render_guarded(base_final, base_valid, json):
     exact two-sided Fisher p against the baseline arm. Secondary: asks, classifier misses, simulated-user errors."""
     folder = os.path.join(REAL, 'agent_guarded')
     if not os.path.exists(os.path.join(folder, 'episodes.csv')):
-        return
+        return []
     with open(os.path.join(folder, 'episodes.csv'), encoding='utf-8', newline='') as f:
         rows = [r for r in csv.DictReader(f) if r['phase'] == 'scheduled']
     last = {}
@@ -198,4 +199,50 @@ def render_guarded(base_final, base_valid, json):
             ('AgentGuardUserErrN', sum(receipts[r['episode_id']].get('user_error') == 1 and restart(r).get('decision') == 'ASK'
                                   for r in valid)),
             ('AgentGuardFisherP', f'{fisher:.3f}' if fisher >= 1e-3 else '$<$0.001')):
+        M(name, value)
+    return valid
+
+
+def arm_rows(folder, json):
+    with open(os.path.join(folder, 'episodes.csv'), encoding='utf-8', newline='') as f:
+        rows = [r for r in csv.DictReader(f) if r['phase'] == 'scheduled']
+    last = {}
+    for r in sorted(rows, key=lambda r: int(r['attempt'])):
+        last[r['scheduled_index']] = r
+    final = list(last.values())
+    receipts = {}
+    for r in final:
+        with open(os.path.join(folder, 'receipts', r['episode_id'] + '.json'), encoding='utf-8') as f:
+            receipts[r['episode_id']] = json.load(f).get('guard') or {}
+    return final, [r for r in final if r['outcome'] != 'INVALID'], receipts
+
+
+def render_rules(guarded_valid, json):
+    """Same-evidence rules arm (agent_study_rules.freeze.json, Sent configuration only), written once its data exist:
+    the AgentRules macros. Primary: RESENT_DUPLICATE over valid episodes, Wilson 95%, and the exact two-sided Fisher
+    p against the guarded arm's Sent-configuration episodes (AgentGuardSent macros). Secondary: retries, asks."""
+    folder = os.path.join(REAL, 'agent_rules')
+    if not os.path.exists(os.path.join(folder, 'episodes.csv')):
+        return
+    final, valid, receipts = arm_rows(folder, json)
+    restart = lambda r: receipts[r['episode_id']].get('restart') or {}
+    n, dup = len(valid), sum(r['outcome'] == 'RESENT_DUPLICATE' for r in valid)
+    sent = [r for r in guarded_valid if r['config'] == 'sent']
+    sent_dup = sum(r['outcome'] == 'RESENT_DUPLICATE' for r in sent)
+    z = 1.959964
+    if n:
+        p, d = dup / n, 1 + z * z / n
+        c, h = (p + z * z / (2 * n)) / d, z * math.sqrt(p * (1 - p) / n + z * z / (4 * n * n)) / d
+        lo, hi, pct = f'{100 * max(0.0, c - h):.1f}', f'{100 * min(1.0, c + h):.1f}', f'{100 * dup / n:.1f}'
+    else:
+        lo = hi = pct = 'N/A'
+    fisher = fisher_two_sided(dup, n - dup, sent_dup, len(sent) - sent_dup)
+    for name, value in (
+            ('AgentRulesScheduledN', len(final)), ('AgentRulesValidN', n), ('AgentRulesInvalidN', len(final) - n),
+            ('AgentRulesDupN', dup), ('AgentRulesDupPct', pct), ('AgentRulesDupLo', lo), ('AgentRulesDupHi', hi),
+            ('AgentRulesRetryN', sum(restart(r).get('decision') == 'RETRY' for r in valid)),
+            ('AgentRulesAskN', sum(restart(r).get('decision') == 'ASK' for r in valid)),
+            ('AgentRulesNoCandN', sum(restart(r).get('decision') == 'NO_CANDIDATE' for r in valid)),
+            ('AgentGuardSentValidN', len(sent)), ('AgentGuardSentDupN', sent_dup),
+            ('AgentRulesFisherP', f'{fisher:.3f}' if fisher >= 1e-3 else '$<$0.001')):
         M(name, value)

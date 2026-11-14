@@ -76,7 +76,7 @@ def freeze_problems(freeze, serving_receipt, goal_file, freeze_file=FREEZE):
 
 def scheduled(args):
     freeze = json.loads(args.freeze.read_text(encoding='utf-8'))
-    if bool(freeze.get('guard')) != (args.guard == 'ghosteffect'):
+    if (freeze.get('guard') or {}).get('name', 'none') != args.guard:
         raise SystemExit('--guard does not match the freeze')
     problems = freeze_problems(freeze, args.serving_receipt, args.goal_file, args.freeze)
     if problems:
@@ -87,9 +87,10 @@ def scheduled(args):
         index = planned['scheduled_index']
         if planned['extra'] and valid >= 10:
             break
-        guard = lambda attempt: (['--guard', 'ghosteffect', '--user-error', str(planned['user_error'][str(attempt)])]
+        guard = lambda attempt: (['--guard', args.guard, '--user-error', str(planned['user_error'][str(attempt)])]
                                  if freeze.get('guard') else [])
-        run = lambda attempt, suffix: episode(args, '%s%02d%s' % ('g' if freeze.get('guard') else 's', index, suffix),
+        prefix = {'none': 's', 'ghosteffect': 'g', 'rules': 'r'}[args.guard]
+        run = lambda attempt, suffix: episode(args, '%s%02d%s' % (prefix, index, suffix),
                                               planned['config'], planned['tags'][str(attempt)], 'scheduled',
                                               'drop-forcestop', common + guard(attempt) +
                                               ['--scheduled-index', str(index), '--attempt', str(attempt)])
@@ -111,18 +112,19 @@ def main():
     parser.add_argument('--adb', type=Path, required=True)
     parser.add_argument('--out', type=Path, default=TESTBED / 'runs' / 'agent')
     parser.add_argument('--dev-n', type=int, default=10)
-    parser.add_argument('--guard', choices=('none', 'ghosteffect'), default='none')
+    parser.add_argument('--guard', choices=('none', 'ghosteffect', 'rules'), default='none')
     parser.add_argument('--freeze', type=Path)
     args = parser.parse_args()
-    args.freeze = args.freeze or (TESTBED / 'agent_study_guarded.freeze.json' if args.guard == 'ghosteffect' else FREEZE)
+    args.freeze = args.freeze or {'ghosteffect': TESTBED / 'agent_study_guarded.freeze.json',
+                                  'rules': TESTBED / 'agent_study_rules.freeze.json'}.get(args.guard, FREEZE)
     args.out.mkdir(parents=True, exist_ok=True)
     if args.phase == 'scheduled':
         return scheduled(args)
     for k in range(1, args.dev_n + 1):
         tag = 'gx:' + ''.join(secrets.choice('0123456789ABCDEFGHJKMNPQRSTVWXYZ') for _ in range(6))
-        if args.guard == 'ghosteffect':   # guarded dev episodes carry the fault: the guard acts only after it
-            episode(args, 'gdev-%02d' % k, 'nosent' if k % 2 else 'sent', tag, 'dev', 'drop-forcestop',
-                    ['--guard', 'ghosteffect', '--user-error', '0'])
+        if args.guard != 'none':   # guarded dev episodes carry the fault: the guard acts only after it
+            episode(args, '%sdev-%02d' % (args.guard[0], k), 'sent' if args.guard == 'rules' or k % 2 == 0 else 'nosent',
+                    tag, 'dev', 'drop-forcestop', ['--guard', args.guard, '--user-error', '0'])
         else:
             episode(args, 'dev-%02d' % k, 'nosent' if k % 2 else 'sent', tag, 'dev', 'none')
 

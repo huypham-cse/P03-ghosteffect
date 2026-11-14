@@ -109,5 +109,45 @@ def simulated_user(delivered_truth, user_error):
     return bool(delivered_truth) != bool(user_error)
 
 
+RULES_WAIT_S = 10.0   # the fixed wait of the paper's same-evidence rules (planner_sim.T_RULES_WAIT)
+
+
+class Rules(Guard):
+    """Same-evidence rule cascade (paper RQ3 'rules'; planner_sim.resolve_rules) on the same ledger and boundary.
+
+    K-9 with a Sent folder: hop 1 is K-9's own Outbox listing, the end-to-end family is K-9's Sent list. The reads are
+    exact (K-9's database), an upper bound on a perception-based reader. K-9 is not G2, so hop 1 gives no vote. After the
+    fixed 10 s wait: the mail in the Sent list means done; absent means every family reads absent, so retry; no
+    reading means ask (the simulated user as in the guarded arm).
+    """
+
+    def restart(self, ask, read_folders, sleep):
+        self.controller.close()
+        self.controller = HostController(self.db, None, self.journal)
+        ledger = self.controller.ledger
+        if self.effect not in ledger.candidates():
+            record = dict(decision='NO_CANDIDATE', state=ledger.state(self.effect))
+        else:
+            hop1 = read_folders()
+            sleep(RULES_WAIT_S)
+            folders = read_folders()
+            record = dict(hop1_folders=hop1, folders=folders)
+            if folders is None:
+                result = self.controller.recover(self.effect)
+                delivered = ask()
+                ledger.settle(self.effect, 'COMMITTED' if delivered else 'ABSENT')
+                record.update(decision=result['decision'], reason='no_reading',
+                              answer='delivered' if delivered else 'not_delivered')
+            elif 'Sent' in folders:
+                ledger.settle(self.effect, 'COMMITTED')
+                record.update(decision='COMMITTED', reason='sent_list_shows_it')
+            else:
+                ledger.settle(self.effect, 'ABSENT')
+                record.update(decision='RETRY', reason='every_family_reads_absent')
+            record['state'] = ledger.state(self.effect)
+        self.journal.emit('RULES_RESTART', **record)
+        return record
+
+
 if __name__ == '__main__':
     print(json.dumps(dict(module=__doc__.splitlines()[0])))

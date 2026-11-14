@@ -15,7 +15,8 @@
 
 --guard ghosteffect (guarded arm): ghost_guard.py issues the effect in a host ledger before a classified
 commit tap, and at step 5 recovers it from the reopened ledger and asks a simulated user before any
-restart (see that module). Everything else is the baseline above.
+restart (see that module). --guard rules: the same ledger, but the paper's same-evidence rule cascade
+decides at step 5 (ghost_guard.Rules). Everything else is the baseline above.
 
 --framework scripted-stop / scripted-redo is a SYNTHETIC fixture that taps through K-9 by
 coordinates to dry-run this harness without a model. Its episodes are never study data.
@@ -190,11 +191,12 @@ def worker(args):
         env = load_env(args.adb, args.console_port, args.adb_server_port, args.grpc_port, freeze_datetime=False)
         shell(f'am start -W -n {k9_reset.LAUNCH}')
         native_execute = env.execute_action
-        if args.guard == 'ghosteffect':
-            from ghost_guard import Guard, simulated_user, COMMIT_KINDS
-            guard = Guard(out, args.episode_id, receipt['goal_sha256'], Journal(out / 'guard.jsonl'))
-            receipt['guard'] = dict(name='ghosteffect', user_error=args.user_error)
-            row['agent'] = 'm3a+ghosteffect'
+        if args.guard != 'none':
+            from ghost_guard import Guard, Rules, simulated_user, COMMIT_KINDS
+            guard = (Rules if args.guard == 'rules' else Guard)(out, args.episode_id, receipt['goal_sha256'],
+                                                                Journal(out / 'guard.jsonl'))
+            receipt['guard'] = dict(name=args.guard, user_error=args.user_error)
+            row['agent'] = 'm3a+' + args.guard
 
         def guarded_execute(action):
             gate()
@@ -311,10 +313,19 @@ def worker(args):
             gate_state.update(reason='', deadline=horizon, phase='phase2')
             row['t_agent_restart_utc'] = time.time_ns()
             if guard is not None:
-                receipt['guard']['restart'] = guard.restart(
-                    lambda: simulated_user(backend_copies(args.tag)[0] >= 1, args.user_error))
-            if guard is not None and receipt['guard']['restart'].get('answer') == 'delivered':
-                receipt['phase2_stopped_by'] = 'guard'   # GhostEffect settled the step; the agent is not restarted
+                ask = lambda: simulated_user(backend_copies(args.tag)[0] >= 1, args.user_error)
+                if args.guard == 'rules':
+                    def read_folders():   # K-9's own folders holding the mail: Outbox (hop 1), Sent (end to end)
+                        found = subprocess.run(adb + ['shell', f'sqlite3 $(ls {k9_reset.DATA}/databases/*.db | grep -v '
+                                                      f'preferences) "select f.name from messages m join folders f on '
+                                                      f"f.id=m.folder_id where m.subject like '%{args.tag}%' and m.deleted=0\""],
+                                               capture_output=True, text=True, timeout=60)
+                        return found.stdout.split() if found.returncode == 0 else None
+                    receipt['guard']['restart'] = guard.restart(ask, read_folders, time.sleep)
+                else:
+                    receipt['guard']['restart'] = guard.restart(ask)
+            if guard is not None and receipt['guard']['restart'].get('state') == 'COMMITTED':
+                receipt['phase2_stopped_by'] = 'guard'   # the guard settled the step; the agent is not restarted
                 row['agent_final_status'] = 'done'
             else:
                 phase2_stop = run_phase('redo' if args.framework == 'scripted-redo' else 'stop', 'steps_after_restart')
@@ -374,7 +385,7 @@ def main():
     parser.add_argument('--attempt', type=int, choices=(1, 2), default=1)
     parser.add_argument('--goal-file', type=Path, required=True, help='task text; {tag} is replaced by --tag')
     parser.add_argument('--tag', required=True, help='unique episode tag the task puts in the subject, gx:XXXXXX')
-    parser.add_argument('--guard', choices=('none', 'ghosteffect'), default='none')
+    parser.add_argument('--guard', choices=('none', 'ghosteffect', 'rules'), default='none')
     parser.add_argument('--user-error', type=int, choices=(0, 1), default=0,
                         help='guarded arm: 1 if the simulated user answers the ask wrongly (drawn in the freeze)')
     parser.add_argument('--max-steps', type=int, default=20)

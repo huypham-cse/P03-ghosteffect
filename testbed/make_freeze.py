@@ -37,6 +37,17 @@ GUARD = dict(
     no_candidate='the classifier missed the commit tap; the agent restarts unguarded and the miss stays in the data',
     baseline='agent_study.freeze.json, scheduled s01 to s20: same task, fault, model, decoding, configs and outcome rule',
     user_error_rate=USER_ERROR_RATE)
+RULES_ARM = dict(
+    name='rules', module='testbed/ghost_guard.py Rules on testbed/controller.py and testbed/classifier.py',
+    commit=GUARD['commit'],
+    recovery="the paper's same-evidence rule cascade (RQ3; planner_sim.resolve_rules): hop 1 is K-9's Outbox listing "
+             "(not G2, so no vote), a fixed 10 s wait, then the end-to-end family, K-9's Sent list; read exactly from "
+             "K-9's database, an upper bound on a perception-based reader",
+    decision='mail in the Sent list: COMMITTED, agent not restarted; absent: every family absent, ABSENT, the agent '
+             'restarts (retry); no reading: ask the simulated user as in the guarded arm',
+    configs='sent only: without a Sent folder the only end-to-end family is the VLM, which has no real reader here',
+    baseline=GUARD['baseline'], guarded='agent_study_guarded.freeze.json, scheduled g01 to g20',
+    user_error_rate=USER_ERROR_RATE)
 
 
 def sha(path):
@@ -54,18 +65,18 @@ def tags(n, draw=None):
 
 
 def build(serving, native_source, goal_bytes, archives, avd_config_sha256, host, h_eval=300, max_steps=20, draw=None,
-          guard=False, error_draw=None):
+          guard=None, error_draw=None):
     """Pure part: every input is passed in, so tests can build a freeze without a device or server."""
     from agent_episode import classify, OUTCOMES, FIELDS, ERROR_WAIT_S
     assets = {a['file']: a['sha256'] for a in json.loads((TESTBED / 'assets.lock.json').read_text())['assets']}
     pool = iter(tags(60, draw))
-    order = [dict(scheduled_index=i, config='nosent' if i % 2 else 'sent', extra=i > 20,
+    order = [dict(scheduled_index=i, config='sent' if guard == 'rules' else 'nosent' if i % 2 else 'sent', extra=i > 20,
                   tags={'1': next(pool), '2': next(pool)}) for i in range(1, 31)]
     if guard:
         error_draw = error_draw or (lambda: int(secrets.randbelow(10 ** 6) < USER_ERROR_RATE * 10 ** 6))
         for planned in order:
             planned['user_error'] = {'1': error_draw(), '2': error_draw()}
-    return dict(guard=GUARD if guard else None,
+    return dict(guard={'ghosteffect': GUARD, 'rules': RULES_ARM, True: GUARD}.get(guard),
         kind='A-native freeze (B-08); written by testbed/make_freeze.py', created_utc_ns=time.time_ns(),
         model=dict(repo_id=serving['repo_id'], revision=serving['revision'], dtype=serving['dtype'],
                    engine='vLLM ' + serving['engine_version'], max_model_len=serving['max_model_len'],
@@ -98,10 +109,11 @@ def main():
     parser.add_argument('--adb', type=Path, required=True)
     parser.add_argument('--adb-server-port', default='5038')
     parser.add_argument('--serial', default='emulator-5580')
-    parser.add_argument('--guard', action='store_true', help='guarded arm: GhostEffect guard and drawn user errors')
+    parser.add_argument('--guard', choices=('ghosteffect', 'rules'), help='guarded arm and drawn simulated-user errors')
     parser.add_argument('--output', type=Path)
     args = parser.parse_args()
-    args.output = args.output or TESTBED / ('agent_study_guarded.freeze.json' if args.guard else 'agent_study.freeze.json')
+    args.output = args.output or TESTBED / {'ghosteffect': 'agent_study_guarded.freeze.json',
+                                            'rules': 'agent_study_rules.freeze.json'}.get(args.guard, 'agent_study.freeze.json')
     sys.path.insert(0, str(TESTBED))
     from androidworld_env import verify_source
     serving = json.loads(args.serving_receipt.read_text(encoding='utf-8'))
