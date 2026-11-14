@@ -115,10 +115,10 @@ def main():
     parser.add_argument('--fault', choices=('drop-forcestop', 'drop-killagent'), default='drop-forcestop')
     parser.add_argument('--output', type=Path)
     args = parser.parse_args()
-    args.output = args.output or TESTBED / {'ghosteffect': 'agent_study_guarded.freeze.json',
-                                            'rules': 'agent_study_rules.freeze.json'}.get(args.guard) or (
+    args.output = args.output or TESTBED / ({'ghosteffect': 'agent_study_guarded.freeze.json',
+                                             'rules': 'agent_study_rules.freeze.json'}.get(args.guard) or (
         'agent_study_t3a.freeze.json' if args.framework == 't3a' else 'agent_study_killagent.freeze.json'
-        if args.fault == 'drop-killagent' else 'agent_study.freeze.json')
+        if args.fault == 'drop-killagent' else 'agent_study.freeze.json'))
     sys.path.insert(0, str(TESTBED))
     from androidworld_env import verify_source
     serving = json.loads(args.serving_receipt.read_text(encoding='utf-8'))
