@@ -161,16 +161,7 @@ def worker(args):
             raise EpochStop('h_eval')
 
     try:
-        t0 = time.monotonic()
-        receipt['reset'] = k9_reset.reset(args.adb, 'emulator-%d' % args.console_port, args.config, out,
-                                          str(args.adb_server_port), args.java)
-        row['reset_s'] = round(time.monotonic() - t0, 1)
-        if receipt['reset']['verdict'] != 'PASS':
-            raise RuntimeError('reset failed')
-        faults = Faults(Journal(out / 'proxy.jsonl'), barrier_timeout=120)
-        proxy = smtp_proxy(('127.0.0.1', k9_reset.SMTP_PORT), faults, listen=('127.0.0.1', 14025))
-        threading.Thread(target=proxy.serve_forever, kwargs={'poll_interval': .05}, daemon=True).start()
-        arm = faults.configure('drop') if args.fault != 'none' else None
+        # model, source and receipt first: a dead tunnel fails here, before a minute of reset
         if args.framework == 'm3a':
             serving = serving_contract(args.serving_receipt, args.endpoint)
             row['model_id'] = serving['repo_id'] + '@' + serving['revision']
@@ -182,6 +173,16 @@ def worker(args):
             receipt['native_source'] = verify_source(ROOT / 'runtime/vendor/android_world_full')
         else:
             row['model_id'] = 'none (synthetic fixture)'
+        t0 = time.monotonic()
+        receipt['reset'] = k9_reset.reset(args.adb, 'emulator-%d' % args.console_port, args.config, out,
+                                          str(args.adb_server_port), args.java)
+        row['reset_s'] = round(time.monotonic() - t0, 1)
+        if receipt['reset']['verdict'] != 'PASS':
+            raise RuntimeError('reset failed')
+        faults = Faults(Journal(out / 'proxy.jsonl'), barrier_timeout=120)
+        proxy = smtp_proxy(('127.0.0.1', k9_reset.SMTP_PORT), faults, listen=('127.0.0.1', 14025))
+        threading.Thread(target=proxy.serve_forever, kwargs={'poll_interval': .05}, daemon=True).start()
+        arm = faults.configure('drop') if args.fault != 'none' else None
         env = load_env(args.adb, args.console_port, args.adb_server_port, args.grpc_port, freeze_datetime=False)
         shell(f'am start -W -n {k9_reset.LAUNCH}')
         native_execute = env.execute_action
@@ -384,8 +385,10 @@ def main():
                        attempt=args.attempt, agent=args.framework, phase=args.phase, agent_final_status='timeout',
                        outcome='INVALID', invalid_reason='harness_timeout', wall_clock_s=args.timeout_seconds,
                        t_end_utc=time.time_ns())
+            synthetic = args.framework != 'm3a' or json.loads(args.serving_receipt.read_text()).get('synthetic', False)
             (args.output / 'TIMEOUT.json').write_text(json.dumps(dict(
                 status='TIMEOUT', outcome='INVALID', invalid_reason='harness_timeout', tag=args.tag,
+                study_data=not synthetic,
                 timeout_seconds=args.timeout_seconds, row=row), indent=2), encoding='utf-8')
             raise SystemExit(124)
     print((args.output / 'worker.log').read_text(encoding='utf-8', errors='replace')[-600:])

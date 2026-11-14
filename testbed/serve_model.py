@@ -21,10 +21,11 @@ from setup_models import ROOT,LOCK,local_config,project_path,relative_name
 
 # Memory settings per GPU (b-log 14/11). They decide how much GPU memory vLLM takes and how many
 # requests it batches; they do not change what the model sees or answers. An episode sends one
-# request at a time, so max_num_seqs=1 on the 24 GB A10G loses nothing.
+# request at a time, so max_num_seqs=1 on the 24 GB A10G loses nothing. 0.90 of 22.5 GiB leaves about
+# 3 GiB of KV cache after the 15.6 GiB weights; 32768 tokens need 1.75 GiB (56 KiB per token).
 GPUS={'h100':dict(name='H100',min_mib=75000,util=dict(singleton=.85,dual=.45),max_num_seqs=2),
       'l40s':dict(name='L40S',min_mib=44000,util=dict(singleton=.85),max_num_seqs=2),
-      'a10g':dict(name='A10G',min_mib=22000,util=dict(singleton=.95),max_num_seqs=1)}
+      'a10g':dict(name='A10G',min_mib=22000,util=dict(singleton=.90),max_num_seqs=1)}
 PIXELS=dict(min_pixels=3136,max_pixels=3211264)
 # Qwen's processor default (12845056) makes vLLM reserve encoder memory for 16384-token images.
 # The cap shrinks that reserve to 4096 tokens, and a 1080x2400 screenshot (2408x1092 after
@@ -45,7 +46,8 @@ def command_for(model,snapshot,port,allocation,gpu,python=sys.executable):
              '--dtype','bfloat16','--tensor-parallel-size','1','--max-model-len','32768',
              '--load-format','safetensors',
              '--max-num-seqs',str(GPUS[gpu]['max_num_seqs']),'--gpu-memory-utilization',str(GPUS[gpu]['util'][allocation]),
-             '--limit-mm-per-prompt',json.dumps({'image':5}), '--generation-config','vllm','--seed','0']
+             '--limit-mm-per-prompt',json.dumps({'image':5}), '--generation-config','vllm','--seed','0',
+             '--mm-processor-cache-gb','1']   # host RAM only; M3A never resends an identical image
     if model['env_prefix'] in ('GUIOWL','QWEN'):
         command+=['--mm-processor-kwargs',json.dumps(PIXELS)]
     return command

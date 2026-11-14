@@ -28,15 +28,26 @@ def receipt_of(run):
 
 
 def label_cost(receipts):
+    """Seconds per component over the valid scheduled episodes, i.e. complete fault-injection trials.
+    (A valid row is always the last attempt of its index: attempt 2 runs only after an invalid attempt 1.)"""
+    trials = [r for r in receipts if r['row']['phase'] == 'scheduled' and r['row']['outcome'] != 'INVALID']
     rows = []
     for component in COMPONENTS:
-        values = [float(r['label_cost'][component]) for r in receipts
-                  if r['row']['phase'] == 'scheduled' and r.get('label_cost', {}).get(component) not in (None, '')]
+        values = [float(r['label_cost'][component]) for r in trials
+                  if r.get('label_cost', {}).get(component) not in (None, '')]
         rows.append(dict(component=component, n=len(values),
                          **({k: round(f(values), 1) for k, f in (('min_s', min), ('median_s', statistics.median),
                                                                   ('max_s', max))} if values else
                             dict(min_s='', median_s='', max_s=''))))
     return rows
+
+
+def scrub(text):
+    """Receipts go into the anonymous artifact: replace this machine's repo and home paths (raw and JSON-escaped)."""
+    for path, placeholder in ((TESTBED.parent, '<repo>'), (Path.home(), '<home>')):
+        for form in (str(path), str(path).replace('\\', '/'), json.dumps(str(path))[1:-1]):
+            text = text.replace(form, placeholder)
+    return text
 
 
 def main():
@@ -49,15 +60,18 @@ def main():
     found = {}
     for run in sorted(p for p in args.runs if p.is_dir()):
         receipt = receipt_of(run)
+        if receipt.get('study_data') is not True:
+            raise SystemExit('%s is not study data (synthetic fixture or fake model); leave it out' % run)
         row = {f: str(receipt['row'][f]) for f in FIELDS}
         if row['episode_id'] in found:
             raise SystemExit('episode_id %s appears twice' % row['episode_id'])
         found[row['episode_id']] = (row, receipt)
     table = args.out / 'episodes.csv'
     if table.exists():
-        for old in csv.DictReader(table.open(encoding='utf-8', newline='')):
-            if found.get(old['episode_id'], (None,))[0] != old:
-                raise SystemExit('episodes.csv is append-only; %s changed or is missing' % old['episode_id'])
+        with table.open(encoding='utf-8', newline='') as f:
+            for old in csv.DictReader(f):
+                if found.get(old['episode_id'], (None,))[0] != old:
+                    raise SystemExit('episodes.csv is append-only; %s changed or is missing' % old['episode_id'])
     receipts = []
     with table.open('w', encoding='utf-8', newline='') as f:
         writer = csv.DictWriter(f, fieldnames=FIELDS, lineterminator='\n')
@@ -65,7 +79,7 @@ def main():
         for row, receipt in sorted(found.values(), key=lambda x: int(x[0]['t_end_utc'])):
             writer.writerow(row)
             (args.out / 'receipts' / (row['episode_id'] + '.json')).write_text(
-                json.dumps(receipt, indent=2, default=str), encoding='utf-8')
+                scrub(json.dumps(receipt, indent=2, default=str)), encoding='utf-8')
             receipts.append(receipt)
     with (args.out / 'label_cost.csv').open('w', encoding='utf-8', newline='') as f:
         writer = csv.DictWriter(f, fieldnames=('component', 'n', 'min_s', 'median_s', 'max_s'), lineterminator='\n')

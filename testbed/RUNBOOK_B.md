@@ -38,8 +38,8 @@ Server 80GB và 40GB không vào được từ 10/11. Nhóm thuê một máy AWS
 |---|---|---|
 | 0:00 đến 0:45 | Mục 3: chép code, `check`, `setup` (cài vLLM khoảng 10 phút, tải Qwen khoảng 5 phút), `serve` (nạp model và biên dịch 5 đến 10 phút) | Bật AVD sớm và để chạy vài phút (lỗi a11y chỉ gặp ngay sau cold boot); mở tunnel khi có `MODEL_SERVING_READY` |
 | 0:45 đến 1:15 | Model chạy | Một episode dev đầu tiên, ngồi xem (`--dev-n 1`) |
-| 1:15 đến 2:30 | Model chạy | 9 episode dev còn lại (B-07). Dưới 6/10 thành công thì báo trưởng nhóm trước khi đi tiếp |
-| 2:30 đến 2:45 | Model chạy | `make_freeze.py`, commit, PR, trưởng nhóm gộp (B-08) |
+| 1:15 đến 2:30 | Model chạy | 9 episode dev còn lại (B-07). Dưới 6/10 thành công thì báo trưởng nhóm trước khi đi tiếp, và Stop máy trong lúc chờ |
+| 2:30 đến 2:45 | Model chạy (Stop nếu chờ gộp quá 30 phút; freeze không phụ thuộc phiên server) | `make_freeze.py`, commit, PR, trưởng nhóm gộp, `git fetch` (B-08). Runner chỉ chạy scheduled khi freeze đã nằm trong `origin/main` và khớp code, task, profile GPU |
 | 2:45 đến khoảng 6:30 | Model chạy | `run_agent_study.py --phase scheduled`: 20 episode khoảng 10 phút mỗi episode, chạy thêm nếu dưới 10 hợp lệ (B-09). Báo C số đếm thô ngay khi xong |
 | Xong | **Stop máy ngay** | `collect_agent.py`, `check_agent_data.py`, render, viết B-10 và B-11 |
 
@@ -100,10 +100,10 @@ ssh -N -L 8101:127.0.0.1:8101 ghost-gpu
 
 ```bash
 curl -s http://127.0.0.1:8101/version          # phải là 0.11.0
-scp 'ghost-gpu:~/P03/testbed/runs/serve-*/SERVING.json' testbed/runs/SERVING.json
+scp 'ghost-gpu:~/P03/testbed/runs/serve-<ngày giờ>/SERVING.json' testbed/runs/SERVING.json   # đúng thư mục in ở dòng MODEL_SERVING_READY
 ```
 
-Tunnel rớt giữa episode thì lệnh gọi model lỗi, episode ghi `measurement_error` và `run_agent_study.py` tự chạy lại lần 2 của index đó. Mở lại tunnel rồi chạy lại đúng lệnh; các episode đã xong được bỏ qua.
+`run_agent_study.py` kiểm endpoint trước mỗi episode; tunnel chết thì nó dừng hẳn, không tiêu lượt chạy. Tunnel rớt giữa một episode thì episode đó ghi `measurement_error` và được chạy lại lần 2; lỗi đo hai lần liên tiếp thì runner dừng để tìm nguyên nhân. Mở lại tunnel rồi chạy lại đúng lệnh; episode đã xong được bỏ qua.
 
 ## 5. Local: smoke AVD có K-9 và forwarder
 

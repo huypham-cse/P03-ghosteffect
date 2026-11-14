@@ -7,6 +7,9 @@ dev: dev-01 to dev-NN, no fault, configs alternate, fresh tags. scheduled: follo
 (testbed/agent_study.freeze.json): indices 1 to 20, attempt 2 only after a measurement error, extra
 indices 21 to 30 only while fewer than 10 are valid. Episodes already in --out are skipped, so the
 command can be run again after an interruption. Each episode is one agent_episode.py process.
+The endpoint must answer as the receipt says before each episode, and two measurement errors in a row
+stop the run. Scheduled index 1 starts only once the freeze is merged into origin/main and matches the
+live code, task and GPU profile.
 """
 import argparse
 import json
@@ -19,6 +22,7 @@ import time
 TESTBED = Path(__file__).resolve().parent
 FREEZE = TESTBED / 'agent_study.freeze.json'
 MEASUREMENT = ('measurement_error:', 'grading_failed:', 'harness_timeout')
+ENDPOINT = 'http://127.0.0.1:8101/v1'
 
 
 def outcome(folder):
@@ -31,6 +35,12 @@ def outcome(folder):
 def episode(args, episode_id, config, tag, phase, fault, extra=()):
     folder = args.out / episode_id
     if outcome(folder) is None:
+        from native_episode import serving_contract
+        try:   # a dead tunnel stops the run here instead of spending the attempts of the next indices
+            serving_contract(args.serving_receipt, ENDPOINT)
+        except Exception as exc:
+            raise SystemExit('model endpoint not ready (%s: %s); reopen the tunnel, then run the same command'
+                             % (type(exc).__name__, exc))
         if folder.exists():
             raise SystemExit('%s exists without a result; move it aside and note it in b-log' % folder)
         command = [sys.executable, '-B', str(TESTBED / 'agent_episode.py'), '--framework', 'm3a', '--config', config,
@@ -45,12 +55,30 @@ def episode(args, episode_id, config, tag, phase, fault, extra=()):
     return row
 
 
+def freeze_problems(freeze, serving_receipt, goal_file):
+    """Why scheduled index 1 must not start yet; empty when the freeze is merged and matches what will run."""
+    import hashlib
+    from make_freeze import CODE, sha
+    git = lambda *a: subprocess.run(['git', *a], cwd=TESTBED, capture_output=True, text=True)
+    commit = git('log', '-1', '--format=%H', '--', str(FREEZE)).stdout.strip()
+    problems = []
+    if not commit or git('diff', '--quiet', 'HEAD', '--', str(FREEZE)).returncode:
+        problems.append('the freeze is not committed')
+    elif git('merge-base', '--is-ancestor', commit, 'origin/main').returncode:
+        problems.append('the freeze commit is not in origin/main (merge the freeze PR, then git fetch)')
+    problems += ['%s changed since the freeze' % n for n in CODE if sha(TESTBED / n) != freeze['testbed_code_sha256'][n]]
+    if hashlib.sha256(goal_file.read_text(encoding='utf-8').strip().encode()).hexdigest() != freeze['task']['goal_sha256']:
+        problems.append('task text differs from the freeze')
+    if json.loads(serving_receipt.read_text(encoding='utf-8')).get('gpu_profile') != freeze['model']['gpu_profile']:
+        problems.append('GPU profile of the serving receipt differs from the freeze')
+    return problems
+
+
 def scheduled(args):
-    if subprocess.run(['git', 'diff', '--quiet', 'HEAD', '--', str(FREEZE)], cwd=TESTBED).returncode or not \
-            subprocess.run(['git', 'log', '-1', '--format=%H', '--', str(FREEZE)], cwd=TESTBED,
-                           capture_output=True, text=True).stdout.strip():
-        raise SystemExit('commit and merge testbed/agent_study.freeze.json before the first scheduled episode')
     freeze = json.loads(FREEZE.read_text(encoding='utf-8'))
+    problems = freeze_problems(freeze, args.serving_receipt, args.goal_file)
+    if problems:
+        raise SystemExit('not starting scheduled episodes: ' + '; '.join(problems))
     common = ['--h-eval', str(freeze['fault']['h_eval_s']), '--max-steps', str(freeze['agent']['max_steps'])]
     valid = 0
     for planned in freeze['order']:
@@ -63,6 +91,8 @@ def scheduled(args):
         row = run(1, '')
         if row['invalid_reason'].startswith(MEASUREMENT):
             row = run(2, '-r2')
+            if row['invalid_reason'].startswith(MEASUREMENT):
+                raise SystemExit('two measurement errors in a row at index %d; find the cause first' % index)
         valid += row['outcome'] != 'INVALID'
         print('  valid so far: %d' % valid, flush=True)
     print('scheduled done: %d valid' % valid)

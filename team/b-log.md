@@ -230,3 +230,18 @@ Khớp kỳ vọng đã ghi trước. Dữ liệu: `artifact/results/real/audit/
 **Kiểm:** testbed và artifact test qua; render thêm đúng 44 macro (`??`) vào `macros_real.tex` và tạo `tab_agent.tex`, không số nào khác đổi; build 21 trang. `scrub_check.sh` chỉ báo nhầm các địa chỉ `@test.invalid` như trước.
 
 **Chưa làm:** tổng duyệt trên emulator với `fake_model.py` (chờ trưởng nhóm đồng ý chạy emulator); nạp vLLM thật trên A10G.
+
+## 14/11/2026 (sau review độc lập của nhánh `b/05-aws-gpu`)
+
+Review độc lập kết luận chưa nên gộp; đã kiểm lại từng điểm và sửa:
+- `server_gpu.sh`: vLLM 0.11.0 chỉ yêu cầu `transformers>=4.55.2`, nên pip sẽ lấy transformers 5.23.0 (bản mới nhất trên PyPI hôm nay) và chỉ lỗi lúc `serve`. Giờ ghim đúng bản CI của vLLM 0.11.0 đã thử (`transformers==4.55.2`, `huggingface_hub==0.34.3`, theo `requirements/test.txt` ở tag v0.11.0) và `setup` import thử cả hai. `apt-get` chờ khóa dpkg tối đa 10 phút.
+- Tunnel chết từng có thể tiêu hết lượt chạy của cả freeze trong khoảng một giờ (mỗi episode lỗi sau một phút). Giờ `agent_episode.py` kiểm model trước khi reset, `run_agent_study.py` kiểm endpoint trước mỗi episode và dừng nếu không trả lời, và dừng khi lỗi đo hai lần liên tiếp.
+- Checker từng từ chối một lần chạy lại hợp lệ khi lần 1 lỗi trước lúc ghi `native_source`; giờ chỉ so các trường của freeze ở dòng không có lỗi đo.
+- YC-B7: checker tính lại `label_cost.csv` từ receipt. Tập tính chi phí nhãn là các episode scheduled hợp lệ (lượt tiêm lỗi trọn vẹn), không gồm lượt hỏng sớm.
+- Dữ liệu giả: `collect_agent.py` từ chối receipt có `study_data` khác `true`, checker đòi `study_data: true` ở mọi dòng; `TIMEOUT.json` có `study_data`.
+- Trước index 1, runner kiểm freeze đã nằm trong `origin/main` và khớp code, task, profile GPU đang chạy.
+- Double-blind: `collect_agent.py` thay đường dẫn repo và thư mục home trong receipt bằng `<repo>`, `<home>`; checker báo nếu còn đường dẫn người dùng.
+- A10G dùng 90% bộ nhớ GPU thay vì 95% (dư hơn ở bước kiểm bộ nhớ trống lúc khởi động, KV vẫn còn khoảng 3 GiB, cần 1,75 GiB); thêm `--mm-processor-cache-gb 1` vì máy chỉ có 16 GB RAM (chỉ là bộ nhớ đệm phía CPU, M3A không gửi lại ảnh y hệt).
+- Runbook: chép đúng `SERVING.json` vừa in ra; Stop máy khi chờ trưởng nhóm duyệt cổng dev hoặc gộp freeze.
+
+Test: testbed 96 qua (4 bỏ qua), artifact 49 qua (1 bỏ qua); render không đổi gì thêm.

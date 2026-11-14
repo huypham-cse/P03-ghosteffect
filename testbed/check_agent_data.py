@@ -1,4 +1,4 @@
-"""Check artifact/results/real/agent/ against the freeze (YC-B3, YC-B4). Exit 0 only if every check passes.
+"""Check artifact/results/real/agent/ against the freeze (YC-B3, YC-B4, YC-B7). Exit 0 only if every check passes.
 
   python testbed/check_agent_data.py artifact/results/real/agent
 """
@@ -6,12 +6,15 @@ import argparse
 import csv
 import json
 from pathlib import Path
+import re
 
 from agent_episode import FIELDS, OUTCOMES, classify
+from collect_agent import label_cost
 from make_freeze import CODE
 
 TESTBED = Path(__file__).resolve().parent
 MEASUREMENT = ('measurement_error:', 'grading_failed:', 'harness_timeout')
+LOCAL_PATH = re.compile(r'[A-Za-z]:[\\/]+Users|/home/[^/"]+/|/Users/[^/"]+/')   # double-blind
 
 
 def number(value):
@@ -36,13 +39,19 @@ def check(folder, freeze_file=TESTBED / 'agent_study.freeze.json'):
     extra = {p.stem for p in (folder / 'receipts').glob('*.json')} - set(ids)
     if extra:
         err('receipts without a row: %s' % sorted(extra))
-    final, attempts = {}, {}
+    final, attempts, receipts = {}, {}, []
     for r in rows:
         file = folder / 'receipts' / (r['episode_id'] + '.json')
         if not file.is_file():
             err('%s: no receipt' % r['episode_id'])
             continue
-        receipt = json.loads(file.read_text(encoding='utf-8'))
+        text = file.read_text(encoding='utf-8')
+        receipt = json.loads(text)
+        receipts.append(receipt)
+        if LOCAL_PATH.search(text):
+            err('%s: receipt holds a local user path' % r['episode_id'])
+        if receipt.get('study_data') is not True:
+            err('%s: not study data (synthetic fixture or fake model)' % r['episode_id'])
         if {f: str(receipt['row'][f]) for f in FIELDS} != r:
             err('%s: receipt row differs from episodes.csv' % r['episode_id'])
         if r['outcome'] not in OUTCOMES:
@@ -65,11 +74,11 @@ def check(folder, freeze_file=TESTBED / 'agent_study.freeze.json'):
         planned = order[index]
         if r['config'] != planned['config'] or receipt.get('tag') != planned['tags'][str(attempt)]:
             err('%s: config or tag differs from the freeze order' % r['episode_id'])
-        if r['invalid_reason'] != 'harness_timeout':
+        if not measurement:   # a measurement error may stop the episode before these are recorded
             if (receipt.get('native_source') != freeze['agent']['native_source']
                     or receipt.get('goal_sha256') != freeze['task']['goal_sha256']
                     or receipt.get('gpu_profile') != freeze['model']['gpu_profile']
-                    or receipt.get('study_data') is not True or receipt.get('h_eval_s') != freeze['fault']['h_eval_s']
+                    or receipt.get('h_eval_s') != freeze['fault']['h_eval_s']
                     or any(receipt.get('source_sha256', {}).get(n) != freeze['testbed_code_sha256'][n] for n in CODE)):
                 err('%s: prompt, task, code, GPU or horizon differs from the freeze' % r['episode_id'])
         final[index] = r if attempt == 2 or index not in final else final[index]
@@ -87,6 +96,9 @@ def check(folder, freeze_file=TESTBED / 'agent_study.freeze.json'):
         if len(valid(range(1, i + 1))) >= 10:
             err('extra index %d ran after 10 valid episodes' % (i + 1))
             break
+    with (folder / 'label_cost.csv').open(encoding='utf-8', newline='') as f:
+        if list(csv.DictReader(f)) != [{k: str(v) for k, v in row.items()} for row in label_cost(receipts)]:
+            err('label_cost.csv differs from the value recomputed from the receipts')
     if len(valid(final)) < 10:
         err('only %d valid scheduled episodes (need 10)' % len(valid(final)))
     return errors

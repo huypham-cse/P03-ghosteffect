@@ -13,6 +13,7 @@ import unittest
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from agent_episode import FIELDS, classify
 from check_agent_data import check
+from collect_agent import label_cost
 import make_freeze
 
 TESTBED = Path(__file__).resolve().parents[1]
@@ -54,7 +55,7 @@ class AgentData(unittest.TestCase):
         self.freeze_file = self.tmp / 'freeze.json'
         self.freeze_file.write_text(json.dumps(self.fz), encoding='utf-8')
 
-    def write(self, receipts):
+    def write(self, receipts, cost=None):
         folder = self.tmp / 'agent'
         shutil.rmtree(folder, ignore_errors=True)
         (folder / 'receipts').mkdir(parents=True)
@@ -65,6 +66,10 @@ class AgentData(unittest.TestCase):
             for r in receipts:
                 writer.writerow(r['row'])
                 (folder / 'receipts' / (r['row']['episode_id'] + '.json')).write_text(json.dumps(r), encoding='utf-8')
+        with (folder / 'label_cost.csv').open('w', encoding='utf-8', newline='') as f:
+            writer = csv.DictWriter(f, fieldnames=('component', 'n', 'min_s', 'median_s', 'max_s'), lineterminator='\n')
+            writer.writeheader()
+            writer.writerows(cost or label_cost(receipts))
         return check(folder, self.freeze_file)
 
     def good(self):
@@ -96,6 +101,26 @@ class AgentData(unittest.TestCase):
         self.assertTrue(any('rerun without a measurement error' in e for e in errors), errors)
         self.assertTrue(any('tag differs' in e for e in errors), errors)
 
+    def test_measurement_rerun_without_model_fields_passes(self):
+        receipts = self.good()
+        failed = episode(self.fz, 3, reason='measurement_error:RuntimeError')
+        for key in ('native_source', 'gpu_profile', 'goal_sha256'):   # stopped before these were recorded
+            del failed[key]
+        receipts[2] = failed
+        receipts.append(episode(self.fz, 3, attempt=2))
+        self.assertEqual(self.write(receipts), [])
+
+    def test_synthetic_rows_label_cost_and_local_paths_are_caught(self):
+        receipts = self.good()
+        fake = episode(self.fz, 1, phase='dev')
+        fake.update(study_data=False, error='C:' + chr(92) + 'Users' + chr(92) + 'someone' + chr(92) + 'adb.exe failed')
+        errors = self.write(receipts + [fake])
+        self.assertTrue(any('not study data' in e for e in errors), errors)
+        self.assertTrue(any('local user path' in e for e in errors), errors)
+        wrong = label_cost(receipts)
+        wrong[0]['median_s'] = 99.0
+        self.assertTrue(any('label_cost.csv differs' in e for e in self.write(receipts, wrong)))
+
     def test_extra_indices_only_below_ten_valid(self):
         receipts = self.good() + [episode(self.fz, 21)]
         self.assertTrue(any('against the freeze rule' in e for e in self.write(receipts)))
@@ -116,6 +141,18 @@ class AgentData(unittest.TestCase):
         shutil.rmtree(sorted(runs.iterdir())[0])
         reply = subprocess.run(command + [str(p) for p in runs.iterdir()], capture_output=True, text=True, env=env)
         self.assertIn('append-only', reply.stderr)
+        fake = episode(self.fz, 9, phase='dev')
+        fake['study_data'] = False
+        (runs / 'fake').mkdir()
+        (runs / 'fake' / 'RESULT.json').write_text(json.dumps(fake), encoding='utf-8')
+        reply = subprocess.run(command + [str(runs / 'fake')], capture_output=True, text=True, env=env)
+        self.assertIn('not study data', reply.stderr)
+
+    def test_collect_scrubs_local_paths(self):
+        from collect_agent import scrub
+        self.assertEqual(scrub(json.dumps(dict(e=str(ROOT / 'runtime' / 'adb.exe')))), json.dumps(dict(e='x'))
+                         .replace('x', '<repo>' + json.dumps(os.sep)[1:-1] + 'runtime' + json.dumps(os.sep)[1:-1] + 'adb.exe'))
+        self.assertNotIn(str(Path.home()), scrub(str(Path.home() / 'x')))
 
     def test_render_writes_the_44_macros(self):
         folder = self.tmp / 'results' / 'agent'

@@ -22,7 +22,7 @@ def screen(*items, history=''):
 class GpuProfiles(unittest.TestCase):
     def test_only_memory_settings_differ_between_gpus(self):
         a10g, h100 = (command_for(QWEN, 'snap', 8101, 'singleton', g) for g in ('a10g', 'h100'))
-        self.assertEqual((flag(a10g, '--gpu-memory-utilization'), flag(a10g, '--max-num-seqs')), ('0.95', '1'))
+        self.assertEqual((flag(a10g, '--gpu-memory-utilization'), flag(a10g, '--max-num-seqs')), ('0.9', '1'))
         self.assertEqual((flag(h100, '--gpu-memory-utilization'), flag(h100, '--max-num-seqs')), ('0.85', '2'))
         strip = lambda c: [x for i, x in enumerate(c) if c[i - 1] not in ('--gpu-memory-utilization', '--max-num-seqs')]
         self.assertEqual(strip(a10g), strip(h100))

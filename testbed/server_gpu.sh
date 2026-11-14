@@ -41,12 +41,14 @@ setup)
     python_ok
     if ! python3 -c 'import ensurepip' 2>/dev/null; then   # Ubuntu leaves venv support out of the base image
         SUDO=; [ "$(id -u)" = 0 ] || SUDO=sudo
-        $SUDO apt-get update -q && $SUDO apt-get install -y -q python3-venv
+        $SUDO apt-get -o DPkg::Lock::Timeout=600 update -q
+        $SUDO apt-get -o DPkg::Lock::Timeout=600 install -y -q python3-venv
     fi
     [ -d "$VENV" ] || python3 -m venv "$VENV"
     "$PY" -m pip install -q --upgrade pip
-    "$PY" -m pip install -q vllm==0.11.0 huggingface_hub
-    "$PY" -c "import importlib.metadata as m; print('vllm', m.version('vllm'))"
+    # vllm 0.11.0 only asks for transformers>=4.55.2, so pip would take transformers 5; pin what its CI tested
+    "$PY" -m pip install -q vllm==0.11.0 transformers==4.55.2 huggingface_hub==0.34.3
+    "$PY" -c "import vllm, transformers, importlib.metadata as m; print('vllm', m.version('vllm'), 'transformers', transformers.__version__)"
     if [ -f runtime/models/qwen/cc594898137f460bfe9f0759e9844b3ce807cfb5/SNAPSHOT.json ]; then
         echo "Qwen already downloaded and checked"
     else
