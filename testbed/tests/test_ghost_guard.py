@@ -7,7 +7,7 @@ from types import SimpleNamespace as NS
 import unittest
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from faultproxy import Journal
-from ghost_guard import Guard, simulated_user, capture
+from ghost_guard import Guard, Rules, simulated_user, capture
 
 
 def element(text='', desc='', box=(0, 0, 100, 100)):
@@ -57,6 +57,31 @@ class GhostGuard(unittest.TestCase):
 
     def test_simulated_user(self):
         self.assertEqual([simulated_user(t, e) for t in (True, False) for e in (0, 1)], [True, False, False, True])
+
+
+class RuleCascade(unittest.TestCase):
+    def setUp(self):
+        self.tmp = Path(tempfile.mkdtemp())
+        self.addCleanup(shutil.rmtree, self.tmp, True)
+        self.rules = Rules(self.tmp, 'r01', 'goal', Journal(self.tmp / 'guard.jsonl'))
+        self.addCleanup(self.rules.close)
+        self.rules.before(NS(action_type='click', index=0), SCREEN, 'phase1')
+        self.waits = []
+
+    def restart(self, folders, answer=None):
+        return self.rules.restart(lambda: answer, lambda: folders, self.waits.append)
+
+    def test_sent_list_means_done(self):
+        record = self.restart(['Sent'])
+        self.assertEqual((record['decision'], record['state'], self.waits), ('COMMITTED', 'COMMITTED', [10.0]))
+
+    def test_outbox_only_means_retry(self):   # the lost-reply case: K-9 never writes the Sent list
+        record = self.restart(['Outbox'])
+        self.assertEqual((record['decision'], record['reason'], record['state']), ('RETRY', 'every_family_reads_absent', 'ABSENT'))
+
+    def test_no_reading_asks(self):
+        record = self.restart(None, answer=True)
+        self.assertEqual((record['decision'], record['answer'], record['state']), ('ASK', 'delivered', 'COMMITTED'))
 
 
 if __name__ == '__main__':
