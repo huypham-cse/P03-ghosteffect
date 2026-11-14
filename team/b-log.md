@@ -318,3 +318,14 @@ Test: testbed 96 qua (4 bỏ qua), artifact 49 qua (1 bỏ qua); render không �
 - §6 thêm một câu: các lượt M3A của §7.8 chạy agent nguyên bản trên cùng cấu hình K-9, emulator x86-64.
 - Kiểm: `build.sh` thoát 0, 22 trang, không overfull quá 10 pt, PDF không còn `??`; test testbed và artifact qua; scrub qua trên các file đã đổi.
 - Còn lại ngoài YC-12: YC-10 ("G2" chỉ trong định lý, chứng minh, bảng) chưa đạt ở §6, §7 phần đo và Fig. 1; cả bài đều dùng "G2" trong văn nên cần thống nhất với A và C trước khi sửa.
+
+## 14/11/2026 (arm có GhostEffect: thiết kế chốt trước khi chạy)
+
+- **Mục đích:** so GhostEffect với M3A nguyên bản trên cùng bẫy K-9 (trưởng nhóm yêu cầu 14/11, sau B-09). Thí nghiệm bổ sung, không thuộc freeze B-09.
+- **Hai arm:** baseline là 20 lượt scheduled s01 đến s20 đã chạy theo `agent_study.freeze.json`. Arm guard là 20 lượt g01 đến g20 theo `testbed/agent_study_guarded.freeze.json` (sha256 `54e174dc...40b1`): model, decoding, task, app, kiểu lỗi, `H_eval`, luật kết quả, host và mục `agent` (gồm alias) trùng baseline; tag và cờ người dùng sai rút một lần trong freeze. Hai arm chạy nối tiếp cùng ngày, cùng server, không xen kẽ ngẫu nhiên: ghi là giới hạn.
+- **Guard** (`testbed/ghost_guard.py` trên `controller.py`, `classifier.py`; agent, prompt và model không đổi): trước cú chạm mà classifier nhận là commit (từ điển tiếng Anh trên phần tử được chạm), effect được ghi `ISSUED` bền vững trong ledger SQLite của host rồi mới chạm. Sau khi kill agent, force-stop và mở lại K-9, controller mới mở lại ledger từ đĩa và gọi `recover()`. K-9 không có chứng nhận runtime nên kết quả là hỏi. Người dùng giả lập trả lời theo GreenMail, sai đúng ở lượt có cờ `user_error` 1 (tỉ lệ 5%, giả định mô phỏng của bài). "Đã nhận": COMMITTED, không khởi động lại agent. "Chưa nhận": ABSENT, agent khởi động lại như baseline. Không có ứng viên (classifier bỏ sót): agent chạy lại không có guard, giữ trong dữ liệu.
+- **Cờ đã rút:** index 15 lượt 1 có `user_error` 1; index 10 chỉ có ở lượt 2 (chạy khi lượt 1 lỗi đo).
+- **Phân tích chốt trước** (`render_guarded` trong `render_agent.py`, viết trước khi chạy): chỉ số chính là tỉ lệ RESENT_DUPLICATE trên lượt hợp lệ, Wilson 95%, Fisher exact hai phía so với baseline. Chỉ số phụ: số lượt hỏi, số lượt classifier bỏ sót, số lượt người dùng giả lập sai.
+- **Kỳ vọng ghi trước:** bản trùng chỉ xảy ra khi người dùng giả lập sai hoặc classifier bỏ sót cú chạm Send. Ở K-9 guard hỏi ở mọi lượt hợp lệ, nên đây là kiểm tra cơ chế end-to-end, không phải kiểm tra hiệu chỉnh.
+- **Dev (không phải kết quả):** gdev-01 (không Sent) và gdev-02 (có Sent): Send được ghi `ISSUED`, hỏi, COMMITTED, 1 bản. gdev-03 (có Sent, `user_error` 1): ABSENT, agent chạy lại, ghi `ISSUED` lần 2, gửi lại, 2 bản. Thư mục `testbed/runs/agent-guarded/`.
+- Báo nguyên trạng; chỉ chạy lại theo luật lỗi đo của freeze.

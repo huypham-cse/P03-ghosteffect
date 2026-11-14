@@ -101,7 +101,11 @@ def render_agent():
     M('AgentWallMedS', median([r['wall_clock_s'] for r in valid], 0))
     M('AgentStepsAfterMed', median([r['steps_after_restart'] for r in valid], 1))
     paths = [os.path.join(folder, 'receipts', r['episode_id'] + '.json') for r in final]
-    receipts = [json.load(open(p, encoding='utf-8')) for p in paths if os.path.exists(p)]
+    receipts = []
+    for p in paths:
+        if os.path.exists(p):
+            with open(p, encoding='utf-8') as f:
+                receipts.append(json.load(f))
     if len(receipts) == len(final) and all('model_calls' in r for r in receipts):
         M('AgentModelCallsN', sum(r['model_calls'] for r in receipts))
         M('AgentAliasCallsN', sum(r['type_alias_calls'] for r in receipts))
@@ -145,3 +149,53 @@ Valid episodes & ''' + ' & '.join(str(len(rs)) for rs in (by_config('nosent'), b
 \end{tabular}
 \end{table}
 ''')
+    render_guarded(final, valid, json)
+
+
+def fisher_two_sided(a, b, c, d):
+    """Exact two-sided p for the 2x2 table [[a, b], [c, d]] (sum of tables no more likely than the observed)."""
+    from math import comb
+    r1, c1, n = a + b, a + c, a + b + c + d
+    p = lambda x: comb(c1, x) * comb(n - c1, r1 - x) / comb(n, r1)
+    observed = p(a)
+    return min(1.0, sum(p(x) for x in range(max(0, r1 + c1 - n), min(r1, c1) + 1) if p(x) <= observed * (1 + 1e-9)))
+
+
+def render_guarded(base_final, base_valid, json):
+    """Guarded arm (GhostEffect at the M3A boundary, agent_study_guarded.freeze.json), written only once its
+    data exist: \Guard* macros. Primary: RESENT_DUPLICATE over valid scheduled episodes, Wilson 95%, and the
+    exact two-sided Fisher p against the baseline arm. Secondary: asks, classifier misses, simulated-user errors."""
+    folder = os.path.join(REAL, 'agent_guarded')
+    if not os.path.exists(os.path.join(folder, 'episodes.csv')):
+        return
+    with open(os.path.join(folder, 'episodes.csv'), encoding='utf-8', newline='') as f:
+        rows = [r for r in csv.DictReader(f) if r['phase'] == 'scheduled']
+    last = {}
+    for r in sorted(rows, key=lambda r: int(r['attempt'])):
+        last[r['scheduled_index']] = r
+    final = list(last.values())
+    valid = [r for r in final if r['outcome'] != 'INVALID']
+    receipts = {}
+    for r in final:
+        with open(os.path.join(folder, 'receipts', r['episode_id'] + '.json'), encoding='utf-8') as f:
+            receipts[r['episode_id']] = json.load(f).get('guard') or {}
+    restart = lambda r: receipts[r['episode_id']].get('restart') or {}
+    n, dup = len(valid), sum(r['outcome'] == 'RESENT_DUPLICATE' for r in valid)
+    base_dup = sum(r['outcome'] == 'RESENT_DUPLICATE' for r in base_valid)
+    z = 1.959964
+    if n:
+        p, d = dup / n, 1 + z * z / n
+        c, h = (p + z * z / (2 * n)) / d, z * math.sqrt(p * (1 - p) / n + z * z / (4 * n * n)) / d
+        lo, hi, pct = f'{100 * max(0.0, c - h):.1f}', f'{100 * min(1.0, c + h):.1f}', f'{100 * dup / n:.1f}'
+    else:
+        lo = hi = pct = 'N/A'
+    fisher = fisher_two_sided(dup, n - dup, base_dup, len(base_valid) - base_dup)
+    for name, value in (
+            ('GuardScheduledN', len(final)), ('GuardValidN', n), ('GuardInvalidN', len(final) - n),
+            ('GuardDupN', dup), ('GuardDupPct', pct), ('GuardDupLo', lo), ('GuardDupHi', hi),
+            ('GuardAskN', sum(restart(r).get('decision') == 'ASK' for r in valid)),
+            ('GuardNoCandN', sum(restart(r).get('decision') == 'NO_CANDIDATE' for r in valid)),
+            ('GuardUserErrN', sum(receipts[r['episode_id']].get('user_error') == 1 and restart(r).get('decision') == 'ASK'
+                                  for r in valid)),
+            ('GuardFisherP', f'{fisher:.3f}' if fisher >= 1e-3 else '{<}0.001')):
+        M(name, value)

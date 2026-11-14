@@ -13,6 +13,10 @@
     Inbox carrying the episode tag. The outcome rule is classify() below (frozen in B-08).
 --fault none (A-dev): steps 1, 2 (pass-through), 3 without the stop, then grade after 30 s.
 
+--guard ghosteffect (guarded arm): ghost_guard.py issues the effect in a host ledger before a classified
+commit tap, and at step 5 recovers it from the reopened ledger and asks a simulated user before any
+restart (see that module). Everything else is the baseline above.
+
 --framework scripted-stop / scripted-redo is a SYNTHETIC fixture that taps through K-9 by
 coordinates to dry-run this harness without a model. Its episodes are never study data.
 """
@@ -151,7 +155,7 @@ def worker(args):
     started = time.monotonic()
     stop, gate_state = threading.Event(), dict(reason='', deadline=None, phase='phase1')
     phase_actions, action_utc = dict(phase1=[], phase2=[]), []
-    env = proxy = None
+    env = proxy = guard = None
     measurement_error = ''
 
     def gate():
@@ -186,12 +190,19 @@ def worker(args):
         env = load_env(args.adb, args.console_port, args.adb_server_port, args.grpc_port, freeze_datetime=False)
         shell(f'am start -W -n {k9_reset.LAUNCH}')
         native_execute = env.execute_action
+        if args.guard == 'ghosteffect':
+            from ghost_guard import Guard, simulated_user, COMMIT_KINDS
+            guard = Guard(out, args.episode_id, receipt['goal_sha256'], Journal(out / 'guard.jsonl'))
+            receipt['guard'] = dict(name='ghosteffect', user_error=args.user_error)
+            row['agent'] = 'm3a+ghosteffect'
 
         def guarded_execute(action):
             gate()
             action_utc.append(time.time_ns())
             phase_actions[gate_state['phase']].append({k: v for k, v in vars(action).items() if v is not None})
             trace.emit('ACTION', phase=gate_state['phase'], action=phase_actions[gate_state['phase']][-1])
+            if guard is not None and action.action_type in COMMIT_KINDS:
+                guard.before(action, env.get_state().ui_elements, gate_state['phase'])
             return native_execute(action)
         env.execute_action = guarded_execute
 
@@ -299,9 +310,16 @@ def worker(args):
             stop.clear()
             gate_state.update(reason='', deadline=horizon, phase='phase2')
             row['t_agent_restart_utc'] = time.time_ns()
-            phase2_stop = run_phase('redo' if args.framework == 'scripted-redo' else 'stop', 'steps_after_restart')
-            receipt['phase2_stopped_by'] = phase2_stop
-            row['agent_final_status'] = final_status(phase_actions['phase2'], phase2_stop)
+            if guard is not None:
+                receipt['guard']['restart'] = guard.restart(
+                    lambda: simulated_user(backend_copies(args.tag)[0] >= 1, args.user_error))
+            if guard is not None and receipt['guard']['restart'].get('answer') == 'delivered':
+                receipt['phase2_stopped_by'] = 'guard'   # GhostEffect settled the step; the agent is not restarted
+                row['agent_final_status'] = 'done'
+            else:
+                phase2_stop = run_phase('redo' if args.framework == 'scripted-redo' else 'stop', 'steps_after_restart')
+                receipt['phase2_stopped_by'] = phase2_stop
+                row['agent_final_status'] = final_status(phase_actions['phase2'], phase2_stop)
             while time.monotonic() < horizon:
                 time.sleep(.5)
             row['observation_s'] = round(time.monotonic() - t_relaunch, 1)
@@ -332,6 +350,9 @@ def worker(args):
         receipt.setdefault('label_cost', {}).update(observation=row['observation_s'],
                                                     grading=round(time.monotonic() - t3, 1), total=row['wall_clock_s'])
         receipt.update(row=row, message_ids=ids, actions=phase_actions)
+        if guard is not None:
+            receipt['guard']['taps'] = guard.taps
+            guard.close()
         if env is not None:
             env.close()
         if proxy is not None:
@@ -353,6 +374,9 @@ def main():
     parser.add_argument('--attempt', type=int, choices=(1, 2), default=1)
     parser.add_argument('--goal-file', type=Path, required=True, help='task text; {tag} is replaced by --tag')
     parser.add_argument('--tag', required=True, help='unique episode tag the task puts in the subject, gx:XXXXXX')
+    parser.add_argument('--guard', choices=('none', 'ghosteffect'), default='none')
+    parser.add_argument('--user-error', type=int, choices=(0, 1), default=0,
+                        help='guarded arm: 1 if the simulated user answers the ask wrongly (drawn in the freeze)')
     parser.add_argument('--max-steps', type=int, default=20)
     parser.add_argument('--h-eval', type=float, default=300)
     parser.add_argument('--timeout-seconds', type=float, default=1800)
