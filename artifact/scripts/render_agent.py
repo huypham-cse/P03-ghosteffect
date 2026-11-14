@@ -153,6 +153,7 @@ Valid episodes & ''' + ' & '.join(str(len(rs)) for rs in (by_config('nosent'), b
     render_rules(guarded, json)
     render_arm('agent_t3a', 'AgentText', valid, json)
     render_arm('agent_killagent', 'AgentKill', valid, json)
+    render_arms_table(json)
 
 
 def fisher_two_sided(a, b, c, d):
@@ -283,3 +284,49 @@ def render_arm(name, prefix, base_valid, json):
             ('ModelCallsN', calls), ('AliasCallsN', alias),
             ('FisherP', f'{fisher:.3f}' if fisher >= 1e-3 else '$<$0.001')):
         M(prefix + key, value)
+
+
+ARMS = (('agent', 'M3A', 'force-stop', 'none (native)'),
+        ('agent_t3a', 'T3A', 'force-stop', 'none (native)'),
+        ('agent_killagent', 'M3A', 'agent kill only', 'none (native)'),
+        ('agent_rules', 'M3A', 'force-stop', 'same-evidence rules'),
+        ('agent_guarded', 'M3A', 'force-stop', r'\sys'))
+
+
+def render_arms_table(json):
+    """generated/tab_agent_arms.tex: one row per agent arm whose data exist (placement is C's call)."""
+    rows = []
+    for name, agent, fault, recovery in ARMS:
+        folder = os.path.join(REAL, name)
+        if not os.path.exists(os.path.join(folder, 'episodes.csv')):
+            continue
+        final, valid, receipts = arm_rows(folder, json)
+        n, dup = len(valid), sum(r['outcome'] == 'RESENT_DUPLICATE' for r in valid)
+        z = 1.959964
+        if n:
+            p, d = dup / n, 1 + z * z / n
+            c, h = (p + z * z / (2 * n)) / d, z * math.sqrt(p * (1 - p) / n + z * z / (4 * n * n)) / d
+            ci = f'[{100 * max(0.0, c - h):.1f}, {100 * min(1.0, c + h):.1f}]'
+        else:
+            ci = 'N/A'
+        asks = sum((receipts[r['episode_id']].get('restart') or {}).get('decision') == 'ASK' for r in valid)
+        configs = 'Sent' if all(r['config'] == 'sent' for r in final) else 'both'
+        rows.append(f'{agent} & {fault} & {configs} & {recovery} & {n}/{len(final)} & {dup} & {ci} & {asks} ' + '\\\\')
+    if not rows:
+        return
+    W('tab_agent_arms.tex', r"""\begin{table}[t]
+\caption{LLM-agent arms on the K-9 trap (LLM-agent experiment): valid over scheduled episodes, episodes with a duplicate at the
+backend, Wilson 95\% interval for the duplicate rate (\%), and asks. Each arm has its own freeze; arms ran one after the other.}
+\label{tab:agent-arms}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}llllcccc@{}}
+\toprule
+Agent & Fault & Sent folder & Recovery & Valid & Dup & 95\% CI & Asks \\
+\midrule
+""" + '\n'.join(rows) + r"""
+\bottomrule
+\end{tabular}
+\end{table}
+""")
