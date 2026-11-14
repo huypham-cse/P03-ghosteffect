@@ -329,3 +329,12 @@ Test: testbed 96 qua (4 bỏ qua), artifact 49 qua (1 bỏ qua); render không �
 - **Kỳ vọng ghi trước:** bản trùng chỉ xảy ra khi người dùng giả lập sai hoặc classifier bỏ sót cú chạm Send. Ở K-9 guard hỏi ở mọi lượt hợp lệ, nên đây là kiểm tra cơ chế end-to-end, không phải kiểm tra hiệu chỉnh.
 - **Dev (không phải kết quả):** gdev-01 (không Sent) và gdev-02 (có Sent): Send được ghi `ISSUED`, hỏi, COMMITTED, 1 bản. gdev-03 (có Sent, `user_error` 1): ABSENT, agent chạy lại, ghi `ISSUED` lần 2, gửi lại, 2 bản. Thư mục `testbed/runs/agent-guarded/`.
 - Báo nguyên trạng; chỉ chạy lại theo luật lỗi đo của freeze.
+
+## 15/11/2026 (arm có GhostEffect: kết quả)
+
+- **Chạy:** 20 lượt scheduled g01 đến g20 theo `agent_study_guarded.freeze.json`, từ 22:53 ngày 14/11 đến 01:10 ngày 15/11, trên nhánh `b/guarded-arm` (file đúng hash của freeze). Mỗi index một lần, không có lỗi đo.
+- **Kết quả:** 19 lượt hợp lệ. Bản trùng 1/19 (g15, đúng lượt freeze rút cờ người dùng sai: người dùng nói "chưa nhận", ledger ABSENT, agent chạy lại và gửi lần 2). 18 lượt còn lại: guard hỏi, "đã nhận", COMMITTED, server 1 bản. g19 không hợp lệ: agent nhập chữ vào cùng một ô suốt 20 bước, chưa chạm Send (không phải classifier bỏ sót). Guard hỏi ở 19/19 lượt hợp lệ; classifier bắt được cú chạm Send ở mọi lượt hợp lệ.
+- **So với baseline:** bản trùng 17/18 (94,4%) xuống 1/19 (5,3%, Wilson 95% từ 0,9 đến 24,6), Fisher exact hai phía p = 2,0e-8. Hai arm chạy nối tiếp, cùng ngày, cùng server.
+- **Kiểm:** `collect_agent.py` gom 23 lượt (gdev-01 đến gdev-03, g01 đến g20) vào `artifact/results/real/agent_guarded/`; `check_agent_data.py --freeze` OK hai lần, bản gom lại giống hệt; baseline vẫn OK. Tính lại độc lập từ trace, proxy và `ledger.db`: khớp mọi số (trừ khác biệt định nghĩa bộ đếm alias đã ghi). vLLM: 1306 yêu cầu = 944 trước đó + 362 của arm này, 0 `length`, 0 `abort`, `server.log` không lỗi; `server-snapshot-4.tgz`.
+- **Bài:** §7.8 thêm một đoạn với 11 macro `\AgentGuard*` (tên đổi từ `\Guard*` để nằm trong `macros_real.tex`), nói rõ ở K-9 arm này kiểm ledger và hỏi end to end, không kiểm hiệu chỉnh; giới hạn thêm "a simulated user, and arms run one after the other". Bỏ câu về Outbox, mô tả task và câu dẫn tới mục device study để giữ khoảng 34 dòng, tức khoảng 0,59 cột. Thêm `SUMMARY.md` và hai `.meta.json` cho thư mục mới.
+- **Server:** không còn việc nào cần server; báo trưởng nhóm có thể Stop.

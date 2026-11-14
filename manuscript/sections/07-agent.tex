@@ -1,24 +1,25 @@
 % LLM-agent experiment (B-10). Every number is a macro written by artifact/scripts/render_agent.py from
-% artifact/results/real/agent/ (episodes.csv, label_cost.csv, freeze.json, receipts/).
+% artifact/results/real/agent/ and agent_guarded/ (episodes.csv, label_cost.csv, freeze.json, receipts/).
 \subsection{An LLM agent in the K-9 trap}
 \label{sec:eval-agent}
 We then sent one LLM agent into the K-9 trap of \S\ref{sec:eval-real} (LLM-agent experiment on the emulator).
 \AgentFramework{} from AndroidWorld~\cite{rawles2025androidworld} drove \AgentModel{} (\AgentServing, greedy decoding) on \AgentHost.
-Its task was to mail a fixed text under a fresh subject tag. When K-9 sent the mail, the server committed it, our proxy dropped the reply and
-K-9 recorded the error. We then killed the agent, force-stopped and relaunched K-9, and restarted the agent on the same task with no hint.
-The server's copies \AgentHEvalS\,s after the relaunch decide the outcome. Everything was frozen before the first scheduled episode.
+After the server committed its mail, our proxy dropped the reply. We killed the agent, force-stopped K-9 and restarted both, the agent on
+the same task with no hint. The server's copies \AgentHEvalS\,s after the relaunch decide the outcome, under a freeze written beforehand.
 
 In this LLM-agent experiment \AgentValidN{} of \AgentScheduledN{} scheduled episodes were valid. In the other \AgentInvalidN{} the original
-never reached the server. In every valid episode K-9 had marked the committed mail as
-unsent, as in the scripted runs (Table~\ref{tab:real}). The agent resent it in \AgentResentN{} of \AgentValidN{} valid episodes
-(\AgentResentPct\%, Wilson 95\% interval from \AgentResentLo{} to \AgentResentHi\%), and each resend left a duplicate at the server
-(\AgentDupN{}). With a Sent folder it resent in \AgentSentDupN{} of \AgentSentValidN{} episodes, without one in \AgentNosentDupN{} of
-\AgentNosentValidN. Once it declared the task done without resending (\AgentDoneNoResendN{}), and it never asked or stopped
-(\AgentAskedN{}) or failed the task (\AgentTaskFailN{}). A valid episode took \AgentWallMedS\,s at the median.
+never reached the server. The agent resent it in \AgentResentN{} of \AgentValidN{} valid episodes (\AgentResentPct\%, Wilson 95\% interval
+from \AgentResentLo{} to \AgentResentHi\%), and each resend left a duplicate at the server (\AgentDupN{}). Once it declared the task done
+without resending (\AgentDoneNoResendN{}), and it never asked or stopped (\AgentAskedN{}) or failed the task (\AgentTaskFailN{}). A valid
+episode took \AgentWallMedS\,s at the median.
 
-\AgentModel{} writes M3A's text-entry action as \texttt{type}, which M3A rejects, and a development episode stalled on it for
-\AgentMaxSteps{} steps. Our model client renames that action to \texttt{input\_text} and changes nothing else (the prompt, history and
-reflection are upstream's). The rename fired in \AgentAliasEpisodesN{} of \AgentScheduledN{} scheduled episodes and in \AgentAliasCallsN{}
-of \AgentModelCallsN{} model calls. Without it the agent cannot type, so it could neither send nor resend.
-Limits: one agent, one model, one app, the emulator only, one fault (a lost reply, then a force-stop), \AgentValidN{} valid episodes, and
-this rename. It shows that a current agent walks into the trap, not how often agents do (\S\ref{sec:device-plan}).
+With \sys at the action boundary, \AgentGuardScheduledN{} more scheduled episodes followed a second freeze (same task, fault and model).
+Its ledger issued the send before the tap, and after the relaunch it asked, since no K-9 family certifies. A simulated user answered from the
+server, wrong on a pre-drawn 5\% of asks. Duplicates fell to \AgentGuardDupN{} of \AgentGuardValidN{} valid episodes (\AgentGuardDupPct\%,
+Wilson 95\% interval from \AgentGuardDupLo{} to \AgentGuardDupHi\%, Fisher $p$ \AgentGuardFisherP{} against the native agent), the one with a
+wrong answer (\AgentGuardUserErrN), and \sys asked in all \AgentGuardAskN. On K-9 this tests the ledger and asking end to end, not calibration.
+
+Our model client renames \AgentModel's text-entry action \texttt{type}, which M3A rejects, to \texttt{input\_text} and changes nothing else.
+The rename fired in \AgentAliasEpisodesN{} of \AgentScheduledN{} baseline episodes and in \AgentAliasCallsN{} of \AgentModelCallsN{} model
+calls. Without it the agent cannot type. Limits: one agent, one model, one app, the emulator only, one fault, small $n$, this rename, a
+simulated user, and arms run one after the other.
