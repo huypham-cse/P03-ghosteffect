@@ -348,6 +348,14 @@ Test: testbed 96 qua (4 bỏ qua), artifact 49 qua (1 bỏ qua); render không �
 - **Kỳ vọng ghi trước:** K-9 chỉ ghi Sent sau khi gửi thành công nên sau khi mất phản hồi Sent không bao giờ có thư; rule cho gửi lại ở mọi lượt hợp lệ, và bản trùng phụ thuộc agent có soạn lại hay không.
 - **Dev (không phải kết quả):** rdev-01 (có Sent): Outbox có thư, Sent không có, RETRY, agent chạy lại và gửi lại, 2 bản. Thư mục `testbed/runs/agent-rules/`.
 
+## 15/11/2026 (arm rule cascade: kết quả và sự cố emulator)
+
+- **Kết quả:** 20 index, 15 lượt hợp lệ. Rule cho gửi lại ở 15/15 lượt (Sent không bao giờ có thư sau khi mất phản hồi), 14 lượt agent gửi lại thành bản trùng (93,3%, Wilson 95% từ 70,2 đến 98,8), r11 là TASK_FAILURE (agent chạy lại gọi `open_app` 20 lần). So với các lượt có Sent của arm GhostEffect (0/10): Fisher exact hai phía p = 3,4e-6. Rule không hỏi lần nào; classifier bắt được Send ở mọi lượt hợp lệ. r07, r08: thư gốc không tới server.
+- **Sự cố:** index 9 (kiểm focus lúc force-stop), 10 và 12 (reset: K-9 không có focus) hỏng hai lần liên tiếp nên INVALID (mỗi index một lần chạy lại). Nguyên nhân: sau khoảng 10 giờ với máy ảo 2 GB, System UI hiện hộp thoại "isn't responding" chiếm focus; sau đó bản ghi "LAST ANR" trong `dumpsys window` (dòng `mCurrentFocus` đầu tiên là null) làm `k9_reset` đọc sai focus. `k9_reset.py` nằm trong code bị freeze hash nên không sửa giữa arm.
+- **Xử lý:** 02:43 reboot hệ điều hành của emulator; 02:57 đến 02:59 một watchdog (chỉ chạm "Wait" trên hộp thoại ANR của System UI, ghi log `testbed/runs/anr-watchdog.log`) chạm 14 lần, đều trước pha agent của r11, sau đó không chạm lần nào; 03:08 khởi động lại emulator với RAM 4 GB (`-memory 4096`, `config.ini` đã hash không đổi), index 13 đến 20 chạy không có ANR. Runner có thêm luật: chạy lại đúng lệnh thì đi tiếp qua index đã có hai lỗi đo ghi từ trước, còn hai lỗi mới liên tiếp vẫn dừng. Checker bỏ qua phần kiểm guard ở dòng có lỗi đo (reset hỏng trước khi guard được tạo). Hai sửa này không thuộc code bị freeze hash.
+- **Kiểm:** gom 24 lượt (rdev-01, r01 đến r20, r09-r2, r10-r2, r12-r2) vào `artifact/results/real/agent_rules/`; checker OK hai lần (bản gom lại giống hệt). Baseline và arm guard vẫn OK.
+- **Bài:** §7.8 thêm một câu về rule (macro `\AgentRules*`, `\AgentGuardSent*`); gọn lại phần mở đầu, câu các nhóm kết quả và câu alias để mục vẫn khoảng 33 dòng, tức khoảng 0,57 cột.
+
 ## 15/11/2026 (arm T3A và arm chỉ kill agent: thiết kế chốt trước khi chạy)
 
 - **Mục đích:** gỡ hai giới hạn "một agent" và "một kiểu lỗi" của §7.8 (trưởng nhóm chốt 15/11, duyệt trước mọi PR và commit).
