@@ -49,9 +49,13 @@ setup)
             { echo "driver installed but not loaded: sudo reboot, then run setup again" >&2; exit 1; }
     fi
     python_ok
-    if ! python3 -c 'import ensurepip' 2>/dev/null; then   # Ubuntu leaves venv support out of the base image
+    need=   # Ubuntu leaves venv support out of the base image; Triton compiles a C helper at first start (gcc, Python.h)
+    python3 -c 'import ensurepip' 2>/dev/null || need="$need python3-venv"
+    command -v gcc >/dev/null || need="$need gcc"
+    [ -f "$(python3 -c 'import sysconfig; print(sysconfig.get_paths()["include"])')/Python.h" ] || need="$need python3-dev"
+    if [ -n "$need" ]; then
         $APT update
-        $APT install -y python3-venv
+        $APT install -y $need
     fi
     [ -d "$VENV" ] || python3 -m venv "$VENV"
     "$PY" -m pip install -q --upgrade pip

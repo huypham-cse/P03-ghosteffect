@@ -1,4 +1,4 @@
-# Runbook phần B: chạy LLM agent trên GPU thuê (AWS g5.xlarge)
+# Runbook phần B: chạy LLM agent trên GPU thuê (AWS g6e.xlarge)
 
 Làm theo thứ tự, mỗi bước có lệnh và điều kiện qua. Chạy lệnh từ thư mục gốc repo. Ghi mọi việc đã làm vào `team/b-log.md` theo luật 1.8.
 
@@ -22,7 +22,7 @@ Máy local: Windows 11, 8 luồng CPU, 31,5 GB RAM, Intel Arc 140V, Java 21, ổ
 
 ## 1. Plan theo giờ (máy AWS, 14/11)
 
-Server 80GB và 40GB không vào được từ 10/11. Nhóm thuê một máy AWS: `g5.xlarge` (1 GPU A10G 24 GB, 4 vCPU, 16 GB RAM), Seoul, Ubuntu 24.04 (AMI Deep Learning Base OSS Nvidia Driver GPU AMI), ổ gp3 150 GB, SSH chỉ mở cho IP của máy local. AWS tính tiền theo giây khi máy bật, nên mọi việc không cần GPU làm trước hoặc sau, và tắt máy (Stop) ngay khi xong.
+Server 80GB và 40GB không vào được từ 10/11. Nhóm thuê một máy AWS. Cấu hình chốt là `g5.xlarge`, nhưng máy được tạo (14/11) là `g6e.xlarge` (1 GPU L40S 48 GB, 4 vCPU, 30 GB RAM), us-east-1, Ubuntu 24.04 thường (không phải Deep Learning AMI, nên chưa có driver NVIDIA), ổ 300 GB, SSH chỉ mở cho IP của máy local. Trưởng nhóm chọn giữ máy này. AWS tính tiền theo giây khi máy bật, nên mọi việc không cần GPU làm trước hoặc sau, và tắt máy (Stop) ngay khi xong.
 
 **Trước khi có máy (không tốn tiền):**
 
@@ -43,19 +43,20 @@ Server 80GB và 40GB không vào được từ 10/11. Nhóm thuê một máy AWS
 | 2:45 đến khoảng 6:30 | Model chạy | `run_agent_study.py --phase scheduled`: 20 episode khoảng 10 phút mỗi episode, chạy thêm nếu dưới 10 hợp lệ (B-09). Báo C số đếm thô ngay khi xong |
 | Xong | **Stop máy ngay** | `collect_agent.py`, `check_agent_data.py`, render, viết B-10 và B-11 |
 
-Tổng thời gian máy bật khoảng 6 đến 8 giờ, tức khoảng 8 đến 10 USD với g5.xlarge (1,237 USD/giờ). Giữ ổ đĩa (máy ở trạng thái Stop) đến khi nghiệm thu xong ngày 21/11 phòng phải chạy lại, rồi Terminate.
+Tổng thời gian máy bật khoảng 6 đến 8 giờ, tức khoảng 11 đến 15 USD với g6e.xlarge ở us-east-1 (1,861 USD/giờ). Giữ ổ đĩa (máy ở trạng thái Stop) đến khi nghiệm thu xong ngày 21/11 phòng phải chạy lại, rồi Terminate.
 
-**Nếu vLLM không lên được trên A10G** (hết bộ nhớ GPU khi nạp model): Stop máy, đổi instance type sang `g6e.xlarge` (L40S 48 GB), Start, chạy lại `serve`. Venv và trọng số còn nguyên trên ổ; `server_gpu.sh` tự chọn profile `l40s`. Phải đổi trước khi freeze, và mọi episode scheduled chạy trên cùng một loại máy (freeze ghi `gpu_profile`).
+`server_gpu.sh` tự chọn profile theo GPU (`l40s` trên máy này, `a10g` nếu sau này đổi sang g5). Mọi episode scheduled phải chạy trên cùng một loại máy, vì freeze ghi `gpu_profile`; không đổi instance type sau khi freeze.
 
 ## 2. Kết nối máy AWS
 
-Thêm vào `~/.ssh/config` (IP lấy trên EC2 console; IP đổi sau mỗi lần Stop rồi Start, khi đó sửa dòng `HostName`):
+Key `MobiSYS.pem` do người tạo máy gửi; để ở `~/.ssh/`, ngoài repo, chỉ tài khoản mình đọc được (Windows: `icacls <file> /inheritance:r /grant:r "<user>:R"`). Thêm vào `~/.ssh/config` (IP lấy trên EC2 console; IP đổi sau mỗi lần Stop rồi Start, khi đó sửa dòng `HostName`):
 
 ```
 Host ghost-gpu
     HostName <IP của máy EC2>
     User ubuntu
-    IdentityFile ~/.ssh/id_ed25519
+    IdentityFile ~/.ssh/MobiSYS.pem
+    IdentitiesOnly yes
     ServerAliveInterval 30
 ```
 
@@ -63,14 +64,14 @@ Host ghost-gpu
 ssh -o ConnectTimeout=15 ghost-gpu 'nvidia-smi -L'
 ```
 
-Qua khi in ra một GPU A10G (hoặc L40S nếu đã đổi sang g6e). SSH bị treo thì kiểm security group có mở cổng 22 cho đúng IP local không.
+Qua khi in ra một GPU L40S (sau bước `setup`; trước đó máy chưa có driver). SSH bị treo thì kiểm security group có mở cổng 22 cho đúng IP local không.
 
 ## 3. Server: chép code, cài, chạy model
 
-Chép code lên server (cách này chạy được cả khi repo đã chuyển sang private):
+Chép code lên server (cách này chạy được cả khi repo đã chuyển sang private). Trên Windows phải có `-c core.autocrlf=false`: không có nó, `git archive` đổi xuống dòng sang CRLF và bash trên server báo `set: pipefail: invalid option name`.
 
 ```bash
-git archive HEAD | ssh ghost-gpu 'mkdir -p ~/P03 && tar -x -C ~/P03'
+git -c core.autocrlf=false archive HEAD | ssh ghost-gpu 'mkdir -p ~/P03 && tar -x -C ~/P03'
 ```
 
 Vào server, mở `tmux` để model không tắt khi rớt SSH:
@@ -80,13 +81,15 @@ ssh ghost-gpu
 tmux new -s qwen
 cd ~/P03
 bash testbed/server_gpu.sh check     # GPU, profile (a10g/l40s/h100), RAM, ổ đĩa, Python phải dưới 3.14
-bash testbed/server_gpu.sh setup     # cài python3-venv nếu thiếu, venv vLLM 0.11.0, tải khoảng 16,6 GB trọng số Qwen, kiểm từng file
+bash testbed/server_gpu.sh setup     # driver NVIDIA nếu thiếu, python3-venv, gcc và python3-dev (Triton biên dịch module C lúc vLLM khởi động), venv vLLM 0.11.0, khoảng 16,6 GB trọng số Qwen, kiểm từng file
 bash testbed/server_gpu.sh serve     # chờ dòng MODEL_SERVING_READY
 ```
 
+Trên AMI Ubuntu thường, lần `setup` đầu cài driver 580-server dựng sẵn cho đúng kernel rồi dừng ở dòng `driver installed but not loaded` vì nouveau đang giữ card: `sudo reboot` (reboot không đổi IP), chờ khoảng một phút, chạy lại `setup`.
+
 Qua khi thấy `MODEL_SERVING_READY testbed/runs/serve-<ngày giờ>/SERVING.json`. Thoát tmux bằng `Ctrl-b` rồi `d`; model vẫn chạy. Lỗi thì `serve_model.py` in `FAILED <loại lỗi>: <thông báo>` và ghi vào `SERVING.json`; log của vLLM ở `testbed/runs/serve-*/server.log`.
 
-Profile bộ nhớ (trong `serve_model.py`) chỉ đổi phần bộ nhớ vLLM giữ và số yêu cầu chạy song song, không đổi model, ngữ cảnh 32768 hay cách xử lý ảnh: A10G dùng 95% bộ nhớ GPU và 1 yêu cầu một lúc (mỗi episode chỉ gửi một yêu cầu một lúc); L40S và H100 dùng 85% và 2. Ảnh giới hạn `max_pixels=3211264` để vLLM không phải giữ chỗ cho ảnh 16384 token; ảnh chụp 1080x2400 sau khi làm tròn là 2629536 điểm ảnh, dưới mức đó, nên không ảnh nào bị thu nhỏ.
+Profile bộ nhớ (trong `serve_model.py`) chỉ đổi phần bộ nhớ vLLM giữ và số yêu cầu chạy song song, không đổi model, ngữ cảnh 32768 hay cách xử lý ảnh: A10G dùng 90% bộ nhớ GPU và 1 yêu cầu một lúc (mỗi episode chỉ gửi một yêu cầu một lúc); L40S và H100 dùng 85% và 2. Ảnh giới hạn `max_pixels=3211264` để vLLM không phải giữ chỗ cho ảnh 16384 token; ảnh chụp 1080x2400 sau khi làm tròn là 2629536 điểm ảnh, dưới mức đó, nên không ảnh nào bị thu nhỏ.
 
 ## 4. Local: tunnel và receipt
 
@@ -202,7 +205,7 @@ runtime/agent-venv/Scripts/python.exe testbed/make_freeze.py --serving-receipt t
 runtime/agent-venv/Scripts/python.exe testbed/run_agent_study.py --phase scheduled --serving-receipt testbed/runs/SERVING.json --adb runtime/android-sdk/platform-tools/adb.exe
 ```
 
-Episode dev là `dev-01` đến `dev-10` (không lỗi, xen kẽ hai cấu hình). Episode scheduled theo đúng thứ tự và tag trong freeze: `s01` đến `s20`, `sNN-r2` là lần chạy lại sau lỗi đo, `s21` trở đi chỉ khi dưới 10 hợp lệ. Lệnh `scheduled` từ chối chạy nếu freeze chưa commit. Bị ngắt giữa chừng thì chạy lại đúng lệnh; episode đã có kết quả được bỏ qua, thư mục dở dang thì dời sang chỗ khác và ghi vào b-log. `--host` không ghi gì lộ danh tính, ví dụ `one NVIDIA A10G (24 GB) cloud VM; x86-64 laptop running the Android emulator (API 33)`.
+Episode dev là `dev-01` đến `dev-10` (không lỗi, xen kẽ hai cấu hình). Episode scheduled theo đúng thứ tự và tag trong freeze: `s01` đến `s20`, `sNN-r2` là lần chạy lại sau lỗi đo, `s21` trở đi chỉ khi dưới 10 hợp lệ. Lệnh `scheduled` từ chối chạy nếu freeze chưa commit. Bị ngắt giữa chừng thì chạy lại đúng lệnh; episode đã có kết quả được bỏ qua, thư mục dở dang thì dời sang chỗ khác và ghi vào b-log. `--host` không ghi gì lộ danh tính, ví dụ `one NVIDIA L40S (48 GB) cloud VM; x86-64 laptop running the Android emulator (API 33)`.
 
 Sau khi chạy xong (máy AWS đã Stop):
 
@@ -229,7 +232,6 @@ runtime/agent-venv/Scripts/python.exe testbed/agent_episode.py --framework m3a -
 ## 7. Chưa thử được trước khi có máy
 
 - **Lỗi a11y tree:** chỉ gặp ngay sau cold boot; chờ AVD chạy vài phút rồi mới bắt đầu. Khi không có phiên AndroidWorld nào đang chạy, forwarder mất server gRPC và hiện hộp thoại "keeps stopping"; `k9_reset.py` tắt nó, `agent_episode.py` bật lại khi nạp môi trường.
-- **vLLM trên A10G:** chưa thử nạp model thật; xem cách đổi sang g6e ở mục 1.
 - **Tốc độ thật của model:** số bước M3A làm được trong `H_eval = 300 s` chỉ biết khi chạy dev.
 
 ## 8. Cuối mỗi ngày
@@ -240,9 +242,9 @@ runtime/agent-venv/Scripts/python.exe testbed/agent_episode.py --framework m3a -
 
 ## 9. Khi có sự cố
 
-- **vLLM hết bộ nhớ GPU trên A10G:** đổi sang g6e.xlarge (mục 1), không tự hạ ngữ cảnh hay đổi cách xử lý ảnh.
+- **vLLM hết bộ nhớ GPU:** không tự hạ ngữ cảnh hay đổi cách xử lý ảnh; ghi log và báo trưởng nhóm.
 - **vLLM báo lỗi CUDA hoặc driver:** ghi lại `nvidia-smi` và log trong `testbed/runs/serve-*/server.log`; không đổi phiên bản vLLM hay model khi chưa báo trưởng nhóm.
-- **Hết dung lượng:** trọng số Qwen khoảng 16,6 GB, venv vLLM khoảng 10 GB; ổ 150 GB là đủ.
+- **Hết dung lượng:** trọng số Qwen khoảng 16,6 GB, venv vLLM khoảng 10 GB; ổ 300 GB thừa.
 - **SSH treo sau khi Start lại máy:** IP của máy EC2 đã đổi; sửa `HostName` trong `~/.ssh/config`.
 
 ## 6e. Audit thao tác K-9 (B-12)
