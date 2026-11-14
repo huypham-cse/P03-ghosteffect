@@ -255,3 +255,27 @@ Test: testbed 96 qua (4 bỏ qua), artifact 49 qua (1 bỏ qua); render không �
 - **B-07 (dev-02 đến dev-11, sau khi sửa):** 8/10 thành công (gửi đúng một bản rồi báo xong): có Sent 5/5, không Sent 3/5. Hai lần hỏng (dev-09, dev-11) cùng kiểu: bấm Send, K-9 hiện hộp thoại "Sent folder not found", agent hiểu là đã gửi và báo xong; server không có bản nào. 7 đến 11 bước, 115 đến 159 s mỗi episode. Alias đổi tên ở 12 trên 166 lệnh gọi model; sau lần đầu trong một episode, model thường tự viết `input_text` vì history có tên đúng.
 - **B-08:** `testbed/agent_study.freeze.json` tạo bằng `make_freeze.py` từ receipt serve thật và AVD đang chạy (sha256 `8b0c68b1b68f19340a79e36caf6dcfba673cbe0b0c92c65d86aee0dcc77ac158`); hash bản sao K-9 khớp bảng mục 6b của runbook.
 - **B-15** chạy trên cùng máy trước khi bật vLLM, ghi ở PR riêng.
+
+## 14/11/2026 (B-09 scheduled và đóng máy AWS)
+
+- **Freeze trước lượt chính thức:** freeze nằm ở commit `4cb6a01` trên `origin/main` (17:29:52 +07); `t_issue` sớm nhất của scheduled là 17:32:20 +07. `freeze.json` trong artifact trùng byte với `testbed/agent_study.freeze.json` (sha256 `8b0c68b1...ac158`).
+- **B-09:** index 1 đến 20, mỗi index một lần chạy, không có lỗi đo nên không có lần 2. 18 hợp lệ (từ 10 trở lên) nên không chạy index 21 đến 30.
+  - `RESENT_DUPLICATE` 17: có Sent 10/10, không Sent 7/8 hợp lệ. Mỗi lượt có 2 bản và 2 Message-ID ở backend lúc hết `H_eval`.
+  - `DECLARED_DONE_NO_RESEND` 1 (s01, không Sent): sau khi mở lại, agent soạn lại thư rồi báo xong; harness không ghi nhận lần bấm Send nào (`agent_tapped_send_after_restart` 0), backend 1 bản.
+  - `INVALID original_not_committed` 2 (s07, s19, đều không Sent): agent bấm nút cuối rồi báo xong ngay trong pha 1, server không có bản nào, giống dev-09 và dev-11. Lý do này không được chạy lại.
+  - s16 hết 20 bước sau khi mở lại (`agent_final_status` timeout) nhưng đã gửi lại trước đó (2 bản).
+  - Số đếm thô này phải tới C trong ngày (B-09); trưởng nhóm chuyển.
+- **Chi phí nhãn (18 lượt hợp lệ, `label_cost.csv`):** tổng min 391,6 s, median 411,9 s, max 434,1 s; soạn median 88,8 s; quan sát 300,0 đến 300,5 s; reset median 4,4 s.
+- **Alias `type` thành `input_text`:** scheduled 48 trên 643 lệnh gọi model; cả 30 lượt có bộ đếm (dev-02 đến dev-11 và s01 đến s20) là 60 trên 809. dev-01 chạy trước khi có bộ đếm.
+- **vLLM (`/metrics` lúc đóng máy):** 848 yêu cầu, tất cả kết thúc `stop`, 0 `length`, 0 `abort`; trung bình 2,61 s mỗi yêu cầu; 10 546 522 token prompt, 45 851 token sinh. `server.log` không có dòng lỗi nào; `dmesg` chỉ có dòng nạp driver, không Xid, không OOM.
+- **Kiểm hai lần:** `collect_agent.py` gom 31 lượt (dev-01 đến dev-11, s01 đến s20) vào `artifact/results/real/agent/`; `check_agent_data.py` OK. Gom lại từ đầu vào thư mục tạm, checker OK lần hai, hai thư mục giống hệt (`diff -r` rỗng). Test testbed 97 qua (4 bỏ qua).
+- **Smoke cuối:** một lượt dev không lỗi ở `testbed/runs/smoke-final` (không gom vào artifact): có Sent, gửi một bản rồi báo xong, 141 s, 17 lệnh gọi, alias 1 lần.
+- **YC-B5:** `runtime/vendor/` chỉ có `android_world_full` (B-02 chỉ clone AndroidWorld; YC-B5 ghi 4 repo theo kế hoạch cũ). `rev-parse HEAD` = `55ddaf5edc6f6c25673aed343907d5b9dca66f84`. `git diff` rỗng (không file nào được theo dõi bị sửa); `status --porcelain` có 4 file chưa theo dõi, sinh từ `.proto` cùng thư mục khi cài (09/11, 6 phút sau khi clone):
+  ```
+  ?? android_world/task_evals/information_retrieval/proto/state_pb2.py
+  ?? android_world/task_evals/information_retrieval/proto/state_pb2_grpc.py
+  ?? android_world/task_evals/information_retrieval/proto/task_pb2.py
+  ?? android_world/task_evals/information_retrieval/proto/task_pb2_grpc.py
+  ```
+- **Dữ liệu server kéo về laptop** (`testbed/runs/aws-1114/`, không commit): `server-snapshot-1.tgz` (17:00) và `server-snapshot-2.tgz` (19:45, sha256 `14d48674...28ac6`): `/metrics` của vLLM, `nvidia-smi` và `nvidia-smi -q`, `pip freeze` của venv serve, dòng lệnh vLLM đang chạy, `serve.log`, `server.log` và `SERVING.json` của hai lần serve, `SNAPSHOT.json` của Qwen (hash từng file), log setup, `dpkg` gói GPU, hai lần chạy ledger.
+- **Còn lại, không cần server:** B-10 (`07-agent.tex`, render macro, `SUMMARY.md`, nêu alias kèm số đếm), B-11 macro `\LabelTrial*`, §2.3 theo kết quả. Máy có thể Stop (giữ ổ tới 21/11 phòng khi cần chạy lại).
