@@ -307,3 +307,14 @@ Test: testbed 96 qua (4 bỏ qua), artifact 49 qua (1 bỏ qua); render không �
 - **Kiểm:** `build.sh` thoát 0, 22 trang, không overfull quá 10 pt, PDF không còn `??`. Test testbed và artifact qua. Scrub qua trên các file đã đổi. `07-agent.tex`: 0 câu quá 45 từ, 0 đoạn có hơn 1 dấu chấm phẩy, 0 `\para`, 0 `\emph`.
 - **Còn mở (YC-12, ngoài B-10):** tổng các file văn bản của B vẫn vượt giới hạn: `\para` 9 (giới hạn 5), `\emph` 25 (10), câu quá 45 từ 9, đoạn có hơn 1 dấu chấm phẩy 10. Cần một lượt sửa riêng cho §2, §6, §7 phần đo và `fig1.tex`.
 - **Cần C:** mục "Planned device study" (`07-evaluation.tex`) mở đầu bằng "RQ7 measured app behaviour, not agents", giờ cần một câu dẫn tới §7.8. **Cần A:** lần render tới sẽ điền `\CertLabelMedS` và `\CertDeviceHoursFive` từ `label_cost.csv`.
+
+## 14/11/2026 (YC-12: độ dễ đọc các file văn bản của B)
+
+- Phạm vi: `02-background-motivation.tex`, `06-implementation.tex`, `07-real.tex`, `07-agent.tex`, `tab-apps.tex`, `tab-position.tex`, `figures/fig1.tex`. Chỉ đổi câu chữ, không đổi số, macro hay kết luận nào.
+- `readability_count.py` trên các file đó, trước và sau: `\para` 9 thành 4 (giới hạn 5), `\emph` 25 thành 9 (giới hạn 10), câu quá 45 từ 9 thành 0, đoạn có hơn 1 dấu chấm phẩy 10 thành 0.
+- Cách làm: tách câu dài và các chuỗi liệt kê nối bằng dấu chấm phẩy; bỏ `\para` ở đoạn đầu §6 và §7 phần đo, ba khoảng trống ở §2.2 giờ mở bằng "The first/second/third gap is"; tên nút và trạng thái giao diện (Send, Pay, Save, Post, Sent, Lease) đặt trong ngoặc kép thay vì `\emph`, nhãn bốn loại gián đoạn ở §2.1 thôi in nghiêng.
+- `fig1.tex`: ba `\newcommand` của hình chuyển vào trong `tikzpicture` (cục bộ trong hình) để bộ đếm không đọc mã TikZ thành văn; caption tách câu. Hình hiển thị như cũ (đã xem ảnh trang 2).
+- Dấu gạch ngang trong các câu đã sửa: `20--100`, `Clopper--Pearson`, `prepare--dispatch--settle` và ba khoảng macro `A--B` đổi thành "from A to B" hoặc dấu phẩy. Các ô `--` (nghĩa là "không có") trong `tab-position.tex` giữ nguyên.
+- §6 thêm một câu: các lượt M3A của §7.8 chạy agent nguyên bản trên cùng cấu hình K-9, emulator x86-64.
+- Kiểm: `build.sh` thoát 0, 22 trang, không overfull quá 10 pt, PDF không còn `??`; test testbed và artifact qua; scrub qua trên các file đã đổi.
+- Còn lại ngoài YC-12: YC-10 ("G2" chỉ trong định lý, chứng minh, bảng) chưa đạt ở §6, §7 phần đo và Fig. 1; cả bài đều dùng "G2" trong văn nên cần thống nhất với A và C trước khi sửa.
