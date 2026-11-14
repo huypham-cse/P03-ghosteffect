@@ -38,11 +38,20 @@ check)
     python_ok && echo "Python: OK for vLLM 0.11.0"
     ;;
 setup)
+    SUDO=; [ "$(id -u)" = 0 ] || SUDO=sudo
+    APT="$SUDO apt-get -o DPkg::Lock::Timeout=600 -q"
+    if ! nvidia-smi -L >/dev/null 2>&1; then   # plain Ubuntu AMI: Ubuntu's signed prebuilt driver for the running kernel
+        $APT update
+        $APT install -y nvidia-headless-no-dkms-580-server nvidia-utils-580-server "linux-modules-nvidia-580-server-$(uname -r)"
+        echo 'blacklist nouveau' | $SUDO tee /etc/modprobe.d/blacklist-nouveau.conf >/dev/null
+        $SUDO update-initramfs -u
+        { $SUDO modprobe -r nouveau 2>/dev/null; $SUDO modprobe nvidia && nvidia-smi -L; } ||
+            { echo "driver installed but not loaded: sudo reboot, then run setup again" >&2; exit 1; }
+    fi
     python_ok
     if ! python3 -c 'import ensurepip' 2>/dev/null; then   # Ubuntu leaves venv support out of the base image
-        SUDO=; [ "$(id -u)" = 0 ] || SUDO=sudo
-        $SUDO apt-get -o DPkg::Lock::Timeout=600 update -q
-        $SUDO apt-get -o DPkg::Lock::Timeout=600 install -y -q python3-venv
+        $APT update
+        $APT install -y python3-venv
     fi
     [ -d "$VENV" ] || python3 -m venv "$VENV"
     "$PY" -m pip install -q --upgrade pip
