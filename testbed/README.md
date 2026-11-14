@@ -19,8 +19,9 @@ the original rig's hashes. All content is synthetic and all accounts are test ac
 - Windows 11 x86_64 with WHPX, or Linux with KVM. 8 CPU threads and 32 GB RAM were used.
 - Python 3.11 or newer for the stdlib tools; the agent environment is pinned to Python 3.11.8 through `uv`.
 - Java 17 or newer for GreenMail.
-- For the LLM agent: one NVIDIA H100 80GB running vLLM 0.11.0 (`serve_model.py`), reached through an SSH tunnel so
-  the endpoint stays on loopback. No paid model API is used.
+- For the LLM agent: one NVIDIA GPU running vLLM 0.11.0 (`serve_model.py`; profiles for A10G 24 GB, L40S 48 GB and
+  H100 80 GB differ only in memory settings), reached through an SSH tunnel so the endpoint stays on loopback. No
+  paid model API is used.
 
 ## Quick checks without a device
 
@@ -71,9 +72,16 @@ running these scripts.
 
 ```bash
 python testbed/setup_agents.py --output testbed/runs/agents-01
-bash testbed/server_h100.sh setup && bash testbed/server_h100.sh serve      # on the GPU server
-runtime/agent-venv/Scripts/python.exe testbed/agent_episode.py --framework m3a --config sent --fault drop-forcestop --phase scheduled --episode-id s01 --scheduled-index 1 --goal-file <task.txt> --tag gx:ABC123 --serving-receipt testbed/runs/SERVING.json --adb runtime/android-sdk/platform-tools/adb.exe --output testbed/runs/s01
+bash testbed/server_gpu.sh setup && bash testbed/server_gpu.sh serve      # on the GPU server
+runtime/agent-venv/Scripts/python.exe testbed/agent_episode.py --framework m3a --config sent --fault drop-forcestop --phase scheduled --episode-id s01 --scheduled-index 1 --goal-file testbed/agent_goal.txt --tag gx:ABC123 --serving-receipt testbed/runs/SERVING.json --adb runtime/android-sdk/platform-tools/adb.exe --output testbed/runs/s01
 ```
+
+The study itself: `run_agent_study.py --phase dev` (A-dev), `make_freeze.py` (writes
+`agent_study.freeze.json`: model, decoding, native source hashes, task, app hashes, outcome rule and the episode
+order with its tags), `run_agent_study.py --phase scheduled` (follows the committed freeze), then
+`collect_agent.py`, `check_agent_data.py` and `artifact/scripts/render.py` (`render_agent.py` writes the `\Agent*`
+and `\LabelTrial*` macros). `fake_model.py` is a synthetic stand-in for the vLLM endpoint that rehearses the whole
+path on the AVD without a GPU; its receipts are marked synthetic and are never study data.
 
 `agent_episode.py` runs one episode: reset, native M3A from the pinned AndroidWorld commit, the agent blocked as
 soon as the server committed the mail, the reply dropped, K-9 force-stopped and relaunched, a fresh M3A on the same
@@ -92,7 +100,9 @@ run a separate proxy at the same time.
 | `k9_reset.py`, `k9_fault_case.py`, `k9_audit_table.py` | K-9 reset, scripted lost-reply case, action audit table |
 | `agent_episode.py` | LLM-agent fault-injection episode and outcome rule |
 | `native_episode.py`, `androidworld_env.py`, `local_model.py` | Pinned AndroidWorld env, M3A/T3A factory, loopback vLLM binding |
-| `serve_model.py`, `setup_models.py`, `server_h100.sh` | Model download and serving on the GPU server |
+| `serve_model.py`, `setup_models.py`, `server_gpu.sh` | Model download and serving on the GPU server |
+| `run_agent_study.py`, `make_freeze.py`, `collect_agent.py`, `check_agent_data.py` | A-dev and A-native runs, freeze, data and its checks |
+| `fake_model.py` | Synthetic vLLM stand-in for rehearsing the agent path without a GPU |
 | `capture_androidworld.py`, `smoke_android.py`, `smoke_agent_wire.py` | AVD and agent wiring smoke tests |
 | `smoke_greenmail.py`, `smoke_http_backends.py` | Backend plus proxy smoke tests without Android |
 | `setup_android.py`, `setup_avd.py`, `setup_assets.py`, `setup_backends.py`, `setup_agents.py` | Pinned setup |

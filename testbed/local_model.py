@@ -2,15 +2,27 @@
 
 Preserves upstream prompt/history and all supplied images at full resolution.
 No paid provider, checkpoint substitution, retry, cropping or silent truncation.
+One documented output change: Qwen2.5-VL writes the text action as "type", which the pinned
+M3A rejects, so the name "type" becomes "input_text" (decided by the team lead on 14/11/2026;
+counted per call in the trace and the episode receipt, disclosed in the paper).
 This is a backbone binding, not a reimplementation of M3A/T3A agent algorithms.
 """
 import base64
 import hashlib
 import io
 import json
+import re
 import time
 from urllib.parse import urlsplit
 import urllib.request
+
+
+TYPE_ACTION = re.compile(r'("action_type"\s*:\s*")type(")')
+
+
+def alias_action_type(text):
+    """("type" -> "input_text") on action JSON only; returns (text, number of replacements)."""
+    return TYPE_ACTION.subn(r'\1input_text\2', text)
 
 
 def png_bytes(image):
@@ -66,11 +78,14 @@ class LocalModel:
         text=choices[0].get('message',{}).get('content')
         if not isinstance(text,str) or not text.strip():
             raise ValueError('empty/non-text completion')
+        text,aliased=alias_action_type(text)
+        raw['action_alias']=aliased
         if self.journal:
             self.journal.emit('LOCAL_INFERENCE',model=self.model_id,
                               prompt_sha256=hashlib.sha256(text_prompt.encode()).hexdigest(),
                               image_sha256=image_hashes,usage=raw.get('usage'),seconds=time.monotonic()-started,
-                              finish_reason=choices[0]['finish_reason'],weights_revision_verified=False)
+                              finish_reason=choices[0]['finish_reason'],weights_revision_verified=False,
+                              action_alias=aliased)
         # Upstream explicitly accepts None for unknown safety-classifier status.
         # A local model without that classifier must not claim safety=True.
         return text,None,raw

@@ -144,7 +144,7 @@ def worker(args):
                original_committed=0, fault_receipt=0)
     receipt = dict(kind='agent fault-injection episode' if args.framework == 'm3a' else 'SYNTHETIC fixture dry run',
                    study_data=args.framework == 'm3a', fault=args.fault, tag=args.tag, h_eval_s=args.h_eval,
-                   goal_sha256=hashlib.sha256(args.goal_file.read_bytes()).hexdigest(),
+                   goal_sha256=hashlib.sha256(args.goal_file.read_text(encoding='utf-8').strip().encode()).hexdigest(),  # CRLF-proof
                    source_sha256={p.name: hashlib.sha256(p.read_bytes()).hexdigest()
                                   for p in sorted(Path(__file__).parent.glob('*.py'))})
     goal = args.goal_file.read_text(encoding='utf-8').strip().replace('{tag}', args.tag)
@@ -161,6 +161,18 @@ def worker(args):
             raise EpochStop('h_eval')
 
     try:
+        # model, source and receipt first: a dead tunnel fails here, before a minute of reset
+        if args.framework == 'm3a':
+            serving = serving_contract(args.serving_receipt, args.endpoint)
+            row['model_id'] = serving['repo_id'] + '@' + serving['revision']
+            receipt['serving_receipt_sha256'] = hashlib.sha256(args.serving_receipt.read_bytes()).hexdigest()
+            receipt['gpu_profile'] = serving.get('gpu_profile', '')
+            if serving.get('synthetic'):   # fake_model.py rehearsal
+                receipt.update(study_data=False, kind='SYNTHETIC rehearsal against fake_model.py')
+                row['model_id'] = 'SYNTHETIC fake_model.py'
+            receipt['native_source'] = verify_source(ROOT / 'runtime/vendor/android_world_full')
+        else:
+            row['model_id'] = 'none (synthetic fixture)'
         t0 = time.monotonic()
         receipt['reset'] = k9_reset.reset(args.adb, 'emulator-%d' % args.console_port, args.config, out,
                                           str(args.adb_server_port), args.java)
@@ -171,13 +183,6 @@ def worker(args):
         proxy = smtp_proxy(('127.0.0.1', k9_reset.SMTP_PORT), faults, listen=('127.0.0.1', 14025))
         threading.Thread(target=proxy.serve_forever, kwargs={'poll_interval': .05}, daemon=True).start()
         arm = faults.configure('drop') if args.fault != 'none' else None
-        if args.framework == 'm3a':
-            serving = serving_contract(args.serving_receipt, args.endpoint)
-            row['model_id'] = serving['repo_id'] + '@' + serving['revision']
-            receipt['serving_receipt_sha256'] = hashlib.sha256(args.serving_receipt.read_bytes()).hexdigest()
-            receipt['native_source'] = verify_source(ROOT / 'runtime/vendor/android_world_full')
-        else:
-            row['model_id'] = 'none (synthetic fixture)'
         env = load_env(args.adb, args.console_port, args.adb_server_port, args.grpc_port, freeze_datetime=False)
         shell(f'am start -W -n {k9_reset.LAUNCH}')
         native_execute = env.execute_action
@@ -202,6 +207,8 @@ def worker(args):
                 usage = raw.get('usage') or {}
                 row['prompt_tokens'] += usage.get('prompt_tokens', 0)
                 row['completion_tokens'] += usage.get('completion_tokens', 0)
+                receipt['model_calls'] = receipt.get('model_calls', 0) + 1   # alias disclosure (local_model.py)
+                receipt['type_alias_calls'] = receipt.get('type_alias_calls', 0) + bool(raw.get('action_alias'))
                 return text, safety, raw
             agent.llm.predict_mm = guarded_predict
             native_step = agent.step
@@ -258,7 +265,8 @@ def worker(args):
             while not stop.is_set() and time.monotonic() < deadline:
                 time.sleep(.1)
             stop.set()
-        journal = [json.loads(l) for l in (out / 'proxy.jsonl').read_text().splitlines()]
+        journal = ([json.loads(l) for l in (out / 'proxy.jsonl').read_text().splitlines()]
+                   if (out / 'proxy.jsonl').exists() else [])   # the journal file appears only when K-9 connects
         accepts = [e for e in journal if e['event'] == 'UPSTREAM_ACCEPT' and e.get('status') == 250
                    and (arm is None or e.get('arm_id') == arm)]
         row['original_committed'] = int(bool(accepts))
@@ -375,9 +383,16 @@ def main():
         try:
             reply = subprocess.run(command, stdout=stream, stderr=subprocess.STDOUT, timeout=args.timeout_seconds)
         except subprocess.TimeoutExpired:
+            row = {f: '' for f in FIELDS}   # the killed worker wrote no row; keep the run in episodes.csv
+            row.update(episode_id=args.episode_id, scheduled_index=args.scheduled_index, config=args.config,
+                       attempt=args.attempt, agent=args.framework, phase=args.phase, agent_final_status='timeout',
+                       outcome='INVALID', invalid_reason='harness_timeout', wall_clock_s=args.timeout_seconds,
+                       t_end_utc=time.time_ns())
+            synthetic = args.framework != 'm3a' or json.loads(args.serving_receipt.read_text()).get('synthetic', False)
             (args.output / 'TIMEOUT.json').write_text(json.dumps(dict(
-                status='TIMEOUT', outcome='INVALID', invalid_reason='harness_timeout',
-                timeout_seconds=args.timeout_seconds), indent=2), encoding='utf-8')
+                status='TIMEOUT', outcome='INVALID', invalid_reason='harness_timeout', tag=args.tag,
+                study_data=not synthetic,
+                timeout_seconds=args.timeout_seconds, row=row), indent=2), encoding='utf-8')
             raise SystemExit(124)
     print((args.output / 'worker.log').read_text(encoding='utf-8', errors='replace')[-600:])
     raise SystemExit(reply.returncode)
