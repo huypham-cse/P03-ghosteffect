@@ -213,3 +213,20 @@ Khớp kỳ vọng đã ghi trước. Dữ liệu: `artifact/results/real/audit/
 - Trước khi chốt thiết kế, có một lượt dò đường `testbed/runs/b12/explore-01` (lỗi mất phản hồi không kèm thao tác, rồi bấm tay vào Outbox để tìm nút "Send messages"). Lượt này không có kết quả thao tác nào và không nằm trong CSV.
 - B-12 ghi là chạy sau B-09 để không tranh AVD; vì B-09 đang bị chặn (server không vào được) nên audit chạy trước, trên cùng AVD nhưng không có episode agent nào chạy song song.
 - Sửa theo review: README bỏ bước bật proxy ngoài (trùng cổng với proxy riêng của `k9_fault_case.py`) và bỏ chữ `--journal`; lỗi reset giờ cũng ghi `RESULT.json` INVALID; reset chỉ bấm BACK khi đúng là hộp thoại lỗi; `render_real.py` kiểm cấu hình nosent và chuỗi bấm của từng thao tác; §7 nói rõ cửa sổ 60 s không phủ poll 15 phút và số lượt hợp lệ trên số lượt thử (macro `\RealAuditAttemptsN`); `SUMMARY.md` (đoạn mới) ghi bản điều chỉnh và hai phiên bản code; `.meta.json` ghi đủ lệnh; thêm test cho `k9_audit_table.py`.
+
+## 14/11/2026 (B-05 đến B-11: chuẩn bị cho máy AWS)
+
+**Bối cảnh:** server 80GB và 40GB vẫn không vào được (bảo trì). Nhóm thuê máy AWS `g5.xlarge` (1 GPU A10G 24 GB, 4 vCPU, 16 GB RAM), Seoul, Ubuntu 24.04, ổ gp3 150 GB, SSH chỉ mở cho IP local; dự phòng `g6e.xlarge` (L40S 48 GB) trên cùng ổ. Giá on-demand lấy từ trang giá AWS: g5.xlarge 1,237 USD/giờ, g6e.xlarge 2,288 USD/giờ ở Seoul; Singapore không có g5, g6, g6e.
+
+**Đã sửa (chưa chạy với model thật):**
+- `serve_model.py`: bỏ điều kiện chỉ nhận H100; thêm profile `h100`, `l40s`, `a10g` chỉ khác phần bộ nhớ (A10G dùng 95% bộ nhớ GPU và 1 yêu cầu một lúc; hai loại kia 85% và 2). Model, revision, BF16, ngữ cảnh 32768, seed và cách sinh chữ không đổi. Qwen thêm `max_pixels=3211264` (như GUI-Owl) để vLLM không giữ chỗ cho ảnh 16384 token; ảnh 1080x2400 sau khi làm tròn bội 28 là 2629536 điểm ảnh, dưới mức đó, nên không ảnh nào bị thu nhỏ. `image_policy` trong receipt ghi đúng điều này, `serving_contract` nhận giá trị mới. Lỗi khi khởi động giờ in ra và ghi vào `SERVING.json`.
+- `server_h100.sh` đổi tên thành `server_gpu.sh`: tự chọn profile theo `nvidia-smi`, cài `python3-venv` nếu thiếu, từ chối Python từ 3.14 (vLLM 0.11.0 và torch 2.8.0 chỉ có bản cho 3.9 đến 3.13; Ubuntu 26.04 dùng 3.14).
+- `agent_episode.py`: receipt ghi `gpu_profile`; receipt của model giả ghi `study_data: false`; khi harness hết giờ, `TIMEOUT.json` có một dòng `row` để lượt đó vẫn vào `episodes.csv`.
+
+**Mới:** `fake_model.py` (model giả để tổng duyệt trên emulator, không bao giờ là dữ liệu), `run_agent_study.py` (chạy liền các episode dev và scheduled theo freeze, bỏ qua episode đã xong), `make_freeze.py` (B-08), `collect_agent.py`, `check_agent_data.py` (YC-B4, có fixture lỗi trong `tests/test_agent_data.py`), `artifact/scripts/render_agent.py` (44 macro theo hợp đồng 12/11 và `tab_agent.tex`; chưa có dữ liệu thì in `??`), `testbed/agent_goal.txt` (task, giống `testbed/runs/goal.txt` đã dùng khi chạy thử).
+
+**Ghi trước khi chạy:** thứ tự scheduled và tag của mọi lần chạy rút một lần khi tạo freeze; index 1 đến 20 xen kẽ không Sent, có Sent; lần 2 chỉ sau lỗi đo; index 21 đến 30 chỉ khi dưới 10 hợp lệ và dừng khi đủ 10. Nếu A10G không nạp được model thì đổi sang g6e trước khi freeze; mọi episode scheduled chạy trên cùng một profile GPU (freeze ghi `gpu_profile`, checker kiểm).
+
+**Kiểm:** testbed và artifact test qua; render thêm đúng 44 macro (`??`) vào `macros_real.tex` và tạo `tab_agent.tex`, không số nào khác đổi; build 21 trang. `scrub_check.sh` chỉ báo nhầm các địa chỉ `@test.invalid` như trước.
+
+**Chưa làm:** tổng duyệt trên emulator với `fake_model.py` (chờ trưởng nhóm đồng ý chạy emulator); nạp vLLM thật trên A10G.

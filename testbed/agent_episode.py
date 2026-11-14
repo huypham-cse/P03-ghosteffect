@@ -175,6 +175,10 @@ def worker(args):
             serving = serving_contract(args.serving_receipt, args.endpoint)
             row['model_id'] = serving['repo_id'] + '@' + serving['revision']
             receipt['serving_receipt_sha256'] = hashlib.sha256(args.serving_receipt.read_bytes()).hexdigest()
+            receipt['gpu_profile'] = serving.get('gpu_profile', '')
+            if serving.get('synthetic'):   # fake_model.py rehearsal
+                receipt.update(study_data=False, kind='SYNTHETIC rehearsal against fake_model.py')
+                row['model_id'] = 'SYNTHETIC fake_model.py'
             receipt['native_source'] = verify_source(ROOT / 'runtime/vendor/android_world_full')
         else:
             row['model_id'] = 'none (synthetic fixture)'
@@ -375,9 +379,14 @@ def main():
         try:
             reply = subprocess.run(command, stdout=stream, stderr=subprocess.STDOUT, timeout=args.timeout_seconds)
         except subprocess.TimeoutExpired:
+            row = {f: '' for f in FIELDS}   # the killed worker wrote no row; keep the run in episodes.csv
+            row.update(episode_id=args.episode_id, scheduled_index=args.scheduled_index, config=args.config,
+                       attempt=args.attempt, agent=args.framework, phase=args.phase, agent_final_status='timeout',
+                       outcome='INVALID', invalid_reason='harness_timeout', wall_clock_s=args.timeout_seconds,
+                       t_end_utc=time.time_ns())
             (args.output / 'TIMEOUT.json').write_text(json.dumps(dict(
-                status='TIMEOUT', outcome='INVALID', invalid_reason='harness_timeout',
-                timeout_seconds=args.timeout_seconds), indent=2), encoding='utf-8')
+                status='TIMEOUT', outcome='INVALID', invalid_reason='harness_timeout', tag=args.tag,
+                timeout_seconds=args.timeout_seconds, row=row), indent=2), encoding='utf-8')
             raise SystemExit(124)
     print((args.output / 'worker.log').read_text(encoding='utf-8', errors='replace')[-600:])
     raise SystemExit(reply.returncode)

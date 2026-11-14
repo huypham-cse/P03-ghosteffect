@@ -17,7 +17,7 @@ import time
 from urllib.parse import urlsplit
 
 from setup_models import ROOT,LOCK,project_path
-from serve_model import get_json
+from serve_model import get_json,QWEN_IMAGE_POLICY
 
 
 def serving_contract(file,endpoint):
@@ -31,7 +31,7 @@ def serving_contract(file,endpoint):
             or receipt.get('revision')!=model['revision'] or receipt.get('dtype')!='bfloat16'
             or receipt.get('max_model_len')!=32768 or receipt.get('engine_version')!='0.11.0'
             or not receipt.get('checkpoint_files_verified') or not receipt.get('models_loaded')
-            or receipt.get('image_policy')!='upstream_recipe' or receipt.get('history_policy')!='upstream_recipe'):
+            or receipt.get('image_policy')!=QWEN_IMAGE_POLICY or receipt.get('history_policy')!='upstream_recipe'):
         raise ValueError('serving receipt is not a ready pinned Qwen BF16 engine')
     # A copied server receipt may name its original port. Endpoint may instead
     # be an SSH forward; live card/root/version must still match that server.
