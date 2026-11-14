@@ -355,3 +355,21 @@ Test: testbed 96 qua (4 bỏ qua), artifact 49 qua (1 bỏ qua); render không �
 - **Xử lý:** 02:43 reboot hệ điều hành của emulator; 02:57 đến 02:59 một watchdog (chỉ chạm "Wait" trên hộp thoại ANR của System UI, ghi log `testbed/runs/anr-watchdog.log`) chạm 14 lần, đều trước pha agent của r11, sau đó không chạm lần nào; 03:08 khởi động lại emulator với RAM 4 GB (`-memory 4096`, `config.ini` đã hash không đổi), index 13 đến 20 chạy không có ANR. Runner có thêm luật: chạy lại đúng lệnh thì đi tiếp qua index đã có hai lỗi đo ghi từ trước, còn hai lỗi mới liên tiếp vẫn dừng. Checker bỏ qua phần kiểm guard ở dòng có lỗi đo (reset hỏng trước khi guard được tạo). Hai sửa này không thuộc code bị freeze hash.
 - **Kiểm:** gom 24 lượt (rdev-01, r01 đến r20, r09-r2, r10-r2, r12-r2) vào `artifact/results/real/agent_rules/`; checker OK hai lần (bản gom lại giống hệt). Baseline và arm guard vẫn OK.
 - **Bài:** §7.8 thêm một câu về rule (macro `\AgentRules*`, `\AgentGuardSent*`); gọn lại phần mở đầu, câu các nhóm kết quả và câu alias để mục vẫn khoảng 33 dòng, tức khoảng 0,57 cột.
+
+## 15/11/2026 (arm T3A và arm chỉ kill agent: thiết kế chốt trước khi chạy)
+
+- **Mục đích:** gỡ hai giới hạn "một agent" và "một kiểu lỗi" của §7.8 (trưởng nhóm chốt 15/11, duyệt trước mọi PR và commit).
+- **Arm T3A:** T3A của AndroidWorld (chỉ đọc văn bản của cây giao diện, cùng commit pin, prompt nguyên bản) trên cùng Qwen qua `TextOnlyModel`; alias `type` thành `input_text` vẫn áp dụng. Cùng task, lỗi `drop-forcestop`, `H_eval`, luật kết quả, cấu hình xen kẽ; 20 index; freeze `testbed/agent_study_t3a.freeze.json`; lượt `t01` đến `t20`. Không guard.
+- **Arm chỉ kill agent:** M3A, lỗi `drop-killagent`: proxy bỏ phản hồi, K-9 ghi lỗi, agent bị kill rồi khởi động lại cùng task; K-9 không bị force-stop, không mở lại. `H_eval` tính từ lúc agent khởi động lại. Freeze `testbed/agent_study_killagent.freeze.json`; lượt `k01` đến `k20`. Không guard.
+- **Code:** `agent_episode.py` (`--framework t3a`, `--fault drop-killagent`, nhận biết thao tác `status` của T3A từ chữ), `make_freeze.py` (`--framework`, `--fault`), `run_agent_study.py` (lấy agent và kiểu lỗi từ freeze), test mới.
+- **Phân tích chốt trước** (`render_arm` trong `render_agent.py`): tỉ lệ RESENT_DUPLICATE trên lượt hợp lệ, Wilson 95%. Phụ: Fisher exact hai phía so với M3A force-stop, các nhóm kết quả khác, bộ đếm alias. Macro `\AgentText*` (T3A) và `\AgentKill*`.
+- **Thứ tự:** chạy xong arm rules; 2 lượt dev có lỗi cho mỗi arm; freeze cả hai trong một PR (merge commit); chạy T3A 20 lượt rồi kill-only 20 lượt nối tiếp bằng một script, trên cùng nhánh, không đổi nhánh giữa chừng.
+- **Không ghi kỳ vọng về hướng:** T3A không thấy ảnh nên có thể đọc Outbox khác M3A; khi chỉ kill agent, màn hình K-9 giữ nguyên nên agent có thể thấy thông báo lỗi gửi.
+
+## 15/11/2026 (arm T3A và arm chỉ kill agent: dev và freeze)
+
+- **Dev (không phải kết quả), máy ảo RAM 4 GB:** tdev-01 (T3A, không Sent): T3A báo xong trước khi thư tới server, INVALID original_not_committed. tdev-02 (T3A, có Sent): gửi lại, 2 bản; harness nhận đúng thao tác `status` của T3A. T3A không cần alias (0 lần đổi tên): nó tự viết `input_text`. kdev-01 (không Sent) và kdev-02 (có Sent): lỗi `agent-kill-only` (K-9 không bị force-stop), agent gửi lại, 2 bản mỗi lượt. Thư mục `testbed/runs/agent-t3a/`, `testbed/runs/agent-killagent/`.
+- **Freeze:** `testbed/agent_study_t3a.freeze.json` (sha256 `c5cecb82...65afc`, `agent.framework` t3a) và `testbed/agent_study_killagent.freeze.json` (sha256 `6c766d3d...cfa69`, `fault.kind` drop-killagent). Model, decoding, task, app, luật kết quả, host và luật thứ tự trùng baseline; cấu hình xen kẽ như baseline; không guard nên không rút cờ người dùng.
+- **Khác baseline về môi trường:** hai arm này chạy trên máy ảo RAM 4 GB (baseline và arm guard chạy 2 GB). Watchdog ANR của System UI vẫn chạy và ghi log.
+- **Sửa:** `make_freeze.py` có lỗi thứ tự toán tử ở dòng chọn tên file output khi không có guard; đã sửa trước khi tạo freeze (file không thuộc code bị hash).
+- **Chạy:** script nối tiếp T3A rồi kill-only trên nhánh `b/two-arms`, không đổi nhánh giữa chừng.

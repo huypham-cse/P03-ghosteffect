@@ -65,7 +65,7 @@ def tags(n, draw=None):
 
 
 def build(serving, native_source, goal_bytes, archives, avd_config_sha256, host, h_eval=300, max_steps=20, draw=None,
-          guard=None, error_draw=None):
+          guard=None, error_draw=None, framework='m3a', fault='drop-forcestop'):
     """Pure part: every input is passed in, so tests can build a freeze without a device or server."""
     from agent_episode import classify, OUTCOMES, FIELDS, ERROR_WAIT_S
     assets = {a['file']: a['sha256'] for a in json.loads((TESTBED / 'assets.lock.json').read_text())['assets']}
@@ -84,7 +84,7 @@ def build(serving, native_source, goal_bytes, archives, avd_config_sha256, host,
                    gpu_profile=serving['gpu_profile'], gpu_memory_utilization=serving['gpu_memory_utilization'],
                    max_num_seqs=serving['max_num_seqs']),
         decoding=dict(temperature=0, top_p=1, n=1, max_tokens=2048, server_seed=0, generation_config='vllm'),
-        agent=dict(framework='m3a', native_source=native_source, max_steps=max_steps,
+        agent=dict(framework=framework, native_source=native_source, max_steps=max_steps,
                    output_alias='action name "type" -> "input_text" in local_model.py (lead decision 14/11, '
                                 'after dev-01); prompt, history and reflection unchanged'),
         task=dict(goal=goal_bytes.decode('utf-8').strip(),
@@ -93,7 +93,8 @@ def build(serving, native_source, goal_bytes, archives, avd_config_sha256, host,
         apps=dict(k9_apk_sha256=assets['com.fsck.k9_39046.apk'], greenmail_jar_sha256=assets['greenmail.jar'],
                   k9_clean_copy_sha256=archives,
                   avd_config_sha256=avd_config_sha256),
-        fault=dict(kind='drop-forcestop', order='reply dropped, K-9 records the error, force-stop, relaunch',
+        fault=dict(kind=fault, order='reply dropped, K-9 records the error, force-stop, relaunch' if fault == 'drop-forcestop'
+                   else 'reply dropped, K-9 records the error, the agent is killed and restarted; K-9 keeps running',
                    error_wait_s=ERROR_WAIT_S, h_eval_s=h_eval),
         outcome_rule=dict(outcomes=list(OUTCOMES), classify_sha256=hashlib.sha256(
             inspect.getsource(classify).encode()).hexdigest(), episodes_csv_fields=list(FIELDS)),
@@ -110,10 +111,14 @@ def main():
     parser.add_argument('--adb-server-port', default='5038')
     parser.add_argument('--serial', default='emulator-5580')
     parser.add_argument('--guard', choices=('ghosteffect', 'rules'), help='guarded arm and drawn simulated-user errors')
+    parser.add_argument('--framework', choices=('m3a', 't3a'), default='m3a')
+    parser.add_argument('--fault', choices=('drop-forcestop', 'drop-killagent'), default='drop-forcestop')
     parser.add_argument('--output', type=Path)
     args = parser.parse_args()
-    args.output = args.output or TESTBED / {'ghosteffect': 'agent_study_guarded.freeze.json',
-                                            'rules': 'agent_study_rules.freeze.json'}.get(args.guard, 'agent_study.freeze.json')
+    args.output = args.output or TESTBED / ({'ghosteffect': 'agent_study_guarded.freeze.json',
+                                             'rules': 'agent_study_rules.freeze.json'}.get(args.guard) or (
+        'agent_study_t3a.freeze.json' if args.framework == 't3a' else 'agent_study_killagent.freeze.json'
+        if args.fault == 'drop-killagent' else 'agent_study.freeze.json'))
     sys.path.insert(0, str(TESTBED))
     from androidworld_env import verify_source
     serving = json.loads(args.serving_receipt.read_text(encoding='utf-8'))
@@ -128,7 +133,7 @@ def main():
     freeze = build(serving, verify_source(ROOT / 'runtime/vendor/android_world_full'),
                    args.goal_file.read_bytes(), archives,
                    sha(ROOT / 'runtime/android-avd/ghosteffect_api33_x86_local.avd/config.ini'), args.host,
-                   guard=args.guard)
+                   guard=args.guard, framework=args.framework, fault=args.fault)
     args.output.write_text(json.dumps(freeze, indent=2) + '\n', encoding='utf-8')
     print('wrote', args.output, 'sha256', sha(args.output))
 

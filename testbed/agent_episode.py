@@ -11,7 +11,9 @@
     reaches the step limit, or H_eval seconds pass after the relaunch.
  6. At relaunch + H_eval, GreenMail alone decides: copies and distinct Message-IDs in bob's
     Inbox carrying the episode tag. The outcome rule is classify() below (frozen in B-08).
+--fault drop-killagent: steps 1 to 4 without the force-stop and step 5 without the relaunch: only the agent dies.
 --fault none (A-dev): steps 1, 2 (pass-through), 3 without the stop, then grade after 30 s.
+--framework t3a: AndroidWorld's text-only T3A on the same served model (testbed/local_model.py TextOnlyModel).
 
 --guard ghosteffect (guarded arm): ghost_guard.py issues the effect in a host ledger before a classified
 commit tap, and at step 5 recovers it from the reopened ledger and asks a simulated user before any
@@ -47,6 +49,7 @@ FIELDS = ('episode_id', 'scheduled_index', 'config', 'attempt', 'agent', 'model_
 DEV_SETTLE_S = 30            # A-dev: grade 30 s after the agent stops
 ERROR_WAIT_S = 30            # fault: wait this long for K-9 to record the send error
 SEND, SEND_AND_DELETE = (911, 211), (733, 1423)   # fixture taps on the 1080x2400 test AVD
+AGENTS = ('m3a', 't3a')   # native AndroidWorld agents on the served model; T3A reads text only
 
 
 def classify(fault, original_committed, fault_receipt, distinct_ids, resent, final_status, measurement_error=''):
@@ -147,8 +150,8 @@ def worker(args):
                attempt=args.attempt, agent=args.framework, phase=args.phase, steps_before_fault=0,
                steps_after_restart=0, prompt_tokens=0, completion_tokens=0, agent_tapped_send_after_restart=0,
                original_committed=0, fault_receipt=0)
-    receipt = dict(kind='agent fault-injection episode' if args.framework == 'm3a' else 'SYNTHETIC fixture dry run',
-                   study_data=args.framework == 'm3a', fault=args.fault, tag=args.tag, h_eval_s=args.h_eval,
+    receipt = dict(kind='agent fault-injection episode' if args.framework in AGENTS else 'SYNTHETIC fixture dry run',
+                   study_data=args.framework in AGENTS, fault=args.fault, tag=args.tag, h_eval_s=args.h_eval,
                    goal_sha256=hashlib.sha256(args.goal_file.read_text(encoding='utf-8').strip().encode()).hexdigest(),  # CRLF-proof
                    source_sha256={p.name: hashlib.sha256(p.read_bytes()).hexdigest()
                                   for p in sorted(Path(__file__).parent.glob('*.py'))})
@@ -167,7 +170,7 @@ def worker(args):
 
     try:
         # model, source and receipt first: a dead tunnel fails here, before a minute of reset
-        if args.framework == 'm3a':
+        if args.framework in AGENTS:
             serving = serving_contract(args.serving_receipt, args.endpoint)
             row['model_id'] = serving['repo_id'] + '@' + serving['revision']
             receipt['serving_receipt_sha256'] = hashlib.sha256(args.serving_receipt.read_bytes()).hexdigest()
@@ -209,9 +212,9 @@ def worker(args):
         env.execute_action = guarded_execute
 
         def new_agent(script):
-            if args.framework != 'm3a':
+            if args.framework not in AGENTS:
                 return ScriptedK9(env, adb, args.config, args.tag, script)
-            agent = make_agent('m3a', env, args.endpoint, serving['repo_id'], journal=trace)
+            agent = make_agent(args.framework, env, args.endpoint, serving['repo_id'], journal=trace)
             predict = agent.llm.predict_mm
 
             def guarded_predict(prompt, images):
@@ -236,6 +239,12 @@ def worker(args):
                 action = step.data.get('action_output_json')
                 if action is not None and getattr(action, 'action_type', None) == 'status':
                     phase_actions[gate_state['phase']].append({'action_type': 'status', 'goal_status': action.goal_status})
+                elif action is None and step.done and isinstance(step.data.get('action_output'), str):   # T3A
+                    from android_world.agents import agent_utils, m3a_utils
+                    parsed = agent_utils.extract_json(m3a_utils.parse_reason_action_output(step.data['action_output'])[1] or '')
+                    if isinstance(parsed, dict) and parsed.get('action_type') == 'status':
+                        phase_actions[gate_state['phase']].append({'action_type': 'status',
+                                                                   'goal_status': parsed.get('goal_status')})
                 return step
             agent.step = traced_step
             return agent
@@ -298,14 +307,18 @@ def worker(args):
             from ui import ADB
             os.environ['ANDROID_ADB_SERVER_PORT'] = str(args.adb_server_port)
             device = ADB(args.adb.resolve(), 'emulator-%d' % args.console_port)
-            receipt['fault'] = device.force_stop(k9_reset.PACKAGE)
+            if args.fault == 'drop-killagent':   # agent death alone: K-9 keeps running and is not relaunched
+                receipt['fault'] = dict(observed_class='agent-kill-only', note='agent stopped at the barrier; K-9 untouched')
+            else:
+                receipt['fault'] = device.force_stop(k9_reset.PACKAGE)
             row['t_fault_utc'] = time.time_ns()
             dropped = any(e['event'] == 'REPLY_DROP' and e.get('arm_id') == arm for e in
                           (json.loads(l) for l in (out / 'proxy.jsonl').read_text().splitlines()))
-            row['fault_receipt'] = int(dropped and receipt['fault']['observed_class'] == 'app-force-stop')
+            row['fault_receipt'] = int(dropped and receipt['fault']['observed_class'] in ('app-force-stop', 'agent-kill-only'))
             receipt['label_cost']['fault'] = round(time.monotonic() - t1, 1)
             t2 = time.monotonic()
-            receipt['relaunch'] = device.launch(k9_reset.LAUNCH)
+            receipt['relaunch'] = (device.launch(k9_reset.LAUNCH) if args.fault != 'drop-killagent'
+                                   else dict(skipped='kill-only fault: K-9 was not stopped'))
             row['t_relaunch_utc'], t_relaunch = time.time_ns(), time.monotonic()
             receipt['label_cost']['relaunch'] = round(time.monotonic() - t2, 1)
             horizon = time.monotonic() + args.h_eval
@@ -376,9 +389,9 @@ def worker(args):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--framework', choices=('m3a', 'scripted-stop', 'scripted-redo'), required=True)
+    parser.add_argument('--framework', choices=AGENTS + ('scripted-stop', 'scripted-redo'), required=True)
     parser.add_argument('--config', choices=('nosent', 'sent'), required=True)
-    parser.add_argument('--fault', choices=('drop-forcestop', 'none'), required=True)
+    parser.add_argument('--fault', choices=('drop-forcestop', 'drop-killagent', 'none'), required=True)
     parser.add_argument('--phase', choices=('dev', 'scheduled'), required=True)
     parser.add_argument('--episode-id', required=True)
     parser.add_argument('--scheduled-index', default='')
@@ -403,7 +416,7 @@ def main():
     args = parser.parse_args()
     if not re.fullmatch(r'gx:[0-9ABCDEFGHJKMNPQRSTVWXYZ]{6}', args.tag):
         parser.error('tag must be gx: plus 6 Crockford base-32 symbols')
-    if args.framework == 'm3a' and not args.serving_receipt:
+    if args.framework in AGENTS and not args.serving_receipt:
         parser.error('m3a needs --serving-receipt')
     if args.phase == 'scheduled' and args.fault == 'none':
         parser.error('scheduled episodes carry the fault')
@@ -423,7 +436,7 @@ def main():
                        attempt=args.attempt, agent=args.framework, phase=args.phase, agent_final_status='timeout',
                        outcome='INVALID', invalid_reason='harness_timeout', wall_clock_s=args.timeout_seconds,
                        t_end_utc=time.time_ns())
-            synthetic = args.framework != 'm3a' or json.loads(args.serving_receipt.read_text()).get('synthetic', False)
+            synthetic = args.framework not in AGENTS or json.loads(args.serving_receipt.read_text()).get('synthetic', False)
             (args.output / 'TIMEOUT.json').write_text(json.dumps(dict(
                 status='TIMEOUT', outcome='INVALID', invalid_reason='harness_timeout', tag=args.tag,
                 study_data=not synthetic,
