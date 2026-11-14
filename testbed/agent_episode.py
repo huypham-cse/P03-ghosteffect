@@ -207,6 +207,8 @@ def worker(args):
                 usage = raw.get('usage') or {}
                 row['prompt_tokens'] += usage.get('prompt_tokens', 0)
                 row['completion_tokens'] += usage.get('completion_tokens', 0)
+                receipt['model_calls'] = receipt.get('model_calls', 0) + 1   # alias disclosure (local_model.py)
+                receipt['type_alias_calls'] = receipt.get('type_alias_calls', 0) + bool(raw.get('action_alias'))
                 return text, safety, raw
             agent.llm.predict_mm = guarded_predict
             native_step = agent.step
@@ -263,7 +265,8 @@ def worker(args):
             while not stop.is_set() and time.monotonic() < deadline:
                 time.sleep(.1)
             stop.set()
-        journal = [json.loads(l) for l in (out / 'proxy.jsonl').read_text().splitlines()]
+        journal = ([json.loads(l) for l in (out / 'proxy.jsonl').read_text().splitlines()]
+                   if (out / 'proxy.jsonl').exists() else [])   # the journal file appears only when K-9 connects
         accepts = [e for e in journal if e['event'] == 'UPSTREAM_ACCEPT' and e.get('status') == 250
                    and (arm is None or e.get('arm_id') == arm)]
         row['original_committed'] = int(bool(accepts))

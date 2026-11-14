@@ -64,5 +64,15 @@ class FakeModel(unittest.TestCase):
         self.assertEqual(reply('...Based on the reason: fake:subject\n...Summary of this step: '), 'fake:subject done')
 
 
+class ActionAlias(unittest.TestCase):
+    def test_only_the_type_action_name_changes(self):   # dev-01, 14/11: Qwen writes "type", M3A wants "input_text"
+        from local_model import alias_action_type
+        text = 'Reason: To field.\nAction: {"action_type": "type", "text": "type here", "index": 9}'
+        self.assertEqual(alias_action_type(text),
+                         ('Reason: To field.\nAction: {"action_type": "input_text", "text": "type here", "index": 9}', 1))
+        for unchanged in ('{"action_type": "click", "index": 2}', '{"action_type": "typed"}', 'type the text'):
+            self.assertEqual(alias_action_type(unchanged), (unchanged, 0))
+
+
 if __name__ == '__main__':
     unittest.main()
