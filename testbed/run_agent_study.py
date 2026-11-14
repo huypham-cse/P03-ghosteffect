@@ -43,7 +43,7 @@ def episode(args, episode_id, config, tag, phase, fault, extra=()):
                              % (type(exc).__name__, exc))
         if folder.exists():
             raise SystemExit('%s exists without a result; move it aside and note it in b-log' % folder)
-        command = [sys.executable, '-B', str(TESTBED / 'agent_episode.py'), '--framework', 'm3a', '--config', config,
+        command = [sys.executable, '-B', str(TESTBED / 'agent_episode.py'), '--framework', args.framework, '--config', config,
                    '--fault', fault, '--phase', phase, '--episode-id', episode_id, '--goal-file', str(args.goal_file),
                    '--tag', tag, '--serving-receipt', str(args.serving_receipt), '--adb', str(args.adb),
                    '--output', str(folder), *extra]
@@ -78,6 +78,8 @@ def scheduled(args):
     freeze = json.loads(args.freeze.read_text(encoding='utf-8'))
     if (freeze.get('guard') or {}).get('name', 'none') != args.guard:
         raise SystemExit('--guard does not match the freeze')
+    if freeze['agent']['framework'] != args.framework:
+        raise SystemExit('--framework does not match the freeze')
     problems = freeze_problems(freeze, args.serving_receipt, args.goal_file, args.freeze)
     if problems:
         raise SystemExit('not starting scheduled episodes: ' + '; '.join(problems))
@@ -89,10 +91,11 @@ def scheduled(args):
             break
         guard = lambda attempt: (['--guard', args.guard, '--user-error', str(planned['user_error'][str(attempt)])]
                                  if freeze.get('guard') else [])
-        prefix = {'none': 's', 'ghosteffect': 'g', 'rules': 'r'}[args.guard]
+        prefix = ({'ghosteffect': 'g', 'rules': 'r'}.get(args.guard) or ('t' if args.framework == 't3a' else
+                  'k' if freeze['fault']['kind'] == 'drop-killagent' else 's'))
         run = lambda attempt, suffix: episode(args, '%s%02d%s' % (prefix, index, suffix),
                                               planned['config'], planned['tags'][str(attempt)], 'scheduled',
-                                              'drop-forcestop', common + guard(attempt) +
+                                              freeze['fault']['kind'], common + guard(attempt) +
                                               ['--scheduled-index', str(index), '--attempt', str(attempt)])
         row = run(1, '')
         if row['invalid_reason'].startswith(MEASUREMENT):
@@ -114,6 +117,9 @@ def main():
     parser.add_argument('--dev-n', type=int, default=10)
     parser.add_argument('--guard', choices=('none', 'ghosteffect', 'rules'), default='none')
     parser.add_argument('--freeze', type=Path)
+    parser.add_argument('--framework', choices=('m3a', 't3a'), default='m3a')
+    parser.add_argument('--fault', choices=('drop-forcestop', 'drop-killagent'), default='drop-forcestop',
+                        help='dev episodes of an arm with this fault (scheduled episodes take it from the freeze)')
     args = parser.parse_args()
     args.freeze = args.freeze or {'ghosteffect': TESTBED / 'agent_study_guarded.freeze.json',
                                   'rules': TESTBED / 'agent_study_rules.freeze.json'}.get(args.guard, FREEZE)
@@ -125,6 +131,9 @@ def main():
         if args.guard != 'none':   # guarded dev episodes carry the fault: the guard acts only after it
             episode(args, '%sdev-%02d' % (args.guard[0], k), 'sent' if args.guard == 'rules' or k % 2 == 0 else 'nosent',
                     tag, 'dev', 'drop-forcestop', ['--guard', args.guard, '--user-error', '0'])
+        elif args.framework != 'm3a' or args.fault != 'drop-forcestop':   # t3a or kill-only dev: with the fault
+            episode(args, '%sdev-%02d' % ('t' if args.framework == 't3a' else 'k', k), 'nosent' if k % 2 else 'sent',
+                    tag, 'dev', args.fault)
         else:
             episode(args, 'dev-%02d' % k, 'nosent' if k % 2 else 'sent', tag, 'dev', 'none')
 

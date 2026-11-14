@@ -347,3 +347,13 @@ Test: testbed 96 qua (4 bỏ qua), artifact 49 qua (1 bỏ qua); render không �
 - **Phân tích chốt trước** (`render_rules` trong `render_agent.py`): tỉ lệ RESENT_DUPLICATE trên lượt hợp lệ, Wilson 95%, Fisher exact hai phía so với các lượt cấu hình có Sent của arm guard (`\AgentGuardSent*`). Phụ: số lần cho gửi lại, số lần hỏi, số lần classifier bỏ sót.
 - **Kỳ vọng ghi trước:** K-9 chỉ ghi Sent sau khi gửi thành công nên sau khi mất phản hồi Sent không bao giờ có thư; rule cho gửi lại ở mọi lượt hợp lệ, và bản trùng phụ thuộc agent có soạn lại hay không.
 - **Dev (không phải kết quả):** rdev-01 (có Sent): Outbox có thư, Sent không có, RETRY, agent chạy lại và gửi lại, 2 bản. Thư mục `testbed/runs/agent-rules/`.
+
+## 15/11/2026 (arm T3A và arm chỉ kill agent: thiết kế chốt trước khi chạy)
+
+- **Mục đích:** gỡ hai giới hạn "một agent" và "một kiểu lỗi" của §7.8 (trưởng nhóm chốt 15/11, duyệt trước mọi PR và commit).
+- **Arm T3A:** T3A của AndroidWorld (chỉ đọc văn bản của cây giao diện, cùng commit pin, prompt nguyên bản) trên cùng Qwen qua `TextOnlyModel`; alias `type` thành `input_text` vẫn áp dụng. Cùng task, lỗi `drop-forcestop`, `H_eval`, luật kết quả, cấu hình xen kẽ; 20 index; freeze `testbed/agent_study_t3a.freeze.json`; lượt `t01` đến `t20`. Không guard.
+- **Arm chỉ kill agent:** M3A, lỗi `drop-killagent`: proxy bỏ phản hồi, K-9 ghi lỗi, agent bị kill rồi khởi động lại cùng task; K-9 không bị force-stop, không mở lại. `H_eval` tính từ lúc agent khởi động lại. Freeze `testbed/agent_study_killagent.freeze.json`; lượt `k01` đến `k20`. Không guard.
+- **Code:** `agent_episode.py` (`--framework t3a`, `--fault drop-killagent`, nhận biết thao tác `status` của T3A từ chữ), `make_freeze.py` (`--framework`, `--fault`), `run_agent_study.py` (lấy agent và kiểu lỗi từ freeze), test mới.
+- **Phân tích chốt trước** (`render_arm` trong `render_agent.py`): tỉ lệ RESENT_DUPLICATE trên lượt hợp lệ, Wilson 95%. Phụ: Fisher exact hai phía so với M3A force-stop, các nhóm kết quả khác, bộ đếm alias. Macro `\AgentText*` (T3A) và `\AgentKill*`.
+- **Thứ tự:** chạy xong arm rules; 2 lượt dev có lỗi cho mỗi arm; freeze cả hai trong một PR (merge commit); chạy T3A 20 lượt rồi kill-only 20 lượt nối tiếp bằng một script, trên cùng nhánh, không đổi nhánh giữa chừng.
+- **Không ghi kỳ vọng về hướng:** T3A không thấy ảnh nên có thể đọc Outbox khác M3A; khi chỉ kill agent, màn hình K-9 giữ nguyên nên agent có thể thấy thông báo lỗi gửi.

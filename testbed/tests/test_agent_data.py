@@ -149,6 +149,32 @@ class AgentData(unittest.TestCase):
         reply = subprocess.run(command + [str(runs / 'fake')], capture_output=True, text=True, env=env)
         self.assertIn('not study data', reply.stderr)
 
+    def test_freeze_for_t3a_and_kill_only(self):
+        counter = itertools.count()
+        draw = lambda: 'gx:%06d' % next(counter)
+        t3a = make_freeze.build(SERVING, dict(commit='c'), GOAL, dict(sent='s', nosent='n'), 'avd', 'h', draw=draw,
+                                framework='t3a')
+        kill = make_freeze.build(SERVING, dict(commit='c'), GOAL, dict(sent='s', nosent='n'), 'avd', 'h', draw=draw,
+                                 fault='drop-killagent')
+        self.assertEqual((t3a['agent']['framework'], t3a['fault']['kind']), ('t3a', 'drop-forcestop'))
+        self.assertEqual((kill['agent']['framework'], kill['fault']['kind']), ('m3a', 'drop-killagent'))
+        self.assertIn('K-9 keeps running', kill['fault']['order'])
+        self.assertEqual([o['config'] for o in kill['order'][:4]], ['nosent', 'sent', 'nosent', 'sent'])
+
+    def test_render_writes_an_unguarded_arm(self):
+        self.write(self.good())
+        for name in ('agent', 'agent_t3a'):
+            shutil.copytree(self.tmp / 'agent', self.tmp / 'results' / name)
+        macros = {}
+        scope = dict(os=os, csv=csv, math=math, REAL=str(self.tmp / 'results'),
+                     M=lambda k, v: macros.__setitem__(k, str(v)), W=lambda k, v: None)
+        exec((ROOT / 'artifact/scripts/render_agent.py').read_text(encoding='utf-8'), scope)
+        scope['render_agent']()
+        self.assertEqual((macros['AgentTextValidN'], macros['AgentTextDupN'], macros['AgentTextFisherP']),
+                         ('20', '10', '1.000'))
+        self.assertEqual((macros['AgentTextModelCallsN'], macros['AgentTextAliasCallsN']), ('200', '10'))
+        self.assertNotIn('AgentKillValidN', macros)   # no data, no macro
+
     def test_collect_scrubs_local_paths(self):
         from collect_agent import scrub
         self.assertEqual(scrub(json.dumps(dict(e=str(ROOT / 'runtime' / 'adb.exe')))), json.dumps(dict(e='x'))

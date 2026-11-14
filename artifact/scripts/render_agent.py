@@ -151,6 +151,8 @@ Valid episodes & ''' + ' & '.join(str(len(rs)) for rs in (by_config('nosent'), b
 ''')
     guarded = render_guarded(final, valid, json)
     render_rules(guarded, json)
+    render_arm('agent_t3a', 'AgentText', valid, json)
+    render_arm('agent_killagent', 'AgentKill', valid, json)
 
 
 def fisher_two_sided(a, b, c, d):
@@ -246,3 +248,38 @@ def render_rules(guarded_valid, json):
             ('AgentGuardSentValidN', len(sent)), ('AgentGuardSentDupN', sent_dup),
             ('AgentRulesFisherP', f'{fisher:.3f}' if fisher >= 1e-3 else '$<$0.001')):
         M(name, value)
+
+
+def render_arm(name, prefix, base_valid, json):
+    """Unguarded arm with another agent (agent_t3a: T3A, AgentText macros) or another fault (agent_killagent: agent killed,
+    K-9 kept running, AgentKill macros), written once its data exist. Primary: RESENT_DUPLICATE over valid scheduled
+    episodes with Wilson 95%. Secondary: the exact two-sided Fisher p against the M3A force-stop baseline, the other
+    outcome classes, and the alias counters of the receipts."""
+    folder = os.path.join(REAL, name)
+    if not os.path.exists(os.path.join(folder, 'episodes.csv')):
+        return
+    final, valid, _ = arm_rows(folder, json)
+    calls = alias = 0
+    for r in final:
+        with open(os.path.join(folder, 'receipts', r['episode_id'] + '.json'), encoding='utf-8') as f:
+            receipt = json.load(f)
+        calls += receipt.get('model_calls', 0)
+        alias += receipt.get('type_alias_calls', 0)
+    n = len(valid)
+    count = lambda *outcomes: sum(r['outcome'] in outcomes for r in valid)
+    dup, base_dup = count('RESENT_DUPLICATE'), sum(r['outcome'] == 'RESENT_DUPLICATE' for r in base_valid)
+    z = 1.959964
+    if n:
+        p, d = dup / n, 1 + z * z / n
+        c, h = (p + z * z / (2 * n)) / d, z * math.sqrt(p * (1 - p) / n + z * z / (4 * n * n)) / d
+        lo, hi, pct = f'{100 * max(0.0, c - h):.1f}', f'{100 * min(1.0, c + h):.1f}', f'{100 * dup / n:.1f}'
+    else:
+        lo = hi = pct = 'N/A'
+    fisher = fisher_two_sided(dup, n - dup, base_dup, len(base_valid) - base_dup)
+    for key, value in (
+            ('ScheduledN', len(final)), ('ValidN', n), ('InvalidN', len(final) - n), ('DupN', dup), ('DupPct', pct),
+            ('DupLo', lo), ('DupHi', hi), ('DoneNoResendN', count('DECLARED_DONE_NO_RESEND')),
+            ('AskedN', count('ASKED_OR_STOPPED')), ('TaskFailN', count('TASK_FAILURE')),
+            ('ModelCallsN', calls), ('AliasCallsN', alias),
+            ('FisherP', f'{fisher:.3f}' if fisher >= 1e-3 else '$<$0.001')):
+        M(prefix + key, value)
