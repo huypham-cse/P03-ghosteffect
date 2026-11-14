@@ -55,18 +55,18 @@ def episode(args, episode_id, config, tag, phase, fault, extra=()):
     return row
 
 
-def freeze_problems(freeze, serving_receipt, goal_file):
+def freeze_problems(freeze, serving_receipt, goal_file, freeze_file=FREEZE):
     """Why scheduled index 1 must not start yet; empty when the freeze is merged and matches what will run."""
     import hashlib
     from make_freeze import CODE, sha
     git = lambda *a: subprocess.run(['git', *a], cwd=TESTBED, capture_output=True, text=True)
-    commit = git('log', '-1', '--format=%H', '--', str(FREEZE)).stdout.strip()
+    commit = git('log', '-1', '--format=%H', '--', str(freeze_file)).stdout.strip()
     problems = []
-    if not commit or git('diff', '--quiet', 'HEAD', '--', str(FREEZE)).returncode:
+    if not commit or git('diff', '--quiet', 'HEAD', '--', str(freeze_file)).returncode:
         problems.append('the freeze is not committed')
     elif git('merge-base', '--is-ancestor', commit, 'origin/main').returncode:
         problems.append('the freeze commit is not in origin/main (merge the freeze PR, then git fetch)')
-    problems += ['%s changed since the freeze' % n for n in CODE if sha(TESTBED / n) != freeze['testbed_code_sha256'][n]]
+    problems += ['%s changed since the freeze' % n for n, h in freeze['testbed_code_sha256'].items() if sha(TESTBED / n) != h]
     if hashlib.sha256(goal_file.read_text(encoding='utf-8').strip().encode()).hexdigest() != freeze['task']['goal_sha256']:
         problems.append('task text differs from the freeze')
     if json.loads(serving_receipt.read_text(encoding='utf-8')).get('gpu_profile') != freeze['model']['gpu_profile']:
@@ -75,8 +75,10 @@ def freeze_problems(freeze, serving_receipt, goal_file):
 
 
 def scheduled(args):
-    freeze = json.loads(FREEZE.read_text(encoding='utf-8'))
-    problems = freeze_problems(freeze, args.serving_receipt, args.goal_file)
+    freeze = json.loads(args.freeze.read_text(encoding='utf-8'))
+    if bool(freeze.get('guard')) != (args.guard == 'ghosteffect'):
+        raise SystemExit('--guard does not match the freeze')
+    problems = freeze_problems(freeze, args.serving_receipt, args.goal_file, args.freeze)
     if problems:
         raise SystemExit('not starting scheduled episodes: ' + '; '.join(problems))
     common = ['--h-eval', str(freeze['fault']['h_eval_s']), '--max-steps', str(freeze['agent']['max_steps'])]
@@ -85,9 +87,12 @@ def scheduled(args):
         index = planned['scheduled_index']
         if planned['extra'] and valid >= 10:
             break
-        run = lambda attempt, suffix: episode(args, 's%02d%s' % (index, suffix), planned['config'],
-                                              planned['tags'][str(attempt)], 'scheduled', 'drop-forcestop',
-                                              common + ['--scheduled-index', str(index), '--attempt', str(attempt)])
+        guard = lambda attempt: (['--guard', 'ghosteffect', '--user-error', str(planned['user_error'][str(attempt)])]
+                                 if freeze.get('guard') else [])
+        run = lambda attempt, suffix: episode(args, '%s%02d%s' % ('g' if freeze.get('guard') else 's', index, suffix),
+                                              planned['config'], planned['tags'][str(attempt)], 'scheduled',
+                                              'drop-forcestop', common + guard(attempt) +
+                                              ['--scheduled-index', str(index), '--attempt', str(attempt)])
         row = run(1, '')
         if row['invalid_reason'].startswith(MEASUREMENT):
             row = run(2, '-r2')
@@ -106,13 +111,20 @@ def main():
     parser.add_argument('--adb', type=Path, required=True)
     parser.add_argument('--out', type=Path, default=TESTBED / 'runs' / 'agent')
     parser.add_argument('--dev-n', type=int, default=10)
+    parser.add_argument('--guard', choices=('none', 'ghosteffect'), default='none')
+    parser.add_argument('--freeze', type=Path)
     args = parser.parse_args()
+    args.freeze = args.freeze or (TESTBED / 'agent_study_guarded.freeze.json' if args.guard == 'ghosteffect' else FREEZE)
     args.out.mkdir(parents=True, exist_ok=True)
     if args.phase == 'scheduled':
         return scheduled(args)
     for k in range(1, args.dev_n + 1):
         tag = 'gx:' + ''.join(secrets.choice('0123456789ABCDEFGHJKMNPQRSTVWXYZ') for _ in range(6))
-        episode(args, 'dev-%02d' % k, 'nosent' if k % 2 else 'sent', tag, 'dev', 'none')
+        if args.guard == 'ghosteffect':   # guarded dev episodes carry the fault: the guard acts only after it
+            episode(args, 'gdev-%02d' % k, 'nosent' if k % 2 else 'sent', tag, 'dev', 'drop-forcestop',
+                    ['--guard', 'ghosteffect', '--user-error', '0'])
+        else:
+            episode(args, 'dev-%02d' % k, 'nosent' if k % 2 else 'sent', tag, 'dev', 'none')
 
 
 if __name__ == '__main__':

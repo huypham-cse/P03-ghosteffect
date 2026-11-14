@@ -74,12 +74,18 @@ def check(folder, freeze_file=TESTBED / 'agent_study.freeze.json'):
         planned = order[index]
         if r['config'] != planned['config'] or receipt.get('tag') != planned['tags'][str(attempt)]:
             err('%s: config or tag differs from the freeze order' % r['episode_id'])
+        guard = receipt.get('guard') or {}
+        if freeze.get('guard') and (guard.get('name') != freeze['guard']['name']
+                                    or guard.get('user_error') != planned['user_error'][str(attempt)]):
+            err('%s: guard or simulated-user error differs from the freeze' % r['episode_id'])
+        if not freeze.get('guard') and guard:
+            err('%s: guarded receipt under an unguarded freeze' % r['episode_id'])
         if not measurement:   # a measurement error may stop the episode before these are recorded
             if (receipt.get('native_source') != freeze['agent']['native_source']
                     or receipt.get('goal_sha256') != freeze['task']['goal_sha256']
                     or receipt.get('gpu_profile') != freeze['model']['gpu_profile']
                     or receipt.get('h_eval_s') != freeze['fault']['h_eval_s']
-                    or any(receipt.get('source_sha256', {}).get(n) != freeze['testbed_code_sha256'][n] for n in CODE)):
+                    or any(receipt.get('source_sha256', {}).get(n) != h for n, h in freeze['testbed_code_sha256'].items())):
                 err('%s: prompt, task, code, GPU or horizon differs from the freeze' % r['episode_id'])
         final[index] = r if attempt == 2 or index not in final else final[index]
     for (index, attempt), r in attempts.items():
@@ -107,8 +113,9 @@ def check(folder, freeze_file=TESTBED / 'agent_study.freeze.json'):
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('folder', type=Path)
+    parser.add_argument('--freeze', type=Path, default=TESTBED / 'agent_study.freeze.json')
     args = parser.parse_args()
-    errors = check(args.folder)
+    errors = check(args.folder, args.freeze)
     print('\n'.join(errors) or 'OK: episodes.csv, receipts and freeze agree')
     raise SystemExit(1 if errors else 0)
 

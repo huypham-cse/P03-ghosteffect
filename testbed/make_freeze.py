@@ -23,8 +23,20 @@ TESTBED = Path(__file__).resolve().parent
 ROOT = TESTBED.parent
 CROCKFORD = '0123456789ABCDEFGHJKMNPQRSTVWXYZ'
 CODE = ('agent_episode.py', 'androidworld_env.py', 'faultproxy.py', 'k9_reset.py', 'local_model.py',
-        'native_episode.py', 'serve_model.py', 'ui.py')
+        'native_episode.py', 'serve_model.py', 'ui.py', 'ghost_guard.py', 'controller.py', 'classifier.py')
 RULES = __doc__[__doc__.index('Order (B-09)'):].strip()
+USER_ERROR_RATE = 0.05   # the paper's simulation: the user answers an ask wrongly 5% of the time
+GUARD = dict(
+    name='ghosteffect', module='testbed/ghost_guard.py on testbed/controller.py and testbed/classifier.py',
+    commit='classifier.py English lexicon on the element the action targets; the effect is ISSUED in the host '
+           'SQLite ledger (WAL, synchronous=FULL) before the native tap',
+    recovery='after the kill and relaunch the ledger is reopened; K-9 has no runtime certificate, so recover() asks',
+    user='simulated: answers from GreenMail whether the mail arrived, wrong exactly on the attempts with user_error 1',
+    delivered='COMMITTED; the step is done and the agent is not restarted',
+    not_delivered='ABSENT; retry permitted and the agent restarts as in the baseline',
+    no_candidate='the classifier missed the commit tap; the agent restarts unguarded and the miss stays in the data',
+    baseline='agent_study.freeze.json, scheduled s01 to s20: same task, fault, model, decoding, configs and outcome rule',
+    user_error_rate=USER_ERROR_RATE)
 
 
 def sha(path):
@@ -41,14 +53,19 @@ def tags(n, draw=None):
     return out
 
 
-def build(serving, native_source, goal_bytes, archives, avd_config_sha256, host, h_eval=300, max_steps=20, draw=None):
+def build(serving, native_source, goal_bytes, archives, avd_config_sha256, host, h_eval=300, max_steps=20, draw=None,
+          guard=False, error_draw=None):
     """Pure part: every input is passed in, so tests can build a freeze without a device or server."""
     from agent_episode import classify, OUTCOMES, FIELDS, ERROR_WAIT_S
     assets = {a['file']: a['sha256'] for a in json.loads((TESTBED / 'assets.lock.json').read_text())['assets']}
     pool = iter(tags(60, draw))
     order = [dict(scheduled_index=i, config='nosent' if i % 2 else 'sent', extra=i > 20,
                   tags={'1': next(pool), '2': next(pool)}) for i in range(1, 31)]
-    return dict(
+    if guard:
+        error_draw = error_draw or (lambda: int(secrets.randbelow(10 ** 6) < USER_ERROR_RATE * 10 ** 6))
+        for planned in order:
+            planned['user_error'] = {'1': error_draw(), '2': error_draw()}
+    return dict(guard=GUARD if guard else None,
         kind='A-native freeze (B-08); written by testbed/make_freeze.py', created_utc_ns=time.time_ns(),
         model=dict(repo_id=serving['repo_id'], revision=serving['revision'], dtype=serving['dtype'],
                    engine='vLLM ' + serving['engine_version'], max_model_len=serving['max_model_len'],
@@ -81,8 +98,10 @@ def main():
     parser.add_argument('--adb', type=Path, required=True)
     parser.add_argument('--adb-server-port', default='5038')
     parser.add_argument('--serial', default='emulator-5580')
-    parser.add_argument('--output', type=Path, default=TESTBED / 'agent_study.freeze.json')
+    parser.add_argument('--guard', action='store_true', help='guarded arm: GhostEffect guard and drawn user errors')
+    parser.add_argument('--output', type=Path)
     args = parser.parse_args()
+    args.output = args.output or TESTBED / ('agent_study_guarded.freeze.json' if args.guard else 'agent_study.freeze.json')
     sys.path.insert(0, str(TESTBED))
     from androidworld_env import verify_source
     serving = json.loads(args.serving_receipt.read_text(encoding='utf-8'))
@@ -96,7 +115,8 @@ def main():
         raise SystemExit('%s exists; a freeze is written once' % args.output)
     freeze = build(serving, verify_source(ROOT / 'runtime/vendor/android_world_full'),
                    args.goal_file.read_bytes(), archives,
-                   sha(ROOT / 'runtime/android-avd/ghosteffect_api33_x86_local.avd/config.ini'), args.host)
+                   sha(ROOT / 'runtime/android-avd/ghosteffect_api33_x86_local.avd/config.ini'), args.host,
+                   guard=args.guard)
     args.output.write_text(json.dumps(freeze, indent=2) + '\n', encoding='utf-8')
     print('wrote', args.output, 'sha256', sha(args.output))
 
