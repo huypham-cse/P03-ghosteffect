@@ -1,0 +1,8 @@
+component,n,min_s,median_s,max_s
+reset,10,6.7,7.7,8.8
+compose,10,83.3,103.4,128.5
+fault,10,0.6,0.8,1.1
+relaunch,10,3.9,4.5,5.2
+observation,10,300.0,300.2,300.5
+grading,10,0.0,0.0,0.0
+total,10,409.1,431.7,454.9

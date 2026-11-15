@@ -1,0 +1,17 @@
+{
+  "file": "episodes.csv",
+  "sha256": "231f80d50f1b86b72d4046dd156419d246be9afbc24ea9f48a36b002be28ace0",
+  "kind": "LLM-agent experiment on the emulator, kill-only arm (M3A on Qwen2.5-VL-7B-Instruct, no recovery; reply drop, then only the agent is killed and restarted while K-9 keeps running)",
+  "task": "B-10 killagent arm (lead decision 15/11/2026)",
+  "freeze": "testbed/agent_study_killagent.freeze.json, sha256 6c766d3d2b70415b5a468051ad20c97cac74172bea63e405a0c4964931cbfa69, committed in 3d03295 and merged in 7ff422b (#47) before the first scheduled episode",
+  "episodes_command": "runtime/agent-venv/Scripts/python.exe testbed/run_agent_study.py --phase scheduled --freeze testbed/agent_study_killagent.freeze.json --serving-receipt testbed/runs/SERVING.json --adb runtime/android-sdk/platform-tools/adb.exe --out testbed/runs/agent-killagent",
+  "collect_command": "python testbed/collect_agent.py testbed/runs/agent-killagent/* --out artifact/results/real/agent_killagent --freeze testbed/agent_study_killagent.freeze.json",
+  "check_command": "python testbed/check_agent_data.py artifact/results/real/agent_killagent --freeze testbed/agent_study_killagent.freeze.json",
+  "git_commit": "the scheduled runs used branch b/two-arms at 3d03295, whose files the freeze hashes",
+  "seed": "episode order and subject tags drawn once by make_freeze.py --fault drop-killagent; decoding temperature 0, top_p 1, server seed 0",
+  "python": "episodes: 3.11.8 (agent venv); collect: 3.14.0",
+  "date": "2026-11-15",
+  "host": "one NVIDIA L40S (48 GB) cloud VM serving the model (vLLM 0.11.0, BF16); x86-64 laptop running the Android emulator (API 33, 4 GB guest RAM)",
+  "comparison": "artifact/results/real/agent (M3A, force-stop, scheduled s01 to s20)",
+  "rows": "22: kdev-01, kdev-02 (phase dev, with the fault, not a result), k01 to k20 (phase scheduled)"
+}

@@ -173,6 +173,8 @@ class AgentData(unittest.TestCase):
         self.assertEqual((macros['AgentTextValidN'], macros['AgentTextDupN'], macros['AgentTextFisherP']),
                          ('20', '10', '1.000'))
         self.assertEqual((macros['AgentTextModelCallsN'], macros['AgentTextAliasCallsN']), ('200', '10'))
+        self.assertEqual((macros['AgentTextResentN'], macros['AgentTextResentNoDupN']),
+                         (macros['AgentResentN'], macros['AgentResentNoDupN']))   # same data as the baseline
         self.assertNotIn('AgentKillValidN', macros)   # no data, no macro
 
     def test_collect_scrubs_local_paths(self):
