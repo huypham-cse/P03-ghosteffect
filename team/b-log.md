@@ -390,3 +390,10 @@ Test: testbed 96 qua (4 bỏ qua), artifact 49 qua (1 bỏ qua); render không �
 - **Emulator:** không có ANR (`dumpsys window lastanr`: chưa có ANR từ lúc khởi động 03:08), watchdog không chạm lần nào trong cả hai arm.
 - **Kiểm:** gom 22 lượt (kdev-01, kdev-02, k01 đến k20) vào `artifact/results/real/agent_killagent/`; checker OK, gom lại vào thư mục tạm giống hệt; đếm lại độc lập từ `proxy.jsonl` và `RESULT.json` khớp. Bốn arm cũ (baseline, guard, rules, T3A) chạy lại checker vẫn OK.
 - **Bài:** §7.8 thêm một câu cho T3A và kill-only (macro `\AgentText*`, `\AgentKill*`), bỏ "one agent" và "one fault" khỏi giới hạn; bảng 5 arm `tab_agent_arms.tex` để C quyết định đặt ở đâu (phụ lục).
+
+## 15/11/2026 (đóng đợt chạy server)
+
+- **Snapshot cuối:** `testbed/runs/aws-1114/server-snapshot-5.tgz` (không commit; sha256 `44eb47fc...15a11`): `/metrics` của vLLM, `nvidia-smi`, dòng GPU trong `dmesg` (không có Xid), `server.log`, `uptime`.
+- **Đối chiếu:** vLLM 3.499 yêu cầu = 1.306 (hết arm guard) + 2.193 lệnh gọi model trong receipt của arm rules (597), T3A (896) và kill-only (700), tính cả lượt dev; 0 `length`, 0 `abort`, `server.log` không có dòng lỗi.
+- **Laptop:** dừng watchdog ANR, giữ máy thức, tunnel SSH và emulator.
+- **Server:** không còn việc nào cần server; báo trưởng nhóm có thể Stop (không Terminate, giữ đĩa tới 21/11).
