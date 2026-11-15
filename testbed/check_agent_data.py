@@ -14,7 +14,7 @@ from make_freeze import CODE
 
 TESTBED = Path(__file__).resolve().parent
 MEASUREMENT = ('measurement_error:', 'grading_failed:', 'harness_timeout')
-LOCAL_PATH = re.compile(r'[A-Za-z]:[\\/]+Users|/home/[^/"]+/|/Users/[^/"]+/')   # double-blind
+LOCAL_PATH = re.compile(r'[A-Za-z]:[\\/]+Users|/home/[^/"]+/|/Users[/][^/"]+/')   # double-blind; [/] so the scrub skips this line
 
 
 def number(value):
