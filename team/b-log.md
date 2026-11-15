@@ -403,3 +403,10 @@ Test: testbed 96 qua (4 bỏ qua), artifact 49 qua (1 bỏ qua); render không �
 - Bản #48 lúc rút gọn đã bỏ host, số lượt hỏi hoặc dừng, số lượt thất bại và median thời gian, là các mục YC-B6 bắt buộc. Đã đưa lại cả bốn (`\AgentHost`, `\AgentAskedN`, `\AgentTaskFailN`, `\AgentWallMedS`).
 - Danh sách giới hạn ghi "two agents and faults" thay cho "one agent" và "only force-stop" của YC-B6, vì arm T3A và arm chỉ kill agent đã gỡ hai giới hạn đó.
 - `readability_count.py` trên `07-agent.tex`: PASS (không câu quá 45 từ, không đoạn nào quá một dấu chấm phẩy). Mục dài 34 dòng trong PDF (8 ở trang 11, 26 ở trang 12), khoảng 0,59 cột.
+
+## 15/11/2026 (dọn việc B còn lại sau đợt chạy)
+
+- **YC-B5, kiểm lại sau khi mọi arm chạy xong:** `runtime/vendor/` vẫn chỉ có `android_world_full`; `rev-parse HEAD` = `55ddaf5edc6f6c25673aed343907d5b9dca66f84`; `git diff` rỗng; `status --porcelain` vẫn đúng 4 file `*_pb2*.py` chưa theo dõi sinh lúc cài, như ghi ngày 14/11. Mọi sửa binding nằm trong `testbed/`.
+- **YC-B12:** `check_agent_data.py` dòng 17 (regex phát hiện đường dẫn máy) bị `scrub_check.sh` báo `local-user-path` vì chứa chuỗi đó; viết lại thành `[/]`, nghĩa regex không đổi, test cũ vẫn bắt được đường dẫn Windows. `sh team/scrub_check.sh testbed/` giờ chỉ còn 26 dòng `email`, tất cả là địa chỉ tổng hợp `@test.invalid` mà luật ẩn danh cho phép; vẫn chờ C thêm ngoại lệ đó vào `scrub_check.sh` (review #12).
+- **§2.3:** thêm một câu với kết quả T3A (`\AgentTextResentN` trên `\AgentTextValidN`), câu về device study giữ nguyên cho các agent và app khác. Không đổi bố cục trang (Conclusion vẫn ở dòng 1557, 22 trang); readability PASS.
+- **Cần A, C:** A commit bản render lại `macros_guarantee.tex` (`\CertLabelMedS`, `\CertDeviceHoursFive` đang `??` trong file đã commit). C sửa ba câu nói bài không đo agent (§1 dòng 47, §7 dòng 7 và 101), quyết định chỗ đặt `tab_agent_arms.tex`, cho `make_bundle.sh` loại `testbed/README.vi.md` và `testbed/RUNBOOK_B.md`.
