@@ -397,3 +397,9 @@ Test: testbed 96 qua (4 bỏ qua), artifact 49 qua (1 bỏ qua); render không �
 - **Đối chiếu:** vLLM 3.499 yêu cầu = 1.306 (hết arm guard) + 2.193 lệnh gọi model trong receipt của arm rules (597), T3A (896) và kill-only (700), tính cả lượt dev; 0 `length`, 0 `abort`, `server.log` không có dòng lỗi.
 - **Laptop:** dừng watchdog ANR, giữ máy thức, tunnel SSH và emulator.
 - **Server:** không còn việc nào cần server; báo trưởng nhóm có thể Stop (không Terminate, giữ đĩa tới 21/11).
+
+## 15/11/2026 (§7.8: trả lại các mục YC-B6)
+
+- Bản #48 lúc rút gọn đã bỏ host, số lượt hỏi hoặc dừng, số lượt thất bại và median thời gian, là các mục YC-B6 bắt buộc. Đã đưa lại cả bốn (`\AgentHost`, `\AgentAskedN`, `\AgentTaskFailN`, `\AgentWallMedS`).
+- Danh sách giới hạn ghi "two agents and faults" thay cho "one agent" và "only force-stop" của YC-B6, vì arm T3A và arm chỉ kill agent đã gỡ hai giới hạn đó.
+- `readability_count.py` trên `07-agent.tex`: PASS (không câu quá 45 từ, không đoạn nào quá một dấu chấm phẩy). Mục dài 34 dòng trong PDF (8 ở trang 11, 26 ở trang 12), khoảng 0,59 cột.
