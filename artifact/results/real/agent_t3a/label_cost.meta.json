@@ -1,0 +1,17 @@
+{
+  "file": "label_cost.csv",
+  "sha256": "d62db91320f37644ccece32ca69ea3110a1baded4744d239db2a1bcfd3b56a85",
+  "kind": "LLM-agent experiment on the emulator, T3A arm (AndroidWorld T3A, text only, on Qwen2.5-VL-7B-Instruct, no recovery; reply drop then K-9 force-stop as in the baseline)",
+  "task": "B-10 t3a arm (lead decision 15/11/2026)",
+  "freeze": "testbed/agent_study_t3a.freeze.json, sha256 c5cecb8207db1b186a722b8b8bd31bda13f1e23a82f008bf98e5517513e65afc, committed in 3d03295 and merged in 7ff422b (#47) before the first scheduled episode",
+  "episodes_command": "runtime/agent-venv/Scripts/python.exe testbed/run_agent_study.py --phase scheduled --framework t3a --freeze testbed/agent_study_t3a.freeze.json --serving-receipt testbed/runs/SERVING.json --adb runtime/android-sdk/platform-tools/adb.exe --out testbed/runs/agent-t3a",
+  "collect_command": "python testbed/collect_agent.py testbed/runs/agent-t3a/* --out artifact/results/real/agent_t3a --freeze testbed/agent_study_t3a.freeze.json",
+  "check_command": "python testbed/check_agent_data.py artifact/results/real/agent_t3a --freeze testbed/agent_study_t3a.freeze.json",
+  "git_commit": "the scheduled runs used branch b/two-arms at 3d03295, whose files the freeze hashes",
+  "seed": "episode order and subject tags drawn once by make_freeze.py --framework t3a; decoding temperature 0, top_p 1, server seed 0",
+  "python": "episodes: 3.11.8 (agent venv); collect: 3.14.0",
+  "date": "2026-11-15",
+  "host": "one NVIDIA L40S (48 GB) cloud VM serving the model (vLLM 0.11.0, BF16); x86-64 laptop running the Android emulator (API 33, 4 GB guest RAM)",
+  "comparison": "artifact/results/real/agent (M3A, force-stop, scheduled s01 to s20)",
+  "rows": "seconds per component over the 10 valid scheduled episodes"
+}

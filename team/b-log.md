@@ -373,3 +373,20 @@ Test: testbed 96 qua (4 bỏ qua), artifact 49 qua (1 bỏ qua); render không �
 - **Khác baseline về môi trường:** hai arm này chạy trên máy ảo RAM 4 GB (baseline và arm guard chạy 2 GB). Watchdog ANR của System UI vẫn chạy và ghi log.
 - **Sửa:** `make_freeze.py` có lỗi thứ tự toán tử ở dòng chọn tên file output khi không có guard; đã sửa trước khi tạo freeze (file không thuộc code bị hash).
 - **Chạy:** script nối tiếp T3A rồi kill-only trên nhánh `b/two-arms`, không đổi nhánh giữa chừng.
+
+## 15/11/2026 (arm T3A: kết quả)
+
+- **Kết quả:** 20 index cho 7 lượt hợp lệ nên chạy thêm index phụ 21 đến 23 theo luật freeze, đủ 10 lượt hợp lệ trên 23. Kết quả chính đã chốt trước (RESENT_DUPLICATE): 3/10 (30,0%, Wilson 95% từ 10,8 đến 60,3). Nhóm khác: RESENT_BUT_NO_DUP 6 (t02, t04, t06, t10, t16, t20), TASK_FAILURE 1 (t09, 20 bước sau khi chạy lại, không gửi, không báo xong).
+- **Gửi lại:** T3A gửi lại ở 9/10 lượt hợp lệ (Wilson từ 59,6 đến 98,2). Ở cả 9 lượt, journal của proxy có thư thứ hai với Message-ID riêng, server trả 250 sau lúc agent khởi động lại. Ở 6 lượt RESENT_BUT_NO_DUP thư gửi lại dài 776 byte, thư có tag dài 791 byte (đúng 15 byte của `Lease gx:XXXXXX`): T3A để trống tiêu đề, nên luật đếm bản theo tag (IMAP `TEXT`) không tính. t04 và t06 cả thư gốc cũng không có tag (server có 0 bản có tag). Luật freeze vì vậy đếm thiếu bản trùng của T3A; bài báo nêu cả hai số.
+- **Không hợp lệ:** 13 lượt original_not_committed (10/12 index không Sent, 3/11 index có Sent): T3A báo xong hoặc hết bước trước khi thư tới server. Đây là kỹ năng làm task của T3A, không phải harness (cùng harness, M3A hợp lệ 18/20).
+- **Alias:** 0 lần đổi tên trong 825 lần gọi model (T3A tự viết `input_text`).
+- **Emulator:** không có ANR, watchdog không chạm lần nào trong arm này (lần chạm cuối 02:59:08).
+- **Kiểm:** gom 25 lượt (tdev-01, tdev-02, t01 đến t23) vào `artifact/results/real/agent_t3a/`; `check_agent_data.py --freeze` OK; gom lại vào thư mục tạm, giống hệt. `render_arm` thêm `\AgentTextResentN` và `\AgentTextResentNoDupN` (nhóm kết quả khác, thuộc phần phụ đã chốt), bảng `tab_agent_arms.tex` thêm cột Resent.
+
+## 15/11/2026 (arm chỉ kill agent: kết quả)
+
+- **Kết quả:** 20 index, 19 lượt hợp lệ, không dùng index phụ. RESENT_DUPLICATE 19/19 (100%, Wilson 95% từ 83,2 đến 100). So với M3A force-stop (17/18): Fisher exact hai phía p = 0,486, tức giữ K-9 sống (màn hình và Outbox còn nguyên, có thông báo lỗi gửi) không làm agent bớt gửi lại. 5 lượt (k08, k12, k14, k18, k20) agent gửi thêm hai lần, server có 3 bản có tag với 3 Message-ID. k17: agent báo xong trước khi thư tới server, INVALID original_not_committed.
+- **Alias:** 54 trên 644 lần gọi model.
+- **Emulator:** không có ANR (`dumpsys window lastanr`: chưa có ANR từ lúc khởi động 03:08), watchdog không chạm lần nào trong cả hai arm.
+- **Kiểm:** gom 22 lượt (kdev-01, kdev-02, k01 đến k20) vào `artifact/results/real/agent_killagent/`; checker OK, gom lại vào thư mục tạm giống hệt; đếm lại độc lập từ `proxy.jsonl` và `RESULT.json` khớp. Bốn arm cũ (baseline, guard, rules, T3A) chạy lại checker vẫn OK.
+- **Bài:** §7.8 thêm một câu cho T3A và kill-only (macro `\AgentText*`, `\AgentKill*`), bỏ "one agent" và "one fault" khỏi giới hạn; bảng 5 arm `tab_agent_arms.tex` để C quyết định đặt ở đâu (phụ lục).

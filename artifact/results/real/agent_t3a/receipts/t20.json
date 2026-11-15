@@ -1,0 +1,256 @@
+{
+  "kind": "agent fault-injection episode",
+  "study_data": true,
+  "fault": {
+    "observed_class": "app-force-stop",
+    "package": "com.fsck.k9",
+    "pids_before": [
+      "28964"
+    ],
+    "pids_after": []
+  },
+  "tag": "gx:RHRYYF",
+  "h_eval_s": 300.0,
+  "goal_sha256": "1922f9687d5de45ccf95b1f9b692a1d0d911419674f5c2d0f60b99c032281133",
+  "source_sha256": {
+    "agent_episode.py": "88d3ae4f5dcf44f76eeada8c070190123676277113f38a30f72bff2a9f2c965a",
+    "androidworld_env.py": "f066b85c8e0f75854ea22f655d64a7cec92f925e7b0ab0561f8ca99b6208c848",
+    "app_driver.py": "6b6e16f6c87a1a580fe364c80b0e554f5e5cf0eb03bcd1f3f7a0b716b572d3ac",
+    "calibration.py": "3c2b9a8d24655d2b5126b5294d9042c83830ff6420507406a9f621a43f603a01",
+    "capture_androidworld.py": "09be1e05d94c781ea92cf47aa7c6d92c6cf9d5307c47619d30f820ebb3bef84f",
+    "check_agent_data.py": "a1f1495a0d4b54ed6298b6e9d26358062dfcf8598f91e6d675df2171920f011a",
+    "classifier.py": "5664989142b6f38953c382e2cc99bb17577f5c282271f2bdbdc4697015ccf256",
+    "collect_agent.py": "4ce805dc00502e77f7835136183a92115dee1aa5898491173b060f1341028714",
+    "controller.py": "fef48698b14c219326a319f189bb6c792aa5ce0137c58a1327bce32206cdb927",
+    "fake_model.py": "3f3853ab7e048975fd65428afdc2c71d552710ab476dc37aff1b0c78d88ee32c",
+    "faultproxy.py": "09936ffd52463d8bf64e81e4a2be40b53c60bcff687965024eb96c6c68bb358b",
+    "ghost_guard.py": "667bd21e1c552c1e550ee318ca2637b1d895c1cf1a59763041194949e0240631",
+    "grader.py": "614cc63804016102b1ca8e0e1d7675fb22f75049f16818dc7e02ef4d22895280",
+    "k9_audit_table.py": "c6e51ef760372b525e94d96b1fd42150a6fa85eb536cdcb093ba02198ac7d712",
+    "k9_fault_case.py": "cab967f1f57967dcdea0ea20f0151897ffb0e816d4ef80f561855562f77e1657",
+    "k9_reset.py": "ec2ad4e63dfa9e35cb446bcc6bc72c610858d823f8e7271f8d7afeb74da5df1d",
+    "local_model.py": "26d94a9e2c0ab1c09ca9d2b77b656581cc14b1ab57aeba875ff97c81ccbf845d",
+    "make_freeze.py": "7b300309477f2edceec8d7b32b535c4cfc187694d1e44b21dd4df6a92d68a64c",
+    "native_episode.py": "99b0c703d2103e98cdfc5b67951c2a90a954bc1bf56c265d1ba228a6cc323b85",
+    "observer.py": "319c47d1d2c3847c79c05cc9e8e0f22fba4f35123912c477849d85044b12144d",
+    "preflight.py": "96229e23f1685000d4aa4643548628c3ee650098383cf1fb805909e0f0ff7d3d",
+    "probes.py": "556749658d82b81d3b49bd2e7ba7eeec5c438eef724817cbd5704e194d7c4237",
+    "recovery.py": "1cd0861f8db119fce9f38429754accd4345134c9964e7659035ce61583d72b72",
+    "run_agent_study.py": "fd57c0cdefd9fb3e8067126033240124df48c0e24ba09e12aab3793db9afd390",
+    "run_case.py": "82fc76a15f16177b4d9a48e6f7c9300d712bc13c3f989c01e48826a9210ff30c",
+    "serve_model.py": "6b410e74b25db1dc0b959e77177dd5e30fc5e20b8a357094c5cadfad0a6ed404",
+    "setup_agents.py": "93300ff193e21004ec10886ba0acab1aacda465220ccccc2bffcb783a54ca58e",
+    "setup_android.py": "133c845e47604a46dbc9bbf654e0a1d463d6f772d24157c8992de684e4b5011d",
+    "setup_assets.py": "2a5682bc2a4479d5133ef09cf8ddcef4fab22403b41b387fba132fb54340f7ce",
+    "setup_avd.py": "a47674ccb011d95afc7616e89a96ff046d65ca5488867710f176c3387de54bdf",
+    "setup_backends.py": "c2e76625fdb9513b45a6a97ee5b864366b7aa8afecb1d3165fbde0e19fcdab08",
+    "setup_models.py": "c1b9c9202edfb1fcc11fa1ec7afeee089b2fe0ec95ebb49cb10e5ba6968180a4",
+    "smoke_agent_wire.py": "3fc6a619fe61d921fae669020dac29e1eebab7aa0aa8bd12b7e4cba5973866e5",
+    "smoke_android.py": "adf7184902521891918c6c96bd6b05c27a94561cce6ec602282674b6fedfd88d",
+    "smoke_greenmail.py": "40634e892f99dedb6a3d4213ca49afd7d0607721842325e4ba34f176d59ec817",
+    "smoke_http_backends.py": "b39f5cf00bef12f81c143649fd7046a3d379e7ae01acf5ae276308b849a1b096",
+    "ui.py": "6a723aab03ebc367db9cc321ba2462a2fcde69cc0dc2a56e44ce57174176b144"
+  },
+  "serving_receipt_sha256": "18be2a4f7bc7989551590b4bbebaa43d0079dd7629829673a4e90afb95580620",
+  "gpu_profile": "l40s",
+  "native_source": {
+    "commit": "55ddaf5edc6f6c25673aed343907d5b9dca66f84",
+    "imported_module_sha256": {
+      "agents.m3a": "de84c469ce90d4594577918a27a77d0fd65f7b86092751b49633716118a71220",
+      "agents.t3a": "289eda58083bdedebacede5d623b8f68b18d71cdca05d28d7c5a7b3bc846c21c",
+      "agents.base_agent": "55651285282625e2cf6167276bee0c75e9452c6cb99fbeb35688295319cabdd9",
+      "agents.infer": "0cd389b60adbadcf63f4b6e42a2ccd87ff8605e809e557fa55eb19141981da5d",
+      "env.android_world_controller": "9b0b43e4b4de52182927332092ec338d5e64111c7cc660e9a3232f3ce8a961cc",
+      "env.interface": "3d3b5c1766458abb964f9d6e61d384763541cd1b63f131fa834607c489bb8c7e",
+      "env.env_launcher": "94f0cb16589b4bb94a16819d431a5a19e7a1265f8fa4f8b49914b6ec8a40b537",
+      "env.actuation": "2246cbdeba977b0b3e36bf20061275c3a57c9de6f32035abb31b148f8f86c744"
+    },
+    "tracked_source_clean": true
+  },
+  "reset": {
+    "verdict": "PASS",
+    "config": "sent",
+    "checks": {
+      "archive_restored": true,
+      "k9_store_empty": true,
+      "sent_setting": true,
+      "mailboxes_empty": true,
+      "server_sent_folder": true,
+      "k9_on_top": true,
+      "k9_focused": true,
+      "no_k9_notifications": true,
+      "reverse_ports": true
+    },
+    "archive": "/data/local/tmp/ghosteffect/k9-sent.tar",
+    "archive_sha256": "33c67fc3a3964381084c7e0fde9a8b7b147bd68148bbd7d5c0b847f2ae63ba0a",
+    "k9_messages_outbox_pending": [
+      0,
+      0,
+      0
+    ],
+    "greenmail_pid": 20016,
+    "mailboxes": {
+      "alice": {
+        "INBOX": 0,
+        "Sent": 0
+      },
+      "bob": {
+        "INBOX": 0
+      }
+    },
+    "top_activity": "topResumedActivity=ActivityRecord{21c0f5d u0 com.fsck.k9/.activity.MessageHomeActivity} t300}",
+    "focus": "mCurrentFocus=Window{78e6d48 u0 com.fsck.k9/com.fsck.k9.activity.MessageHomeActivity}",
+    "utc_ns": 1794697057077592100
+  },
+  "model_calls": 43,
+  "type_alias_calls": 0,
+  "phase1_stopped_by": "fault",
+  "label_cost": {
+    "reset": 7.7,
+    "compose": 113.4,
+    "fault": 0.9,
+    "relaunch": 5.2,
+    "observation": 300.2,
+    "grading": 0.0,
+    "total": 442.0
+  },
+  "k9_outbox_before_fault": "error|1|Unable to send message",
+  "relaunch": {
+    "recovery_origin_mono_ns": 156950468000000,
+    "foreground": "com.fsck.k9/com.fsck.k9.activity.MessageHomeActivity"
+  },
+  "phase2_stopped_by": "agent",
+  "row": {
+    "episode_id": "t20",
+    "scheduled_index": "20",
+    "config": "sent",
+    "attempt": 1,
+    "agent": "t3a",
+    "model_id": "Qwen/Qwen2.5-VL-7B-Instruct@cc594898137f460bfe9f0759e9844b3ce807cfb5",
+    "phase": "scheduled",
+    "t_issue_utc": 1794697175490963500,
+    "t_data_250_utc": 1794697177322275400,
+    "t_fault_utc": 1794697181982122000,
+    "t_relaunch_utc": 1794697187193382400,
+    "t_agent_restart_utc": 1794697187193382400,
+    "t_end_utc": 1794697487384763200,
+    "backend_copies_at_horizon": 1,
+    "distinct_message_ids": 1,
+    "original_committed": 1,
+    "fault_receipt": 1,
+    "agent_tapped_send_after_restart": 1,
+    "agent_final_status": "done",
+    "outcome": "RESENT_BUT_NO_DUP",
+    "invalid_reason": "",
+    "steps_before_fault": 13,
+    "steps_after_restart": 9,
+    "prompt_tokens": 544397,
+    "completion_tokens": 2094,
+    "wall_clock_s": 442.0,
+    "reset_s": 7.7,
+    "observation_s": 300.2,
+    "notes": ""
+  },
+  "message_ids": [
+    "<6C4E9A6B-1089-4886-A4EE-3C47CF64EB8F@test.invalid>"
+  ],
+  "actions": {
+    "phase1": [
+      {
+        "action_type": "click",
+        "index": 6
+      },
+      {
+        "action_type": "click",
+        "index": 9
+      },
+      {
+        "action_type": "click",
+        "index": 9
+      },
+      {
+        "action_type": "input_text",
+        "index": 9,
+        "text": "bob@test.invalid"
+      },
+      {
+        "action_type": "click",
+        "index": 11
+      },
+      {
+        "action_type": "input_text",
+        "index": 11,
+        "text": "Lease gx:RHRYYF"
+      },
+      {
+        "action_type": "click",
+        "index": 12
+      },
+      {
+        "action_type": "click",
+        "index": 12
+      },
+      {
+        "action_type": "click",
+        "index": 12
+      },
+      {
+        "action_type": "click",
+        "index": 12
+      },
+      {
+        "action_type": "click",
+        "index": 12
+      },
+      {
+        "action_type": "input_text",
+        "index": 12,
+        "text": "Signed lease attached later."
+      },
+      {
+        "action_type": "click",
+        "index": 3
+      }
+    ],
+    "phase2": [
+      {
+        "action_type": "click",
+        "index": 6
+      },
+      {
+        "action_type": "click",
+        "index": 9
+      },
+      {
+        "action_type": "click",
+        "index": 9
+      },
+      {
+        "action_type": "input_text",
+        "index": 9,
+        "text": "bob@test.invalid"
+      },
+      {
+        "action_type": "click",
+        "index": 11
+      },
+      {
+        "action_type": "input_text",
+        "index": 12,
+        "text": "Signed lease attached later."
+      },
+      {
+        "action_type": "click",
+        "index": 3
+      },
+      {
+        "action_type": "click",
+        "index": 3
+      },
+      {
+        "action_type": "status",
+        "goal_status": "complete"
+      }
+    ]
+  }
+}
