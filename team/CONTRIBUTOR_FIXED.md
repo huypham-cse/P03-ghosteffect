@@ -49,6 +49,7 @@
 | A-07 | **Rút §4 còn khoảng 1,5 trang.** Thm 4.1 ba dòng kèm ghi chú phần kinh điển; giữ đủ Prop 4.4 và Thm 4.8; chuyển Prop 4.3, Lemma 4.5, Lemma 4.6(iii), Lemma 4.7, saga xuống App. A. Dùng chỗ trống cho walk-through Alg. 1 (một lượt K-9, một lượt Element) ở §5.4. | R29 | 18/11 |
 | A-08 | **§5.3:** hop 1 đọc màn hình Outbox qua cây accessibility, không đọc DB của app; thay "khoảng 15 s mỗi nhãn" bằng thời gian đo của B (có từ 18/11) và tính device-hours cho 5.000 nhãn × lớp × kết quả; chuyển Table 1 (cỡ mẫu) xuống phụ lục của A. | R15 | 19/11 |
 | A-09 | **Render riêng.** `render_guarantee.py` chỉ đọc CSV, viết `macros_guarantee.tex` và bảng của A. Gửi danh sách tên macro cho C trước 11/11. | | 11/11 (tên), 17/11 (giá trị) |
+| A-10 | **(Thêm 15/11, sau các arm agent ngoài kế hoạch của B.)** (a) Commit `macros_guarantee.tex` render lại: trên `main` `\CertLabelMedS` và `\CertDeviceHoursFive` vẫn là `??`, dù `real/agent/label_cost.csv` của B đã có (render cục bộ ra 412 s và 4.577 giờ); phần này thuộc A-09. (b) Tùy chọn: một câu ở §5 dẫn sang §7.8, nơi ledger (ISSUED trước cú chạm) và nhánh hỏi người dùng khi không họ nào chứng nhận đã chạy end to end trên M3A thật. Không cần sửa lý thuyết: tỉ lệ người dùng trả lời sai 5% của arm GhostEffect trùng tham số mô phỏng ở §7. | | 17/11 |
 
 ### Phần B: Đo đạc thực tế và thí nghiệm LLM agent
 
@@ -77,7 +78,8 @@
 | B-14 | **Nonce, Fig. 1, tab-apps:** K-9 dùng subject (người nhận thấy được) trên tài khoản thử có opt-in; sửa Fig. 1(b) và `tab-apps.tex`; thêm cột measured/planned; nhánh G2 của Fig. 1 ghi theo mode khuyến nghị chung. | 13/11 |
 | B-15 | Chạy lại `bench_ledger.py` trên host POSIX của B; viết lại đoạn "laptop running macOS" ở §6 (trên WSL, `\LedgerFull*` render ra "--"). | 16/11 |
 | B-16 | Làm sạch `testbed/` để đóng gói: không `runtime/`, `runs/`, `*.local.json`, `.env`; `testbed/README.md` bằng tiếng Anh (bản tiếng Việt đổi tên thành `README.vi.md`, không đưa vào gói). | 19/11 |
-| B-17 | (Chỉ khi trưởng nhóm duyệt và B-09 xong trước 13/11) Đo độ trễ Element độc lập; cần thêm kill -9 và netcut vào `run_case.py` và một bộ phân tích ra schema `c2_element_first_visible.csv`. | 19/11 |
+| B-17 | **Bỏ (trưởng nhóm quyết 15/11, lý do trong `team/b-log.md`).** (Chỉ khi trưởng nhóm duyệt và B-09 xong trước 13/11) Đo độ trễ Element độc lập; cần thêm kill -9 và netcut vào `run_case.py` và một bộ phân tích ra schema `c2_element_first_visible.csv`. | 19/11 |
+| B-18 | **(Thêm 15/11.)** Khi C đặt `tab_agent_arms.tex` (C-17), thêm một chỗ dẫn bảng ở §7.8 nếu vẫn giữ được 0,6 cột (YC-B6). | 19/11 |
 
 ### Phần C: Đánh giá so sánh và câu chuyện của bài
 
@@ -102,6 +104,17 @@
 | C-12 | **Chuẩn bị artifact ẩn danh:** README tiếng Anh (lệnh tái lập một dòng, phiên bản Python, thời gian chạy, đầu ra nào phụ thuộc host); `team/make_bundle.sh` đóng gói `artifact/` và `testbed/`, loại `tmp/`, `codex/`, `team/`, `review.md`, `resolve.md`, `runtime/`, `.git`; chạy thử gói qua scrub check. | 19/11 |
 | C-13 | **Điều phối chốt chung** (không tính vào hạn 19/11 của vai trò): chạy freeze 21/11 sau khi cả ba vai trò được nghiệm thu; ngày 22/11 đóng gói, tải artifact, chèn link vào §8, kiểm cổng cuối và nộp HotCRP (§7.6). | 21/11 đến 22/11 |
 
+**Thêm 15/11, sau các arm agent ngoài kế hoạch của B** (dữ liệu và §7.8 đã trên `main`: #44, #46, #48, #50, #51). M3A không có recovery gửi lại và để bản trùng ở 17/18 lượt hợp lệ; GhostEffect ở ranh giới thao tác giảm còn 1/19 (Fisher p = 2,0e-8); rule cùng bằng chứng (RQ3) trùng 14/15 ở cấu hình có Sent, GhostEffect 0/10 (p = 3,4e-6); T3A gửi lại 9/10 (3 bản trùng có tag); chỉ kill agent, K-9 vẫn chạy: trùng 19/19. Mọi số có macro `\Agent*`, `\AgentGuard*`, `\AgentRules*`, `\AgentText*`, `\AgentKill*` trong `macros_real.tex`.
+
+| ID | Việc | Hạn |
+|---|---|---|
+| C-14 | **Bỏ các câu nói bài không đo agent.** `01-introduction.tex` dòng 47 ("We ran no LLM agent and no phone"); `07-evaluation.tex` dòng 7 ("none measures an LLM agent", thêm loại "LLM-agent experiment" vào danh sách loại số); `10-conclusion.tex` dòng 6 ("LLM agents, VLMs and phones remain to be measured": còn VLM, điện thoại và các model khác). | 17/11 |
+| C-15 | **Kết quả agent ở abstract, đoạn Results của intro và conclusion** (YC-C8 đã đòi abstract có kết quả agent). Cùng trưởng nhóm chọn số lên abstract; đề xuất: bản trùng của M3A từ `\AgentDupN`/`\AgentValidN` còn `\AgentGuardDupN`/`\AgentGuardValidN` với \sys. Giữ tối đa 4 con số trong abstract và cổng trang 12 (YC-F3). | 18/11 |
+| C-16 | **§7.9 kế hoạch device study** (`07-evaluation.tex` dòng 101): bỏ "RQ7 measured app behaviour, not agents"; ghi M3A và T3A đã chạy trên emulator với một model (§7.8), device study mở rộng sang điện thoại, thêm agent và model. Tùy chọn: ở RQ3 (`07-realsim.tex`) một câu dẫn arm rules trên agent thật, khớp dự đoán của mô phỏng (rule cho gửi lại ở mọi lượt). | 18/11 |
+| C-17 | **Đặt bảng 5 arm** `generated/tab_agent_arms.tex` (B render, nhãn `tab:agent-arms`) vào `appendix-results.tex`; báo B để thêm chỗ dẫn (B-18). | 18/11 |
+| C-18 | **Chạy lại pipeline sau dữ liệu mới của B:** manifest của `run_all.py` ghi bốn thư mục `artifact/results/real/agent_guarded`, `agent_rules`, `agent_t3a`, `agent_killagent` là input như phần `real/`; sinh lại `others/notes.md` từ macro hiện tại (thêm khoảng 70 macro agent). | 19/11 |
+| C-19 | **Hai việc cũ đang chặn nghiệm thu B:** `scrub_check.sh` thêm ngoại lệ cho địa chỉ tổng hợp `@test.invalid` (review #12; YC-B12 chỉ còn báo nhầm loại này); `make_bundle.sh` loại `testbed/README.vi.md` và `testbed/RUNBOOK_B.md` (tiếng Việt, nội bộ) khỏi gói (C-12). | 17/11 |
+
 ## 3. Phụ thuộc giữa các phần
 
 | # | Ai chờ | Chờ gì | Từ ai, khi nào | Loại | Trong lúc chờ |
@@ -119,6 +132,8 @@
 | 11 | A | `label_cost.csv` để tính device-hours ở §5.3 | B (B-11), 18/11 | Mềm khi viết; **cứng khi nghiệm thu** | Viết công thức với `??` |
 | 12 | C (chốt chung) | Testbed sạch để đóng gói artifact | B (B-16), 19/11 | **Cứng**, dùng ngày 22/11 | Chuẩn bị gói phần `artifact/` |
 | 13 | C (chốt chung) | Cả ba vai trò được nghiệm thu | Người nghiệm thu, 21/11 | **Cứng** với lần freeze 21/11 và cổng cuối | Không |
+| 14 | B | Chỗ đặt `tab_agent_arms.tex` (thêm 15/11) | C (C-17), 18/11 | Mềm | §7.8 chưa dẫn bảng |
+| 15 | B (nghiệm thu) | Ngoại lệ `@test.invalid` trong `scrub_check.sh` (thêm 15/11) | C (C-19), 17/11 | **Cứng** với YC-B12 | Không |
 
 ## 4. Hợp đồng chốt trước 11/11
 
@@ -155,8 +170,8 @@
 | Giai đoạn | A | B | C |
 |---|---|---|---|
 | 9 đến 13/11 | A-05 (13/11), nháp A-06 và A-01; tên macro (A-09, 11/11) | B-01 đến B-05, B-14; từ khi server mở (10/11): B-06 đến B-08 (11/11), B-09 (chạy agent 12/11, chạy thêm 13/11) | C-01 (12/11), C-02 (11/11), C-10 (13/11) |
-| 14 đến 17/11 | A-06 (15/11), A-02 và A-03 (16/11), A-01 và A-04 (17/11) | B-13, B-15 (không cần GPU) | C-03 (16/11), C-04 và C-06 (17/11) |
-| 18 đến 19/11 | A-07, A-08; **xong việc, mở PR nghiệm thu 19/11** | B-10, B-11, B-12, B-16; **xong việc, mở PR nghiệm thu 19/11** | C-05, C-07, C-08 (đăng ký abstract 19/11), C-09, C-11, C-12; **xong việc, mở PR nghiệm thu 19/11** |
+| 14 đến 17/11 | A-06 (15/11), A-02 và A-03 (16/11), A-01 và A-04 (17/11), A-10 (17/11) | B-13, B-15 (không cần GPU) | C-03 (16/11), C-04 và C-06 (17/11), C-14 và C-19 (17/11) |
+| 18 đến 19/11 | A-07, A-08; **xong việc, mở PR nghiệm thu 19/11** | B-10, B-11, B-12, B-16, B-18; **xong việc, mở PR nghiệm thu 19/11** | C-05, C-07, C-08 (đăng ký abstract 19/11), C-09, C-11, C-12, C-15 đến C-17 (18/11), C-18 (19/11); **xong việc, mở PR nghiệm thu 19/11** |
 | 20 đến 21/11 | Nghiệm thu A, sửa lỗi nghiệm thu | Nghiệm thu B, sửa lỗi nghiệm thu | Nghiệm thu C, sửa lỗi nghiệm thu; **21/11 chạy freeze, chốt số liệu** |
 | 22/11 | Sẵn sàng sửa lỗi cổng cuối | Sẵn sàng sửa lỗi cổng cuối | C-13: đóng gói artifact, cổng cuối và **nộp HotCRP chậm nhất 22/11** |
 | 23/11 đến 4/12 | Dự phòng | Dự phòng | Dự phòng (hội nghị: đăng ký abstract 27/11, nộp bài 4/12) |
@@ -216,7 +231,7 @@
 | YC-B3 | **Freeze trước khi chạy.** Thời điểm commit của `testbed/agent_study.freeze.json` sớm hơn `t_issue_utc` nhỏ nhất của các episode `scheduled`. Freeze có model và revision, decoding, hash prompt, task, hash APK/AVD, `H_eval = 300`, luật kết quả, seed, thứ tự episode. `artifact/results/real/agent/freeze.json` giống hệt bản đã commit. | `git log -1 --format=%cI -- testbed/agent_study.freeze.json` so với CSV; `sha256sum` hai file |
 | YC-B4 | **Dữ liệu agent hợp lệ.** `check_agent_data.py` thoát 0. Script kiểm: header đúng schema và thứ tự §4; có mọi lần chạy (dev, scheduled, invalid, chạy lại); từ 20 episode scheduled theo đúng thứ tự trong freeze; **từ 10 episode hợp lệ** (`original_committed=1` và `fault_receipt=1`); mỗi episode tối đa một lần chạy lại và chỉ vì lỗi đo; `outcome` thuộc 6 nhóm và khớp trường backend (ví dụ `RESENT_DUPLICATE` khi và chỉ khi `distinct_message_ids ≥ 2`); dòng nào cũng có receipt; hash prompt trong mọi receipt bằng hash trong freeze. Test của checker có một fixture lỗi và phải bắt được lỗi đó. | `python3 testbed/check_agent_data.py artifact/results/real/agent`; `python3 -m unittest testbed/tests/test_agent_data.py` |
 | YC-B5 | **Agent không bị sửa.** Cuối đợt chạy, 4 repo trong `runtime/vendor/` sạch và đúng commit pin; mọi sửa binding nằm trong `testbed/` và có test. | Kết quả `git -C runtime/vendor/<repo> status --porcelain` và `rev-parse HEAD` dán trong `b-log.md` |
-| YC-B6 | **Mục agent trong bài.** `07-agent.tex` không quá 0,6 cột trong PDF; nêu model và phiên bản, host, kiểu lỗi, `H_eval`, số episode scheduled, hợp lệ, không hợp lệ (kèm lý do), gửi lại, trùng ở backend, hỏi hoặc dừng, thất bại tác vụ, khoảng tin cậy Wilson 95% cho tỉ lệ gửi lại, median thời gian; mọi số là macro `\Agent*`; có danh sách giới hạn (một agent, một model, chỉ emulator, chỉ force-stop, n nhỏ). §2.3 khớp kết quả: nếu không lần nào gửi lại thì tiêu đề và câu chữ §2.3 không còn nói agent hay tạo ghost effect. | Đọc PDF; YC-04 trên `07-agent.tex` |
+| YC-B6 | **Mục agent trong bài.** `07-agent.tex` không quá 0,6 cột trong PDF; nêu model và phiên bản, host, kiểu lỗi, `H_eval`, số episode scheduled, hợp lệ, không hợp lệ (kèm lý do), gửi lại, trùng ở backend, hỏi hoặc dừng, thất bại tác vụ, khoảng tin cậy Wilson 95% cho tỉ lệ gửi lại, median thời gian; mọi số là macro `\Agent*`; có danh sách giới hạn (một agent, một model, chỉ emulator, chỉ force-stop, n nhỏ; từ 15/11 arm T3A và arm chỉ kill agent đã gỡ "một agent" và "chỉ force-stop", danh sách ghi đúng các arm đã chạy). §2.3 khớp kết quả: nếu không lần nào gửi lại thì tiêu đề và câu chữ §2.3 không còn nói agent hay tạo ghost effect. | Đọc PDF; YC-04 trên `07-agent.tex` |
 | YC-B7 | **Chi phí nhãn.** `label_cost.csv` đúng schema §4, tính từ receipt bằng script; checker tính lại ra cùng giá trị; macro `\LabelTrial*` khớp CSV. | `check_agent_data.py` kiểm lại; so macro với CSV |
 | YC-B8 | **Audit K-9 và dữ liệu thô.** Câu trong bài về thao tác "Send messages" khớp số đếm `sendmsgs_tapped` trong CSV; lượt audit mới nằm trong CSV mới có cột loại thao tác (sync, send_messages, none, recompose). File thô cũ không bị sửa hay xóa; `SUMMARY.md` chỉ được thêm đoạn mới. | `git diff --numstat origin/main...HEAD -- artifact/results/real/ \| awk '$2!=0'` rỗng (không file nào bị xóa dòng) |
 | YC-B9 | **Trình bày số đo.** Table 3b có min, median, max và n cho từng lớp lỗi (hoặc dot plot đủ điểm); có số sự kiện stale-screen kèm mẫu số; lượt mất do ANR được mô tả là censored và nói cách xử lý; có load host và thời gian dump, ghi là cận dưới của mọi độ trễ; câu §2.1 về app foreground đã sửa. | Đọc PDF |
@@ -240,6 +255,7 @@
 | YC-C10 | **Related work và citation.** Mỗi hệ LIMBO, Agent libOS, VeriGUI có một câu so sánh. Mọi bib key mới có trong danh sách kiểm nguồn `others/citation-audit.md` kèm DOI hoặc URL đã mở được. | Đọc §9; so `git diff origin/main...HEAD -- manuscript/references.bib` với danh sách kiểm |
 | YC-C11 | **Công cụ kiểm của nhóm.** `team/scrub_check.sh` và `team/readability_count.py` có trên `main` chậm nhất 13/11. `scrub_check.sh` thoát khác 0 trên một file tạm chứa `/Users/abc` và thoát 0 trên file sạch. `readability_count.py` chạy trên toàn bộ thân bài cho tổng `\para{` tối đa 15, `\emph{` tối đa 30 và 0 câu quá 45 từ; bảng tổng trước và sau dán trong PR. | `git log --diff-filter=A --format=%cI origin/main -- team/scrub_check.sh team/readability_count.py`; chạy hai script |
 | YC-C12 | **Chuẩn bị artifact.** README tiếng Anh nêu lệnh tái lập một dòng, phiên bản Python, thời gian chạy, đầu ra nào phụ thuộc host. `team/make_bundle.sh` tạo gói không có `tmp/`, `codex/`, `team/`, `review.md`, `resolve.md`, `runtime/`, `.git`; gói chạy thử qua scrub check. | Chạy `sh team/make_bundle.sh <thư mục thử>`; liệt kê file trong gói; `sh team/scrub_check.sh <thư mục thử>` thoát 0 |
+| YC-C13 | **Câu chữ về agent (thêm 15/11, C-14 đến C-18).** Không còn câu nói bài không đo LLM agent; §7.9 khớp §7.8; abstract, đoạn Results của intro và conclusion nêu kết quả agent bằng macro; `tab_agent_arms.tex` được input ở phụ lục; manifest ghi bốn thư mục agent mới là input. | `grep -nE 'no LLM agent\|none measures an LLM agent\|not agents\|LLM agents, VLMs' manuscript/sections/*.tex` không ra dòng nào; `grep -n tab_agent_arms manuscript/sections/*.tex`; đọc PDF và manifest |
 
 ### 7.6 Nghiệm thu cuối (cả nhóm, chậm nhất 22/11)
 
