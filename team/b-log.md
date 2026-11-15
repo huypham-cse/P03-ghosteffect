@@ -410,3 +410,9 @@ Test: testbed 96 qua (4 bỏ qua), artifact 49 qua (1 bỏ qua); render không �
 - **YC-B12:** `check_agent_data.py` dòng 17 (regex phát hiện đường dẫn máy) bị `scrub_check.sh` báo `local-user-path` vì chứa chuỗi đó; viết lại thành `[/]`, nghĩa regex không đổi, test cũ vẫn bắt được đường dẫn Windows. `sh team/scrub_check.sh testbed/` giờ chỉ còn 26 dòng `email`, tất cả là địa chỉ tổng hợp `@test.invalid` mà luật ẩn danh cho phép; vẫn chờ C thêm ngoại lệ đó vào `scrub_check.sh` (review #12).
 - **§2.3:** thêm một câu với kết quả T3A (`\AgentTextResentN` trên `\AgentTextValidN`), câu về device study giữ nguyên cho các agent và app khác. Không đổi bố cục trang (Conclusion vẫn ở dòng 1557, 22 trang); readability PASS.
 - **Cần A, C:** A commit bản render lại `macros_guarantee.tex` (`\CertLabelMedS`, `\CertDeviceHoursFive` đang `??` trong file đã commit). C sửa ba câu nói bài không đo agent (§1 dòng 47, §7 dòng 7 và 101), quyết định chỗ đặt `tab_agent_arms.tex`, cho `make_bundle.sh` loại `testbed/README.vi.md` và `testbed/RUNBOOK_B.md`.
+
+## 15/11/2026 (B-17: không làm)
+
+- **Quyết định của trưởng nhóm (15/11):** bỏ B-17 (đo lại độ trễ Element bằng `run_case.py` có thêm kill -9 và netcut).
+- **Lý do:** điều kiện của chính B-17 không còn (B-09 chạy ngày 14/11, không xong trước 13/11); dữ liệu B-17 nhắm tới đã có: Table 3b lấy độ trễ Element khi kill -9, cắt mạng và force-stop từ `c2_element_first_visible.csv` (101 lượt, 0 censored); B-17 chỉ là phép đo lặp bằng pipeline khác, không thêm kết quả mới, và không việc nào của A, C hay câu nào trong bài phụ thuộc vào nó.
+- **Nếu reviewer hỏi về cách đo độ trễ Element:** B-17 làm được bằng emulator, không cần GPU.
