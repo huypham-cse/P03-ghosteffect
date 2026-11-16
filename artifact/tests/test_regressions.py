@@ -263,7 +263,7 @@ class RunnerTests(unittest.TestCase):
         existing = {p.name for p in (ARTIFACT / 'results').glob('planner_real4_*.csv')}
         declared = {'planner_real4_%s.csv' % tag for tag in planner.REAL4}
         self.assertEqual(declared, set(runner.PART_OUTPUTS['real4']))
-        self.assertTrue(existing.issubset(declared))
+        self.assertEqual(existing, declared)
 
     @unittest.skipUnless(os.name == 'posix', 'full runner uses POSIX host-crash semantics')
     def test_parallel_job_failure_records_failed_and_never_renders(self):
