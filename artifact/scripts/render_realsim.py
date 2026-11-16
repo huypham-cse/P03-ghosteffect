@@ -5,6 +5,27 @@ import glob as _glob
 # ================================================================== measured-parameter simulation
 _pr = rd('planner_real.csv') if os.path.exists(os.path.join(RES, 'planner_real.csv')) else []
 _P = {(r['tag'], r['policy']): r for r in _pr}
+
+
+def _report_count(tag, column):
+    """Read a table-wide count from its rows, rejecting mixed inputs."""
+    values = {int(r[column]) for r in _pr if r['tag'] == tag}
+    if len(values) != 1:
+        raise ValueError('inconsistent reporting count: ' + tag + '/' + column)
+    return f'{values.pop():,}'.replace(',', '{,}')
+
+
+M('RsimWorkflowN', _report_count('main', 'n'))
+M('RsimBaseLabelN', _report_count('main', 'ncal'))
+M('RsimFiveLabelN', _report_count('five', 'ncal'))
+_fit = {r['family_read']: r for r in rd('real/campaign2/c2_element_families.csv') if r['cell'] == 'ALL'}
+_co = rd('real/campaign2/c2_element_cofailure.csv')
+M('RsimFitLateWrong', _fit['a_indicator_late']['wrong'])
+M('RsimFitLateObs', _fit['a_indicator_late']['observed'])
+if len({(r['n'], r['both_wrong']) for r in _co}) != 1:
+    raise ValueError('inconsistent late cofailure counts')
+M('RsimFitCoWrong', _co[0]['both_wrong'])
+M('RsimFitCoN', _co[0]['n'])
 _lab = {'redo': 'redo', 'app-state': 'trust app status', 'rules': 'rules, 10\\,s wait', 'rules-w30-all': 'rules, 30\\,s wait',
         'always-ask': 'always ask', 'g2-only': 'Thm.~\\ref{thm:twohop} only', 'ghost': 'product', 'ghost-src': 'source families',
         'ghost-joint': 'joint'}
@@ -18,11 +39,11 @@ def _row(tag, pol, label=None):
     return f"{label or _lab[pol]} & {_cells(_P[(tag, pol)])} \\\\"
 
 
-_left = [r'\multicolumn{5}{@{}l}{\emph{Element: fault-injected, class-keyed labels (2{,}000 per class and outcome)}} \\']
+_left = [r'\multicolumn{5}{@{}l}{\emph{Element: fault-injected, class-keyed labels (\RsimBaseLabelN{} per class and outcome)}} \\']
 _left += [_row('main', p) for p in ('redo', 'app-state', 'rules', 'rules-w30-all', 'g2-only')]
 _left += [_row('main', p, '\\alg, ' + _lab[p]) for p in ('ghost', 'ghost-src', 'ghost-joint')]
 _left += [r'\multicolumn{5}{@{}l}{\emph{Element, \alg\ with other labels}} \\']
-for tag, lab in (('five', '5{,}000 per class'), ('passive', 'passive labels')):
+for tag, lab in (('five', r'\RsimFiveLabelN{} per class'), ('passive', 'passive labels')):
     for p in ('ghost', 'ghost-joint'):
         _left.append(_row(tag, p, f"{lab}, {'product' if p == 'ghost' else 'joint'}"))
 _right = [r'\multicolumn{5}{@{}l}{\emph{Element, lag tail beyond 14\,s (\RsimTail\%)}} \\']
@@ -46,11 +67,15 @@ Policy & dup & loss & ask & $P_{\mathrm{v}}$ (hi) \\
 '''
 W('tab_realsim.tex', r'''\begin{table*}[t]
 \centering
-\caption{\emph{Measured-parameter simulation} (12{,}000 paired interrupted workflows per row; not an emulator run). Measured (Table~\ref{tab:real}): G2 and its
-mechanisms, per-fault-class lag laws with lag-blind first reads, the 2\% late no-observation rate and zero late family errors (Element); the permanent failed state,
-the client-written Sent folder and its APPEND lag (K-9). Modelled: fault mix, absent-side errors, Monitor, user; K-9's queued-mail lag $U$(45\,s, 15\,min) is an
-assumption. Element has no hop-1 family (its indicator is not lag-free). Labels are simulated draws from the measured law. Tail: committed effects (the 95\%
-upper bound from 0/101 censored) visible only after 14--300\,s. Always ask: dup/loss \RsimElemAskAllDup/\RsimElemAskAllLoss{} (Element). dup, loss, ask: \% of workflows; $P_{\mathrm{v}}$: \% of committed effects the policy retried by itself
+\caption{\emph{Measured-parameter simulation} (\RsimWorkflowN{} paired interrupted workflows per row; not an emulator run).
+Calibration and test draws follow the same fitted law. Element's measured late family errors are
+\RsimFitLateWrong/\RsimFitLateObs{} observed reads; pairwise late cofailures are \RsimFitCoWrong/\RsimFitCoN{} trials.
+This checks the certification machinery and asking cost under that law, rather than reader errors on real screens.
+Measured inputs (Table~\ref{tab:real}) include retry mechanisms and per-class lags; fault mix, absent-side errors, Monitor and user are modelled.
+K-9's queued-mail lag $U$(45\,s, 15\,min) is assumed. Element has no lag-free hop-1 family.
+The tail case places \RsimTail\% of committed effects beyond the measured maximum.
+Always ask: dup/loss \RsimElemAskAllDup/\RsimElemAskAllLoss{} (Element).
+dup, loss and ask are percentages of workflows; $P_{\mathrm v}$ is the percentage of committed effects retried by the policy
 (CP 95\% upper bound; budget 1\%).}
 \label{tab:realsim}
 \scriptsize
