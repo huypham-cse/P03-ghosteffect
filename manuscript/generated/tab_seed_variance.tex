@@ -1,0 +1,27 @@
+\begin{table*}[t]
+\centering
+\caption{Across-seed asking-rate variability for the fixed Table~2 and Table~4 reporting cases.
+Each row reports the same \SimSeedCount{} original seeds; workflow, calibration, and lag budgets are recorded in the accompanying metadata.
+Values are percentages: arithmetic mean $\pm$ sample standard deviation and range; standard deviation is not a confidence interval.}
+\label{tab:seedvariance}
+\small
+\begin{tabular}{@{}llrr@{}}
+\toprule
+Profile & Policy & ask mean $\pm$ SD & ask range \\
+\midrule
+model & redo & 0.00 $\pm$ 0.00 & 0.00--0.00 \\
+model & theorem-only & 72.98 $\pm$ 0.88 & 71.96--74.33 \\
+model & always-ask & 100.00 $\pm$ 0.00 & 100.00--100.00 \\
+model & rules & 23.90 $\pm$ 1.20 & 22.46--25.08 \\
+model & product & 24.85 $\pm$ 1.29 & 23.21--26.58 \\
+model & joint & 66.72 $\pm$ 0.94 & 65.38--67.67 \\
+element & product & 3.01 $\pm$ 0.26 & 2.67--3.38 \\
+element & joint & 72.86 $\pm$ 1.01 & 71.54--74.00 \\
+element & vetted rules & 5.29 $\pm$ 6.80 & 2.17--17.46 \\
+k9 & product & 100.00 $\pm$ 0.00 & 100.00--100.00 \\
+k9 & joint & 100.00 $\pm$ 0.00 & 100.00--100.00 \\
+k9sent & product & 100.00 $\pm$ 0.00 & 100.00--100.00 \\
+k9sent & joint & 100.00 $\pm$ 0.00 & 100.00--100.00 \\
+\bottomrule
+\end{tabular}
+\end{table*}
