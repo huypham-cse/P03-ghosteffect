@@ -2,7 +2,7 @@
 \label{sec:eval}
 We first report emulator measurements and measured-parameter simulations, then compare recovery decisions in model-based simulations.
 Additional guarantees, correlated-read experiments and baseline details appear in Appendix~\ref{app:extra}.
-The following results do not measure an LLM agent; that study is still pending.
+Every reported number is generated from the artifact CSVs, including the emulator LLM-agent study below.
 
 \input{generated/real_section}
 \input{sections/07-agent}
@@ -14,7 +14,7 @@ The default model contains eight app profiles, persistent reader errors, correla
 Calibration uses whole effects; each policy sees the same \SimN{} interrupted workflows.
 The user can answer incorrectly, so total duplicate/loss rates include user errors as well as planner decisions.
 The guaranteed quantity $P_{\mathrm v}$ instead counts committed effects retried by the planner itself.
-We use $\delta=\min(\alpha,\beta)/(10K n_{\mathrm{cls}})$, matching A's calibration accounting.
+We use $\delta=\min(\alpha,\beta)/(10K n_{\mathrm{cls}})$, matching the calibration accounting in Section~\ref{sec:theory}.
 Here $K$ counts tested bounds per class, and $n_{\mathrm{cls}}$ counts calibrated fault classes (one when pooled).
 Appendix~\ref{app:extra} records the complete model, budgets, confidence intervals and paired tests.
 
@@ -43,4 +43,5 @@ Removing the nonce, hop-1 probe or digest raises product's asking rate to \SimNo
 Using nominal independent-read bounds retries \SimNoCalPv\% of committed effects; declaring when uncertified loses \SimNoAskLv\% of absent effects.
 The complete ablation rows remain in Appendix~\ref{app:extra}.
 \para{Study scope.}\label{sec:device-plan}
-Future work will test other agents, models and physical devices.
+The M3A and T3A arms run on the emulator with one model configuration.
+The planned device study extends this evidence to physical phones, additional agents and additional models.
