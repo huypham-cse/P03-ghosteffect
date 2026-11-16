@@ -34,6 +34,8 @@ PART_OUTPUTS = {
         'boot10k', 'tail5', 'tail5tied', 'down5', 'down15', 't0down5',
         't0down15', 'netlab', 'netlabkey')],
 }
+AGENT_INPUT_DIRS = tuple('artifact/results/real/' + name for name in (
+    'agent_guarded', 'agent_rules', 'agent_t3a', 'agent_killagent'))
 NUMERIC_JOBS = [
     ('sim_sprt.py', ['sprt_validation.csv', 'sprt_asym.csv', 'calibration.csv', 'correlation.csv']),
     ('sim_impossibility.py', ['impossibility.csv', 'bayes_floor.csv', 'cost_policy.csv', 'late_commit.csv', 'lag_wait.csv']),
@@ -90,6 +92,12 @@ def prepare_workspace(destination):
     return destination, inputs
 
 
+def agent_input_hashes(inputs):
+    """Return provenance entries belonging to the four agent input corpora."""
+    return {name: inputs[name] for name in inputs
+            if any(name.startswith(prefix + '/') for prefix in AGENT_INPUT_DIRS)}
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output-dir', type=Path)
@@ -104,9 +112,12 @@ def main(argv=None):
     destination = args.output_dir or ROOT / 'codex' / 'runs' / ('artifact_%s_%s' % (stamp, os.getpid()))
     destination, inputs = prepare_workspace(destination)
     scripts, results = destination / 'artifact' / 'scripts', destination / 'artifact' / 'results'
+    agent_inputs = agent_input_hashes(inputs)
     manifest = dict(status='RUNNING', kind='artifact-reproduction', created_utc=stamp,
                     workspace=str(destination), source_inputs=inputs, jobs=args.jobs,
-                    timeout_seconds=args.timeout, completed=[], errors=[])
+                    timeout_seconds=args.timeout, agent_input_directories=AGENT_INPUT_DIRS,
+                    agent_inputs=agent_inputs, python_executable=sys.executable,
+                    python_version=sys.version, completed=[], errors=[])
     manifest_path = destination / 'RUN.json'
 
     def save():

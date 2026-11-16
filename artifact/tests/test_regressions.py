@@ -265,6 +265,23 @@ class RunnerTests(unittest.TestCase):
         self.assertEqual(declared, set(runner.PART_OUTPUTS['real4']))
         self.assertEqual(existing, declared)
 
+    def test_agent_input_hashes_include_only_the_four_agent_corpora(self):
+        inputs = {
+            'artifact/results/real/agent_guarded/episodes.csv': 'guarded',
+            'artifact/results/real/agent_rules/episodes.csv': 'rules',
+            'artifact/results/real/agent_t3a/episodes.csv': 't3a',
+            'artifact/results/real/agent_killagent/episodes.csv': 'killagent',
+            'artifact/results/real/agent/episodes.csv': 'legacy',
+            'artifact/results/real/params.csv': 'params',
+        }
+        selected = runner.agent_input_hashes(inputs)
+        self.assertEqual({
+            'artifact/results/real/agent_guarded/episodes.csv',
+            'artifact/results/real/agent_rules/episodes.csv',
+            'artifact/results/real/agent_t3a/episodes.csv',
+            'artifact/results/real/agent_killagent/episodes.csv',
+        }, set(selected))
+
     @unittest.skipUnless(os.name == 'posix', 'full runner uses POSIX host-crash semantics')
     def test_parallel_job_failure_records_failed_and_never_renders(self):
         with tempfile.TemporaryDirectory() as temp:
