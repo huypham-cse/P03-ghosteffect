@@ -229,7 +229,8 @@ def http_proxy(upstream, protocol, faults, listen=('127.0.0.1', 0)):
             finally:
                 conn.close()
 
-        do_GET = do_POST = do_PUT = do_DELETE = do_PROPFIND = do_REPORT = do_OPTIONS = do_MKCOL = handle_request
+        do_GET = do_POST = do_PUT = do_DELETE = do_PROPFIND = do_PROPPATCH = do_REPORT = do_OPTIONS = do_MKCOL = \
+            do_MKCALENDAR = handle_request
 
     return ThreadingHTTPServer(listen, Handler)
 

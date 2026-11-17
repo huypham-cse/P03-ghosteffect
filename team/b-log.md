@@ -440,3 +440,13 @@ Test: testbed 96 qua (4 bỏ qua), artifact 49 qua (1 bỏ qua); render không �
 - **Hợp lệ:** cả 7 điều kiện trước redo đều đạt (REPRODUCED). **Trùng:** sau redo server có 2 bản với 2 Message-ID khác nhau. Báo cáo số trùng trên số hợp lệ kèm khoảng Wilson 95%, theo cấu hình và theo cách kill.
 - **Không thay lượt:** lượt INVALID giữ nguyên, ghi lý do. Chỉ dừng nếu máy mất kết nối adb; lượt dở dang (không có `RESULT.json`) thì chạy lại cùng tên và ghi vào đây.
 - **Không chạy:** Doze, giả rút sạc, thiếu RAM thật (đụng tới cả máy); Element và DAVx5 (cần server Matrix, CalDAV và tải thêm).
+- **Ghi chú đợt điện thoại:** s02 bắt đầu lúc 01:26:29, có thể đã nạp bản `k9_fault_case.py` có thêm hàm kill bằng thiếu RAM (chưa commit lúc đó). Hàm này không được gọi trên điện thoại, đường chạy của điện thoại giống hệt 7f9f286. Từ s03 checkout chính đã về đúng 7f9f286; việc mới làm trong worktree `P03-emu`, branch `b/emulator-faults`.
+
+## 18/11/2026 (kế hoạch đợt emulator: thiếu RAM thật và Doze, ghi trước khi chạy)
+
+- **Vì sao emulator:** trưởng nhóm chỉ có máy cá nhân; các lỗi này đụng tới cả máy (lấp RAM, ép Doze), nên làm trên AVD. Đã duyệt tải (18/11): DAVx5 4.5.21-ose và Etar 1.0.57 (F-Droid, hash khớp `assets.lock.json`), Radicale 3.9.0 từ PyPI vào `runtime/radicale-venv` (pip kéo 14 gói).
+- **Chạy sau đợt điện thoại**, trên AVD `ghosteffect_api33_x86_local` (API 33, `-memory 4096`).
+- **E1, K-9 bị lmkd giết:** `k9_fault_case.py --kill lmk --observe 120 --action recompose --action-window 60`; e01 đến e06 xen kẽ sent, nosent. `--kill lmk`: HOME rồi lấp một tmpfs 64 MB mỗi lần tới khi lmkd giết K-9 (phải có dòng `lowmemorykiller` nhắc K-9, không thì INVALID), rồi trả RAM.
+- **E2, DAVx5 (`caldav_fault_case.py`, mới):** như C2-4 của campaign 2: Etar tạo sự kiện có tiêu đề là nonce, DAVx5 PUT lên Radicale qua proxy, proxy giữ phản hồi, áp lỗi lúc DAVx5 còn chờ, rồi bỏ phản hồi. Chấm từ store của Radicale (số bản mang nonce) và journal của proxy (thời điểm PUT lại cùng href). Ô: `none`, `kill9`, `lmk`, mỗi ô 3 lượt, cửa sổ 180 s; `doze` 3 lượt: tắt màn hình, giả rút sạc, ép deep idle trước khi bỏ phản hồi, giữ 600 s, rồi trả lại, cửa sổ 180 s.
+- **Câu hỏi:** (1) lmkd giết K-9 thì K-9 có tự gửi lại không, redo có ra bản trùng không (H1 với kiểu kill thật); (2) DAVx5 có giữ đúng một bản khi bị lmkd giết (H3), và dưới Doze lần PUT lại bị hoãn bao lâu (độ trễ khi Doze, §8).
+- **Không thay lượt;** lượt INVALID giữ, ghi lý do. Số nhỏ, đây là đo thăm dò cơ chế, không phải ước lượng tỷ lệ.

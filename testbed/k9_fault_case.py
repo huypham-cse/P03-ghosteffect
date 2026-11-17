@@ -63,6 +63,31 @@ def background_kill(shell, device):
     return dict(observed_class='app-background-kill', package=k9_reset.PACKAGE, pids_before=before.split(), pids_after=[])
 
 
+def lmk_kill(shell, device, package=k9_reset.PACKAGE, max_mb=3600):
+    """AVD only (root): put the app in the background, then fill a tmpfs 64 MB at a time until the
+    low-memory killer reaps it, and free the memory again. Returns lmkd's own log lines for the app."""
+    before = device.pids(package)
+    if not before:
+        raise RuntimeError('target has no live PID before fault; not an app-death trial')
+    shell('input keyevent KEYCODE_HOME')
+    time.sleep(2)
+    mem = '/data/local/tmp/gx_mem'
+    shell(f'mkdir -p {mem} && mount -t tmpfs -o size={max_mb}m tmpfs {mem}')
+    filled = 0
+    try:
+        while device.pids(package) and filled < max_mb:
+            shell(f'dd if=/dev/zero of={mem}/f{filled} bs=1048576 count=64 2>/dev/null')
+            filled += 64
+    finally:
+        shell(f'rm -f {mem}/*; umount {mem}')
+    after = device.pids(package)
+    lmkd = [line for line in shell('logcat -d -s lowmemorykiller:I').splitlines() if package in line]
+    if after or not lmkd:
+        raise RuntimeError('memory pressure did not reap %s through lmkd (%d MB filled)' % (package, filled))
+    return dict(observed_class='app-lmkd-kill', package=package, pids_before=before.split(), pids_after=[],
+                filled_mb=filled, lmkd_line=lmkd[-1])
+
+
 k9_notices = k9_reset.k9_notices
 
 
@@ -137,8 +162,9 @@ def main():
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--action', choices=ACTIONS, help='B-12 audit: one user action after the fault')
     parser.add_argument('--action-window', type=float, default=60, help='seconds after the action before grading')
-    parser.add_argument('--kill', choices=['force-stop', 'background'], default='force-stop',
-                        help='how K-9 dies after its error: force-stop (campaign 2) or HOME then am kill')
+    parser.add_argument('--kill', choices=['force-stop', 'background', 'lmk'], default='force-stop',
+                        help='how K-9 dies after its error: force-stop (campaign 2), HOME then am kill, '
+                             'or HOME then real memory pressure until lmkd reaps it (AVD only)')
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=False)
     args.control, args.journal = 'http://127.0.0.1:19025', args.output / 'proxy.jsonl'
@@ -207,7 +233,10 @@ def trial(args):
     pre_fault = state()
     device = run_case.ADB(Path(args.adb).resolve(), args.serial)
     fault_utc_ns = time.time_ns()
-    fault = background_kill(shell, device) if args.kill == 'background' else device.force_stop(k9_reset.PACKAGE)
+    if args.kill == 'lmk' and phone:
+        raise ValueError('--kill lmk fills the device memory; AVD only')
+    fault = background_kill(shell, device) if args.kill == 'background' else lmk_kill(shell, device) \
+        if args.kill == 'lmk' else device.force_stop(k9_reset.PACKAGE)
     recovery = device.launch(k9_reset.LAUNCH)
     time.sleep(args.observe)
     server = imap_count('127.0.0.1', k9_reset.IMAP_PORT, 'INBOX', nonce, 'bob', 'bobpass')
