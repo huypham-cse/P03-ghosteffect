@@ -1,0 +1,29 @@
+{
+  "fault": "doze",
+  "utc_ns": 1794951231209531900,
+  "dirty_before": "No result found.",
+  "save_tap": {
+    "at": [
+      821,
+      211
+    ],
+    "utc_ns": 1794951239337326400
+  },
+  "barrier_utc_ns": 1794951292672735000,
+  "fault_receipt": {
+    "observed_class": "device-doze-deep",
+    "state": "IDLE"
+  },
+  "fault_utc_ns": 1794951294795237600,
+  "doze_exit_utc_ns": 1794951414874456800,
+  "nonce": "gx:BCDGDW",
+  "href": "/alice/cal/7d62f695-e02a-4611-aa1a-6933571fb419.ics",
+  "puts": 2,
+  "server_copies": [
+    "7d62f695-e02a-4611-aa1a-6933571fb419.ics"
+  ],
+  "first_put_after_fault_s": 0.0078446,
+  "dirty_after": "No result found.",
+  "first_put_after_doze_exit_s": -120.0713746,
+  "verdict": "EXACTLY_ONCE"
+}

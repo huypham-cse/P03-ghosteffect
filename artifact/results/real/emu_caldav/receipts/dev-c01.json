@@ -1,0 +1,26 @@
+{
+  "fault": "none",
+  "utc_ns": 1794950809403958800,
+  "dirty_before": "No result found.",
+  "save_tap": {
+    "at": [
+      821,
+      211
+    ],
+    "utc_ns": 1794950816726818700
+  },
+  "barrier_utc_ns": 1794950848609245700,
+  "fault_receipt": {
+    "observed_class": "none"
+  },
+  "fault_utc_ns": 1794950848609254400,
+  "nonce": "gx:S7HDEN",
+  "href": "/alice/cal/3c39aefd-0553-4740-9fb2-22da31bf8b27.ics",
+  "puts": 2,
+  "server_copies": [
+    "3c39aefd-0553-4740-9fb2-22da31bf8b27.ics"
+  ],
+  "first_put_after_fault_s": 0.0346615,
+  "dirty_after": "No result found.",
+  "verdict": "EXACTLY_ONCE"
+}

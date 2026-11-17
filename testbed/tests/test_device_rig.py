@@ -55,7 +55,7 @@ class DeviceRig(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             for name, verdict, copies in (('s01', 'REPRODUCED', 2), ('s02', 'REPRODUCED', 1), ('s03', 'INVALID', None)):
                 (Path(tmp) / name).mkdir()
-                result = dict(config='sent', verdict=verdict)
+                result = dict(config='sent', verdict=verdict, smtp_data_after_fault=0)
                 if copies:
                     result.update(checks=checks, audit=dict(action='recompose', server_copies_after_action=copies,
                                                             distinct_message_ids_after_action=copies))

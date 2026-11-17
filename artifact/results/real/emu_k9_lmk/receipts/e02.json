@@ -1,0 +1,76 @@
+{
+  "verdict": "REPRODUCED",
+  "config": "nosent",
+  "kill": "lmk",
+  "nonce": "gx:YTTBC6",
+  "checks": {
+    "reply_dropped_after_commit": true,
+    "error_before_fault": true,
+    "app_killed_and_relaunched": true,
+    "one_server_copy": true,
+    "k9_kept_in_outbox": true,
+    "sent_folder_empty": true,
+    "k9_marked_error": true
+  },
+  "server": {
+    "copies": 1,
+    "receiver_uids": [
+      "1"
+    ],
+    "scan_complete": true,
+    "scope": "receiver mailbox at this horizon; not client Sent state"
+  },
+  "sent": null,
+  "k9_outbox_state": "error|1|Unable to send message",
+  "k9_outbox_before_fault": "error|1|Unable to send message",
+  "fault": {
+    "observed_class": "app-lmkd-kill",
+    "package": "com.fsck.k9",
+    "pids_before": [
+      "11660"
+    ],
+    "pids_after": [],
+    "filled_mb": 3072,
+    "lmkd_line": "11-18 04:56:38.118   129   129 I lowmemorykiller: Kill 'com.fsck.k9' (11660), uid 10174, oom_score_adj 700 to free 44852kB rss, 32688kB swap; reason: low watermark is breached and swap is low (204188kB < 300624kB)"
+  },
+  "observe_s": 120.0,
+  "request_id": "<8C6A3539-99BA-4153-A14E-1317866D9643@test.invalid>",
+  "smtp_data_after_fault": 0,
+  "device": "avd",
+  "utc_ns": 1794952722672303200,
+  "k9_folders": [
+    "Outbox"
+  ],
+  "reset_archive_sha256": "d836ec76cdabde8617235eebab47a51ba7a3bcd55bf3fbabfb819f09d276ef43",
+  "audit": {
+    "action": "recompose",
+    "taps": [
+      {
+        "label": "Send",
+        "bounds": [
+          848,
+          148,
+          975,
+          274
+        ],
+        "utc_ns": 1794952730276356400
+      },
+      {
+        "label": "Send and Delete",
+        "bounds": [
+          601,
+          1396,
+          865,
+          1449
+        ],
+        "utc_ns": 1794952734322110400
+      }
+    ],
+    "action_start_utc_ns": 1794952722676424300,
+    "window_s": 60.0,
+    "smtp_data_after_action": 1,
+    "server_copies_after_action": 2,
+    "distinct_message_ids_after_action": 2,
+    "k9_outbox_after_action": "error|1|Unable to send message"
+  }
+}

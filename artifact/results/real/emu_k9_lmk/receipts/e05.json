@@ -1,0 +1,71 @@
+{
+  "verdict": "REPRODUCED",
+  "config": "sent",
+  "kill": "lmk",
+  "nonce": "gx:6DDPFX",
+  "checks": {
+    "reply_dropped_after_commit": true,
+    "error_before_fault": true,
+    "app_killed_and_relaunched": true,
+    "one_server_copy": true,
+    "k9_kept_in_outbox": true,
+    "sent_folder_empty": true,
+    "k9_marked_error": true
+  },
+  "server": {
+    "copies": 1,
+    "receiver_uids": [
+      "1"
+    ],
+    "scan_complete": true,
+    "scope": "receiver mailbox at this horizon; not client Sent state"
+  },
+  "sent": {
+    "copies": 0,
+    "receiver_uids": [],
+    "scan_complete": true,
+    "scope": "receiver mailbox at this horizon; not client Sent state"
+  },
+  "k9_outbox_state": "error|1|Unable to send message",
+  "k9_outbox_before_fault": "error|1|Unable to send message",
+  "fault": {
+    "observed_class": "app-lmkd-kill",
+    "package": "com.fsck.k9",
+    "pids_before": [
+      "15805"
+    ],
+    "pids_after": [],
+    "filled_mb": 3008,
+    "lmkd_line": "11-18 05:07:38.647   129   129 I lowmemorykiller: Kill 'com.fsck.k9' (15805), uid 10174, oom_score_adj 700 to free 63816kB rss, 19272kB swap; reason: low watermark is breached and swap is low (300572kB < 300624kB)"
+  },
+  "observe_s": 120.0,
+  "request_id": "<E198D9DB-7081-44CD-AFF2-493B276658AE@test.invalid>",
+  "smtp_data_after_fault": 0,
+  "device": "avd",
+  "utc_ns": 1794953382007268400,
+  "k9_folders": [
+    "Outbox"
+  ],
+  "reset_archive_sha256": "33c67fc3a3964381084c7e0fde9a8b7b147bd68148bbd7d5c0b847f2ae63ba0a",
+  "audit": {
+    "action": "recompose",
+    "taps": [
+      {
+        "label": "Send",
+        "bounds": [
+          848,
+          148,
+          975,
+          274
+        ],
+        "utc_ns": 1794953389686424700
+      }
+    ],
+    "action_start_utc_ns": 1794953382011470800,
+    "window_s": 60.0,
+    "smtp_data_after_action": 1,
+    "server_copies_after_action": 2,
+    "distinct_message_ids_after_action": 2,
+    "k9_outbox_after_action": "error|1|Unable to send message"
+  }
+}

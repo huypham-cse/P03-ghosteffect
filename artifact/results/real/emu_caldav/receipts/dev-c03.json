@@ -1,0 +1,6 @@
+{
+  "verdict": "INVALID",
+  "fault": "lmk",
+  "error_type": "RuntimeError",
+  "reason": "memory pressure did not reap at.bitfire.davdroid through lmkd (3648 MB filled)"
+}

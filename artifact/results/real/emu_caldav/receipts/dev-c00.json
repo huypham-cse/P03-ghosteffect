@@ -1,0 +1,6 @@
+{
+  "verdict": "INVALID",
+  "fault": "none",
+  "error_type": "RuntimeError",
+  "reason": "Etar's DONE button not found"
+}
