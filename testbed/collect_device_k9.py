@@ -24,6 +24,7 @@ FIELDS = ('trial', 'phase', 'config', 'kill', 'verdict', *CHECKS, 'server_copies
 def row(run):
     r = json.loads((run / 'RESULT.json').read_text(encoding='utf-8'))
     a, c, d = r.get('audit') or {}, r.get('checks') or {}, r.get('device') or {}
+    d = d if isinstance(d, dict) else dict(model=d)   # AVD trials record device='avd'
     dup = a.get('server_copies_after_action') == 2 and a.get('distinct_message_ids_after_action') == 2
     return dict(trial=run.name, phase='dev' if run.name.startswith('dev') else 'scheduled', config=r['config'],
                 kill=r.get('kill', 'force-stop'), verdict=r['verdict'], **{k: c.get(k, '') for k in CHECKS},
