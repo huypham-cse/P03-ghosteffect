@@ -1,0 +1,73 @@
+{
+  "verdict": "NOT_REPRODUCED",
+  "config": "sent",
+  "nonce": "gx:W6Q6EZ",
+  "checks": {
+    "reply_dropped_after_commit": true,
+    "error_before_fault": false,
+    "app_killed_and_relaunched": true,
+    "one_server_copy": true,
+    "k9_kept_in_outbox": true,
+    "k9_marked_error": false,
+    "sent_folder_empty": true
+  },
+  "server": {
+    "copies": 1,
+    "receiver_uids": [
+      "1"
+    ],
+    "scan_complete": true,
+    "scope": "receiver mailbox at this horizon; not client Sent state"
+  },
+  "sent": {
+    "copies": 0,
+    "receiver_uids": [],
+    "scan_complete": true,
+    "scope": "receiver mailbox at this horizon; not client Sent state"
+  },
+  "k9_outbox_state": {
+    "nonce_items": 1,
+    "texts": [
+      "Outbox",
+      "gx:W6Q6EZ",
+      "1:04\u202fAM",
+      "To: bob@test.invalid \u2013 synthetic test message",
+      "Load up to 100 more"
+    ],
+    "utc_ns": 1794938775995464500
+  },
+  "k9_outbox_before_fault": [
+    "Failed to send some messages",
+    "SmtpResponseParserException: Unexpected end of stream"
+  ],
+  "fault": {
+    "observed_class": "app-force-stop",
+    "package": "com.fsck.k9",
+    "pids_before": [
+      "30637"
+    ],
+    "pids_after": []
+  },
+  "observe_s": 30.0,
+  "request_id": "<3B319632-7E9E-4D78-B6F7-D6469211CFE6@test.invalid>",
+  "device": {
+    "manufacturer": "samsung",
+    "model": "SM-A356E",
+    "android": "15",
+    "sdk": "35"
+  },
+  "utc_ns": 1794938775995496000,
+  "k9_outbox_screen": {
+    "nonce_items": 1,
+    "texts": [
+      "Outbox",
+      "gx:W6Q6EZ",
+      "1:04\u202fAM",
+      "To: bob@test.invalid \u2013 synthetic test message",
+      "Load up to 100 more"
+    ],
+    "utc_ns": 1794938775995464500
+  },
+  "k9_notices_after": [],
+  "k9_evidence": "notification+screen"
+}

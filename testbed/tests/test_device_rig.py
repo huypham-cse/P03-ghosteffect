@@ -62,7 +62,7 @@ class DeviceRig(unittest.TestCase):
                 (Path(tmp) / name / 'RESULT.json').write_text(json.dumps(result))
             rows = [col.row(Path(tmp) / n) for n in ('s01', 's02', 's03')]
         self.assertEqual([r['redo_duplicate'] for r in rows], [True, False, ''])
-        self.assertIn('| sent | 3 | 2 | 2 | 1/2 |', col.summary(rows))
+        self.assertIn('| force-stop | sent | 3 | 2 | 2 | 1/2 |', col.summary(rows))
 
     def test_phone_reset_needs_the_serial_named(self):
         with patch.dict(os.environ, {'GX_PHYSICAL_SERIAL': 'other'}), self.assertRaises(ValueError):

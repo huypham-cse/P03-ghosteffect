@@ -1,0 +1,114 @@
+{
+  "verdict": "REPRODUCED",
+  "config": "nosent",
+  "kill": "background",
+  "nonce": "gx:QKC7H4",
+  "checks": {
+    "reply_dropped_after_commit": true,
+    "error_before_fault": true,
+    "app_killed_and_relaunched": true,
+    "one_server_copy": true,
+    "k9_kept_in_outbox": true,
+    "sent_folder_empty": true,
+    "no_resend_after_relaunch": true
+  },
+  "server": {
+    "copies": 1,
+    "receiver_uids": [
+      "1"
+    ],
+    "scan_complete": true,
+    "scope": "receiver mailbox at this horizon; not client Sent state"
+  },
+  "sent": null,
+  "k9_outbox_state": {
+    "nonce_items": 1,
+    "texts": [
+      "Outbox",
+      "gx:QKC7H4",
+      "3:51\u202fAM",
+      "To: bob@test.invalid \u2013 synthetic test message",
+      "Load up to 100 more"
+    ],
+    "utc_ns": 1794948823438956300
+  },
+  "k9_outbox_before_fault": [
+    "Failed to send some messages",
+    "SmtpResponseParserException: Unexpected end of stream"
+  ],
+  "fault": {
+    "observed_class": "app-background-kill",
+    "package": "com.fsck.k9",
+    "pids_before": [
+      "4958"
+    ],
+    "pids_after": []
+  },
+  "observe_s": 120.0,
+  "request_id": "<9ACB2A47-4992-4F64-A170-2090DEF1C7DD@test.invalid>",
+  "smtp_data_after_fault": 0,
+  "device": {
+    "manufacturer": "samsung",
+    "model": "SM-A356E",
+    "android": "15",
+    "sdk": "35"
+  },
+  "utc_ns": 1794948823438994800,
+  "k9_outbox_screen": {
+    "nonce_items": 1,
+    "texts": [
+      "Outbox",
+      "gx:QKC7H4",
+      "3:51\u202fAM",
+      "To: bob@test.invalid \u2013 synthetic test message",
+      "Load up to 100 more"
+    ],
+    "utc_ns": 1794948823438956300
+  },
+  "k9_notices_after": [
+    "Failed to send some messages",
+    "SmtpResponseParserException: Unexpected end of stream"
+  ],
+  "k9_evidence": "notification+screen",
+  "audit": {
+    "action": "recompose",
+    "taps": [
+      {
+        "label": "Send",
+        "bounds": [
+          831,
+          111,
+          967,
+          246
+        ],
+        "utc_ns": 1794948831264832000
+      },
+      {
+        "label": "Send and Delete",
+        "bounds": [
+          598,
+          1322,
+          888,
+          1379
+        ],
+        "utc_ns": 1794948835784340600
+      }
+    ],
+    "action_start_utc_ns": 1794948823451035800,
+    "window_s": 60.0,
+    "smtp_data_after_action": 1,
+    "server_copies_after_action": 2,
+    "distinct_message_ids_after_action": 2,
+    "k9_outbox_after_action": {
+      "nonce_items": 1,
+      "texts": [
+        "Outbox",
+        "gx:QKC7H4",
+        "3:51\u202fAM",
+        "To: bob@test.invalid \u2013 synthetic test message",
+        "Load up to 100 more"
+      ],
+      "utc_ns": 1794948898238649500
+    }
+  }
+}

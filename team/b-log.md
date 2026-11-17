@@ -442,6 +442,15 @@ Test: testbed 96 qua (4 bỏ qua), artifact 49 qua (1 bỏ qua); render không �
 - **Không chạy:** Doze, giả rút sạc, thiếu RAM thật (đụng tới cả máy); Element và DAVx5 (cần server Matrix, CalDAV và tải thêm).
 - **Ghi chú đợt điện thoại:** s02 bắt đầu lúc 01:26:29, có thể đã nạp bản `k9_fault_case.py` có thêm hàm kill bằng thiếu RAM (chưa commit lúc đó). Hàm này không được gọi trên điện thoại, đường chạy của điện thoại giống hệt 7f9f286. Từ s03 checkout chính đã về đúng 7f9f286; việc mới làm trong worktree `P03-emu`, branch `b/emulator-faults`.
 
+## 18/11/2026 (kết quả đợt điện thoại, 01:21 đến 04:17)
+
+- **Tạm dừng theo yêu cầu trưởng nhóm** lúc 02:47 để dùng máy: s16 (đang chạy) và s17 (vừa bắt đầu) bị dừng, không có `RESULT.json`; giữ ở `testbed/runs/device-k9/interrupted-s16`, `interrupted-s17` (không commit). Chạy tiếp lúc 02:53 đúng như kế hoạch: chạy lại cùng tên. Không lượt nào khác bị thay.
+- **Kết quả (30 lượt, `artifact/results/real/device_k9/`):** 30/30 hợp lệ (REPRODUCED đủ 7 điều kiện); 30/30 K-9 không gửi lại trong 120 s sau khi mở lại; 30/30 redo qua giao diện để lại bản trùng (2 bản trên server, 2 Message-ID), Wilson 95% từ 88.6 đến 100%. Theo cách kill: force-stop 20/20 (từ 83.9 đến 100% nếu gộp hai cấu hình), về nền rồi `am kill` 10/10.
+- **Kiểm độc lập:** đếm lại từ `proxy.jsonl` từng lượt: đúng 2 SMTP DATA (thư gốc và redo), 2 Message-ID khác nhau, 1 lần bỏ phản hồi, 0 DATA sau lúc kill. Khớp `RESULT.json` cả 30 lượt.
+- **Khác nhau giữa hai cách kill:** sau `am kill` thông báo lỗi của K-9 còn nguyên khi mở lại (10/10), sau force-stop thì mất (0/20). Thư vẫn nằm trong Outbox ở cả 30 lượt (đọc trên màn hình, đúng 1 mục mang nonce).
+- **Ẩn danh:** serial máy không có trong artifact (grep 0 file); mọi địa chỉ là `@test.invalid` tổng hợp; log `case/` (có serial) để lại máy, không commit.
+- **Ý nghĩa cho bài:** cái bẫy K-9 và bản trùng khi agent làm lại bước gửi tái hiện trên điện thoại thật (Android 15, One UI 7), không chỉ trên emulator (bảng campaign 2: 20/20 trên AVD). Kill kiểu hệ điều hành dọn app nền (`am kill`, không hủy việc đã lên lịch) cũng không làm K-9 tự gửi lại trong 120 s. Câu cho bài để C và trưởng nhóm quyết (§7.7 hoặc §8 "Android realism").
+
 ## 18/11/2026 (kế hoạch đợt emulator: thiếu RAM thật và Doze, ghi trước khi chạy)
 
 - **Vì sao emulator:** trưởng nhóm chỉ có máy cá nhân; các lỗi này đụng tới cả máy (lấp RAM, ép Doze), nên làm trên AVD. Đã duyệt tải (18/11): DAVx5 4.5.21-ose và Etar 1.0.57 (F-Droid, hash khớp `assets.lock.json`), Radicale 3.9.0 từ PyPI vào `runtime/radicale-venv` (pip kéo 14 gói).
