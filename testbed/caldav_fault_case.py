@@ -120,10 +120,12 @@ def trial(args, shell, device, journal):
     href, receipt['barrier_utc_ns'] = status['request_id'], time.time_ns()
     if args.fault == 'force-stop':
         receipt['fault_receipt'] = device.force_stop(DAVX5)
-    elif args.fault == 'kill9':
+    elif args.fault in ('kill9', 'kill9-doze'):
         pids = device.pids(DAVX5)
         shell('kill -9 ' + pids)
         receipt['fault_receipt'] = dict(observed_class='app-sigkill', pids_before=pids.split())
+        if args.fault == 'kill9-doze':   # the retry is then a rescheduled sync, which Doze can defer
+            receipt['fault_receipt']['doze'] = doze_enter(shell)
     elif args.fault == 'lmk':
         receipt['fault_receipt'] = lmk_kill(shell, device, DAVX5)
     elif args.fault == 'doze':
@@ -132,7 +134,7 @@ def trial(args, shell, device, journal):
         receipt['fault_receipt'] = dict(observed_class='none')
     receipt['fault_utc_ns'] = time.time_ns()
     control('release', dict(arm_id=arm, fault_receipt=receipt['fault_receipt']))
-    if args.fault == 'doze':
+    if args.fault in ('doze', 'kill9-doze'):
         try:
             time.sleep(args.doze_seconds)
         finally:
@@ -171,7 +173,7 @@ def main():
     parser.add_argument('--adb', required=True)
     parser.add_argument('--adb-server-port', default='5038')
     parser.add_argument('--serial', default='emulator-5580')
-    parser.add_argument('--fault', choices=['none', 'force-stop', 'kill9', 'lmk', 'doze'], required=True)
+    parser.add_argument('--fault', choices=['none', 'force-stop', 'kill9', 'lmk', 'doze', 'kill9-doze'], required=True)
     parser.add_argument('--doze-seconds', type=float, default=600)
     parser.add_argument('--window', type=float, default=180, help='seconds after the fault (or Doze exit) before grading')
     parser.add_argument('--barrier-timeout', type=float, default=90)

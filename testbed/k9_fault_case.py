@@ -63,9 +63,10 @@ def background_kill(shell, device):
     return dict(observed_class='app-background-kill', package=k9_reset.PACKAGE, pids_before=before.split(), pids_after=[])
 
 
-def lmk_kill(shell, device, package=k9_reset.PACKAGE, max_mb=3600):
-    """AVD only (root): put the app in the background, then fill a tmpfs 64 MB at a time until the
-    low-memory killer reaps it, and free the memory again. Returns lmkd's own log lines for the app."""
+def lmk_kill(shell, device, package=k9_reset.PACKAGE, max_mb=6000):
+    """AVD only (root): put the app in the background, then fill a tmpfs 64 MB at a time with random bytes
+    until the low-memory killer reaps it, and free the memory again. Random, because the AVD swaps to zram
+    and zeros compress to nothing (dev 18/11: 3.6 GB of zeros reaped neither K-9 nor DAVx5)."""
     before = device.pids(package)
     if not before:
         raise RuntimeError('target has no live PID before fault; not an app-death trial')
@@ -76,7 +77,7 @@ def lmk_kill(shell, device, package=k9_reset.PACKAGE, max_mb=3600):
     filled = 0
     try:
         while device.pids(package) and filled < max_mb:
-            shell(f'dd if=/dev/zero of={mem}/f{filled} bs=1048576 count=64 2>/dev/null')
+            shell(f'dd if=/dev/urandom of={mem}/f{filled} bs=1048576 count=64 2>/dev/null')
             filled += 64
     finally:
         shell(f'rm -f {mem}/*; umount {mem}')

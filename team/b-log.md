@@ -450,3 +450,10 @@ Test: testbed 96 qua (4 bỏ qua), artifact 49 qua (1 bỏ qua); render không �
 - **E2, DAVx5 (`caldav_fault_case.py`, mới):** như C2-4 của campaign 2: Etar tạo sự kiện có tiêu đề là nonce, DAVx5 PUT lên Radicale qua proxy, proxy giữ phản hồi, áp lỗi lúc DAVx5 còn chờ, rồi bỏ phản hồi. Chấm từ store của Radicale (số bản mang nonce) và journal của proxy (thời điểm PUT lại cùng href). Ô: `none`, `kill9`, `lmk`, mỗi ô 3 lượt, cửa sổ 180 s; `doze` 3 lượt: tắt màn hình, giả rút sạc, ép deep idle trước khi bỏ phản hồi, giữ 600 s, rồi trả lại, cửa sổ 180 s.
 - **Câu hỏi:** (1) lmkd giết K-9 thì K-9 có tự gửi lại không, redo có ra bản trùng không (H1 với kiểu kill thật); (2) DAVx5 có giữ đúng một bản khi bị lmkd giết (H3), và dưới Doze lần PUT lại bị hoãn bao lâu (độ trễ khi Doze, §8).
 - **Không thay lượt;** lượt INVALID giữ, ghi lý do. Số nhỏ, đây là đo thăm dò cơ chế, không phải ước lượng tỷ lệ.
+
+### Sửa kế hoạch đợt emulator sau các lượt dev (18/11, trước khi chạy đợt chính)
+
+- **Dev:** dev-c01 (`none`): DAVx5 PUT lại cùng href 0,03 s sau khi mất phản hồi, 1 bản. dev-c02 (`kill9`): PUT lại 54 s sau khi kill, 1 bản (campaign 2: từ 53 đến 124 s). dev-c03 (`lmk`) và dev-e00 (K-9 `lmk`): INVALID, lấp 3,6 GB mà lmkd không giết app, vì AVD có 3 GB swap zram và số 0 nén gần hết. dev-d00 (`doze`, 120 s): lần retry tức thì trong phiên sync đang chạy vẫn đi qua lúc máy ở deep idle (8 ms sau khi bỏ phản hồi), 1 bản.
+- **Sửa 1:** `lmk_kill` lấp bằng `/dev/urandom`, tối đa 6.000 MB. dev-e01 (K-9 `lmk`): lmkd giết K-9 ở 2.880 MB ("low watermark is breached and swap is low", oom_score_adj 700); REPRODUCED, không gửi lại, redo ra 2 bản.
+- **Sửa 2:** ô Doze đổi thành `kill9-doze`: kill -9 DAVx5 lúc giữ phản hồi, rồi vào deep idle, giữ 600 s. Lý do: Doze chỉ có thể hoãn lần sync được lên lịch lại, không hoãn retry trong phiên đang chạy. dev-d01 (`kill9-doze`, giữ 300 s): DAVx5 vẫn PUT lại 51 s sau khi kill, lúc máy còn ở IDLE, 1 bản.
+- **Đợt chính giữ nguyên phần còn lại:** e01 đến e06 (K-9 `lmk`), c01 đến c09 (`none`, `kill9`, `lmk` xen kẽ), d01 đến d03 (`kill9-doze`, 600 s), cửa sổ 180 s.
