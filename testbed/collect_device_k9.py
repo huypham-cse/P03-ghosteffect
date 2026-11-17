@@ -45,13 +45,15 @@ def wilson(k, n, z=1.959964):
 def summary(rows):
     lines = ['# K-9 lost reply on a physical phone', '',
              'Rows: trials.csv. Valid = every pre-redo check passed. Redo duplicate = 2 server copies, 2 Message-IDs.', '',
-             '| Config | Scheduled | Valid | No resend after relaunch | Redo duplicates | 95% Wilson |', '|---|---|---|---|---|---|']
-    for config in ('sent', 'nosent', 'all'):
-        sched = [r for r in rows if r['phase'] == 'scheduled' and config in (r['config'], 'all')]
+             '| Kill | Config | Scheduled | Valid | No resend after relaunch | Redo duplicates | 95% Wilson |',
+             '|---|---|---|---|---|---|---|']
+    kills = sorted({r['kill'] for r in rows if r['phase'] == 'scheduled'})
+    for kill, config in [(k, c) for k in kills for c in ('sent', 'nosent')] + [('all', 'all')]:
+        sched = [r for r in rows if r['phase'] == 'scheduled' and kill in (r['kill'], 'all') and config in (r['config'], 'all')]
         valid = [r for r in sched if r['verdict'] == 'REPRODUCED']
         dup = sum(r['redo_duplicate'] is True for r in valid)
         ci = '[%.1f, %.1f]' % wilson(dup, len(valid)) if valid else 'N/A'
-        lines.append('| %s | %d | %d | %d | %d/%d | %s |' % (config, len(sched), len(valid),
+        lines.append('| %s | %s | %d | %d | %d | %d/%d | %s |' % (kill, config, len(sched), len(valid),
                      sum(r['no_resend_after_relaunch'] is True for r in valid), dup, len(valid), ci))
     return '\n'.join(lines) + '\n'
 

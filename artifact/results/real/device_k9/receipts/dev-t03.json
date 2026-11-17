@@ -1,0 +1,8 @@
+{
+  "verdict": "INVALID",
+  "config": "nosent",
+  "action": "recompose",
+  "error_type": "RuntimeError",
+  "reason": "reset failed: {\"k9_data_cleared\": true, \"setup_completed\": true, \"mailboxes_empty\": true, \"server_sent_folder\": true, \"k9_focused\": true, \"no_k9_notifications\": false, \"reverse_ports\": true}",
+  "utc_ns": 1794939026942153700
+}
