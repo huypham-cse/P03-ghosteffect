@@ -12,15 +12,21 @@ Not used, and why (b-log, 10/11): AVD snapshots (after a load with -gpu host,
 restored processes drew no text and the guest clock was 80 s off) and IMAP
 DELETE of Sent (GreenMail 2.1.2 throws in signalDeletion and drops the
 connection, so the folder stays).
+
+A physical phone (serial named in GX_PHYSICAL_SERIAL, b-log 18/11) has no root:
+reset_phone() clears only K-9's data with `pm clear` and sets the account up again
+through K-9's own first-run screens. It runs no other command that changes the phone.
 """
 import argparse
 import imaplib
 import json
 import os
+import re
 import signal
 import socket
 import subprocess
 import time
+import xml.etree.ElementTree as ET
 from pathlib import Path
 
 from setup_assets import sha
@@ -92,7 +98,118 @@ def prepare_mailboxes(want_sent):
     return counts
 
 
+def phone_setup_steps(sent):
+    """K-9 24.0 first-run screens on the phone, by en-US label or resource id (recorded 18/11 on the device)."""
+    imap = [('type', 'Server', '127.0.0.1'), ('tap', 'SSL/TLS'), ('tap', 'None'), ('type', 'Port', str(IMAP_PORT)),
+            ('type', 'Username', 'alice'), ('type', 'Password', ACCOUNTS['alice'])]
+    smtp = [('type', 'Server*', '127.0.0.1'), ('tap', 'SSL/TLS'), ('tap', 'None'),
+            ('type', 'Port*', str(REVERSE_PORTS[0])), ('type', 'Username*', 'alice')]
+    nxt = ('tap', 'account_setup_next_button')
+    return ([('tap', 'Get started'), ('tap', 'Add an email account'),
+             ('type', 'account_setup_email_address_input', 'alice@test.invalid'), nxt, ('tap', 'Configure manually')]
+            + imap + [nxt] + smtp + [nxt, ('tap', 'Sent folder'), ('tap', 'Sent' if sent else 'None'), nxt,
+                                     ('type', 'account_setup_display_options_display_name_input', 'Alice'), nxt, nxt,
+                                     ('tap', 'Inbox')])
+
+
+def k9_notices(dump):
+    """Titles and texts of K-9's posted notifications in `dumpsys notification --noredact`. Only active
+    NotificationRecord blocks count (the dump also archives removed ones); other apps' blocks are dropped."""
+    notices = []
+    for block in dump.split('NotificationRecord(')[1:]:
+        if f'pkg={PACKAGE} ' in block.split('\n', 1)[0]:
+            notices += [v for _, v in re.findall(r'android\.(title|text|bigText)=\w+ \((.*)\)', block)]
+    return sorted(set(notices))
+
+
+def find_node(xml, key):
+    """First node of K-9 whose text, content-desc or resource id (suffix after '/') equals key."""
+    for node in ET.fromstring(xml[xml.index('<'):]).iter('node'):
+        if node.get('package') == PACKAGE and key in (node.get('text'), node.get('content-desc'),
+                                                      (node.get('resource-id') or '').split('/')[-1]):
+            x1, y1, x2, y2 = map(int, re.findall(r'\d+', node.get('bounds')))
+            return (x1 + x2) // 2, (y1 + y2) // 2
+    return None
+
+
+def locate(shell, key, timeout=20):
+    """Centre of K-9's element `key` once it is on screen (one UI dump per try)."""
+    deadline = time.monotonic() + timeout
+    while True:
+        shell('uiautomator dump /sdcard/gx_ui.xml')
+        at = find_node(shell('cat /sdcard/gx_ui.xml; rm -f /sdcard/gx_ui.xml'), key)
+        if at is not None:
+            return at
+        if time.monotonic() > deadline:
+            raise RuntimeError('K-9 screen element not found: ' + key)
+        time.sleep(.5)
+
+
+def run_steps(shell, steps, timeout=20):
+    """Tap or fill each target once it is on screen; 'Inbox' only waits. Returns a receipt per step."""
+    receipt = []
+    for kind, key, *text in steps:
+        at = locate(shell, key, timeout)
+        if key != 'Inbox':
+            shell('input tap %d %d' % at)
+        if kind == 'type':
+            shell('input keyevent KEYCODE_MOVE_END && input keyevent ' + ' '.join(['KEYCODE_DEL'] * 40))
+            shell("input text '%s'" % text[0])
+            if 'mInputShown=true' in shell('dumpsys input_method'):
+                shell('input keyevent KEYCODE_BACK')   # only hides the keyboard, never navigates back
+        receipt.append(dict(kind=kind, key=key, at=at, utc_ns=time.time_ns()))
+        time.sleep(1)
+    return receipt
+
+
+def reset_phone(adb_path, serial, config, output, adb_server_port='5038', java='java'):
+    """Rootless reset on a physical phone: only K-9's data and the loopback servers change."""
+    if serial != os.environ.get('GX_PHYSICAL_SERIAL'):
+        raise ValueError('a physical phone needs GX_PHYSICAL_SERIAL set to its serial')
+    adb = [str(Path(adb_path).resolve()), '-P', str(adb_server_port), '-s', serial]
+
+    def run(*cmd):
+        return subprocess.run(adb + list(cmd), capture_output=True, text=True, encoding='utf-8',
+                              timeout=120).stdout.strip()
+
+    shell = lambda command: run('shell', command)
+    cleared = shell(f'am force-stop {PACKAGE} && pm clear {PACKAGE}')
+    shell(f'cmd locale set-app-locales {PACKAGE} --locales en-US && '
+          f'pm grant {PACKAGE} android.permission.POST_NOTIFICATIONS')
+    pid = fresh_greenmail(java, output / 'greenmail.log')
+    mailboxes = prepare_mailboxes(config == 'sent')
+    # Setup checks the SMTP login, so the phone's 14025 goes straight to GreenMail until setup ends,
+    # then to the fault proxy as on the AVD.
+    run('reverse', f'tcp:{REVERSE_PORTS[0]}', f'tcp:{SMTP_PORT}')
+    run('reverse', f'tcp:{IMAP_PORT}', f'tcp:{IMAP_PORT}')
+    launcher = shell(f'cmd package resolve-activity --brief -c android.intent.category.LAUNCHER {PACKAGE}').splitlines()[-1]
+    shell('am start -W -n ' + launcher)
+    steps = run_steps(shell, phone_setup_steps(config == 'sent'))
+    run('reverse', f'tcp:{REVERSE_PORTS[0]}', f'tcp:{REVERSE_PORTS[0]}')
+    focus = next((l.strip() for l in shell('dumpsys window').splitlines() if 'mCurrentFocus' in l), '')
+    seen, deadline = [], time.monotonic() + 30   # a first sync may post a short-lived notification
+    while (notices := k9_notices(shell('dumpsys notification --noredact'))) and time.monotonic() < deadline:
+        seen += notices
+        time.sleep(1)
+    reverse = run('reverse', '--list')
+    device = {k: shell('getprop ' + p) for k, p in (('manufacturer', 'ro.product.manufacturer'),
+              ('model', 'ro.product.model'), ('android', 'ro.build.version.release'), ('sdk', 'ro.build.version.sdk'))}
+    checks = dict(k9_data_cleared=cleared == 'Success',
+                  setup_completed=steps[-1]['key'] == 'Inbox',
+                  mailboxes_empty=all(n == 0 for boxes in mailboxes.values() for n in boxes.values()),
+                  server_sent_folder=('Sent' in mailboxes['alice']) == (config == 'sent'),
+                  k9_focused=PACKAGE + '/' in focus,
+                  no_k9_notifications=not notices,
+                  reverse_ports=all(f'tcp:{p} tcp:{p}' in reverse for p in REVERSE_PORTS))
+    return dict(verdict='PASS' if all(checks.values()) else 'FAIL', config=config, checks=checks, mode='phone-rootless',
+                k9_notices_during_setup=sorted(set(seen)),
+                device=device, sent_folder_choice='Sent' if config == 'sent' else 'None', setup_steps=steps,
+                greenmail_pid=pid, mailboxes=mailboxes, focus=focus, utc_ns=time.time_ns())
+
+
 def reset(adb_path, serial, config, output, adb_server_port='5038', java='java'):
+    if not serial.startswith('emulator-'):
+        return reset_phone(adb_path, serial, config, output, adb_server_port, java)
     adb = [str(Path(adb_path).resolve()), '-P', str(adb_server_port), '-s', serial]
 
     def run(*cmd):

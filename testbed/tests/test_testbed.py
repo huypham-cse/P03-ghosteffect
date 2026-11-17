@@ -345,8 +345,10 @@ class TestGUI(unittest.TestCase):
     def test_unfrozen_profile_and_bad_nonce_are_bot(self):
         self.profile['frozen'] = False
         self.assertEqual(self.read()['verdict'], 'BOT')
-        with self.assertRaises(ValueError):
+        with patch.dict('os.environ', {'GX_PHYSICAL_SERIAL': 'other-phone'}), self.assertRaises(ValueError):
             ADB('adb', 'personal-phone-serial')
+        with patch.dict('os.environ', {'GX_PHYSICAL_SERIAL': 'personal-phone-serial'}):
+            ADB('adb', 'personal-phone-serial')   # only the serial named explicitly
 
     def test_nonce_token_bound_is_enforced_before_analytic_use(self):
         crowded=XML.replace(b'hello gx:ABC123',b' '.join([b'gx:ABC123']*41))

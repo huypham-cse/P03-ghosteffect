@@ -416,3 +416,27 @@ Test: testbed 96 qua (4 bỏ qua), artifact 49 qua (1 bỏ qua); render không �
 - **Quyết định của trưởng nhóm (15/11):** bỏ B-17 (đo lại độ trễ Element bằng `run_case.py` có thêm kill -9 và netcut).
 - **Lý do:** điều kiện của chính B-17 không còn (B-09 chạy ngày 14/11, không xong trước 13/11); dữ liệu B-17 nhắm tới đã có: Table 3b lấy độ trễ Element khi kill -9, cắt mạng và force-stop từ `c2_element_first_visible.csv` (101 lượt, 0 censored); B-17 chỉ là phép đo lặp bằng pipeline khác, không thêm kết quả mới, và không việc nào của A, C hay câu nào trong bài phụ thuộc vào nó.
 - **Nếu reviewer hỏi về cách đo độ trễ Element:** B-17 làm được bằng emulator, không cần GPU.
+
+## 18/11/2026 (rig K-9 trên điện thoại thật, không root)
+
+- **Máy:** điện thoại cá nhân của trưởng nhóm, Samsung Galaxy A35 5G (SM-A356E), Android 15, One UI 7, bản thương mại không root, nối USB với adb của dự án (`-P 5038`). Serial không ghi vào file nào được commit.
+- **Luật dùng máy (trưởng nhóm, 18/11):** chỉ đụng tới K-9; không đổi cài đặt hệ thống (Doze, pin, mạng, trợ năng); chỉ đọc màn hình khi K-9 ở trên cùng và lọc theo gói K-9; không đọc thông báo của app khác ra file. Các lệnh ép Doze hay giả rút sạc chưa chạy, chờ trưởng nhóm quyết khi có mặt.
+- **Đã làm trên máy:** cài K-9 24.0 đúng hash trong `assets.lock.json`; đặt ngôn ngữ riêng của K-9 là en-US (`cmd locale set-app-locales`) để nhãn giống AVD; cấp quyền thông báo cho K-9; `adb reverse` cổng 14025 và 3143.
+- **Code:**
+  - `ui.ADB` nhận serial không phải `emulator-N` chỉ khi `GX_PHYSICAL_SERIAL` ghi đúng serial đó.
+  - `k9_reset.reset_phone()`: `pm clear` K-9 rồi cài lại tài khoản qua màn hình đầu của K-9 (nhãn và id ghi lại trên máy). Trong lúc cài, cổng 14025 của máy trỏ thẳng GreenMail để K-9 kiểm được đăng nhập SMTP, xong thì trỏ về proxy như AVD. Không chạy lệnh xóa dịch vụ trợ năng của nhánh AVD.
+  - `k9_fault_case.py` trên điện thoại: tìm nút theo nhãn; lỗi trước khi kill lấy từ thông báo của K-9; sau khi mở lại đọc Outbox trên màn hình; thay `k9_marked_error` (cần database) bằng `no_resend_after_relaunch` (proxy không thấy SMTP DATA nào sau lúc kill). Thêm `--kill background` (HOME rồi `am kill`, không hủy việc đã lên lịch như force-stop).
+  - `collect_device_k9.py` gom kết quả vào `artifact/results/real/device_k9/`, không chép log `case/` vì có serial.
+- **Dev t01 (sent, force-stop, không redo):** server 1 bản; trước khi kill K-9 hiện thông báo "Failed to send some messages" kèm "SmtpResponseParserException: Unexpected end of stream"; sau khi mở lại thư vẫn trong Outbox, 30 s không gửi lại. Khác AVD: sau force-stop thông báo mất, danh sách Outbox và màn hình thư không có dấu lỗi nào, nên trên điện thoại không kiểm được trạng thái `error` như database.
+- **Dev t02 (INVALID, reset):** điều kiện "không có thông báo K-9" đếm cả bản ghi lưu trữ của thông báo đã gỡ. Sửa: chỉ đếm thông báo đang hiện (`NotificationRecord`), chờ tối đa 30 s cho thông báo đồng bộ lần đầu.
+- **Dev t03 (INVALID):** chạy bằng code trước khi sửa t02, hỏng cùng chỗ.
+- **Dev t04 (sent, force-stop) và t05 (nosent, HOME rồi `am kill`), quan sát 60 s, redo 60 s:** cả hai REPRODUCED 7/7; không SMTP DATA nào sau lúc kill; redo qua giao diện cho 2 bản trên server với 2 Message-ID khác nhau (trùng). Sau `am kill` thông báo lỗi của K-9 vẫn còn, sau force-stop thì mất.
+- **Sửa nhỏ sau t05:** lúc đọc Outbox lần hai script bấm vào tiêu đề "Outbox" thay vì mục trong menu, menu còn mở; giờ bỏ qua bước điều hướng khi tiêu đề đã là Outbox.
+
+### Kế hoạch đợt chính trên điện thoại (ghi trước khi chạy, 18/11)
+
+- **Lượt:** s01 đến s20 kill bằng force-stop; b01 đến b10 kill bằng HOME rồi `am kill`. Cấu hình xen kẽ, số lẻ `sent`, số chẵn `nosent`. Chạy tuần tự s01 đến s20 rồi b01 đến b10.
+- **Mỗi lượt:** `k9_fault_case.py --observe 120 --action recompose --action-window 60`: reset không root, soạn thư với nonce mới, proxy bỏ phản hồi SMTP sau khi server nhận DATA, chờ thông báo lỗi của K-9, kill, mở lại, quan sát 120 s, rồi soạn lại cùng tiêu đề và bấm Send như một agent làm lại bước đó, chờ 60 s.
+- **Hợp lệ:** cả 7 điều kiện trước redo đều đạt (REPRODUCED). **Trùng:** sau redo server có 2 bản với 2 Message-ID khác nhau. Báo cáo số trùng trên số hợp lệ kèm khoảng Wilson 95%, theo cấu hình và theo cách kill.
+- **Không thay lượt:** lượt INVALID giữ nguyên, ghi lý do. Chỉ dừng nếu máy mất kết nối adb; lượt dở dang (không có `RESULT.json`) thì chạy lại cùng tên và ghi vào đây.
+- **Không chạy:** Doze, giả rút sạc, thiếu RAM thật (đụng tới cả máy); Element và DAVx5 (cần server Matrix, CalDAV và tải thêm).

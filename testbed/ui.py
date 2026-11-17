@@ -7,6 +7,7 @@ An unfrozen/missing profile produces BOT, never a guessed absence.
 import argparse
 import hashlib
 import json
+import os
 from pathlib import Path
 import re
 import subprocess
@@ -47,8 +48,9 @@ def focused_window(display_dump,input_dump):
 
 class ADB:
     def __init__(self, executable, serial):
-        if not re.fullmatch(r'emulator-\d+', serial):
-            raise ValueError('this reconstruction runner only targets explicit AVD serials')
+        # A physical phone is allowed only when GX_PHYSICAL_SERIAL names exactly this serial (device study, b-log 18/11).
+        if not (re.fullmatch(r'emulator-\d+', serial) or serial == os.environ.get('GX_PHYSICAL_SERIAL')):
+            raise ValueError('this reconstruction runner only targets explicit AVD serials or GX_PHYSICAL_SERIAL')
         self.executable, self.serial = str(executable), serial
 
     def run(self, *args, timeout=40, check=True):
