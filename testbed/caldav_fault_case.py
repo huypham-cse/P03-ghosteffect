@@ -12,10 +12,12 @@ the retry lag after the fault). Needs root on the AVD; never run on a phone.
 import argparse
 import json
 import random
+import re
 import subprocess
 import threading
 import time
 import urllib.request
+import xml.etree.ElementTree as ET
 from pathlib import Path
 
 from faultproxy import Journal, Faults, http_proxy, control_server
@@ -101,8 +103,9 @@ def trial(args, shell, device, journal):
     nonce = 'gx:' + ''.join(random.SystemRandom().choice(CROCKFORD) for _ in range(6))
     arm = control('arm', dict(mode='drop', request_id=None))['arm_id']
     start = int(time.time() * 1000) + 86_400_000
-    shell(f"am start -W -a android.intent.action.INSERT -t vnd.android.cursor.item/event --es title '{nonce}' "
-          f"--el beginTime {start} --el endTime {start + 3_600_000}")
+    shell('am force-stop ' + ETAR)   # otherwise the intent goes to Etar's month view left on top by the last trial
+    shell(f"am start -W -n {ETAR}/com.android.calendar.EditEventActivity -a android.intent.action.INSERT "
+          f"-t vnd.android.cursor.item/event --es title '{nonce}' --el beginTime {start} --el endTime {start + 3_600_000}")
     time.sleep(3)
     receipt['save_tap'] = device_tap_save(shell)
     deadline, status = time.monotonic() + args.barrier_timeout, {}
@@ -149,8 +152,18 @@ def trial(args, shell, device, journal):
     return receipt
 
 
-def device_tap_save(shell):
-    raise NotImplementedError('Etar save label: fill in from the AVD dev screen')
+def device_tap_save(shell, timeout=20):
+    """Tap Etar's DONE (resource id action_done, recorded on the AVD 18/11); returns where it tapped."""
+    deadline = time.monotonic() + timeout
+    while time.monotonic() < deadline:
+        xml = shell('uiautomator dump /sdcard/gx_ui.xml >/dev/null && cat /sdcard/gx_ui.xml; rm -f /sdcard/gx_ui.xml')
+        for node in ET.fromstring(xml[xml.index('<'):]).iter('node'):
+            if node.get('package') == ETAR and (node.get('resource-id') or '').endswith('/action_done'):
+                x1, y1, x2, y2 = map(int, re.findall(r'\d+', node.get('bounds')))
+                shell('input tap %d %d' % ((x1 + x2) // 2, (y1 + y2) // 2))
+                return dict(at=[(x1 + x2) // 2, (y1 + y2) // 2], utc_ns=time.time_ns())
+        time.sleep(.5)
+    raise RuntimeError("Etar's DONE button not found")
 
 
 def main():
@@ -172,6 +185,9 @@ def main():
     adb = [str(Path(args.adb).resolve()), '-P', args.adb_server_port, '-s', args.serial]
     shell = lambda c: subprocess.run(adb + ['shell', c], capture_output=True, text=True, encoding='utf-8',
                                      errors='replace', timeout=120).stdout.strip()
+    if shell('whoami') != 'root':   # kill -9 of another app and the tmpfs for lmk need root on the AVD
+        subprocess.run(adb + ['root'], capture_output=True, timeout=60)
+        subprocess.run(adb + ['wait-for-device'], capture_output=True, timeout=120)
     if not port_open(RADICALE_PORT):   # one Radicale (and store) serves the DAVx5 setup and every trial
         start_radicale(ROOT / 'runtime' / 'radicale.log')
     make_calendar()
