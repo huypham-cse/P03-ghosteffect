@@ -5,6 +5,18 @@ import glob as _glob
 # ================================================================== measured-parameter simulation
 _pr = rd('planner_real.csv') if os.path.exists(os.path.join(RES, 'planner_real.csv')) else []
 _P = {(r['tag'], r['policy']): r for r in _pr}
+
+
+def _report_count(tag, column):
+    values = {int(r[column]) for r in _pr if r['tag'] == tag}
+    if len(values) != 1:
+        raise ValueError('inconsistent reporting count: ' + tag + '/' + column)
+    return f'{values.pop():,}'.replace(',', '{,}')
+
+
+M('RsimWorkflowN', _report_count('main', 'n'))
+M('RsimBaseLabelN', _report_count('main', 'ncal'))
+M('RsimFiveLabelN', _report_count('five', 'ncal'))
 _lab = {'redo': 'redo', 'app-state': 'trust app status', 'rules': 'rules, 10\\,s wait', 'rules-w30-all': 'rules, 30\\,s wait',
         'always-ask': 'always ask', 'g2-only': 'Thm.~\\ref{thm:twohop} only', 'ghost': 'product', 'ghost-src': 'source families',
         'ghost-joint': 'joint'}
@@ -18,11 +30,11 @@ def _row(tag, pol, label=None):
     return f"{label or _lab[pol]} & {_cells(_P[(tag, pol)])} \\\\"
 
 
-_left = [r'\multicolumn{5}{@{}l}{\emph{Element: fault-injected, class-keyed labels (2{,}000 per class and outcome)}} \\']
+_left = [r'\multicolumn{5}{@{}l}{\emph{Element: fault-injected, class-keyed labels (\RsimBaseLabelN{} per class and outcome)}} \\']
 _left += [_row('main', p) for p in ('redo', 'app-state', 'rules', 'rules-w30-all', 'g2-only')]
 _left += [_row('main', p, '\\alg, ' + _lab[p]) for p in ('ghost', 'ghost-src', 'ghost-joint')]
 _left += [r'\multicolumn{5}{@{}l}{\emph{Element, \alg\ with other labels}} \\']
-for tag, lab in (('five', '5{,}000 per class'), ('passive', 'passive labels')):
+for tag, lab in (('five', r'\RsimFiveLabelN{} per class'), ('passive', 'passive labels')):
     for p in ('ghost', 'ghost-joint'):
         _left.append(_row(tag, p, f"{lab}, {'product' if p == 'ghost' else 'joint'}"))
 _right = [r'\multicolumn{5}{@{}l}{\emph{Element, lag tail beyond 14\,s (\RsimTail\%)}} \\']
@@ -46,7 +58,7 @@ Policy & dup & loss & ask & $P_{\mathrm{v}}$ (hi) \\
 '''
 W('tab_realsim.tex', r'''\begin{table*}[t]
 \centering
-\caption{\emph{Measured-parameter simulation} (12{,}000 paired interrupted workflows per row; not an emulator run). Measured (Table~\ref{tab:real}): G2 and its
+\caption{\emph{Measured-parameter simulation} (\RsimWorkflowN{} paired interrupted workflows per row; not an emulator run). Measured (Table~\ref{tab:real}): G2 and its
 mechanisms, per-fault-class lag laws with lag-blind first reads, the 2\% late no-observation rate and zero late family errors (Element); the permanent failed state,
 the client-written Sent folder and its APPEND lag (K-9). Modelled: fault mix, absent-side errors, Monitor, user; K-9's queued-mail lag $U$(45\,s, 15\,min) is an
 assumption. Element has no hop-1 family (its indicator is not lag-free). Labels are simulated draws from the measured law. Tail: committed effects (the 95\%

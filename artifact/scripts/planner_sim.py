@@ -2021,8 +2021,7 @@ def part_share():
 # C-05: fixed reporting design; no new seed, budget or policy tuning.
 SEED_CASES = {
     'model': (['redo', 'g2-only', 'always-ask', 'rules', 'ghost', 'ghost-joint'], {}),
-    'element': (['ghost', 'ghost-joint'], dict(only_app='element', cal_pop='fault', keyed='all')),
-    'element5k': (['ghost', 'ghost-joint'], dict(only_app='element', cal_pop='fault', keyed='all', ncal_scale=2.5)),
+    'element': (['ghost', 'ghost-joint', 'rules-vetted'], dict(only_app='element', cal_pop='fault', keyed='all')),
     'k9': (['ghost', 'ghost-joint'], dict(only_app='k9', cal_pop='fault')),
     'k9sent': (['ghost', 'ghost-joint'], dict(only_app='k9sent', cal_pop='fault')),
 }
