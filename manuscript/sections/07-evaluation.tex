@@ -4,7 +4,7 @@
 We ask seven questions. \textbf{RQ1}: Do the guarantees hold, and what do they cost? \textbf{RQ2}: What happens when reads are correlated or misses persist?
 \textbf{RQ3}: How does \sys compare with recovery strategies, including asking and a rule cascade over the same evidence? \textbf{RQ4}: Does it stay within budget when the world
 departs from its model? \textbf{RQ5}: What do calibration population, cross-family dependence and calibration size cost? \textbf{RQ6}: What do its mechanisms contribute? \textbf{RQ7}: What do real apps on an emulator do, and how does each planner mode fare with their measured parameters?
-Every number is exact computation, simulation, host or emulator measurement, inserted by a generator from the artifact's CSVs. None measures an LLM agent, a VLM or a phone.
+Every number is exact computation, simulation, host or emulator measurement, or an LLM-agent experiment, inserted by a generator from the artifact's CSVs. The agent study runs on an emulator; physical-phone evidence is reported in the Discussion, while broader VLM coverage remains outside scope.
 
 \subsection{Setup}
 \label{sec:setup}
@@ -18,7 +18,7 @@ with $K{=}11$ (product), 8 (source families) or 5 (joint). All policies see the 
 McNemar tests against the product planner with Holm correction.
 
 Baselines. Redo~\cite{tian2025agentprog}. Checkpoint-resume~\cite{langgraph_durable,khan2026resume}. Atomix-style adapters with one
-read-back~\cite{mohammadi2026atomix}. Verify-before-retry~\cite{mansoor2026verified}. Ledger + key~\cite{li2026exactlyonce}. Four that may ask. The re-read
+read-back~\cite{mohammadi2026atomix}. Verify-before-retry~\cite{mansoor2026verified}. Ledger + key~\cite{li2026exactlyonce}. Four baselines that may ask. The re-read
 SPRT of our earlier design. The same-evidence rules have \sys's ledger, hop~1 with the same fallible Monitor, and the same families read once per view. They use a fixed 10\,s wait.
 An acknowledged entry or a nonce match means done. They retry only if every available family reads absent, otherwise they ask. A lenient variant acts on the first
 unanimous family unless another contradicts it, and a rule family sweeps the wait (5, 10, 30, 60\,s) and the quorum (all families, all but the VLM, any two). The
@@ -77,8 +77,7 @@ the product mode \UserGhostTwenty\%.
 \label{sec:eval-stress}\label{sec:eval-pop}
 Under generative models that depart from the planner's (Table~\ref{tab:stress}, appendix), the product mode stays within budget (CP upper at most \StressMaxHi\%) except where
 calibration misses what deployment sees: heavy lag tails absent from the logs give $P_{\mathrm{v}}{=}\StressLag\%$ (CP upper \StressLagHi\%). Logged, it escalates \StressLagCalAsk\%,
-and an undetected delayed recovery in Doze gives \StressDoze\% (detected, it escalates \StressDozeAsk\%). A G2-classified app whose server does not deduplicate duplicates by
-itself (\StressNodedupDup\% of workflows). G2 is an app property. In an interrupted world (stale history after restarts, optimistic entries, longer lags). Table~\ref{tab:pop} reports the results.
+and an undetected delayed recovery in Doze gives \StressDoze\% (detected, it escalates \StressDozeAsk\%). For a G2-classified app whose server does not deduplicate, duplicates occur (\StressNodedupDup\% of workflows): G2 is an app property. In an interrupted world (stale history after restarts, optimistic entries, longer lags), Table~\ref{tab:pop} reports the results.
 passive labels bring the product mode to \PopIwPProd\% (CP upper \PopIwPProdHi\%) and joint to \PopIwPJoint\%, fault-injected labels to \PopIwFProd\% and \PopIwFJoint\%, while the
 rules stay at \PopIwFRules\%: certification uses what the labels show. Under a 5\% common-mode stale history (violating A2) the product mode retries \PopCmCProd\%, source
 families \PopCmCSrc\% and joint \PopCmCJoint\%. Their cost is labels: at 2{,}000 effects source and joint escalate \NcalESrcAsk\% and \NcalEJointAsk\% against \NcalEProdAsk\%,
@@ -98,9 +97,8 @@ full $\alpha$ yields duplicate probabilities up to \SagaNaiveSixteen\% at $k{=}1
 
 \subsection{Planned device study}
 \label{sec:device-plan}
-RQ7 measured app behaviour, not agents. The device study will run M3A, T3A, AgentProg, UI-TARS-1.5 and Mobile-Agent-v3 on 40 effectful tasks over the apps of
-Table~\ref{tab:apps} (appendix) with the faults of \S\ref{sec:impl}, and measure the agents' native duplicate, loss and false-success rates. We will measure VLM error and correlation on real screens.
-lags under Doze and real memory pressure. We will measure commit-classifier recall and \sys end to end. Hypotheses: \textbf{H1} redo-based agents duplicate most committed interrupted effects
+The emulator study ran M3A and T3A with one model on K-9 (\S\ref{sec:eval-agent}); it measures agent duplicate behaviour, not only app behaviour. Broader device studies will extend this to phones, additional agents and models across 40 effectful tasks over the apps of
+Table~\ref{tab:apps} (appendix) with the faults of \S\ref{sec:impl}. The present study does not claim VLM or physical-phone coverage beyond the measurements reported in the Discussion. Hypotheses: \textbf{H1} redo-based agents duplicate most committed interrupted effects
 (a scripted redo did so on K-9 and CalDAV every time, Table~\ref{tab:real}). \textbf{H2} VLM errors across views are positively correlated. \textbf{H3} force-stop breaks G2 for
 WorkManager-based outboxes are not supported for Element or DAVx5, which recovered after relaunch. \textbf{H4} \sys keeps $P_{\mathrm{v}}$ within budget and escalates at least
 $3\times$ less than always-ask.

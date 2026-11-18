@@ -19,8 +19,8 @@ Payment apps resist this agent. \texttt{FLAG\_SECURE} blocks screenshots. Since 
 not declare \texttt{isAccessibilityTool}~\cite{android_a11ysensitive}. Google Play reserves that declaration for assistive tools~\cite{googleplay_a11ypolicy}. Banking apps
 may also detect accessibility services and gate the commit behind BiometricPrompt. Our measurements therefore use open-source apps with self-hosted servers. Payments need
 MockBank, a test app we plan to build. Element, Simple SMS and Thunderbird offer only counterparty-visible nonce fields (Table~\ref{tab:apps}), and our Element runs opted in.
-Physical phones kill and defer more aggressively, so lag tails may exceed 13.6\,s. A withheld reply took another Element code path and stayed exactly once in
-\RealTimeoutClean{} clean trials. End-to-end encrypted rooms are untested.
+On a physical Android~\RealPhoneAndroid{} phone, K-9 did not resend after a kill in \RealPhoneNoResendN{} of \RealPhoneN{} valid trials, while GUI redo produced duplicates in \RealPhoneDupN{} of those trials. This physical-phone measurement has no agent. On the emulator, lmkd produced duplicates in \RealEmuKDupN{} of \RealEmuKN{} K-9 trials, while DAVx5 retained exactly one copy in \RealEmuCalOnceN{} of \RealEmuCalValidN{} valid trials. Doze and kill medians were \RealEmuCalDozeMedS{} and \RealEmuCalKillMedS{} seconds. A withheld reply took another Element code path and stayed exactly once in
+\RealTimeoutClean{} clean trials. OEM battery management and end-to-end encrypted rooms are untested.
 
 Ethics and threat model.
 A nonce writes agent text into user content, so \sys uses user-only fields by default, requires opt-in for counterparty-visible ones, and never uses invisible characters. We assume

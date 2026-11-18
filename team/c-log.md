@@ -319,3 +319,10 @@ trên manuscript, code/test artifact và receipts. Conclusion vẫn trang 13;
 Trạng thái C-03: triển khai/thí nghiệm/bảng/văn bản xong để review; chưa
 nghiệm thu. C-01/C-02/C-10 có nhánh/commit riêng; vẫn chờ người dùng hoàn
 thành GitHub device login để push và tạo các PR nối tiếp, không tự merge.
+## 18/11/2026 — C-11 làm lại theo nội dung agent/device mới
+
+Đã khôi phục các câu có ý nghĩa trong introduction/evaluation/discussion, dùng macro
+cho kết quả agent, sửa khuyến nghị product-vs-joint theo A2, và bổ sung rõ phạm vi
+physical-phone/emulator. Readability strict hiện PASS: 0 para, 1 emph, 0 câu dài,
+0 đoạn có hơn một dấu chấm phẩy. C-11 vẫn cần rebase sau khi các PR nội dung được
+merge vào `main`.
