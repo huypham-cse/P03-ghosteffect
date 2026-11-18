@@ -551,3 +551,7 @@ C-08/C-09 chỉ chốt các nhận định agent sau khi B có kết quả thậ
 ## 19/11/2026: C-06 sửa theo review #59 (trưởng nhóm sửa trên nhánh)
 
 Gộp `main` (có #55, #57, #58). Phần seed variance (C-05) lấy đúng bản của #58 trên `main`: `SEED_CASES`, `part_seedvariance`, CSV, meta và khối render; #59 không còn đổi seed hay CSV nào ngoài `planner_model_matched` (hết vấn đề YC-08 và trùng phạm vi). Khối kiểm model-matched (C-06) giữ nguyên. Câu mở §7 nêu đủ loại số như #55; các sửa của #55 ở phần Setup và stress (nay nằm trong phụ lục) được áp lại. Thêm kiểm `replace` của bảng planner; caption `tab_nsize` theo #57 (δ/4); bỏ "RQ2", "RQ4 and RQ5" ở phụ lục; §7 dẫn Table `tab:planner`. Render lại `tab_planner`, `tab_planner_extended`, `notes.md`. Build: Kết luận và References bắt đầu ở trang 13.
+
+## 19/11/2026: C-01, C-18 sửa theo review #63 (trưởng nhóm sửa trên nhánh)
+
+Xóa `artifact/runs/2026-11-17/MANIFEST.json` (bản 11-18 đã thay; bản cũ còn đường dẫn máy, scrub lỗi). `run_all.py`: khi thư mục không có `.git` (gói ẩn danh của `make_bundle.sh`) thì lấy `source_commit` từ `BUNDLE-MANIFEST.json`, `source_tree_clean` để `None`, thay vì dừng với lỗi git; có test. Gộp `main` và sinh lại `others/notes.md` từ macro hiện tại (có `\RealRent*`). `macros_guarantee.tex` nay trùng `main` (A đã gộp ở #73). Manifest 11-18 lấy từ 0729af4, trước #76; freeze 21/11 chạy lại toàn bộ.
