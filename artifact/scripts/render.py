@@ -446,6 +446,9 @@ M('VlmEN', f1(nb['vlm_EN']))
 # ===================================================================== planner simulation
 ps = rd('planner_sim.csv')
 P = {r['policy']: r for r in ps}
+_sim_counts = {int(r['n']) for r in ps}
+if len(_sim_counts) != 1:
+    raise ValueError('inconsistent reporting count: planner_sim/n')
 names = {'redo': 'Redo (AgentProg-style)', 'ckpt': 'Checkpoint-resume', 'atomix': 'Atomix-style, in-memory',
          'atomix-durable': 'Atomix-style, durable log', 'verify': 'Verify-before-retry', 'key': 'Ledger + key',
          'key-ask': 'Ledger + key + ask (look-alike)', 'always-ask': 'Ledger + always ask', 'nonce-ask': 'Ledger + nonce + ask',
@@ -470,7 +473,7 @@ hw = max(max(float(P[p]['dup_hi']) - float(P[p]['dup']), float(P[p]['dup']) - fl
 M('SimHalfWidth', f1(hw))
 W('tab_planner.tex', r"""\begin{table}[t]
 \centering
-\caption{Model-based simulation: 12{,}000 paired interrupted workflows (5 seeds $\times$ 2{,}400), $\alpha{=}\beta{=}1\%$ per workflow, default
+\caption{Model-based simulation: \SimN{} paired interrupted workflows, $\alpha{=}\beta{=}1\%$ per workflow, default
 world (persistent nonce misses, within-view VLM correlation 0.6, cross-view 0.1, fallible Monitor, user wrong on 5\% of asks, 10\% with a look-alike), 2{,}000
 calibration effects per app and outcome. dup/loss: \% of workflows with a duplicate/loss from any cause, including wrong user answers; ask: \% of workflows escalated;
 $P_{\mathrm{v}}$: \% of committed effects retried by the planner's own decision (the guaranteed quantity, budget 1\%); s: blocking recovery
@@ -503,7 +506,7 @@ for key, pol in [('Redo', 'redo'), ('Ckpt', 'ckpt'), ('Atomix', 'atomix'), ('Ato
     M(f'Sim{key}Lv', mm('closs', pol, f1) if float(P[pol]['closs']) >= 1 else mm('closs', pol))
     M(f'Sim{key}Secs', f"{float(P[pol]['secs']):.0f}")
     M(f'Sim{key}P', f"{float(P[pol]['p_dup']):.2f}" if P[pol].get('p_dup') not in ('', 'nan', None) else '--')
-M('SimN', '12{,}000')
+M('SimN', f"{next(iter(_sim_counts)):,}".replace(',', '{,}'))
 M('SimGhostReads', f1(P['ghost']['obs']))
 M('SimGhostBg', f1(P['ghost']['bg']))
 M('SimGhostCloss', f2(P['ghost']['closs']))
@@ -539,6 +542,9 @@ for fn in sorted(os.listdir(RES)):
         if fn == 'planner_stress.csv' and any(x.startswith('planner_stress.part') for x in os.listdir(RES)):
             continue
         st += rd(fn)
+_stress_counts = {int(r['n']) for r in st}
+if _stress_counts != _sim_counts:
+    raise ValueError('inconsistent reporting count: planner_stress/n')
 ST = {(r['scenario'], r['policy']): r for r in st}
 scn = [('r1', 'independent re-reads'), ('r1+persist', '\\quad + persistent nonce misses'),
        ('default', 'default world (Table~\\ref{tab:planner})'), ('cross0.3', 'cross-view VLM correlation 0.3'),
@@ -554,7 +560,7 @@ for s_, lab in scn:
     lines.append(f"{lab} & {f2(a['cdup'])} & {f2(rr['cdup'])} & {f2(b['cdup'])} ({f2(b['cdup_hi'])}) & {f2(b['closs'])} & {f1(b['ask'])}" + r' \\')
 W('tab_stress.tex', r"""\begin{table}[t]
 \centering
-\caption{Misspecification and stress (model-based simulation, 12{,}000 paired workflows per row; the generative model departs from
+\caption{Misspecification and stress (model-based simulation, \SimN{} paired workflows per row; the generative model departs from
 the planner's assumptions as listed). $P_{\mathrm{v}}$: \% of committed effects retried by the planner (budget 1\%; CP 95\% upper bound in
 parentheses); $L_{\mathrm{v}}$: \% of absent effects the planner declared done; ask: \% of workflows. Rules: the same-evidence rule baseline.}
 \label{tab:stress}
@@ -602,6 +608,9 @@ pop = [('default', 'default world, passive labels'), ('iworld-passive', 'interru
        ('iworld-fault', 'interrupted world, fault-injected labels'), ('cm0.005-fault', 'stale history 0.5\\%, fault-injected'),
        ('cm0.02-fault', 'stale history 2\\%, fault-injected'), ('cm0.05-fault', 'stale history 5\\%, fault-injected')]
 nc = rd('planner_ncal.csv')
+_ncal_counts = {int(r['n']) for r in nc}
+if _ncal_counts != _sim_counts:
+    raise ValueError('inconsistent reporting count: planner_ncal/n')
 NC = {(r['study'], r.get('ncal') or '', r.get('kappa') or '', r.get('shift_test') or '', r['policy']): r for r in nc}
 cell = lambda r: f"{f2(r['cdup'])} / {float(r['ask']):.0f}"
 lines = []
@@ -615,7 +624,7 @@ for n_ in ncs:
                  ' & '.join(cell(NC[('ncal', str(n_), '', '', p)]) for p in ('ghost', 'ghost-src', 'ghost-joint')) + r' & -- \\')
 W('tab_pop.tex', r"""\begin{table}[t]
 \centering
-\caption{Calibration population, common mode and calibration size (model-based simulation, 12{,}000 paired workflows per row). Cells: $P_{\mathrm{v}}$ (\%, budget 1\%) /
+\caption{Calibration population, common mode and calibration size (model-based simulation, \SimN{} paired workflows per row). Cells: $P_{\mathrm{v}}$ (\%, budget 1\%) /
 escalations (\%). Interrupted world: 2\% stale history after a restart, 3\% optimistic ``sending'' entries for tapped-but-uncommitted effects, 20\% heavy-tailed lags.
 Passive labels come from uninterrupted effects; fault-injected labels from the interrupted population. Rules: $P_{\mathrm{v}}$ of the same-evidence rule baseline.}
 \label{tab:pop}
@@ -669,7 +678,7 @@ for r in ss:
 W('tab_nsize.tex', r"""\begin{table}[t]
 \centering
 \caption{Calibration sizes that make certification possible (exact one-sided Clopper--Pearson, $\delta{=}\min(\alpha,\beta)/(10K)$, $\alpha{=}\beta$), per stratum. Keying by the four
-observable fault classes multiplies every entry by \NsizeKeyLo--\NsizeKeyHi{} (each class needs its own labels and is certified at $\delta/4$). Product (A2): effects so that two families, each with true wrong-verdict rate $p$, multiply to
+observable fault classes multiplies every entry by \NsizeKeyLo--\NsizeKeyHi{} (each class needs its own labels and is certified at $\delta/4$, that is $n_{\mathrm{cls}}{=}4$ in \S\ref{sec:theory-cal}). Product (A2): effects so that two families, each with true wrong-verdict rate $p$, multiply to
 $\alpha_{\mathrm{test}}{=}\alpha/2$; \emph{med.}: observed at the expected count $\lceil pn\rceil$ (about half of such sets fail), \emph{0}: zero wrong verdicts (minimum for any $p$).
 Joint: whole effects for a jointly calibrated region to certify $\alpha_{\mathrm{test}}$ with zero events (\emph{0}), at a true region rate $\alpha_{\mathrm{test}}/4$ (\emph{med.}), and with zero events for one
 step of a 3-effect workflow. Lag: logged times for one wait at $0.2\alpha$ with zero exceedances.}
