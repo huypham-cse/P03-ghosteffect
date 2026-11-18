@@ -66,11 +66,36 @@ def run_command(command, cwd, log, expected=(), timeout=7200):
     with log.open('w', encoding='utf-8') as stream:
         result = subprocess.run(command, cwd=cwd, stdout=stream, stderr=subprocess.STDOUT,
                                 timeout=timeout, check=False)
+    record = dict(command=[_manifest_path(arg, cwd) for arg in command],
+                  log=_manifest_path(log, cwd), exit_code=result.returncode,
+                  seconds=time.monotonic() - started, outputs={})
     if result.returncode:
-        raise RuntimeError('%s exited %s; see %s' % (command, result.returncode, log))
+        error = RuntimeError('%s exited %s; see %s' % (command, result.returncode, log))
+        error.record = record
+        raise error
     outputs = {str(p.relative_to(cwd)): validate_csv(p) for p in expected}
+    record['outputs'] = outputs
     print('PASS', log.stem, flush=True)
-    return dict(command=command, log=str(log), seconds=time.monotonic() - started, outputs=outputs)
+    return record
+
+
+def _manifest_path(value, cwd):
+    """Use workspace-relative paths in the manifest, never host checkout paths."""
+    path = Path(value)
+    try:
+        return str(path.resolve().relative_to(Path(cwd).resolve())).replace(os.sep, '/')
+    except ValueError:
+        return str(value)
+
+
+def source_provenance():
+    """Return the source commit and require a clean checkout for a run."""
+    commit = subprocess.check_output(
+        ['git', '-C', str(ROOT), 'rev-parse', 'HEAD'], text=True).strip()
+    status = subprocess.check_output(
+        ['git', '-C', str(ROOT), 'status', '--porcelain', '--untracked-files=all'],
+        text=True)
+    return dict(source_commit=commit, source_tree_clean=not bool(status.strip()))
 
 
 def prepare_workspace(destination):
@@ -113,11 +138,14 @@ def main(argv=None):
     destination, inputs = prepare_workspace(destination)
     scripts, results = destination / 'artifact' / 'scripts', destination / 'artifact' / 'results'
     agent_inputs = agent_input_hashes(inputs)
+    provenance = source_provenance()
     manifest = dict(status='RUNNING', kind='artifact-reproduction', created_utc=stamp,
-                    workspace=str(destination), source_inputs=inputs, jobs=args.jobs,
+                    workspace='.', source_commit=provenance['source_commit'],
+                    source_tree_clean=provenance['source_tree_clean'],
+                    source_inputs=inputs, jobs=args.jobs,
                     timeout_seconds=args.timeout, agent_input_directories=AGENT_INPUT_DIRS,
                     agent_inputs=agent_inputs, python_executable=sys.executable,
-                    python_version=sys.version, completed=[], errors=[])
+                    python_version=sys.version, completed=[], failed_jobs=[], errors=[])
     manifest_path = destination / 'RUN.json'
 
     def save():
@@ -126,12 +154,19 @@ def main(argv=None):
         os.replace(temp, manifest_path)
 
     def run(name, script, expected, *extra):
-        return run_command([sys.executable, '-u', str(scripts / script), *extra], destination,
-                           destination / 'logs' / (name + '.log'),
-                           [results / p for p in expected], args.timeout)
+        try:
+            return run_command([sys.executable, '-u', str(scripts / script), *extra], destination,
+                               destination / 'logs' / (name + '.log'),
+                               [results / p for p in expected], args.timeout)
+        except RuntimeError as exc:
+            if hasattr(exc, 'record'):
+                manifest['failed_jobs'].append(exc.record)
+            raise
 
     save()
     try:
+        if not provenance['source_tree_clean']:
+            raise RuntimeError('source checkout must be clean before reproduction')
         for script, expected in NUMERIC_JOBS:
             manifest['completed'].append(run(Path(script).stem, script, expected))
             save()
@@ -151,10 +186,18 @@ def main(argv=None):
         for script, expected in (('sample_size.py', ['sample_size.csv']), ('bench_ledger.py', ['ledger_bench.csv'])):
             manifest['completed'].append(run(Path(script).stem, script, expected))
             save()
-        manifest['completed'].append(run('render', 'render.py', []))
+        render_record = run('render', 'render.py', [])
         generated = destination / 'manuscript' / 'generated'
         if not (generated / 'macros.tex').is_file() or not (generated / 'tab_real4.tex').is_file():
             raise RuntimeError('renderer did not publish expected fragments')
+        render_record['outputs'] = {
+            str(path.relative_to(destination)).replace(os.sep, '/'): {
+                'sha256': hashlib.sha256(path.read_bytes()).hexdigest(),
+                'bytes': path.stat().st_size,
+            }
+            for path in generated.iterdir() if path.is_file()
+        }
+        manifest['completed'].append(render_record)
         manifest['status'] = 'PASS'
     except BaseException as exc:
         manifest['status'] = 'FAILED'

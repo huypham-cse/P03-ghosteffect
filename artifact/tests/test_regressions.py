@@ -228,6 +228,20 @@ class NonceTests(unittest.TestCase):
 
 
 class RunnerTests(unittest.TestCase):
+    def test_successful_command_records_relative_paths_exit_code_and_output_hash(self):
+        with tempfile.TemporaryDirectory() as temp:
+            work = Path(temp)
+            (work / 'logs').mkdir()
+            output = work / 'result.csv'
+            result = runner.run_command(
+                [sys.executable, '-c', "open('result.csv','w').write('n,value\\n1,0\\n')"],
+                work, work / 'logs' / 'child.log', [output])
+            self.assertEqual(0, result['exit_code'])
+            self.assertEqual('logs/child.log', result['log'])
+            self.assertEqual(64, len(result['outputs']['result.csv']['sha256']))
+            self.assertTrue(all(not str(value).startswith(str(work))
+                                for value in result.values() if isinstance(value, str)))
+
     def test_child_failure_cannot_pass_with_an_old_csv(self):
         with tempfile.TemporaryDirectory() as temp:
             work = Path(temp)
