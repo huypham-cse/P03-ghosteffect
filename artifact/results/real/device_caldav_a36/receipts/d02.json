@@ -1,0 +1,6 @@
+{
+  "verdict": "INVALID",
+  "fault": "stop-app-doze",
+  "error_type": "RuntimeError",
+  "reason": "calendar provider still has dirty events; not a clean start"
+}

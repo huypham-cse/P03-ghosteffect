@@ -88,7 +88,7 @@ class AnchorTests(unittest.TestCase):
 
 
 # ------------------------------------------------------------------ render_guarantee.py (YC-A4, YC-A9)
-INPUTS = (['planner_real.csv', 'planner_sim.csv', 'real/params.csv']
+INPUTS = (['planner_real.csv', 'planner_sim.csv', 'real/params.csv', 'real/agent/label_cost.csv']
           + [f'planner_real4_{t}.csv' for t, _ in rg.CLOCK_ROWS + rg.TIED_ROWS + rg.TAIL_ROWS + rg.APP_ROWS])
 
 
@@ -113,6 +113,7 @@ class RenderGuaranteeTests(unittest.TestCase):
     def test_parameters_match_the_simulator(self):
         self.assertEqual(rg.N_CLASSES, len(planner.CLASSES))
         self.assertEqual((rg.K_PRODUCT, rg.K_JOINT), (planner.K_PRODUCT, planner.K_JOINT))
+        self.assertEqual(rg.N_LAG, planner.N_LAG)
         defaults = inspect.signature(planner.run).parameters
         self.assertEqual(rg.ALPHA_PCT / 100, defaults['alpha'].default)
         self.assertEqual(rg.BETA_PCT / 100, defaults['beta'].default)
@@ -159,14 +160,13 @@ class RenderGuaranteeTests(unittest.TestCase):
             if name.endswith('Over'):
                 over = float(macros[name[:-4] + 'PvHi']) > rg.ALPHA_PCT
                 self.assertEqual('over budget' if over else 'within budget', value)
-        self.assertEqual({'CertLabelMedS', 'CertDeviceHoursFive'} if not (RESULTS / 'real/agent/label_cost.csv').exists()
-                         else set(), {k for k, v in macros.items() if v == '??'})
+        self.assertEqual(set(), {k for k, v in macros.items() if v == '??'})
 
     def test_label_cost_gives_device_hours(self):
         with tempfile.TemporaryDirectory() as t:
             results = Path(t)
             _copy_inputs(results)
-            (results / 'real/agent').mkdir(parents=True)
+            (results / 'real/agent').mkdir(parents=True, exist_ok=True)
             (results / 'real/agent/label_cost.csv').write_text(
                 'component,n,min_s,median_s,max_s\ntotal,10,90,120,300\n', encoding='utf-8')
             files = rg.render(results)
