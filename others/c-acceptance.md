@@ -10,13 +10,13 @@ must be repeated from the integrated `main` after the content PRs below are merg
 
 | Gate | Evidence | Status |
 |---|---|---|
-| YC-C1 / C-18 | `artifact/runs/2026-11-18/MANIFEST.json`; clean WSL pipeline, all jobs exit 0, relative workspace, source commit and output hashes recorded; `others/notes.md` regenerated | Ready for reviewer re-run |
+| YC-C1 / C-18 | `artifact/runs/2026-11-18/MANIFEST.json`; independent run from `c2b8b541` reports `source_tree_clean=true`, PASS, 25 completed jobs, 0 errors; 104 comparable CSV hashes match and only `ledger_bench.csv` differs as a host measurement | Ready for reviewer re-run |
 | YC-C2 | Renderer regression suite and generated-fragment preservation tests pass on the C-04/C-06 branches | Re-run after integration |
 | YC-C4 / C-05/C-06 | Matched-input renderer checks and vetted baseline checks pass on their PR branches | Re-run after integration |
 | YC-C5 | Caption macros are generated from CSV; hard-coded count captions removed on #57/#58 | Review pending |
 | YC-C10 / C-07 | Related-work citation audit and C-log entry pushed on #60 | Review pending |
-| YC-C11 / C-11 | `readability_count.py --strict` passes C-owned sections: 0 long sentences, 0 multi-semicolon paragraphs, 0 `\para{}`, 1 `\emph{}`; before/after report in `others/readability-c11.md` | Re-run after integration |
-| YC-C12 / C-12 | Bundle created, extracted, and `team/scrub_check.sh` returned PASS; host-dependent benchmark path documented | Review pending |
+| YC-C11 / C-11 | `readability_count.py --strict` passes C-owned sections after `2d47788`: 0 long sentences, 0 multi-semicolon paragraphs, 5 `\para{}`, 4 `\emph{}`; before/after report in `others/readability-c11.md` | Re-run after integration |
+| YC-C12 / C-12 | Bundle `c12-current-1818.zip` created, extracted, scrub PASS, extracted pipeline PASS with 25/25 jobs and 0 errors; all comparable CSV hashes match and only `ledger_bench.csv` differs | Review pending |
 | YC-C13 / C-14–C-20 | Abstract, introduction Results, evaluation, Discussion and conclusion use agent/device macros; #55 and #72 remain open for review | Blocked on merge/review |
 
 ## Required final run
