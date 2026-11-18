@@ -1,0 +1,7 @@
+ro.product.manufacturer=Google
+ro.product.model=Pixel 9
+ro.build.version.release=15
+ro.build.version.sdk=35
+ro.build.version.oneui=
+ro.build.display.id=BP1A.250505.005
+  use_freezer=false

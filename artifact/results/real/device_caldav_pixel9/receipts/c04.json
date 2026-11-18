@@ -1,0 +1,161 @@
+{
+  "fault": "stop-app",
+  "utc_ns": 1795018577351593494,
+  "dirty_before": "No result found.",
+  "save_tap": {
+    "at": [
+      821,
+      256
+    ],
+    "utc_ns": 1795018585719606838
+  },
+  "barrier_utc_ns": 1795018638777884270,
+  "fault_receipt": {
+    "observed_class": "app-stop-keep-jobs",
+    "pids_before": [
+      "24160"
+    ],
+    "pids_after": []
+  },
+  "fault_utc_ns": 1795018639148678216,
+  "proc_samples": [
+    {
+      "utc_ns": 1795018638894655896,
+      "pid": "24160",
+      "deep": "ACTIVE",
+      "procstate": null,
+      "am_frozen": null,
+      "cgroup_frozen": null
+    },
+    {
+      "utc_ns": 1795018649315338230,
+      "pid": null,
+      "deep": "ACTIVE"
+    },
+    {
+      "utc_ns": 1795018659595806665,
+      "pid": null,
+      "deep": "ACTIVE"
+    },
+    {
+      "utc_ns": 1795018669834153066,
+      "pid": null,
+      "deep": "ACTIVE"
+    },
+    {
+      "utc_ns": 1795018680068430643,
+      "pid": null,
+      "deep": "ACTIVE"
+    },
+    {
+      "utc_ns": 1795018690265830149,
+      "pid": null,
+      "deep": "ACTIVE"
+    },
+    {
+      "utc_ns": 1795018700501670009,
+      "pid": "26586",
+      "deep": "ACTIVE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795018710953798906,
+      "pid": "26586",
+      "deep": "ACTIVE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795018721437459776,
+      "pid": "26586",
+      "deep": "ACTIVE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795018731894030414,
+      "pid": "26586",
+      "deep": "ACTIVE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795018742258149772,
+      "pid": "26586",
+      "deep": "ACTIVE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795018752715309101,
+      "pid": "26586",
+      "deep": "ACTIVE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795018763171552033,
+      "pid": "26586",
+      "deep": "ACTIVE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795018773713055762,
+      "pid": "26586",
+      "deep": "ACTIVE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795018784185435031,
+      "pid": "26586",
+      "deep": "ACTIVE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795018794614166680,
+      "pid": "26586",
+      "deep": "ACTIVE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795018805067278151,
+      "pid": "26586",
+      "deep": "ACTIVE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795018815612401099,
+      "pid": "26586",
+      "deep": "ACTIVE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    }
+  ],
+  "nonce": "gx:93XJKT",
+  "href": "/alice/cal/385b7af7-eb23-4416-be3c-00f5a113632e.ics",
+  "puts": 2,
+  "server_copies": [
+    "385b7af7-eb23-4416-be3c-00f5a113632e.ics"
+  ],
+  "first_put_after_fault_s": 52.736543353,
+  "dirty_after": "No result found.",
+  "verdict": "EXACTLY_ONCE"
+}
