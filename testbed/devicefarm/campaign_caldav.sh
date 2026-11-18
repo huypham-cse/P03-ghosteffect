@@ -25,6 +25,10 @@ S settings put global stay_on_while_plugged_in 7
 for apk in at.bitfire.davdroid_405210002.apk ws.xsoh.etar_57.apk; do
     echo "$apk: $(timeout 180 "$ADB" -s "$GX_PHYSICAL_SERIAL" install -r -g "runtime/assets/$apk" 2>&1 | tail -1)"
 done > "$LOG/install.txt"
+# Android 15 does not grant exact alarms at install (-g covers runtime permissions only); without this, Etar opens
+# Settings > Alarms & reminders after the first saved event and covers the next trial (R1c, 18/11).
+S appops set ws.xsoh.etar SCHEDULE_EXACT_ALARM allow
+echo "etar exact alarm: $(S appops get ws.xsoh.etar SCHEDULE_EXACT_ALARM)" >> "$LOG/install.txt"
 python3 -c "import sys; sys.path.insert(0, 'testbed'); import caldav_fault_case as c; \
 c.start_radicale(c.ROOT / 'runtime' / 'radicale.log'); print('MKCALENDAR', c.make_calendar())" > "$LOG/radicale_start.txt" 2>&1
 
