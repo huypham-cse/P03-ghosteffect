@@ -9,3 +9,8 @@
 | `zhang2026verigui` | https://arxiv.org/abs/2604.05477 | VeriGUI verifies action effects and uses verification to guide correction under noisy GUI responses; the record retains its ACL 2026 venue. |
 
 The comparisons describe differences in problem boundary and do not claim that these systems implement GhostEffect's calibrated GUI recovery.
+
+Gray and Reuter (1992) and Bailis et al. (VLDB 2015) were considered for this
+section but not added: the current comparisons already cover the closest
+agent-runtime, GUI-verification and exactly-once boundaries, and adding them
+would not support a distinct claim in the manuscript.
