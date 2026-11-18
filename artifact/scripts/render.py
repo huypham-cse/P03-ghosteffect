@@ -447,6 +447,23 @@ M('VlmEN', f1(nb['vlm_EN']))
 # ===================================================================== planner simulation
 ps = rd('planner_sim.csv')
 P = {r['policy']: r for r in ps}
+ 
+
+# C-06: the new vetted row belongs to the same default model, checked by controls.
+_model_match = {r['policy']: r for r in rd('planner_model_matched.csv')}
+if set(_model_match) != {'rules-vetted', 'ghost', 'ghost-joint'}:
+    raise ValueError('incomplete matched model policies')
+for _control in ('ghost', 'ghost-joint'):
+    for _metric in ('n', 'n1', 'n0', 'dup', 'loss', 'ask', 'cdup', 'cdup_hi', 'closs', 'closs_hi', 'secs'):
+        if abs(float(_model_match[_control][_metric]) - float(P[_control][_metric])) > 1e-10:
+            raise ValueError('matched model control differs: ' + _control + '/' + _metric)
+for _row in _model_match.values():
+    if (_row['profile'], _row['cal_pop'], int(_row['ncal']), int(_row['nlag'])) != ('default-model', 'passive', 2000, 20000):
+        raise ValueError('matched model reporting budget differs')
+P['rules-vetted'] = _model_match['rules-vetted']
+for _suffix, _column, _fmt in (('Ask', 'ask', f1), ('Pv', 'cdup', f2), ('PvHi', 'cdup_hi', f2)):
+    M('SimModelVetted' + _suffix, _fmt(P['rules-vetted'][_column]))
+
 
 # C-05: renderer consumes the archived CSV plus its explicit reporting contract.
 with open(os.path.join(RES, 'planner_seed_variance.meta.json'), encoding='utf-8') as _seed_meta_file:
@@ -499,7 +516,7 @@ names = {'redo': 'Redo (AgentProg-style)', 'ckpt': 'Checkpoint-resume', 'atomix'
          'atomix-durable': 'Atomix-style, durable log', 'verify': 'Verify-before-retry', 'key': 'Ledger + key',
          'key-ask': 'Ledger + key + ask (look-alike)', 'always-ask': 'Ledger + always ask', 'nonce-ask': 'Ledger + nonce + ask',
          'maj3-ask': 'Ledger + 3 VLM views + ask', 'rules': 'Same evidence, rules (all agree)',
-         'rules-lenient': 'Same evidence, rules (lenient)', 'ghost-v1': 'Re-read SPRT (earlier design)',
+         'rules-lenient': 'Same evidence, rules (lenient)', 'rules-vetted': 'Vetted rules (matched inputs)', 'ghost-v1': 'Re-read SPRT (earlier design)',
          'ghost': r'\textbf{GhostEffect} (product, A2)', 'ghost-src': r'\textbf{GhostEffect} (source families)',
          'ghost-joint': r'\textbf{GhostEffect} (joint, no A2)',
          'ghost-nononce': '\\quad $-$ nonce', 'ghost-nohop1': '\\quad $-$ hop-1 probe',
@@ -513,11 +530,11 @@ def prow(r):
 
 
 order_b = ['redo', 'ckpt', 'atomix', 'atomix-durable', 'verify', 'key', 'key-ask', 'nonce-ask', 'maj3-ask', 'always-ask', 'g2-only', 'ghost-v1',
-           'rules', 'rules-lenient', 'ghost', 'ghost-src', 'ghost-joint']
+           'rules', 'rules-lenient', 'rules-vetted', 'ghost', 'ghost-src', 'ghost-joint']
 order_a = ['ghost-nononce', 'ghost-nohop1', 'ghost-nodigest', 'ghost-nocal', 'ghost-uniform', 'ghost-noask', 'ghost-visible']
 hw = max(max(float(P[p]['dup_hi']) - float(P[p]['dup']), float(P[p]['dup']) - float(P[p]['dup_lo'])) for p in P)
 M('SimHalfWidth', f1(hw))
-W('tab_planner.tex', r"""\begin{table}[t]
+_planner_full = (r"""\begin{table}[t]
 \centering
 \caption{Model-based simulation: \SimN{} paired interrupted workflows, $\alpha{=}\beta{=}1\%$ per workflow, default
 world (persistent nonce misses, within-view VLM correlation 0.6, cross-view 0.1, fallible Monitor, user wrong on 5\% of asks, 10\% with a look-alike), 2{,}000
@@ -536,7 +553,22 @@ Policy & dup & loss & ask & $P_{\mathrm{v}}$ & s \\
 \bottomrule
 \end{tabular}
 \end{table}
-""")
+"""
+)
+W('tab_planner_extended.tex', _planner_full.replace('tab:planner}', 'tab:planner-extended}'))
+_main_rows = '\n'.join(prow(P[p]) for p in ('redo', 'g2-only', 'always-ask', 'rules', 'rules-vetted', 'ghost', 'ghost-joint'))
+_full_rows = '\n'.join(prow(P[p]) for p in order_b[:12]) + '\n\\midrule\n' + '\n'.join(prow(P[p]) for p in order_b[12:]) + '\n\\midrule\n' + '\n'.join(prow(P[p]) for p in order_a)
+if _planner_full.count(_full_rows) != 1 or _planner_full.count('tab:planner}') != 1:
+    raise ValueError('tab_planner: main rows or label not found once in the full table')
+_planner_main = _planner_full.replace(_full_rows, _main_rows)
+_caption_start = _planner_main.index(r'\caption{')
+_caption_end = _planner_main.index(r'\label{', _caption_start)
+_planner_main = _planner_main[:_caption_start] + r"""\caption{Model-based simulation on the same \SimN{} interrupted workflows per policy.
+dup/loss include user errors; ask is the asking rate; $P_{\mathrm v}$ counts committed effects retried by the planner; s is blocking time.
+Rates are percentages. Full assumptions, baselines and ablations are in Appendix~\ref{app:extra}.}
+""" + _planner_main[_caption_end:]
+W('tab_planner.tex', _planner_main)
+
 mm = lambda k, p, fmt=f2: fmt(P[p][k])
 for key, pol in [('Redo', 'redo'), ('Ckpt', 'ckpt'), ('Atomix', 'atomix'), ('AtomixDur', 'atomix-durable'), ('Verify', 'verify'),
                  ('Key', 'key'), ('KeyAsk', 'key-ask'), ('AskAll', 'always-ask'), ('NonceAsk', 'nonce-ask'), ('Maj', 'maj3-ask'),

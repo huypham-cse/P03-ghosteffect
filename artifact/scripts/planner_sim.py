@@ -890,8 +890,10 @@ def matched_labels(wrng, app_eps, S):
     Preserve the app/class/outcome order of the existing joint calibration.
     Its pilot and holdout split remains inside joint_calibration, unchanged.
     """
-    if S.get('catalog') != 'measured' or S['cal_pop'] != 'fault':
+    if not S.get('matched_model') and (S.get('catalog') != 'measured' or S['cal_pop'] != 'fault'):
         raise ValueError('matched labels require a measured, fault-injected profile')
+    if S.get('matched_model') and (S.get('catalog') == 'measured' or S['cal_pop'] != 'passive'):
+        raise ValueError('matched model requires the original default passive calibration population')
     n = max(50, int(round(NCAL * S['ncal_scale'])))
     labels = {}
     for app in catalog(S):
@@ -921,7 +923,7 @@ def vetting(wrng, app_eps, S, policy, labels=None, lagx=None):
     and set the wait to the longest logged lag of the class (at least 30 s); if a logged lag exceeds W_MAX or never
     became visible, the rule never retries on end-to-end absence.  'rules-vetted' uses as many labels as GhostEffect,
     'rules-vetted-small' 30 per class and outcome (the size of an emulator campaign cell).  No guarantee is computed."""
-    assert S.get('catalog') == 'measured'
+    assert S.get('catalog') == 'measured' or S.get('matched_model')
     if (labels is None) != (lagx is None):
         raise ValueError('matched vetting needs both shared labels and lag tables')
     if labels is not None and policy.endswith('-small'):
@@ -2068,7 +2070,21 @@ def part_seedvariance():
         stream.write('\n')
 
 
-PARTS = dict(seedvariance=part_seedvariance, share=part_share, main=part_main, rulesweep=part_rulesweep, stress=part_stress, sweep=part_sweep, user=part_user, sens=part_sens, ncal=part_ncal,
+
+
+
+def part_modelmatched():
+    """C-06: add a vetted baseline to the original default model, with shared joint inputs."""
+    policies = ['rules-vetted', 'ghost', 'ghost-joint']
+    out, eff = run(policies, overrides=dict(matched_inputs=True, matched_model=True))
+    rows = summarize(out, eff, policies)
+    for row in rows:
+        row.update(profile='default-model', cal_pop='passive', ncal=NCAL, nlag=N_LAG,
+                   matched_inputs=True, seeds=';'.join(map(str, SEEDS)))
+    write('planner_model_matched.csv', rows)
+
+
+PARTS = dict(modelmatched=part_modelmatched, seedvariance=part_seedvariance, share=part_share, main=part_main, rulesweep=part_rulesweep, stress=part_stress, sweep=part_sweep, user=part_user, sens=part_sens, ncal=part_ncal,
              decomp=part_decomp, real=part_real)
 
 if __name__ == '__main__':
