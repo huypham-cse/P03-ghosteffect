@@ -92,6 +92,10 @@ class DeviceRig(unittest.TestCase):
             self.assertIn('| %s | %s | %s | %s | %s [' % (fault, macro('RealEmuCal%sN' % name), macro('RealEmuCal%sN' % name),
                                                          macro('RealEmuCal%sN' % name), macro('RealEmuCal%sMedS' % name)),
                           summary('emu_caldav'))
+        for folder, p in (('device_caldav_a36', 'RealRentSam'), ('device_caldav_pixel9', 'RealRentPix')):
+            for fault, name in (('stop-app', 'Stop'), ('stop-app-doze', 'Doze')):
+                n, med = macro(p + name + 'N'), re.search(r'\\newcommand\{\\%s%sMedS\}\{(.*?)\\xspace\}' % (p, name), tex)
+                self.assertIn('| %s | 3 | %s | %s | %s' % (fault, n, n, med.group(1) + ' [' if med else 'N/A'), summary(folder))
 
     def test_process_sample_reads_procstate_and_both_frozen_views(self):
         import caldav_fault_case as cal

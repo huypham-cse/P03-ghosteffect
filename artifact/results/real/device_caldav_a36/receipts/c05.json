@@ -1,0 +1,172 @@
+{
+  "fault": "none",
+  "utc_ns": 1795016264190269958,
+  "dirty_before": "No result found.",
+  "save_tap": {
+    "at": [
+      822,
+      181
+    ],
+    "utc_ns": 1795016273530935427
+  },
+  "barrier_utc_ns": 1795016323438052030,
+  "fault_receipt": {
+    "observed_class": "none"
+  },
+  "fault_utc_ns": 1795016323438179682,
+  "proc_samples": [
+    {
+      "utc_ns": 1795016323516015537,
+      "pid": "10174",
+      "deep": "ACTIVE",
+      "procstate": 8,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795016333861970420,
+      "pid": "10174",
+      "deep": "ACTIVE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795016344283749307,
+      "pid": "10174",
+      "deep": "ACTIVE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795016354766235917,
+      "pid": "10174",
+      "deep": "ACTIVE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795016365244697131,
+      "pid": "10174",
+      "deep": "ACTIVE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795016375708970280,
+      "pid": "10174",
+      "deep": "ACTIVE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795016386131554643,
+      "pid": "10174",
+      "deep": "ACTIVE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795016396612503225,
+      "pid": "10174",
+      "deep": "ACTIVE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795016407068324313,
+      "pid": "10174",
+      "deep": "ACTIVE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795016417549537626,
+      "pid": "10174",
+      "deep": "ACTIVE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795016428011638294,
+      "pid": "10174",
+      "deep": "ACTIVE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795016438444764110,
+      "pid": "10174",
+      "deep": "ACTIVE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795016448931946828,
+      "pid": "10174",
+      "deep": "ACTIVE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795016459380902452,
+      "pid": "10174",
+      "deep": "ACTIVE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795016469829352986,
+      "pid": "10174",
+      "deep": "ACTIVE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795016480270161272,
+      "pid": "10174",
+      "deep": "ACTIVE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795016490717481663,
+      "pid": "10174",
+      "deep": "ACTIVE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795016501175220306,
+      "pid": "10174",
+      "deep": "ACTIVE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    }
+  ],
+  "nonce": "gx:GSSTS3",
+  "href": "/alice/cal/385c2bbd-e426-4663-8ee9-b9eb9df985e7.ics",
+  "puts": 2,
+  "server_copies": [
+    "385c2bbd-e426-4663-8ee9-b9eb9df985e7.ics"
+  ],
+  "first_put_after_fault_s": 0.023509242,
+  "dirty_after": "No result found.",
+  "verdict": "EXACTLY_ONCE"
+}
