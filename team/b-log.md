@@ -520,3 +520,11 @@ Test: testbed 96 qua (4 bỏ qua), artifact 49 qua (1 bỏ qua); render không �
   - d02, d03: INVALID vì sự kiện của d01 vẫn dirty nên không có điểm bắt đầu sạch; quy tắc dừng cắt run. Ô stop-app-doze chỉ có 1 lượt hợp lệ.
   - Mẫu process: máy này báo `use_freezer=true`, nhưng không mẫu nào thấy DAVx5 bị đóng băng (`isFrozen=false`, cgroup 0); procstate luôn 19 sau khi app khởi động lại.
   - Cách đọc: trên A36 thật, Doze cộng việc app bị dừng làm lần gửi lại bị hoãn ít nhất 17 phút, khác hẳn AVD. Chưa đủ để nói hoãn bao lâu (chưa thấy lần PUT lại) và vì sao (Doze, nhóm standby của Samsung hay backoff của WorkManager). Một lượt hợp lệ, chỉ là quan sát.
+- **Kết quả R2 (Google Pixel 9, Android 15, bản build BP1A.250505.005; 73,89 phút máy, metered 73,52):**
+  - `etar exact alarm: allow`; hai lượt dev đúng một bản (PUT lại sau 0,017 và 0,045 s). Không lượt nào INVALID, chạy đủ 11 lượt.
+  - none (c01, c03, c05): 3/3 đúng một bản, PUT lại ngay (0,018; 0,029; 0,023 s).
+  - stop-app (c02, c04, c06): 3/3 đúng một bản; PUT lại sau 42,0; 52,7; 52,7 s (AVD với `kill -9`: trung vị 52,5 s).
+  - stop-app-doze (d01 đến d03): 3/3 đúng một bản; PUT lại sau 27,2; 27,4; 27,4 s, lúc máy còn deep IDLE (573 s trước khi thoát ép), như AVD (khoảng 51 s, còn IDLE).
+  - Mẫu process: máy này cũng báo `use_freezer=false`; không mẫu nào đóng băng. Procstate thấy: 6, 8, 19.
+  - Cách đọc: trên Pixel 9 (AOSP), Doze ép không hoãn lần sync lại của DAVx5; trên A36 (One UI) thì hoãn ít nhất 17 phút ở lượt hợp lệ duy nhất. Cả hai máy giữ đúng một bản ở mọi lượt hợp lệ (H3). Câu hỏi (3) về freezer chưa trả lời được: Pixel tắt freezer, A36 bật nhưng không đóng băng DAVx5 lúc chờ.
+- **Sổ phút sau R1d và R2:** R1d 51,59; R2 73,89. Tổng các run của B: 24,28 + 51,59 + 73,89 = 149,76, trên giới hạn 300. Không còn run nào của B đang chạy.
