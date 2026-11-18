@@ -57,7 +57,7 @@ and Pinsker gives $\mathrm{TV}\le\sqrt{\KL(Q_0\|Q_1)/2}\le\sqrt{D_0\E_0[N]/2}$ b
 
 Corollary~\ref{cor:notfree} follows by absolute continuity. If $\PP_0(\text{retry})>0$, some finite record $(u,y_{1:n})$, with reads at times $t_1\le\dots\le t_n$, leads to retry and has
 positive $\PP_0$-probability. If $0<\epsilon_1<1$, $p_1$ has full support and the record has positive $\PP_1$-probability, so $\PP_1(\text{retry})>0$. If $G(t)>0$ for all $t$, then under
-$X{=}1$ and $T>t_n$ every read has its $X{=}0$ law (A1), so $\PP_1(\text{retry})\ge G(t_n)\,\PP_0(\text{record})>0$. Neither argument needs a bounded stopping time.
+$X{=}1$ and $T>t_n-r_e$ every read has its $X{=}0$ law (A1), so $\PP_1(\text{retry})\ge G(t_n-r_e)\,\PP_0(\text{record})>0$. Neither argument needs a bounded stopping time.
 For the equivalence: if $D_0>0$, pick $w$ with $G(w)<\alpha$ ($G\to0$ since $X=\mathbf 1\{T<\infty\}$) and apply (a), which needs $\beta>0$ for a finite threshold $a$. If $D_0=0$ then $p_0=p_1$,
 every read has the same law under both outcomes and at all times, so $\PP_1(\text{retry})=\PP_0(\text{retry})\ge1-\beta>\alpha$.
 

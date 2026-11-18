@@ -76,7 +76,7 @@ class. Suppose also that an effect of unknown class uses the maximum over classe
 at least $1-Kn_{\mathrm{cls}}\delta$ all hold, where $n_{\mathrm{cls}}$ is the number of fault classes. Marginally, $\PP(\text{retry}\mid X{=}1)\le\alpha_{\mathrm{test}}+\alpha_{\mathrm{lag}}+Kn_{\mathrm{cls}}\delta$ and $\PP(\text{declare}\mid X{=}0)\le\beta_{\mathrm{test}}+Kn_{\mathrm{cls}}\delta$.
 \end{lemma}
 Part~(i) is a monotone coupling and (ii) a union bound. Keying by class makes the lab's fault mix irrelevant at the price of labels per class. The unknown-class fallback
-uses all classes' bounds, so the union runs over $Kn_{\mathrm{cls}}$ bounds. \sys sets $\delta=\min(\alpha,\beta)/(10\,K\,n_{\mathrm{cls}})$ with $n_{\mathrm{cls}}{=}4$.
+uses all classes' bounds, so the union runs over $Kn_{\mathrm{cls}}$ bounds. \sys sets $\delta=\min(\alpha,\beta)/(10\,K\,n_{\mathrm{cls}})$, with $n_{\mathrm{cls}}{=}4$ when bounds are keyed by class and $n_{\mathrm{cls}}{=}1$ when they are pooled.
 Here $K{=}11$ for product certification (five ``absent'' and four ``committed'' verdict levels, two waits; the nonce's false-match bound is analytic), $K{=}8$ for source
 families and $K{=}5$ for joint certification. Then $Kn_{\mathrm{cls}}\delta=\min(\alpha,\beta)/10\le\min(\alpha_{\mathrm{cal}},\beta_{\mathrm{cal}})$, and the guarantee pays the union bound on both sides.
 The population assumption is the one that bites: labels from uninterrupted effects miss cached history after a kill, optimistic ``sending'' entries and blackout lags.
@@ -101,8 +101,8 @@ Let \textbf{G2} mean: entries are durable, each is retransmitted until acknowled
 schedule if and only if $n_1=1$ and G2 holds. If retransmission may instead stop in a failed state shown by the app (\textbf{G2$'$}), then $n_1=1$ implies $C_e\le1$ under
 every admissible schedule, and $C_e=0$ only if the entry ends failed.
 \end{theorem}
-The positive window in H3 is a property of the app. Element sends its first transmission within a fraction of a second, faster than one accessibility read, so Element has
-no hop-1 family (\S\ref{sec:eval-real}).
+The positive window in H3 is a property of the app. Element satisfies H3, but its window is a fraction of a second, shorter than one accessibility read. So no probe sees
+an Element entry before it is sent, and Element has no hop-1 family (\S\ref{sec:eval-real}).
 ($\Leftarrow$) is at-least-once delivery plus idempotent application~\cite{helland2012idempotence,birrell1984rpc,wang2021kafka}. What the agent gains is that hop~1 is
 observable on the device within seconds, so for an app with idempotent retries the late-commit regime of Theorem~\ref{thm:main}(b) becomes a local check. The planner therefore counts hop-1
 entries created after $t_0$ and hands a pending entry over to the end-to-end path before its age approaches $H_{\mathrm{dedup}}$ (\S\ref{sec:design-planner}). ``Retrying is safe'' thus means the app's own retry, on the same device, within $H_{\mathrm{dedup}}$.

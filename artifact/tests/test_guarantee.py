@@ -113,6 +113,7 @@ class RenderGuaranteeTests(unittest.TestCase):
     def test_parameters_match_the_simulator(self):
         self.assertEqual(rg.N_CLASSES, len(planner.CLASSES))
         self.assertEqual((rg.K_PRODUCT, rg.K_JOINT), (planner.K_PRODUCT, planner.K_JOINT))
+        self.assertEqual(rg.N_LAG, planner.N_LAG)
         defaults = inspect.signature(planner.run).parameters
         self.assertEqual(rg.ALPHA_PCT / 100, defaults['alpha'].default)
         self.assertEqual(rg.BETA_PCT / 100, defaults['beta'].default)
