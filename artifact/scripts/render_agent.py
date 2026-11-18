@@ -317,7 +317,7 @@ def render_arms_table(json):
                     + '\\\\')
     if not rows:
         return
-    W('tab_agent_arms.tex', r"""\begin{table}[t]
+    W('tab_agent_arms.tex', r"""\begin{table*}[t]
 \caption{LLM-agent arms on the K-9 trap (LLM-agent experiment): valid over scheduled episodes, episodes in which K-9 sent mail
 again after the restart (Resent), episodes with two tagged copies at the backend (Dup), Wilson 95\% interval for
 the duplicate rate (\%), and asks. Each arm has its own freeze; arms ran one after the other.}
@@ -332,5 +332,5 @@ Agent & Fault & Sent folder & Recovery & Valid & Resent & Dup & 95\% CI & Asks \
 """ + '\n'.join(rows) + r"""
 \bottomrule
 \end{tabular}
-\end{table}
+\end{table*}
 """)
