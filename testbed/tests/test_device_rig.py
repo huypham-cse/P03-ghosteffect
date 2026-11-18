@@ -77,6 +77,22 @@ class DeviceRig(unittest.TestCase):
                 (folder / name).write_text('BEGIN:VEVENT\nSUMMARY:%s\nEND:VEVENT\n' % title, encoding='utf-8')
             self.assertEqual(cal.server_copies('gx:ABC123'), ['a.ics', 'b.ics'])
 
+    def test_paper_macros_match_the_collected_summaries(self):
+        import re
+        root = Path(__file__).resolve().parents[2]
+        tex = (root / 'manuscript/generated/macros_real.tex').read_text(encoding='utf-8')
+        macro = lambda name: re.search(r'\\newcommand\{\\%s\}\{(.*?)\\xspace\}' % name, tex).group(1)
+        summary = lambda folder: (root / 'artifact/results/real' / folder / 'SUMMARY.md').read_text(encoding='utf-8')
+        for folder, prefix in (('device_k9', 'RealPhone'), ('emu_k9_lmk', 'RealEmuK')):
+            n, _, _, dup, ci = [c.strip() for c in summary(folder).split('| all | all | ')[1].split('|')[:5]]
+            self.assertEqual((n, dup, ci.split(',')[0]), (macro(prefix + 'N'), '%s/%s' % (macro(prefix + 'DupN'), n),
+                                                         '[' + macro(prefix + 'DupLo')))
+        self.assertEqual(macro('RealPhoneNoResendN'), macro('RealPhoneN'))
+        for fault, name in (('kill9', 'Kill'), ('lmk', 'Lmk'), ('kill9-doze', 'Doze')):
+            self.assertIn('| %s | %s | %s | %s | %s [' % (fault, macro('RealEmuCal%sN' % name), macro('RealEmuCal%sN' % name),
+                                                         macro('RealEmuCal%sN' % name), macro('RealEmuCal%sMedS' % name)),
+                          summary('emu_caldav'))
+
     def test_lmk_and_doze_refuse_a_phone(self):
         import caldav_fault_case as cal
         with patch('sys.argv', ['x', '--adb', 'adb', '--serial', 'RFCX0', '--fault', 'doze', '--output', 'unused']), \

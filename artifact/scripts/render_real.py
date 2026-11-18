@@ -315,8 +315,47 @@ $^{\S}$Force-stop clears the app's notifications. The shade was cleared between 
 \end{table*}
 ''')
 
+    # ------------------------------------------------------------------ device study (b-log 18/11)
+    # Physical-phone measurement: K-9 lost reply, kill, relaunch, GUI redo (no agent), results/real/device_k9/.
+    # Emulator measurement: K-9 killed by lmkd (emu_k9_lmk/), DAVx5 after kill -9, lmkd, kill -9 + Doze (emu_caldav/).
+    import json
+    import statistics
+    _ph = [r for r in _rr('trials.csv', os.path.join(REAL, 'device_k9'))
+           if r['phase'] == 'scheduled' and r['verdict'] == 'REPRODUCED']
+    _pdup = sum(r['redo_duplicate'] == 'True' for r in _ph)
+    (_android,) = {r['android'] for r in _ph}
+    _rc = {r['trial']: json.load(open(os.path.join(REAL, 'device_k9', 'receipts', r['trial'] + '.json'), encoding='utf-8'))
+           for r in _ph}
+    (_obs,) = {int(v['observe_s']) for v in _rc.values()}
+    M('RealPhoneAndroid', _android)
+    M('RealPhoneN', len(_ph))
+    M('RealPhoneForceN', sum(r['kill'] == 'force-stop' for r in _ph))
+    M('RealPhoneBgN', sum(r['kill'] == 'background' for r in _ph))
+    M('RealPhoneNoResendN', sum(r['smtp_data_after_fault'] == '0' for r in _ph))
+    M('RealPhoneDupN', _pdup)
+    M('RealPhoneDupLo', _pct(_wilson(_pdup, len(_ph))[0]))
+    M('RealPhoneObserveS', _obs)
+    for _kill, _name in (('background', 'Bg'), ('force-stop', 'Force')):   # K-9 failure notice still shown after relaunch
+        M('RealPhoneNotif%sN' % _name, sum(bool(_rc[r['trial']]['k9_notices_after']) for r in _ph if r['kill'] == _kill))
+    _ek = [r for r in _rr('trials.csv', os.path.join(REAL, 'emu_k9_lmk'))
+           if r['phase'] == 'scheduled' and r['verdict'] == 'REPRODUCED']
+    _edup = sum(r['redo_duplicate'] == 'True' for r in _ek)
+    M('RealEmuKN', len(_ek))
+    M('RealEmuKDupN', _edup)
+    M('RealEmuKDupLo', _pct(_wilson(_edup, len(_ek))[0]))
+    _ec = [r for r in _rr('trials.csv', os.path.join(REAL, 'emu_caldav')) if r['phase'] == 'scheduled']
+    _ecv = [r for r in _ec if r['verdict'] != 'INVALID']
+    M('RealEmuCalN', len(_ec))
+    M('RealEmuCalValidN', len(_ecv))
+    M('RealEmuCalOnceN', sum(r['verdict'] == 'EXACTLY_ONCE' for r in _ecv))
+    assert all(r['doze_state'] == 'IDLE' for r in _ecv if r['fault'] == 'kill9-doze')   # prose: resent while still in deep idle
+    for _fault, _name in (('kill9', 'Kill'), ('lmk', 'Lmk'), ('kill9-doze', 'Doze')):
+        _d = [float(r['first_put_after_fault_s']) for r in _ecv if r['fault'] == _fault]
+        M('RealEmuCal%sN' % _name, len(_d))
+        M('RealEmuCal%sMedS' % _name, f'{statistics.median(_d):.1f}')
+
     # ------------------------------------------------------------------ prose hooks
-    M('RealDataLimitation', r'Emulator measurements (\S\ref{sec:eval-real}) cover three apps on an emulator, with $n$ small outside Element; agents, physical phones, VLMs and the commit classifier are not measured.')
+    M('RealDataLimitation', r'Emulator measurements (\S\ref{sec:eval-real}) cover three apps on an emulator, with $n$ small outside Element; the agent study (\S\ref{sec:eval-agent}) runs one model on the emulator, and on a physical phone only K-9 was measured, without an agent.')
     exec(open(os.path.join(HERE, 'render_agent.py'), encoding='utf-8').read(), globals())
     render_agent()   # \Agent*, \LabelTrial* (B-10, B-11); ?? until artifact/results/real/agent/ exists
     M('RealPresent', 'yes')
