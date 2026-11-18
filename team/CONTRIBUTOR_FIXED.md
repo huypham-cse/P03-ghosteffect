@@ -185,7 +185,7 @@
 ### 7.1 Quy trình
 
 1. Mỗi vai trò mở PR `[A] Nghiệm thu` (hoặc `[B]`, `[C]`) **chậm nhất 19/11**, chép nguyên bảng §7.2 và yêu cầu riêng của phần mình vào mô tả PR, đánh dấu từng dòng và dán bằng chứng (kết quả lệnh, đường dẫn file, số trang trong PDF).
-2. **Người nghiệm thu** là trưởng nhóm hoặc người được trưởng nhóm chỉ định, **không phải chủ phần**. Người nghiệm thu tự chạy lại các lệnh ở cột "Cách kiểm" trên một bản clone sạch của nhánh PR đã rebase lên `main`, không dựa vào kết quả chủ phần dán.
+2. **Người nghiệm thu** là trưởng nhóm hoặc người được trưởng nhóm chỉ định, **không phải chủ phần**. Người nghiệm thu tự chạy lại các lệnh ở cột "Cách kiểm" trên một bản clone sạch của nhánh PR đã rebase lên `main`, không dựa vào kết quả chủ phần dán. **Ngoại lệ (trưởng nhóm quyết ngày 18/11/2026):** trưởng nhóm tự nghiệm thu phần B dù là chủ phần B; vẫn phải tự chạy lại mọi lệnh "Cách kiểm" trên bản clone sạch và dán kết quả vào PR nghiệm thu.
 3. **Chỉ nghiệm thu khi đạt mọi yêu cầu**: tất cả yêu cầu chung (YC-01 đến YC-12) và tất cả yêu cầu riêng của phần đó. Không có nghiệm thu một phần, không có miễn trừ. Một dòng không đạt thì PR quay lại chủ phần; sửa xong, người nghiệm thu kiểm lại toàn bộ. **Cả ba vai trò phải được nghiệm thu chậm nhất 21/11.**
 4. Yêu cầu kiểm **quy trình và tính trung thực**, không kiểm kết quả đẹp. Không yêu cầu nào đòi GhostEffect thắng baseline hay đòi agent phải gửi lại. Dòng bất lợi được báo đúng là đạt; dòng bất lợi bị giấu là không đạt.
 5. Sau khi nghiệm thu, mọi thay đổi trên phần đó phải qua PR mới và kiểm lại các yêu cầu bị ảnh hưởng.
@@ -272,7 +272,7 @@ C điều phối (C-13), trưởng nhóm nghiệm thu. Ngày 22/11 cả ba vai t
 
 ## 8. Cần trưởng nhóm quyết
 
-1. Chỉ định người nghiệm thu cho từng phần (cách chia đã duyệt ngày 09/11/2026; người làm A, B, C ghi ở §2). Người nghiệm thu phần B phải là Gia Huy hoặc Bá Nguyên, vì trưởng nhóm cũng là chủ phần B.
+1. Chỉ định người nghiệm thu cho từng phần (cách chia đã duyệt ngày 09/11/2026; người làm A, B, C ghi ở §2). ~~Người nghiệm thu phần B phải là Gia Huy hoặc Bá Nguyên, vì trưởng nhóm cũng là chủ phần B.~~ **Đã chốt 18/11:** trưởng nhóm tự nghiệm thu phần B (ngoại lệ ở §7.1 điểm 2). Người nghiệm thu A và C vẫn chưa chỉ định.
 2. Xác nhận nhóm **được sửa paper**: `resolve.md` còn ghi quyết định cũ "không chỉnh paper, paper để sau".
 3. Đường model cho B: máy GPU Linux hay API (kèm ngân sách).
 4. Mode khuyến nghị cuối cùng (mặc định theo `resolve.md` R06). **Đã chốt 18/11:** duyệt nguyên `team/QUYET_DINH_CHUNG.md` (#61), cả bảng mode và bảng thuật ngữ; YC-10, YC-C3 và YC-B10 kiểm theo file này.
