@@ -275,4 +275,4 @@ C điều phối (C-13), trưởng nhóm nghiệm thu. Ngày 22/11 cả ba vai t
 1. Chỉ định người nghiệm thu cho từng phần (cách chia đã duyệt ngày 09/11/2026; người làm A, B, C ghi ở §2). Người nghiệm thu phần B phải là Gia Huy hoặc Bá Nguyên, vì trưởng nhóm cũng là chủ phần B.
 2. Xác nhận nhóm **được sửa paper**: `resolve.md` còn ghi quyết định cũ "không chỉnh paper, paper để sau".
 3. Đường model cho B: máy GPU Linux hay API (kèm ngân sách).
-4. Mode khuyến nghị cuối cùng (mặc định theo `resolve.md` R06).
+4. Mode khuyến nghị cuối cùng (mặc định theo `resolve.md` R06). **Đã chốt 18/11:** duyệt nguyên `team/QUYET_DINH_CHUNG.md` (#61), cả bảng mode và bảng thuật ngữ; YC-10, YC-C3 và YC-B10 kiểm theo file này.

@@ -27,14 +27,14 @@
 \node[step=teal] (b1) at (0,-2.5) {\ico{receipt}\,\ico{lock}\\[1pt] Ledger marks the send \textsf{ISSUED} at $t_0$, \emph{before} the tap.};
 \node[step=teal, right=0.29cm of b1] (b2) {\ico{label}\\[1pt] Nonce \texttt{gx:7K2Q9F} in the subject (Alex sees it; opted in); \textbf{Send}.};
 \node[step=teal, right=0.29cm of b2] (b3) {\ico{bolt}\,\ico{nosignal}\\[1pt] Same lost reply. The ledger entry survives.};
-\node[step=teal, right=0.29cm of b3] (b4) {\ico{magnifier}\,\ico{phone}\\[1pt] Hop~1: a failed entry of an app without idempotent retries is ambiguous end to end (Thm.~\ref{thm:twohop}).};
+\node[step=teal, right=0.29cm of b3] (b4) {\ico{magnifier}\,\ico{phone}\\[1pt] Hop~1: K-9's failed entry is ambiguous end to end (Thm.~\ref{thm:twohop}).};
 \node[step=teal, right=0.29cm of b4] (b5) {\ico{eye}\,\ico{hourglass}\\[1pt] No end-to-end family certifies (K-9's Sent folder never shows it).\meas};
 \node[step=teal, right=0.29cm of b5, fill=teal!16] (b6) {\ico{person}\,\ico{shield}\\[1pt] \textbf{Ask}: ``Did Alex get `Lease' (\texttt{gx:7K2Q9F})?'' Sent \textbf{once}.};
 \foreach \i/\j in {b1/b2,b2/b3,b3/b4,b4/b5,b5/b6} \draw[arr] (\i) -- (\j);
 % G2 branch (Element + Synapse)
 \node[draw=orange!70!black, fill=orange!8, rounded corners=3pt, align=left, text width=6.2cm, inner sep=2.5pt,
       anchor=north west] (g2) at ($(b4.south west)+(0,-0.2)$)
-      {\ico[0.42cm]{check}\hspace{3pt}\parbox[c]{5.6cm}{Idempotent retries (Element + Synapse): the app re-sends the same transaction id or reconciles via \texttt{/sync}, one copy (same device, ${<}24$\,h);\meas{} after a certified wait the row reads ``Sent'' $\Rightarrow$ committed, no ask.}};
+      {\ico[0.42cm]{check}\hspace{3pt}\parbox[c]{5.6cm}{Idempotent retries (Element + Synapse): the app re-sends the same transaction id or reconciles via \texttt{/sync}, one copy (same device, ${<}24$\,h).\meas{} \sys never retries through the GUI: after a certified wait the row reads ``Sent'' $\Rightarrow$ committed, otherwise it asks.}};
 \draw[arr, orange!70!black] (b3.south) |- (g2.west);
 \end{tikzpicture}
 \vspace{-2pt}
