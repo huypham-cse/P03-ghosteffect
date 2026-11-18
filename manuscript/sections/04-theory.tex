@@ -70,7 +70,7 @@ A hidden nonce field is such a blind state, so certifying ``absent'' below its r
 \label{lem:calib}
 (i)~For a family of i.i.d.\ binary views, running the SPRT with $\tilde\epsilon_0\ge\epsilon_0$, $\tilde\epsilon_1\ge\epsilon_1$ ($\tilde\epsilon_0+\tilde\epsilon_1<1$) preserves the
 $(\alpha,\beta)$ guarantee.
-(ii)~One fault class gives an effect's decision $K$ bounds: verdict levels or regions, $q_h$, and the two waits. Suppose each is a one-sided $(1-\delta)$ Clopper--Pearson
+(ii)~One fault class gives an effect's decision $K$ bounds: verdict levels or regions, $q_h$, and the two waits. Suppose each is a one-sided $(1-\delta)$ Clopper-Pearson
 bound~\cite{clopper1934use} from calibration effects that are i.i.d.\ draws from the population of interrupted deployment effects of the effect's observable fault
 class. Suppose also that an effect of unknown class uses the maximum over classes. Then with probability
 at least $1-Kn_{\mathrm{cls}}\delta$ all hold, where $n_{\mathrm{cls}}$ is the number of fault classes. Marginally, $\PP(\text{retry}\mid X{=}1)\le\alpha_{\mathrm{test}}+\alpha_{\mathrm{lag}}+Kn_{\mathrm{cls}}\delta$ and $\PP(\text{declare}\mid X{=}0)\le\beta_{\mathrm{test}}+Kn_{\mathrm{cls}}\delta$.

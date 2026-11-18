@@ -182,7 +182,7 @@ POL_HEAD = (' & \\multicolumn{2}{c}{product} & \\multicolumn{2}{c}{joint} \\\\\n
             '\\cmidrule(lr){2-3}\\cmidrule(lr){4-5}\n'
             '%s & $P_{\\mathrm v}$ (CP) & ask & $P_{\\mathrm v}$ (CP) & ask \\\\')
 PV_NOTE = ('$P_{\\mathrm v}$: \\% of committed effects the planner retried by itself, with the upper end of its '
-           'two-sided 95\\% Clopper--Pearson interval (CP). Ask: \\% of workflows. Budget $\\alpha=' + f'{ALPHA_PCT:g}'
+           'two-sided 95\\% Clopper-Pearson interval (CP). Ask: \\% of workflows. Budget $\\alpha=' + f'{ALPHA_PCT:g}'
            + '\\%$. $^\\dagger$: CP bound over budget.')
 
 

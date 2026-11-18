@@ -142,7 +142,7 @@ reads with the same uniforms $U_i$: a true read is 1 iff $U_i<\epsilon_0$, a mod
 for all $n$. If the true walk exits at the top at step $n$, the model walk stayed above $-b$ before $n$ and is at least $a$ at $n$, so it exits at the top no later. Hence
 $\PP^{\mathrm{true}}_0(\text{declare})\le\PP^{\mathrm{model}}_0(\text{declare})\le\beta$ by (a) applied to the model, under which the planner's statistic is the exact log-likelihood ratio.
 Under $X{=}1$ a true 0-read implies a model 0-read, and the same argument bounds retries by $\alpha$. The argument is per read, so it also covers independent, non-identical views.
-(ii)~A one-sided $(1-\delta)$ Clopper--Pearson bound covers its parameter with probability at least $1-\delta$~\cite{clopper1934use} when the calibration effects are i.i.d.\ from the deployment
+(ii)~A one-sided $(1-\delta)$ Clopper-Pearson bound covers its parameter with probability at least $1-\delta$~\cite{clopper1934use} when the calibration effects are i.i.d.\ from the deployment
 population of the effect's fault class. A union bound over the $Kn_{\mathrm{cls}}$ bounds of all classes gives $1-Kn_{\mathrm{cls}}\delta$. For an unknown class, the per-class bounds that
 the fallback uses are all in the union, and a per-class bound valid for every class bounds any mixture of classes. On the complementary event the guarantee may fail
 with probability at most 1, which gives the marginal bound. The

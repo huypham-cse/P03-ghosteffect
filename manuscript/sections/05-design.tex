@@ -47,7 +47,7 @@ Hop~1 reads the app's Outbox screen through the accessibility tree, like every o
 rendered history (Element) has no hop-1 family. The other three families read the history as the app renders it, and in-app search often queries the server. They are therefore one
 evidence source, and a stale history after a restart can fool all three at once. A server-backed search view inherits the hop-2 lag, so it counts toward ``absent'' only after the wait.
 
-\para{Calibration labels.} For each (app version, family, verdict level or region) the store holds one-sided Clopper--Pearson bounds (Lemma~\ref{lem:calib}(ii)) from calibration
+\para{Calibration labels.} For each (app version, family, verdict level or region) the store holds one-sided Clopper-Pearson bounds (Lemma~\ref{lem:calib}(ii)) from calibration
 effects, not reads. Lemma~\ref{lem:calib} needs effects drawn from the interrupted population, so labels come from fault-injected runs on test accounts or a staging backend.
 The controller injects the fault classes of \S\ref{sec:impl} at the commit point and records the true outcome from the test backend. It runs every family once per view on recovery
 and logs the lag $T_c$ from the anchor $r_e$ to visibility. Bounds and lag tables are keyed by the observable fault class (Lemma~\ref{lem:calib}(ii)), so the lab's fault mix need not
@@ -91,14 +91,14 @@ are exchangeable within a stratum (app version, locale, VLM), and per-device dri
 \label{alg:recover}
 \small
 \begin{algorithmic}[1]
-\Require record $e$ (\textsf{ISSUED} at $t_0$, anchor $r_e$ of its fault class); budget $(\alpha_e,\beta_e)$ from the saga layer; calibrated bounds $q$; lag tables
+\Require record $e$ (\textsf{ISSUED} at $t_0$, anchor $r_e$ of its fault class); budget $(\alpha_e,\beta_e)$ from the saga layer; calibrated bounds $q$; lag tables; idem: the app retries idempotently
 \State $\alpha_t,\alpha_l,\beta_t\gets 0.5\alpha_e,\,0.4\alpha_e,\,0.9\beta_e$ \Comment{$\alpha_{\mathrm{cal}}$ via $\delta$}
 \State $\tau_a,\tau_c\gets$ largest thresholds certified for $\alpha_t,\beta_t$ \Comment{Prop.~\ref{prop:family} or \ref{prop:joint}}
 \State \Call{VerifyForeground}{$e$.app}; $P\gets1$; $d\gets\bot$; $\ell\gets\alpha_l$
 \If{$e$.app has a hop-1 family}
   \State $\ell\gets\alpha_l/2$; $(s,r)\gets$ \Call{Readout}{hop-1} \Comment{entries after $t_0$}\label{alg:hop1}
-  \If{$s=$ com $\wedge$ (G2 $\vee$ local)} $P\gets q^{\mathrm{com}}_{\text{hop1}}(r)$; $d\gets$ com\label{alg:g2}
-    \State $o\gets$ acked; \textbf{if} G2: $o\gets$ \Call{Monitor}{$e$} \Comment{bkgd., fallible}
+  \If{$s=$ com $\wedge$ (idem $\vee$ local)} $P\gets q^{\mathrm{com}}_{\text{hop1}}(r)$; $d\gets$ com\label{alg:g2}
+    \State $o\gets$ acked; \textbf{if} idem: $o\gets$ \Call{Monitor}{$e$} \Comment{bkgd., fallible}
     \State \textbf{if} $o=$ acked $\wedge\,P\le\tau_c$: \Return \Call{Mark}{$e$, \textsf{COMMITTED}}
     \State \textbf{if} $o\in\{$failed, stuck$\}$: $P\gets1$; $d\gets\bot$ \Comment{hand over, once}
   \ElsIf{$s=$ abs} $P\gets q^{\mathrm{abs}}_{\text{hop1}}(r)$; $d\gets$ abs; \textbf{if} $P\le\tau_a$ \Return \Call{Retry}{$e$}\label{alg:abs1}

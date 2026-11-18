@@ -14,7 +14,7 @@
 \node[box=orange] (plan)  at (2.78,-2.84) {\textbf{\alg}: certified family cascade};
 \node[box=teal]   (saga)  at (0,-2.84)  {Saga layer\\$(\alpha_i,\beta_i)$ by KKT};
 \node[box=teal]   (probe) at (5.56,-2.84) {Families: hop-1, nonce, digest, VLM views};
-\node[box=teal]   (cal)   at (5.56,-1.42) {Calibration: verdict bounds $q$, lag tables, retry class};
+\node[box=teal]   (cal)   at (5.56,-1.42) {Calibration: verdict bounds $q$, lag tables, idempotent retries};
 \node[box=gray, text width=7.6cm, minimum height=0.6cm] (out) at (2.78,-4.05)
      {\textsf{COMMITTED} $\mid$ \textsf{PENDING} (monitor) $\mid$ verify foreground $\to$ retry (same nonce) $\mid$ ask};
 \draw[arr] (agent) -- (int);
