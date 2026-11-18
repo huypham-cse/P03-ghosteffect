@@ -31,6 +31,17 @@ must be repeated from the integrated `main` after the content PRs below are merg
 4. Only after the reviewer signs off, mark this PR ready for review and record
    the freeze commit and artifact link.
 
+## Latest integrated-main diagnostic
+
+The current `main` build exits 0 and produces a 22-page PDF. `pdftotext` finds no
+`??`, `pdfinfo` exposes no author name, and `team/scrub_check.sh manuscript`
+passes. The artifact suite is **55/55 PASS** and the testbed suite is **116 PASS,
+3 skipped**. The strict whole-paper readability check still fails because A/B
+owned files contribute 44 `\para{}`, 91 `\emph{}`, 33 long sentences and 36
+multi-semicolon paragraphs. Conclusion and References both begin on page 14, so
+YC-F3 remains open until A/B readability and the integrated page reduction are
+complete.
+
 ## Current blockers / owners
 
 - A and B owners must complete their pending readability and review fixes in
