@@ -474,7 +474,7 @@ for _case, _spec in _seed_cases.items():
         _seed_lines.append(f"{_case} & {_label} & {_mean:.2f} $\\pm$ {_sd:.2f} & {min(_ask):.2f}--{max(_ask):.2f} \\\\")
 W('tab_seed_variance.tex', r'''\begin{table*}[t]
 \centering
-\caption{Across-seed asking-rate variability for the fixed Table~2 and Table~4 reporting cases.
+\caption{Across-seed asking-rate variability for the fixed Table~\ref{tab:planner} and Table~\ref{tab:realsim} reporting cases.
 Each row reports the same \SimSeedCount{} original seeds; workflow, calibration, and lag budgets are recorded in the accompanying metadata.
 Values are percentages: arithmetic mean $\pm$ sample standard deviation and range; standard deviation is not a confidence interval.}
 \label{tab:seedvariance}
@@ -512,7 +512,7 @@ hw = max(max(float(P[p]['dup_hi']) - float(P[p]['dup']), float(P[p]['dup']) - fl
 M('SimHalfWidth', f1(hw))
 W('tab_planner.tex', r"""\begin{table}[t]
 \centering
-\caption{Model-based simulation: 12{,}000 paired interrupted workflows (5 seeds $\times$ 2{,}400), $\alpha{=}\beta{=}1\%$ per workflow, default
+\caption{Model-based simulation: \SimN{} paired interrupted workflows (5 seeds $\times$ 2{,}400), $\alpha{=}\beta{=}1\%$ per workflow, default
 world (persistent nonce misses, within-view VLM correlation 0.6, cross-view 0.1, fallible Monitor, user wrong on 5\% of asks, 10\% with a look-alike), 2{,}000
 calibration effects per app and outcome. dup/loss: \% of workflows with a duplicate/loss from any cause, including wrong user answers; ask: \% of workflows escalated;
 $P_{\mathrm{v}}$: \% of committed effects retried by the planner's own decision (the guaranteed quantity, budget 1\%); s: blocking recovery
