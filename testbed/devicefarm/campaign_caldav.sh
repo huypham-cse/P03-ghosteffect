@@ -9,7 +9,9 @@ export GX_PHYSICAL_SERIAL="$DEVICEFARM_DEVICE_UDID" GX_RADICALE_PYTHON="$(comman
 LOG="$DEVICEFARM_LOG_DIR"
 ADB="$(command -v adb)"
 S() { timeout 60 "$ADB" -s "$GX_PHYSICAL_SERIAL" shell "$@" 2>&1 | tr -d '\r'; }
-SCHEDULE="dev-c00:none c01:none c02:stop-app c03:none c04:stop-app c05:none c06:stop-app d01:stop-app-doze d02:stop-app-doze d03:stop-app-doze"
+SCHEDULE="dev-c00:none dev-c01:none c01:none c02:stop-app c03:none c04:stop-app c05:none c06:stop-app d01:stop-app-doze d02:stop-app-doze d03:stop-app-doze"
+# Abort rule (b-log 18/11, after R1b): a dev trial INVALID, or two scheduled trials INVALID in a row, means the rig
+# is broken on this phone; the run stops instead of burning device minutes, and the dumps are kept.
 
 {
     for p in ro.product.manufacturer ro.product.model ro.build.version.release ro.build.version.sdk \
@@ -38,12 +40,19 @@ sleep 10
 "$ADB" -s "$GX_PHYSICAL_SERIAL" reverse tcp:5233 tcp:5233
 S am stop-app at.bitfire.davdroid
 
+streak=0
 for item in $SCHEDULE; do
     name=${item%%:*}; fault=${item#*:}
     timeout 1500 python3 testbed/caldav_fault_case.py --adb "$ADB" --adb-server-port 5037 --serial "$GX_PHYSICAL_SERIAL" \
         --fault "$fault" --output "$LOG/$name" > "$LOG/$name.log" 2>&1
-    echo "$(date -u +%H:%M:%S) $name $fault $(python3 -c "import json; r = json.load(open('$LOG/$name/RESULT.json')); \
-print(r.get('verdict'), r.get('first_put_after_fault_s'), r.get('reason', ''))" 2>&1)" >> "$LOG/batch.log"
+    line=$(python3 -c "import json; r = json.load(open('$LOG/$name/RESULT.json')); \
+print(r.get('verdict'), r.get('first_put_after_fault_s'), r.get('reason', ''))" 2>&1)
+    echo "$(date -u +%H:%M:%S) $name $fault $line" >> "$LOG/batch.log"
+    case "$line" in INVALID*) streak=$((streak + 1));; *) streak=0;; esac
+    if { [ "${name#dev}" != "$name" ] && [ $streak -ge 1 ]; } || [ $streak -ge 2 ]; then
+        echo "$(date -u +%H:%M:%S) ABORT: rig failure ($name)" >> "$LOG/batch.log"
+        break
+    fi
 done
 "$ADB" -s "$GX_PHYSICAL_SERIAL" reverse --remove-all
 echo "$(date -u +%H:%M:%S) CAMPAIGN DONE" >> "$LOG/batch.log"

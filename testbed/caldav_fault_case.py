@@ -128,6 +128,7 @@ class Sampler(threading.Thread):
 
 def trial(args, shell, device, journal):
     receipt = dict(fault=args.fault, utc_ns=time.time_ns())
+    shell('input keyevent KEYCODE_WAKEUP; wm dismiss-keyguard')   # Galaxy A36 18/11: trials after the first failed
     deadline = time.monotonic() + 120
     while dirty_events(shell) != 'No result found.' and time.monotonic() < deadline:
         time.sleep(2)   # an earlier event still uploading would be the first PUT the proxy arms on
@@ -141,7 +142,7 @@ def trial(args, shell, device, journal):
     shell(f"am start -W -n {ETAR}/com.android.calendar.EditEventActivity -a android.intent.action.INSERT "
           f"-t vnd.android.cursor.item/event --es title '{nonce}' --el beginTime {start} --el endTime {start + 3_600_000}")
     time.sleep(3)
-    receipt['save_tap'] = device_tap_save(shell)
+    receipt['save_tap'] = device_tap_save(shell, dump=args.output / 'ui_no_done.xml')
     deadline, status = time.monotonic() + args.barrier_timeout, {}
     while time.monotonic() < deadline:
         status = control('status', {'arm_id': arm})
@@ -199,17 +200,22 @@ def trial(args, shell, device, journal):
     return receipt
 
 
-def device_tap_save(shell, timeout=20):
-    """Tap Etar's DONE (resource id action_done, recorded on the AVD 18/11); returns where it tapped."""
-    deadline = time.monotonic() + timeout
+def device_tap_save(shell, timeout=20, dump=None):
+    """Tap Etar's DONE (resource id action_done, recorded on the AVD 18/11); returns where it tapped.
+    On failure the last screen dump and the power and focus state go to `dump` (synthetic test data only)."""
+    deadline, xml = time.monotonic() + timeout, ''
     while time.monotonic() < deadline:
         xml = shell('uiautomator dump /sdcard/gx_ui.xml >/dev/null && cat /sdcard/gx_ui.xml; rm -f /sdcard/gx_ui.xml')
-        for node in ET.fromstring(xml[xml.index('<'):]).iter('node'):
+        for node in ET.fromstring(xml[xml.index('<'):]).iter('node') if '<' in xml else ():
             if node.get('package') == ETAR and (node.get('resource-id') or '').endswith('/action_done'):
                 x1, y1, x2, y2 = map(int, re.findall(r'\d+', node.get('bounds')))
                 shell('input tap %d %d' % ((x1 + x2) // 2, (y1 + y2) // 2))
                 return dict(at=[(x1 + x2) // 2, (y1 + y2) // 2], utc_ns=time.time_ns())
         time.sleep(.5)
+    if dump:
+        state = shell('dumpsys power | grep -E "mWakefulness=|mHoldingDisplaySuspendBlocker"; '
+                      'dumpsys window | grep -E "mCurrentFocus|mDreamingLockscreen|isKeyguardShowing|mShowingLockscreen"')
+        Path(dump).write_text(state + '\n' + xml, encoding='utf-8')
     raise RuntimeError("Etar's DONE button not found")
 
 
