@@ -472,9 +472,13 @@ for _case, _spec in _seed_cases.items():
         _label = {'ghost': 'product', 'ghost-joint': 'joint', 'g2-only': 'theorem-only',
                   'rules-vetted': 'vetted rules'}.get(_policy, _policy)
         _seed_lines.append(f"{_case} & {_label} & {_mean:.2f} $\\pm$ {_sd:.2f} & {min(_ask):.2f}--{max(_ask):.2f} \\\\")
+# prose (appendix-results.tex): one reporting seed drives the Element vetted-rule SD; the others cluster low
+_ev = sorted(float(_seed_index[('element', 'rules-vetted', _s)]['ask']) for _s in _seed_values)
+if not _ev[-1] > 3 * _ev[-2]:
+    raise ValueError('seed variance prose: Element vetted rules no longer have a single outlying seed')
 W('tab_seed_variance.tex', r'''\begin{table*}[t]
 \centering
-\caption{Across-seed asking-rate variability for the fixed Table~\ref{tab:planner} and Table~\ref{tab:realsim} reporting cases.
+\caption{Across-seed asking-rate variability for the fixed Table~\ref{tab:planner} (model-based simulation) and Table~\ref{tab:realsim} (measured-parameter simulation) reporting cases.
 Each row reports the same \SimSeedCount{} original seeds; workflow, calibration, and lag budgets are recorded in the accompanying metadata.
 Values are percentages: arithmetic mean $\pm$ sample standard deviation and range; standard deviation is not a confidence interval.}
 \label{tab:seedvariance}

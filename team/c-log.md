@@ -360,3 +360,7 @@ cần review khi nội dung C-20 và các PR dữ liệu được tích hợp.
 ## 19/11/2026: C-04 sửa theo review #57 (trưởng nhóm sửa trên nhánh)
 
 `\RsimFitLateObs` lấy số lượt quan sát của một họ muộn (ba họ có cùng số lượt, cùng số sai, renderer kiểm), nên caption Table 4 và §7.3 ghi 0/99 lượt đọc mỗi họ, không cộng thành 297. Caption `tab_nsize` trở lại "certified at δ/4" (δ trong caption là min(α,β)/(10K), keyed theo 4 lớp chia thêm 4, khớp `sample_size.py` và δ ở §4.3 với n_cls = 4). Render lại `tab_nsize`, `tab_planner`, `tab_realsim` và `others/notes.md` cho khớp renderer.
+
+## 19/11/2026: C-05 sửa theo review #58 (trưởng nhóm sửa trên nhánh)
+
+Thêm test: `render.py` phải thoát lỗi khi `planner_seed_variance.csv` thiếu hoặc trùng một dòng (thử đột biến: bỏ đoạn kiểm thì test fail). Renderer kiểm câu ở phụ lục (một seed duy nhất kéo SD của vetted rules trên Element), caption ghi loại số (model-based và measured-parameter simulation), câu phụ lục bỏ chữ "four" viết tay. Gộp `main` (#57), `tab_planner` khớp renderer. Meta còn ghi `git_commit` 09a20fd (trước force-push); chạy lại với code đã commit cho cùng số đếm, số thực lệch tối đa 1,2e-12; freeze 21/11 sẽ sinh lại meta.

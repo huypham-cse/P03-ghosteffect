@@ -146,6 +146,18 @@ class SeedVarianceMetadataTests(unittest.TestCase):
         self.assertEqual(64, len(metadata['csv_sha256']))
         self.assertEqual(64, len(metadata['script_sha256']))
 
+    def test_renderer_rejects_missing_or_duplicate_seed_rows(self):
+        source = (ROOT / 'artifact/results/planner_seed_variance.csv').read_text(encoding='utf-8').splitlines(keepends=True)
+        for name, rows in (('missing', source[:-1]), ('duplicate', source + source[-1:])):
+            with self.subTest(name), tempfile.TemporaryDirectory() as temp:
+                results = Path(temp) / 'results'
+                shutil.copytree(ROOT / 'artifact/results', results)
+                (results / 'planner_seed_variance.csv').write_text(''.join(rows), encoding='utf-8')
+                run = subprocess.run([sys.executable, str(ROOT / 'artifact/scripts/render.py'), '--results-dir', str(results),
+                                      '--output-dir', str(Path(temp) / 'generated')], capture_output=True, text=True, timeout=300)
+                self.assertNotEqual(0, run.returncode)
+                self.assertIn('incomplete or duplicate seed variance rows', run.stdout + run.stderr)
+
 
 class ReadabilityTests(unittest.TestCase):
     def count(self, source):
