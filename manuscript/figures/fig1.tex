@@ -27,22 +27,22 @@
 \node[step=teal] (b1) at (0,-2.5) {\ico{receipt}\,\ico{lock}\\[1pt] Ledger marks the send \textsf{ISSUED} at $t_0$, \emph{before} the tap.};
 \node[step=teal, right=0.29cm of b1] (b2) {\ico{label}\\[1pt] Nonce \texttt{gx:7K2Q9F} in the subject (Alex sees it; opted in); \textbf{Send}.};
 \node[step=teal, right=0.29cm of b2] (b3) {\ico{bolt}\,\ico{nosignal}\\[1pt] Same lost reply. The ledger entry survives.};
-\node[step=teal, right=0.29cm of b3] (b4) {\ico{magnifier}\,\ico{phone}\\[1pt] Hop~1: a failed entry of a non-G2 app is ambiguous end to end (Thm.~\ref{thm:twohop}).};
+\node[step=teal, right=0.29cm of b3] (b4) {\ico{magnifier}\,\ico{phone}\\[1pt] Hop~1: a failed entry of an app without idempotent retries is ambiguous end to end (Thm.~\ref{thm:twohop}).};
 \node[step=teal, right=0.29cm of b4] (b5) {\ico{eye}\,\ico{hourglass}\\[1pt] No end-to-end family certifies (K-9's Sent folder never shows it).\meas};
 \node[step=teal, right=0.29cm of b5, fill=teal!16] (b6) {\ico{person}\,\ico{shield}\\[1pt] \textbf{Ask}: ``Did Alex get `Lease' (\texttt{gx:7K2Q9F})?'' Sent \textbf{once}.};
 \foreach \i/\j in {b1/b2,b2/b3,b3/b4,b4/b5,b5/b6} \draw[arr] (\i) -- (\j);
 % G2 branch (Element + Synapse)
 \node[draw=orange!70!black, fill=orange!8, rounded corners=3pt, align=left, text width=6.2cm, inner sep=2.5pt,
       anchor=north west] (g2) at ($(b4.south west)+(0,-0.2)$)
-      {\ico[0.42cm]{check}\hspace{3pt}\parbox[c]{5.6cm}{G2 app (Element + Synapse): the app re-sends the same transaction id or reconciles via \texttt{/sync}, one copy (same device, ${<}24$\,h);\meas{} after a certified wait the row reads ``Sent'' $\Rightarrow$ committed, no ask.}};
+      {\ico[0.42cm]{check}\hspace{3pt}\parbox[c]{5.6cm}{Idempotent retries (Element + Synapse): the app re-sends the same transaction id or reconciles via \texttt{/sync}, one copy (same device, ${<}24$\,h);\meas{} after a certified wait the row reads ``Sent'' $\Rightarrow$ committed, no ask.}};
 \draw[arr, orange!70!black] (b3.south) |- (g2.west);
 \end{tikzpicture}
 \vspace{-2pt}
 \caption{A ghost effect and how \sys resolves it, grounded in our emulator measurements (\S\ref{sec:eval-real}). Steps marked $^{\textsf{m}}$ were observed in every
 trial: K-9 \RealKRd/\RealKRd, redo \RealKRecDup/\RealKRecN, Element \RealElemRL/\RealElemRL. (a) The SMTP server accepts the mail but the reply is lost. K-9 records a permanent
 failure, never re-sends, and keeps the mail in its Outbox. Redoing the step (a scripted agent, not an LLM) sends a second mail with a new Message-ID, which SMTP accepts.
-(b) \sys records the send before the tap and tags it with a nonce. K-9's nonce is the subject, which the recipient sees, so it is used only on accounts that opted in. K-9 is not G2 and its entry failed, so hop~1 says nothing about the server, and the Sent folder is written
-by the same client. With no family that can certify, \sys asks instead of resending. For a G2 app such as Element the end-to-end row certifies ``committed'' after a short
+(b) \sys records the send before the tap and tags it with a nonce. K-9's nonce is the subject, which the recipient sees, so it is used only on accounts that opted in. K-9 has no idempotent retry and its entry failed, so hop~1 says nothing about the server, and the Sent folder is written
+by the same client. With no family that can certify, \sys asks instead of resending. For an app with idempotent retries, such as Element, the end-to-end row certifies ``committed'' after a short
 certified wait. Icons: Twemoji (CC-BY 4.0).}
 \label{fig:teaser}
 \end{figure*}
