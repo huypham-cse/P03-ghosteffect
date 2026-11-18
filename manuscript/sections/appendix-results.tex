@@ -1,6 +1,6 @@
 \section{Additional results}
 \label{app:extra}
-Table~\ref{tab:position} positions recent recovery work; Tables~\ref{tab:stress} and~\ref{tab:pop} give the stress and calibration-population results of RQ4 and RQ5;
+Table~\ref{tab:position} positions recent recovery work; Tables~\ref{tab:stress} and~\ref{tab:pop} give the stress and calibration-population results;
 Table~\ref{tab:lag} prices the lag share; Table~\ref{tab:corr} gives the correlated-read experiment of RQ2; Table~\ref{tab:apps} lists testbed apps; Table~\ref{tab:realcone}
 gives campaign~1 of the emulator measurements.
 Figure~\ref{fig:sprt} and Table~\ref{tab:sprt} check Theorem~\ref{thm:main}(a,c) for an i.i.d.\ probe (all 24 cells; Monte Carlo means match the exact $\bar N$ to \SprtMCdev reads;
@@ -44,23 +44,23 @@ unanimous family unless another contradicts it, and a \emph{rule family} sweeps 
 \emph{Metrics}: dup and loss from any cause (\% of workflows, including wrong user answers); asks (\% of workflows); $P_{\mathrm{v}}$, the fraction of committed effects the planner
 itself retried, which is the guaranteed quantity~\eqref{eq:guarantee}; $L_{\mathrm{v}}$, its loss-side analogue; and blocking recovery seconds.
 
-\subsection{RQ1: Guarantees and their price}
+\subsection{Guarantees and their price}
 \label{sec:eval-guar}
 For an i.i.d.\ probe the exact error probabilities are within budget in \SprtAllWithin \SprtCells cells and the SPRT stays within \SprtGapMax reads of~\eqref{eq:lb};
-trusting a nominal ``92\% accurate'' claim violates the budget for \CalNomViol\% of probe types (appendix). Light-tailed lags certify $\alpha_{\mathrm{lag}}{=}10^{-3}$ in
+trusting a nominal ``92\% accurate'' claim violates the budget for \CalNomViol\% of probe types. Light-tailed lags certify $\alpha_{\mathrm{lag}}{=}10^{-3}$ in
 \LagLogThree; a Pareto tail of shape $\kappa{=}1.1$ (our choice, after the heavy-tailed delays Li reports~\cite{li2026exactlyonce}) needs \LagParetoTwo{} at $10^{-2}$ and
 \LagParetoThree{} at $10^{-3}$ (Table~\ref{tab:lag}).
 
-\subsection{RQ2: Correlated reads and persistent misses}
+\subsection{Correlated reads and persistent misses}
 \label{sec:eval-robust}
 With errors correlated within a view, an SPRT that re-reads one view reaches \CorrNaiveOne\% duplicates at $\rho{=}1$, while reading each view once keeps it at most
-\CorrViewWithinMax\% (Table~\ref{tab:corr}, appendix). Across views, a view-level SPRT that assumes independence fails (\CorrViewCrossTwo\% at $\rho{=}0.2$); the certified
+\CorrViewWithinMax\% (Table~\ref{tab:corr}). Across views, a view-level SPRT that assumes independence fails (\CorrViewCrossTwo\% at $\rho{=}0.2$); the certified
 family verdict stays at or below \CorrCertMaxHi\%, asking once all views being wrong exceeds the budget.
 
 
-\subsection{RQ3: Comparison with existing recovery}
+\subsection{Comparison with existing recovery}
 \label{sec:eval-e2e}
-Table~\ref{tab:planner} replays the same \SimN interrupted workflows under every policy. Redo and checkpoint-resume duplicate \SimRedoDup\% and \SimCkptDup\% of workflows.
+Table~\ref{tab:planner-extended} replays the same \SimN interrupted workflows under every policy. Redo and checkpoint-resume duplicate \SimRedoDup\% and \SimCkptDup\% of workflows.
 A durable Atomix log removes the agent-kill duplicates of the in-memory port (\SimAtomixDup\% $\to$ \SimAtomixDurDup\%), but its single read loses \SimAtomixDurLoss\%. Ledger + key has
 the lowest dup + loss among non-asking baselines, yet retries \SimKeyPv\% of committed effects (\ClassKeyGtwoPv\% on G2 apps, where its single read precedes the server commit).
 Always-ask has $P_{\mathrm{v}}{=}0$ but \SimAskAllDup\% duplicates and \SimAskAllLoss\% losses from wrong answers; nonce + ask asks \SimNonceAskAsk\% yet retries \SimNonceAskPv\%,
@@ -91,9 +91,9 @@ union bounds average \DecompBcp\% of the 0.5\% test share against \DecompBtrue\%
 raises its asks from \SweepAskLo\% to \SweepAskHi\%. With a user wrong on 20\% of asks, always-ask reaches \UserAskAllTwenty\% dup + loss, the rules \UserRulesTwenty\%, and
 the product mode \UserGhostTwenty\%.
 
-\subsection{RQ4--RQ5: Stress, calibration population, dependence, size}
+\subsection{Stress, calibration population, dependence, size}
 \label{sec:eval-stress}\label{sec:eval-pop}
-Under generative models that depart from the planner's (Table~\ref{tab:stress}, appendix), the product mode stays within budget (CP upper at most \StressMaxHi\%) except where
+Under generative models that depart from the planner's (Table~\ref{tab:stress}), the product mode stays within budget (CP upper at most \StressMaxHi\%) except where
 calibration misses what deployment sees: heavy lag tails absent from the logs give $P_{\mathrm{v}}{=}\StressLag\%$ (CP upper \StressLagHi\%; logged, it asks \StressLagCalAsk\%),
 and an undetected delayed recovery in Doze gives \StressDoze\% (detected, it asks \StressDozeAsk\%). A G2-classified app whose server does not deduplicate duplicates by
 itself (\StressNodedupDup\% of workflows): G2 is an app property. In an \emph{interrupted world} (stale history after restarts, optimistic entries, longer lags; Table~\ref{tab:pop}),
@@ -103,9 +103,9 @@ families \PopCmCSrc\% and joint \PopCmCJoint\%. Their cost is labels: at 2{,}000
 at 5{,}000 \NcalFSrcAsk\% and \NcalFJointAsk\% (Table~\ref{tab:nsize}). Under version drift ($\kappa{=}10$) the product mode reaches \DriftTenPv\% (CP upper \DriftTenPvHi\%), and a
 200-effect shift test keeps it at most \DriftTenTestPvHi\%.
 
-\subsection{RQ6: Mechanisms}
+\subsection{Mechanisms}
 \label{sec:eval-mech}
-Without the nonce the product mode asks \SimNoNonceAsk\%, without hop~1 \SimNoHopAsk\%, without the digest \SimNoDigestAsk\% (Table~\ref{tab:planner}); nominal i.i.d.\
+Without the nonce the product mode asks \SimNoNonceAsk\%, without hop~1 \SimNoHopAsk\%, without the digest \SimNoDigestAsk\% (Table~\ref{tab:planner-extended}); nominal i.i.d.\
 bounds ask \SimNoCalAsk\% but retry \SimNoCalPv\%; declaring when uncertified loses \SimNoAskLv\% of absent effects; visible nonces cut asks to \SimVisAsk\% but alter
 \SimAltered\% of effects; a uniform budget split changes nothing significant ($p{=}\SimPUni$). A six-symbol nonce has $\epsilon_0\le\NonceEpsZero$, and giving every saga step the
-full $\alpha$ yields duplicate probabilities up to \SagaNaiveSixteen\% at $k{=}16$ (Tables~\ref{tab:nonce},~\ref{tab:saga}, appendix).
+full $\alpha$ yields duplicate probabilities up to \SagaNaiveSixteen\% at $k{=}16$ (Tables~\ref{tab:nonce} and~\ref{tab:saga}).
