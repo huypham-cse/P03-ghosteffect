@@ -16,7 +16,7 @@ fi
 repo=$(git rev-parse --show-toplevel)
 script="$repo/team/scrub_check.sh"
 output=$(cd "$(dirname "$1")" && pwd)/$(basename "$1")
-if [ -n "$(git -C "$repo" status --porcelain --untracked-files=all -- artifact testbed manuscript)" ]; then
+if [ -n "$(git -C "$repo" -c core.autocrlf=true status --porcelain --untracked-files=all -- artifact testbed manuscript)" ]; then
   echo 'artifact/testbed/manuscript must be clean before bundling' >&2
   exit 1
 fi
