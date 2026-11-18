@@ -326,3 +326,11 @@ Thêm môi trường `algorithmic` vào danh sách khối không phải văn xu�
 `team/readability_count.py`. Bổ sung test bảo đảm dấu chấm phẩy và câu dài
 trong Algorithm 1 không bị tính như câu văn. Đây là sửa công cụ dùng chung,
 giúp YC-12 của phần A chạy đúng trên mã giả mà không thay đổi nội dung A.
+
+## 18/11/2026 — C-07 rà soát related work
+
+Đã tách câu so sánh Agent libOS khỏi câu RFC 1047 để mỗi nguồn có phạm vi
+riêng. Câu mới nêu rõ Agent libOS kiểm soát capability và checkpoint quanh
+tool dispatch, còn GhostEffect xử lý effect GUI đã externalize. Bib đã pin
+Agent libOS ở v3; `others/citation-audit.md` ghi URL nguồn và lý do không thêm
+Gray--Reuter hoặc Bailis.
