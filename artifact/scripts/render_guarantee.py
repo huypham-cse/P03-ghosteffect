@@ -148,10 +148,8 @@ def delta(k):
 
 
 def label_median(results):
-    """B's measured seconds per fault-injected label (row 'total'); None until B delivers label_cost.csv."""
+    """B's measured seconds per fault-injected label (row 'total'); a missing file is an input error (YC-A9)."""
     path = Path(results) / 'real' / 'agent' / 'label_cost.csv'
-    if not path.is_file():
-        return None
     rows = read_csv(path.parent, path.name)
     v = num(cert_col(one(rows, 'label_cost.csv', component='total'), 'median_s', 'label_cost.csv'))
     if not v > 0:
@@ -257,13 +255,8 @@ def render(results):
 
     # A-08: B's measured label time
     med = label_median(results)
-    if med is None:
-        print('render_guarantee: real/agent/label_cost.csv not yet delivered by B; label-cost macros are ??',
-              file=sys.stderr)
-        M['CertLabelMedS'] = M['CertDeviceHoursFive'] = '??'
-    else:
-        M['CertLabelMedS'] = f'{med:.0f}'
-        M['CertDeviceHoursFive'] = count(round(labels5 * N_CLASSES * OUTCOMES * med / 3600))
+    M['CertLabelMedS'] = f'{med:.0f}'
+    M['CertDeviceHoursFive'] = count(round(labels5 * N_CLASSES * OUTCOMES * med / 3600))
 
     files = {'macros_guarantee.tex': HEADER + ''.join(
         f'\\newcommand{{\\{k}}}{{{v}\\xspace}}\n' for k, v in sorted(M.items()))}

@@ -21,7 +21,7 @@ In the write-ahead ledger, each effect has a record \{\textit{id}, workflow, ste
 \textsf{PLANNED} $\to$ \textsf{ISSUED} $\to$ \{\textsf{COMMITTED}, \textsf{ABSENT}, \textsf{PENDING}, \textsf{ASKED}\}, with \textsf{ABSENT} $\to$ \textsf{ISSUED} on retry
 (attempt$+1$, same nonce) and \textsf{COMMITTED} $\to$ \textsf{COMPENSATING} $\to$ \textsf{COMPENSATED} when a duplicate is detected. The invariant is write-ahead:
 \textsf{ISSUED} is committed in SQLite (WAL mode, \texttt{synchronous=FULL}) before the commit tap is injected. On restart, every \textsf{ISSUED} record is a ghost-effect
-candidate and is resolved before the agent continues. This is the prepare--dispatch--settle discipline of Agent libOS~\cite{zhang2026agentlibos}, except that settlement is a
+candidate and is resolved before the agent continues. This is the prepare, dispatch and settle discipline of Agent libOS~\cite{zhang2026agentlibos}, except that settlement is a
 statistical decision.
 
 \input{figures/fig-arch}
@@ -53,7 +53,7 @@ The controller injects the fault classes of \S\ref{sec:impl} at the commit point
 and logs the lag $T_c$ from the anchor $r_e$ to visibility. Bounds and lag tables are keyed by the observable fault class (Lemma~\ref{lem:calib}(ii)), so the lab's fault mix need not
 match deployment's. An effect whose class the controller cannot tell uses the per-class maximum. Passive labels (confirmed sends, abandoned forms) are cheaper but miss cached history after a
 kill, optimistic entries and restart lags (\S\ref{sec:eval-pop},~\S\ref{sec:eval-real}). A label costs one fault-injected trial on a test device: reset, compose, fault,
-relaunch, one read of every view, and grading. In our emulator measurements the median trial took \CertLabelMedS\,s. At that rate, \CertLabelsFive labels per class and outcome
+relaunch, one read of every view, and grading. In our LLM-agent experiment on the emulator the median trial took \CertLabelMedS\,s. At that rate, \CertLabelsFive labels per class and outcome
 for \CertClassesN classes take about \CertDeviceHoursFive device-hours (computed from the measured median).
 
 \para{How many labels.} Validity holds at any sample size. Small samples only widen the bounds, so the planner asks more often, not retries more often (\S\ref{sec:eval-pop}).

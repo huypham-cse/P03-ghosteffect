@@ -1,13 +1,13 @@
 \section{Theory}
 \label{sec:theory}
 
-We state the classical results, then the reductions the agent setting needs. Appendix~\ref{app:proofs} has full statements and proofs.
+We state the classical results, then the reductions the agent setting needs.
 
 \subsection{The price of a budget, and two floors}
 \label{sec:theory-main}
-A policy is \emph{verification-only} if it ends by retrying or declaring. Theorem~\ref{thm:main} takes conditionally i.i.d.\ views with lag tail $G$, and $d$ is
-the binary relative entropy. In parts (b) and (c) the policy is verification-only and meets $\PP(\text{declare}\mid X{=}0)\le\beta$, and in (b) it decides by $r_e{+}w$
-from end-to-end reads alone. In part (d) it never asks, and the effect is committed with prior $\pi$, so $\bar\pi=\min(\pi,1{-}\pi)$ is the prior floor.
+Theorem~\ref{thm:main} takes conditionally i.i.d.\ views with lag tail $G$, and $d$ is the binary relative entropy. In (b) and (c) the policy is
+\emph{verification-only}, ending by retrying or declaring, with $\PP(\text{declare}\mid X{=}0)\le\beta$. In (b) it decides by $r_e{+}w$ from end-to-end reads alone,
+and in (c) it meets $(\alpha,\beta)$ with $\alpha{+}\beta{<}1$ and finite $\E_x[N]$. In (d) it never asks, the effect commits with prior $\pi$, and $\bar\pi=\min(\pi,1{-}\pi)$ is the prior floor.
 
 \begin{theorem}
 \label{thm:main}
