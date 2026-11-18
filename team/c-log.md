@@ -319,3 +319,10 @@ trên manuscript, code/test artifact và receipts. Conclusion vẫn trang 13;
 Trạng thái C-03: triển khai/thí nghiệm/bảng/văn bản xong để review; chưa
 nghiệm thu. C-01/C-02/C-10 có nhánh/commit riêng; vẫn chờ người dùng hoàn
 thành GitHub device login để push và tạo các PR nối tiếp, không tự merge.
+
+## 18/11/2026 — C-12 kiểm đường dẫn dữ liệu phụ thuộc host
+
+README artifact và README nhúng trong bundle đều ghi rõ
+`artifact/results/ledger_bench.csv` là file phụ thuộc host. Bundle vẫn yêu
+cầu cây `artifact`, `testbed`, `manuscript` sạch, tạo manifest từ commit hiện
+tại, loại tài liệu nội bộ và chỉ scrub sau khi giải nén.

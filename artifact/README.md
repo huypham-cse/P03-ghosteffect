@@ -74,7 +74,7 @@ Etar+DAVx5+Radicale, Synapse txnId horizon). Campaign 1 (`results/real/*.csv`) s
 
 Verification: `python -m unittest discover -s artifact/tests -v`; SciPy is an optional independent test reference, not a runtime dependency.
 The isolated 25-job run passed, including all declared REAL4 tags. Ledger latency
-(`results/ledger_bench.csv`), filesystem durability, and floating-point tails
+(`artifact/results/ledger_bench.csv` in the extracted bundle), filesystem durability, and floating-point tails
 can vary by host. The archived `ghost-src` outputs differ between Windows and
 Linux because of line-ending and host rendering details; both copies are
 retained for audit. No archived CSV was replaced to hide differences.
