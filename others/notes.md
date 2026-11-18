@@ -5,7 +5,7 @@ Values below come from the current CSV render; this is not a fresh experiment re
 Measurement, fitted-law simulation, model simulation and host timings remain distinct.
 See artifact/README.md for the experiment and CSV provenance.
 
-Total macros: 1290. Do not edit generated values by hand.
+Total macros: 1291. Do not edit generated values by hand.
 
 | Macro | Value | Macro file | Used in |
 |---|---|---|---|
@@ -1201,6 +1201,7 @@ Total macros: 1290. Do not edit generated values by hand.
 | `\SimRulesPvHi` | 0.70 | `macros.tex` | sections/07-evaluation.tex |
 | `\SimRulesRatio` | 11 | `macros.tex` | sections/01-introduction.tex, sections/07-evaluation.tex |
 | `\SimRulesSecs` | 35 | `macros.tex` | (unused) |
+| `\SimSeedCount` | 5 | `macros.tex` | sections/appendix-results.tex |
 | `\SimSrcAsk` | 47.0 | `macros.tex` | sections/07-evaluation.tex |
 | `\SimSrcDup` | 2.1 | `macros.tex` | (unused) |
 | `\SimSrcLoss` | 1.5 | `macros.tex` | (unused) |

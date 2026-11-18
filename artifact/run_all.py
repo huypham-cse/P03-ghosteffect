@@ -22,6 +22,7 @@ import time
 ROOT = Path(__file__).resolve().parent.parent
 PART_OUTPUTS = {
     'main': ['planner_sim.csv', 'planner_class.csv'],
+    'seedvariance': ['planner_seed_variance.csv'],
     'rulesweep': ['planner_rules_sweep.csv'],
     **{'stress%d/6' % i: ['planner_stress.part%d.csv' % i] for i in range(6)},
     'sweep': ['planner_alpha_sweep.csv'], 'user': ['planner_user.csv'],

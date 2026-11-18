@@ -6,6 +6,7 @@ Emits booktabs tables (tab_*.tex), pgfplots figures with inline coordinates (fig
 written by a seeded script (or, for the ledger benchmark, a host measurement).
 """
 import csv
+import json
 import math
 import os
 import argparse
@@ -446,6 +447,51 @@ M('VlmEN', f1(nb['vlm_EN']))
 # ===================================================================== planner simulation
 ps = rd('planner_sim.csv')
 P = {r['policy']: r for r in ps}
+
+# C-05: renderer consumes the archived CSV plus its explicit reporting contract.
+with open(os.path.join(RES, 'planner_seed_variance.meta.json'), encoding='utf-8') as _seed_meta_file:
+    _seed_meta = json.load(_seed_meta_file)
+_seed_rows = rd('planner_seed_variance.csv')
+_seed_cases = _seed_meta['cases']
+_seed_values = _seed_meta['seeds']
+_seed_index = {(r['case'], r['policy'], int(r['seed'])): r for r in _seed_rows}
+_seed_expected = {(case, policy, seed) for case, spec in _seed_cases.items()
+                  for policy in spec['policies'] for seed in _seed_values}
+if set(_seed_index) != _seed_expected or len(_seed_rows) != len(_seed_index):
+    raise ValueError('incomplete or duplicate seed variance rows')
+if any(int(r['n']) != int(_seed_meta['n_per_seed']) for r in _seed_rows):
+    raise ValueError('seed variance workflow count disagrees with metadata')
+M('SimSeedCount', str(len(_seed_values)))
+_seed_lines = []
+for _case, _spec in _seed_cases.items():
+    for _policy in _spec['policies']:
+        _rows = [_seed_index[(_case, _policy, _seed)] for _seed in _seed_values]
+        _ask = [float(r['ask']) for r in _rows]
+        _mean = sum(_ask) / len(_ask)
+        _sd = math.sqrt(sum((x - _mean) ** 2 for x in _ask) / (len(_ask) - 1))
+        _label = {'ghost': 'product', 'ghost-joint': 'joint', 'g2-only': 'theorem-only',
+                  'rules-vetted': 'vetted rules'}.get(_policy, _policy)
+        _seed_lines.append(f"{_case} & {_label} & {_mean:.2f} $\\pm$ {_sd:.2f} & {min(_ask):.2f}--{max(_ask):.2f} \\\\")
+# prose (appendix-results.tex): one reporting seed drives the Element vetted-rule SD; the others cluster low
+_ev = sorted(float(_seed_index[('element', 'rules-vetted', _s)]['ask']) for _s in _seed_values)
+if not _ev[-1] > 3 * _ev[-2]:
+    raise ValueError('seed variance prose: Element vetted rules no longer have a single outlying seed')
+W('tab_seed_variance.tex', r'''\begin{table*}[t]
+\centering
+\caption{Across-seed asking-rate variability for the fixed Table~\ref{tab:planner} (model-based simulation) and Table~\ref{tab:realsim} (measured-parameter simulation) reporting cases.
+Each row reports the same \SimSeedCount{} original seeds; workflow, calibration, and lag budgets are recorded in the accompanying metadata.
+Values are percentages: arithmetic mean $\pm$ sample standard deviation and range; standard deviation is not a confidence interval.}
+\label{tab:seedvariance}
+\small
+\begin{tabular}{@{}llrr@{}}
+\toprule
+Profile & Policy & ask mean $\pm$ SD & ask range \\
+\midrule
+''' + '\n'.join(_seed_lines) + r'''
+\bottomrule
+\end{tabular}
+\end{table*}
+''')
 _sim_counts = {int(r['n']) for r in ps}
 if len(_sim_counts) != 1:
     raise ValueError('inconsistent reporting count: planner_sim/n')
