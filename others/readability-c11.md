@@ -11,7 +11,7 @@ They do not replace a final PDF reading pass.
 | Run | `\para{` | `\emph{` | sentences over 45 words | paragraphs with over one semicolon |
 |---|---:|---:|---:|---:|
 | Before this C-11 pass | 18 | 34 | 19 | 17 |
-| After this C-11 pass | 0 | 1 | 0 | 0 |
+| After this C-11 pass | 5 | 4 | 0 | 0 |
 | C contributor limit | 5 | 10 | 0 | 0 |
 
 Validation command:

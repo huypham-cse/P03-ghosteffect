@@ -8,7 +8,7 @@ Every number is exact computation, simulation, host or emulator measurement, or 
 
 \subsection{Setup}
 \label{sec:setup}
-Model-based simulation. The simulator instantiates \S\ref{sec:model} with 8 app profiles that differ in G2, hop-1 observability, nonce field (private, counterparty-visible,
+\para{Model-based simulation.} The simulator instantiates \S\ref{sec:model} with 8 app profiles that differ in G2, hop-1 observability, nonce field (private, counterparty-visible,
 none), an enumerable history (for the digest), look-alike probability, local-only storage, and outbox durability. Each interrupted workflow has 1--4 effects. Faults (agent kill, app
 kill, blackout, both) and interruption points follow \S\ref{sec:impl}. The default world departs from the planner's assumptions: nonce misses are persistent ($\eta{=}1\%$ hidden
 field, plus 0.6\% per view). Hop-1 views err at 1--5\% each plus 0.5\% persistently, and the Monitor misreads 1\% of terminal states. Digest views miss 3\% each plus 2\% persistently.
@@ -17,13 +17,14 @@ parameter~\cite{pan2024autonomous}). The user answers wrongly on 5\% of asks (10
 with $K{=}11$ (product), 8 (source families) or 5 (joint). All policies see the same \SimN interrupted workflows (5 seeds $\times$ 2{,}400). We report Clopper--Pearson intervals and exact
 McNemar tests against the product planner with Holm correction.
 
-Baselines. Redo~\cite{tian2025agentprog}. Checkpoint-resume~\cite{langgraph_durable,khan2026resume}. Atomix-style adapters with one
-read-back~\cite{mohammadi2026atomix}. Verify-before-retry~\cite{mansoor2026verified}. Ledger + key~\cite{li2026exactlyonce}. Four baselines that may ask. The re-read
-SPRT of our earlier design. The same-evidence rules have \sys's ledger, hop~1 with the same fallible Monitor, and the same families read once per view. They use a fixed 10\,s wait.
-An acknowledged entry or a nonce match means done. They retry only if every available family reads absent, otherwise they ask. A lenient variant acts on the first
-unanimous family unless another contradicts it, and a rule family sweeps the wait (5, 10, 30, 60\,s) and the quorum (all families, all but the VLM, any two). The
+\para{Baselines.} \emph{Redo}~\cite{tian2025agentprog}. checkpoint-resume~\cite{langgraph_durable,khan2026resume}. Atomix-style adapters with one
+read-back~\cite{mohammadi2026atomix}. verify-before-retry~\cite{mansoor2026verified}. ledger + key~\cite{li2026exactlyonce}. Four baselines may ask, plus the \emph{re-read
+SPRT} of our earlier design. The same-evidence rules have \sys's ledger, hop~1 with the same fallible Monitor, and the same families read once per view. They use a fixed 10\,s wait.
+An acknowledged entry or a nonce match means done. The rule retries only if every available family reads absent; otherwise it asks. A lenient variant acts on the first
+unanimous family unless another contradicts it. A rule family sweeps the wait (5, 10, 30, 60\,s) and the quorum (all families, all but the VLM, any two). The
 Theorem~\ref{thm:twohop}-only baseline classifies each app's G2 status offline and never retries: a G2 app's acknowledged hop-1 entry means done, everything else is asked.
-Metrics: dup and loss from any cause (\% of workflows, including wrong user answers). Escalations are the percentage of workflows. $P_{\mathrm{v}}$ is the fraction of committed effects the planner
+
+\emph{Metrics}: dup and loss from any cause (\% of workflows, including wrong user answers). Escalations are the percentage of workflows. $P_{\mathrm{v}}$ is the fraction of committed effects the planner
 itself retried, which is the guaranteed quantity~\eqref{eq:guarantee}. $L_{\mathrm{v}}$ is its loss-side analogue. We also report blocking recovery seconds.
 
 \subsection{RQ1: Guarantees and their price}

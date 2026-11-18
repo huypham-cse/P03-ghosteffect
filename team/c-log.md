@@ -326,3 +326,10 @@ cho kết quả agent, sửa khuyến nghị product-vs-joint theo A2, và bổ 
 physical-phone/emulator. Readability strict hiện PASS: 0 para, 1 emph, 0 câu dài,
 0 đoạn có hơn một dấu chấm phẩy. C-11 vẫn cần rebase sau khi các PR nội dung được
 merge vào `main`.
+## 18/11/2026 — C-11 rà soát lần hai sau review nội dung
+
+Đã khôi phục macro, citation và chi tiết khoa học bị mất trong lượt readability
+trước; đưa kết quả agent/device vào đúng phạm vi; giữ năm tiêu đề `\para{}` thực sự
+và tách các câu dài/dấu chấm phẩy. Strict readability hiện PASS: 5 `\para{}`, 4
+`\emph{}`, 0 câu dài và 0 đoạn có hơn một dấu chấm phẩy. Bản này vẫn cần rebase
+với các PR nội dung trước khi nghiệm thu.
