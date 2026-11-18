@@ -1,0 +1,29 @@
+{
+  "fault": "kill9",
+  "utc_ns": 1794953914468346000,
+  "dirty_before": "No result found.",
+  "save_tap": {
+    "at": [
+      821,
+      211
+    ],
+    "utc_ns": 1794953921846858500
+  },
+  "barrier_utc_ns": 1794953975126005600,
+  "fault_receipt": {
+    "observed_class": "app-sigkill",
+    "pids_before": [
+      "18039"
+    ]
+  },
+  "fault_utc_ns": 1794953975186226900,
+  "nonce": "gx:X341M7",
+  "href": "/alice/cal/57b2189f-06d1-4711-bb5c-c5405a7b1f2b.ics",
+  "puts": 2,
+  "server_copies": [
+    "57b2189f-06d1-4711-bb5c-c5405a7b1f2b.ics"
+  ],
+  "first_put_after_fault_s": 52.5042213,
+  "dirty_after": "No result found.",
+  "verdict": "EXACTLY_ONCE"
+}

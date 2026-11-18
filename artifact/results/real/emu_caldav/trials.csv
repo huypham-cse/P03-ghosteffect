@@ -1,0 +1,19 @@
+trial,phase,fault,verdict,server_copies,puts,first_put_after_fault_s,first_put_after_doze_exit_s,doze_state,lmkd_filled_mb,lmkd_line,dirty_after,nonce,href,error_type,reason
+c01,scheduled,none,EXACTLY_ONCE,1,2,0.0309528,,,,,No result found.,gx:9B4QR0,/alice/cal/b2b7223a-195d-4009-a2b3-992689b92069.ics,,
+c02,scheduled,kill9,EXACTLY_ONCE,1,2,52.5042213,,,,,No result found.,gx:X341M7,/alice/cal/57b2189f-06d1-4711-bb5c-c5405a7b1f2b.ics,,
+c03,scheduled,lmk,EXACTLY_ONCE,1,2,39.4952161,,,3200,"11-18 05:23:48.633   129   129 I lowmemorykiller: Kill 'at.bitfire.davdroid' (18307), uid 10176, oom_score_adj 100 to free 14304kB rss, 37996kB swap; reason: device is low on swap (0kB < 300624kB) and thrashing (301%)",No result found.,gx:WNCYY4,/alice/cal/58bba7f8-7449-4854-9ce2-2b0da295fb3f.ics,,
+c04,scheduled,none,EXACTLY_ONCE,1,2,0.0280706,,,,,No result found.,gx:XRWK59,/alice/cal/464e3d4a-e27a-4286-ab7b-029da7a15263.ics,,
+c05,scheduled,kill9,EXACTLY_ONCE,1,2,54.1021335,,,,,No result found.,gx:ERPH94,/alice/cal/38ceb293-7dcb-49fe-90d2-c559523076a2.ics,,
+c06,scheduled,lmk,EXACTLY_ONCE,1,2,40.5990221,,,3136,"11-18 05:36:07.726   129   129 I lowmemorykiller: Kill 'at.bitfire.davdroid' (20470), uid 10176, oom_score_adj 100 to free 21012kB rss, 37656kB swap; reason: min watermark is breached even after kill",No result found.,gx:ZRZMAD,/alice/cal/6269cf3c-e244-49de-ae7d-dc2bc154ce15.ics,,
+c07,scheduled,none,INVALID,,,,,,,,,,,RuntimeError,no committed PUT within the barrier timeout
+c08,scheduled,kill9,EXACTLY_ONCE,1,2,52.4461626,,,,,No result found.,gx:FHSFNQ,/alice/cal/1c72f2e0-83ff-4c5e-a315-4195d709a27e.ics,,
+c09,scheduled,lmk,EXACTLY_ONCE,1,2,39.5914394,,,3200,"11-18 05:46:51.582   129   129 I lowmemorykiller: Kill 'at.bitfire.davdroid' (22979), uid 10176, oom_score_adj 100 to free 19236kB rss, 33372kB swap; reason: device is low on swap (4kB < 300624kB) and thrashing (311%)",No result found.,gx:FSJ7GJ,/alice/cal/cb67f301-2c69-4e71-b333-57775f472f1e.ics,,
+d01,scheduled,kill9-doze,EXACTLY_ONCE,1,2,50.9483826,-549.1420866,IDLE,,,No result found.,gx:VFNMGA,/alice/cal/523a2816-7805-433d-87c8-3e000b8d0976.ics,,
+d02,scheduled,kill9-doze,EXACTLY_ONCE,1,2,50.882036,-549.2331009,IDLE,,,No result found.,gx:ZB3EEB,/alice/cal/3ad920cf-c2f8-41f1-803d-5dd4a372502b.ics,,
+d03,scheduled,kill9-doze,EXACTLY_ONCE,1,2,50.9228439,-549.1667318,IDLE,,,No result found.,gx:GGFGR3,/alice/cal/c985b736-cd27-4b74-91d8-c829dc1e8f43.ics,,
+dev-c00,dev,none,INVALID,,,,,,,,,,,RuntimeError,Etar's DONE button not found
+dev-c01,dev,none,EXACTLY_ONCE,1,2,0.0346615,,,,,No result found.,gx:S7HDEN,/alice/cal/3c39aefd-0553-4740-9fb2-22da31bf8b27.ics,,
+dev-c02,dev,kill9,EXACTLY_ONCE,1,2,54.1971128,,,,,No result found.,gx:3MDX4T,/alice/cal/2f23e7df-948d-4cf6-abdf-be9dd3e77218.ics,,
+dev-c03,dev,lmk,INVALID,,,,,,,,,,,RuntimeError,memory pressure did not reap at.bitfire.davdroid through lmkd (3648 MB filled)
+dev-d00,dev,doze,EXACTLY_ONCE,1,2,0.0078446,-120.0713746,IDLE,,,No result found.,gx:BCDGDW,/alice/cal/7d62f695-e02a-4611-aa1a-6933571fb419.ics,,
+dev-d01,dev,kill9-doze,EXACTLY_ONCE,1,2,50.918512,-249.1737012,IDLE,,,No result found.,gx:9ZK6VH,/alice/cal/79da7ea1-74f5-4d11-80f4-45c46fc41336.ics,,

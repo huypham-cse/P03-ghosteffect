@@ -1,0 +1,35 @@
+{
+  "fault": "kill9-doze",
+  "utc_ns": 1794955796419435400,
+  "dirty_before": "No result found.",
+  "save_tap": {
+    "at": [
+      821,
+      211
+    ],
+    "utc_ns": 1794955804069658300
+  },
+  "barrier_utc_ns": 1794955857380041700,
+  "fault_receipt": {
+    "observed_class": "app-sigkill",
+    "pids_before": [
+      "24260"
+    ],
+    "doze": {
+      "observed_class": "device-doze-deep",
+      "state": "IDLE"
+    }
+  },
+  "fault_utc_ns": 1794955859554420700,
+  "doze_exit_utc_ns": 1794956459644889900,
+  "nonce": "gx:VFNMGA",
+  "href": "/alice/cal/523a2816-7805-433d-87c8-3e000b8d0976.ics",
+  "puts": 2,
+  "server_copies": [
+    "523a2816-7805-433d-87c8-3e000b8d0976.ics"
+  ],
+  "first_put_after_fault_s": 50.9483826,
+  "dirty_after": "No result found.",
+  "first_put_after_doze_exit_s": -549.1420866,
+  "verdict": "EXACTLY_ONCE"
+}

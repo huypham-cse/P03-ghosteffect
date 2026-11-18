@@ -1,0 +1,33 @@
+{
+  "fault": "lmk",
+  "utc_ns": 1794954897328513600,
+  "dirty_before": "No result found.",
+  "save_tap": {
+    "at": [
+      821,
+      211
+    ],
+    "utc_ns": 1794954904749112000
+  },
+  "barrier_utc_ns": 1794954958049987100,
+  "fault_receipt": {
+    "observed_class": "app-lmkd-kill",
+    "package": "at.bitfire.davdroid",
+    "pids_before": [
+      "20470"
+    ],
+    "pids_after": [],
+    "filled_mb": 3136,
+    "lmkd_line": "11-18 05:36:07.726   129   129 I lowmemorykiller: Kill 'at.bitfire.davdroid' (20470), uid 10176, oom_score_adj 100 to free 21012kB rss, 37656kB swap; reason: min watermark is breached even after kill"
+  },
+  "fault_utc_ns": 1794954970702562800,
+  "nonce": "gx:ZRZMAD",
+  "href": "/alice/cal/6269cf3c-e244-49de-ae7d-dc2bc154ce15.ics",
+  "puts": 2,
+  "server_copies": [
+    "6269cf3c-e244-49de-ae7d-dc2bc154ce15.ics"
+  ],
+  "first_put_after_fault_s": 40.5990221,
+  "dirty_after": "No result found.",
+  "verdict": "EXACTLY_ONCE"
+}

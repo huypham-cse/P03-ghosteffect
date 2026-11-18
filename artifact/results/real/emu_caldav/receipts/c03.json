@@ -1,0 +1,33 @@
+{
+  "fault": "lmk",
+  "utc_ns": 1794954156652114000,
+  "dirty_before": "No result found.",
+  "save_tap": {
+    "at": [
+      821,
+      211
+    ],
+    "utc_ns": 1794954164056913900
+  },
+  "barrier_utc_ns": 1794954217397497400,
+  "fault_receipt": {
+    "observed_class": "app-lmkd-kill",
+    "package": "at.bitfire.davdroid",
+    "pids_before": [
+      "18307"
+    ],
+    "pids_after": [],
+    "filled_mb": 3200,
+    "lmkd_line": "11-18 05:23:48.633   129   129 I lowmemorykiller: Kill 'at.bitfire.davdroid' (18307), uid 10176, oom_score_adj 100 to free 14304kB rss, 37996kB swap; reason: device is low on swap (0kB < 300624kB) and thrashing (301%)"
+  },
+  "fault_utc_ns": 1794954231146377000,
+  "nonce": "gx:WNCYY4",
+  "href": "/alice/cal/58bba7f8-7449-4854-9ce2-2b0da295fb3f.ics",
+  "puts": 2,
+  "server_copies": [
+    "58bba7f8-7449-4854-9ce2-2b0da295fb3f.ics"
+  ],
+  "first_put_after_fault_s": 39.4952161,
+  "dirty_after": "No result found.",
+  "verdict": "EXACTLY_ONCE"
+}

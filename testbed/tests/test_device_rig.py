@@ -55,7 +55,7 @@ class DeviceRig(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             for name, verdict, copies in (('s01', 'REPRODUCED', 2), ('s02', 'REPRODUCED', 1), ('s03', 'INVALID', None)):
                 (Path(tmp) / name).mkdir()
-                result = dict(config='sent', verdict=verdict)
+                result = dict(config='sent', verdict=verdict, smtp_data_after_fault=0)
                 if copies:
                     result.update(checks=checks, audit=dict(action='recompose', server_copies_after_action=copies,
                                                             distinct_message_ids_after_action=copies))
@@ -67,6 +67,21 @@ class DeviceRig(unittest.TestCase):
     def test_phone_reset_needs_the_serial_named(self):
         with patch.dict(os.environ, {'GX_PHYSICAL_SERIAL': 'other'}), self.assertRaises(ValueError):
             k9_reset.reset('adb', 'some-phone', 'sent', Path('.'))
+
+    def test_caldav_copies_count_only_events_carrying_the_nonce(self):
+        import caldav_fault_case as cal, tempfile
+        with tempfile.TemporaryDirectory() as tmp, patch.object(cal, 'STORE', Path(tmp)):
+            folder = Path(tmp) / 'collection-root' / 'alice' / 'cal'
+            folder.mkdir(parents=True)
+            for name, title in (('a.ics', 'gx:ABC123'), ('b.ics', 'gx:ABC123'), ('c.ics', 'gx:OTHER0')):
+                (folder / name).write_text('BEGIN:VEVENT\nSUMMARY:%s\nEND:VEVENT\n' % title, encoding='utf-8')
+            self.assertEqual(cal.server_copies('gx:ABC123'), ['a.ics', 'b.ics'])
+
+    def test_lmk_and_doze_refuse_a_phone(self):
+        import caldav_fault_case as cal
+        with patch('sys.argv', ['x', '--adb', 'adb', '--serial', 'RFCX0', '--fault', 'doze', '--output', 'unused']), \
+                self.assertRaises(SystemExit):
+            cal.main()
 
 
 if __name__ == '__main__':
