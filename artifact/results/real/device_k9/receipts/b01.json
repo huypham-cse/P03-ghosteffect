@@ -1,0 +1,109 @@
+{
+  "verdict": "REPRODUCED",
+  "config": "sent",
+  "kill": "background",
+  "nonce": "gx:JSN6P2",
+  "checks": {
+    "reply_dropped_after_commit": true,
+    "error_before_fault": true,
+    "app_killed_and_relaunched": true,
+    "one_server_copy": true,
+    "k9_kept_in_outbox": true,
+    "sent_folder_empty": true,
+    "no_resend_after_relaunch": true
+  },
+  "server": {
+    "copies": 1,
+    "receiver_uids": [
+      "1"
+    ],
+    "scan_complete": true,
+    "scope": "receiver mailbox at this horizon; not client Sent state"
+  },
+  "sent": {
+    "copies": 0,
+    "receiver_uids": [],
+    "scan_complete": true,
+    "scope": "receiver mailbox at this horizon; not client Sent state"
+  },
+  "k9_outbox_state": {
+    "nonce_items": 1,
+    "texts": [
+      "Outbox",
+      "gx:JSN6P2",
+      "3:23\u202fAM",
+      "To: bob@test.invalid \u2013 synthetic test message",
+      "Load up to 100 more"
+    ],
+    "utc_ns": 1794947156755906200
+  },
+  "k9_outbox_before_fault": [
+    "Failed to send some messages",
+    "SmtpResponseParserException: Unexpected end of stream"
+  ],
+  "fault": {
+    "observed_class": "app-background-kill",
+    "package": "com.fsck.k9",
+    "pids_before": [
+      "8506"
+    ],
+    "pids_after": []
+  },
+  "observe_s": 120.0,
+  "request_id": "<4DB72C17-CE92-448C-9FE5-58C37CC5F93A@test.invalid>",
+  "smtp_data_after_fault": 0,
+  "device": {
+    "manufacturer": "samsung",
+    "model": "SM-A356E",
+    "android": "15",
+    "sdk": "35"
+  },
+  "utc_ns": 1794947156755920000,
+  "k9_outbox_screen": {
+    "nonce_items": 1,
+    "texts": [
+      "Outbox",
+      "gx:JSN6P2",
+      "3:23\u202fAM",
+      "To: bob@test.invalid \u2013 synthetic test message",
+      "Load up to 100 more"
+    ],
+    "utc_ns": 1794947156755906200
+  },
+  "k9_notices_after": [
+    "Failed to send some messages",
+    "SmtpResponseParserException: Unexpected end of stream"
+  ],
+  "k9_evidence": "notification+screen",
+  "audit": {
+    "action": "recompose",
+    "taps": [
+      {
+        "label": "Send",
+        "bounds": [
+          831,
+          111,
+          967,
+          246
+        ],
+        "utc_ns": 1794947164604565400
+      }
+    ],
+    "action_start_utc_ns": 1794947156760005900,
+    "window_s": 60.0,
+    "smtp_data_after_action": 1,
+    "server_copies_after_action": 2,
+    "distinct_message_ids_after_action": 2,
+    "k9_outbox_after_action": {
+      "nonce_items": 1,
+      "texts": [
+        "Outbox",
+        "gx:JSN6P2",
+        "3:23\u202fAM",
+        "To: bob@test.invalid \u2013 synthetic test message",
+        "Load up to 100 more"
+      ],
+      "utc_ns": 1794947226990883600
+    }
+  }
+}
