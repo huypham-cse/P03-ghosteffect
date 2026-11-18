@@ -279,6 +279,16 @@ class RunnerTests(unittest.TestCase):
         self.assertEqual(declared, set(runner.PART_OUTPUTS['real4']))
         self.assertEqual(existing, declared)
 
+    def test_source_provenance_in_a_bundle_without_git_reads_the_bundle_manifest(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            (root / 'BUNDLE-MANIFEST.json').write_text('{"source_commit": "abc123"}', encoding='utf-8')
+            with patch.object(runner, 'ROOT', root):
+                self.assertEqual({'source_commit': 'abc123', 'source_tree_clean': None}, runner.source_provenance())
+                (root / 'BUNDLE-MANIFEST.json').unlink()
+                self.assertEqual({'source_commit': None, 'source_tree_clean': None}, runner.source_provenance())
+        self.assertIn('source_commit', runner.source_provenance())   # the real checkout still asks git
+
     def test_agent_input_hashes_include_only_the_four_agent_corpora(self):
         inputs = {
             'artifact/results/real/agent_guarded/episodes.csv': 'guarded',

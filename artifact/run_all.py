@@ -91,7 +91,15 @@ def _manifest_path(value, cwd):
 
 
 def source_provenance():
-    """Return the source commit and require a clean checkout for a run."""
+    """Return the source commit and whether the checkout is clean.
+
+    The anonymous bundle (team/make_bundle.sh) ships no .git: there the commit comes from
+    BUNDLE-MANIFEST.json and cleanliness is unknown (None), so the one-line reproduce command still runs.
+    """
+    if not (ROOT / '.git').exists():
+        bundle = ROOT / 'BUNDLE-MANIFEST.json'
+        commit = json.loads(bundle.read_text(encoding='utf-8')).get('source_commit') if bundle.is_file() else None
+        return dict(source_commit=commit, source_tree_clean=None)
     commit = subprocess.check_output(
         ['git', '-c', 'core.autocrlf=true', '-C', str(ROOT), 'rev-parse', 'HEAD'],
         text=True).strip()
