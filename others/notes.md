@@ -5,7 +5,7 @@ Values below come from the current CSV render; this is not a fresh experiment re
 Measurement, fitted-law simulation, model simulation and host timings remain distinct.
 See artifact/README.md for the experiment and CSV provenance.
 
-Total macros: 1275. Do not edit generated values by hand.
+Total macros: 1290. Do not edit generated values by hand.
 
 | Macro | Value | Macro file | Used in |
 |---|---|---|---|
@@ -18,13 +18,13 @@ Total macros: 1275. Do not edit generated values by hand.
 | `\AgentDoneNoResendN` | 1 | `macros_real.tex` | sections/07-agent.tex |
 | `\AgentDupHi` | 99.0 | `macros_real.tex` | (unused) |
 | `\AgentDupLo` | 74.2 | `macros_real.tex` | (unused) |
-| `\AgentDupN` | 17 | `macros_real.tex` | sections/07-agent.tex |
+| `\AgentDupN` | 17 | `macros_real.tex` | sections/00-abstract.tex, sections/01-introduction.tex, sections/07-agent.tex, sections/10-conclusion.tex |
 | `\AgentDupPct` | 94.4 | `macros_real.tex` | (unused) |
 | `\AgentFramework` | M3A | `macros_real.tex` | sections/02-background-motivation.tex, sections/07-agent.tex |
-| `\AgentGuardAskN` | 19 | `macros_real.tex` | sections/07-agent.tex |
+| `\AgentGuardAskN` | 19 | `macros_real.tex` | sections/01-introduction.tex, sections/07-agent.tex, sections/10-conclusion.tex |
 | `\AgentGuardDupHi` | 24.6 | `macros_real.tex` | sections/07-agent.tex |
 | `\AgentGuardDupLo` | 0.9 | `macros_real.tex` | sections/07-agent.tex |
-| `\AgentGuardDupN` | 1 | `macros_real.tex` | sections/07-agent.tex |
+| `\AgentGuardDupN` | 1 | `macros_real.tex` | sections/00-abstract.tex, sections/01-introduction.tex, sections/07-agent.tex, sections/10-conclusion.tex |
 | `\AgentGuardDupPct` | 5.3 | `macros_real.tex` | sections/07-agent.tex |
 | `\AgentGuardFisherP` | $<$0.001 | `macros_real.tex` | sections/07-agent.tex |
 | `\AgentGuardInvalidN` | 1 | `macros_real.tex` | (unused) |
@@ -33,7 +33,7 @@ Total macros: 1275. Do not edit generated values by hand.
 | `\AgentGuardSentDupN` | 0 | `macros_real.tex` | sections/07-agent.tex |
 | `\AgentGuardSentValidN` | 10 | `macros_real.tex` | sections/07-agent.tex |
 | `\AgentGuardUserErrN` | 1 | `macros_real.tex` | sections/07-agent.tex |
-| `\AgentGuardValidN` | 19 | `macros_real.tex` | sections/07-agent.tex |
+| `\AgentGuardValidN` | 19 | `macros_real.tex` | sections/00-abstract.tex, sections/07-agent.tex |
 | `\AgentHEvalS` | 300 | `macros_real.tex` | sections/07-agent.tex |
 | `\AgentHost` | one NVIDIA L40S (48 GB) cloud VM; x86-64 laptop running the Android emulator (API 33) | `macros_real.tex` | sections/07-agent.tex |
 | `\AgentInvalidMeasureN` | 0 | `macros_real.tex` | (unused) |
@@ -74,9 +74,9 @@ Total macros: 1275. Do not edit generated values by hand.
 | `\AgentRulesFisherP` | $<$0.001 | `macros_real.tex` | sections/07-agent.tex |
 | `\AgentRulesInvalidN` | 5 | `macros_real.tex` | (unused) |
 | `\AgentRulesNoCandN` | 0 | `macros_real.tex` | (unused) |
-| `\AgentRulesRetryN` | 15 | `macros_real.tex` | sections/07-agent.tex |
+| `\AgentRulesRetryN` | 15 | `macros_real.tex` | sections/07-agent.tex, sections/07-realsim.tex |
 | `\AgentRulesScheduledN` | 20 | `macros_real.tex` | (unused) |
-| `\AgentRulesValidN` | 15 | `macros_real.tex` | sections/07-agent.tex |
+| `\AgentRulesValidN` | 15 | `macros_real.tex` | sections/07-agent.tex, sections/07-realsim.tex |
 | `\AgentScheduledN` | 20 | `macros_real.tex` | sections/07-agent.tex |
 | `\AgentSentDupN` | 10 | `macros_real.tex` | (unused) |
 | `\AgentSentValidN` | 10 | `macros_real.tex` | (unused) |
@@ -98,7 +98,7 @@ Total macros: 1275. Do not edit generated values by hand.
 | `\AgentTextScheduledN` | 23 | `macros_real.tex` | sections/07-agent.tex |
 | `\AgentTextTaskFailN` | 1 | `macros_real.tex` | (unused) |
 | `\AgentTextValidN` | 10 | `macros_real.tex` | sections/02-background-motivation.tex, sections/07-agent.tex |
-| `\AgentValidN` | 18 | `macros_real.tex` | sections/02-background-motivation.tex, sections/07-agent.tex |
+| `\AgentValidN` | 18 | `macros_real.tex` | sections/00-abstract.tex, sections/01-introduction.tex, sections/02-background-motivation.tex, sections/07-agent.tex, sections/10-conclusion.tex |
 | `\AgentWallMedS` | 412 | `macros_real.tex` | sections/07-agent.tex |
 | `\CalCPENhundred` | 5.7 | `macros.tex` | (unused) |
 | `\CalCPViolMax` | 1.6 | `macros.tex` | (unused) |
@@ -131,13 +131,13 @@ Total macros: 1275. Do not edit generated values by hand.
 | `\CertBoundElemJointDup` | 5.12 | `macros_guarantee.tex` | sections/03-model.tex |
 | `\CertBoundElemJointEpsOne` | 6.33 | `macros_guarantee.tex` | (unused) |
 | `\CertBoundElemJointEpsZero` | 5.63 | `macros_guarantee.tex` | (unused) |
-| `\CertBoundElemJointLoss` | 6.63 | `macros_guarantee.tex` | (unused) |
+| `\CertBoundElemJointLoss` | 6.63 | `macros_guarantee.tex` | sections/03-model.tex |
 | `\CertBoundElemJointQone` | 65.06 | `macros_guarantee.tex` | sections/03-model.tex |
 | `\CertBoundElemJointQzero` | 100.00 | `macros_guarantee.tex` | (unused) |
 | `\CertBoundElemProdDup` | 1.19 | `macros_guarantee.tex` | sections/03-model.tex |
 | `\CertBoundElemProdEpsOne` | 10.06 | `macros_guarantee.tex` | (unused) |
 | `\CertBoundElemProdEpsZero` | 6.01 | `macros_guarantee.tex` | (unused) |
-| `\CertBoundElemProdLoss` | 1.25 | `macros_guarantee.tex` | (unused) |
+| `\CertBoundElemProdLoss` | 1.25 | `macros_guarantee.tex` | sections/03-model.tex |
 | `\CertBoundElemProdQone` | 1.92 | `macros_guarantee.tex` | (unused) |
 | `\CertBoundElemProdQzero` | 4.19 | `macros_guarantee.tex` | (unused) |
 | `\CertClassesN` | 4 | `macros_guarantee.tex` | sections/05-design.tex |
@@ -428,15 +428,15 @@ Total macros: 1275. Do not edit generated values by hand.
 | `\RealBlindLagHi` | 13.6 | `macros_real.tex` | (unused) |
 | `\RealBlindLagLo` | 4.6 | `macros_real.tex` | (unused) |
 | `\RealCalKill` | 5 | `macros_real.tex` | sections/07-real.tex |
-| `\RealCalN` | 8 | `macros_real.tex` | sections/00-abstract.tex, sections/01-introduction.tex, sections/07-real.tex |
+| `\RealCalN` | 8 | `macros_real.tex` | sections/01-introduction.tex, sections/07-real.tex |
 | `\RealCalOnce` | 8 | `macros_real.tex` | sections/07-real.tex |
-| `\RealCalRecDup` | 3 | `macros_real.tex` | sections/00-abstract.tex, sections/01-introduction.tex, sections/07-real.tex |
-| `\RealCalRecN` | 3 | `macros_real.tex` | sections/00-abstract.tex, sections/01-introduction.tex, sections/07-real.tex |
+| `\RealCalRecDup` | 3 | `macros_real.tex` | sections/01-introduction.tex, sections/07-real.tex |
+| `\RealCalRecN` | 3 | `macros_real.tex` | sections/01-introduction.tex, sections/07-real.tex |
 | `\RealCensored` | 0 | `macros_real.tex` | sections/07-real.tex |
 | `\RealCoBot` | 2 | `macros_real.tex` | (unused) |
 | `\RealCoN` | 101 | `macros_real.tex` | sections/01-introduction.tex, sections/07-real.tex, sections/08-discussion.tex |
 | `\RealCoWrong` | 0 | `macros_real.tex` | (unused) |
-| `\RealDataLimitation` | Emulator measurements (\S\ref{sec:eval-real}) cover three apps on an emulator, with $n$ small outside Element; the agent study (\S\ref{sec:eval-agent}) runs one model on the emulator, and on a physical phone only K-9 was measured, without an agent. | `macros_real.tex` | sections/08-discussion.tex |
+| `\RealDataLimitation` | Emulator measurements (\S\ref{sec:eval-real}) cover three apps on an emulator, with $n$ small outside Element; the agent study (\S\ref{sec:eval-agent}) runs one model on the emulator. Physical phones ran only K-9 and DAVx5, without an agent; the two rented phones have no root, so \texttt{am stop-app} stands in for \texttt{kill -9} and \texttt{lmkd} was not tested on them. | `macros_real.tex` | sections/08-discussion.tex |
 | `\RealDumpHi` | 2.5 | `macros_real.tex` | sections/07-real.tex |
 | `\RealDumpLo` | 2 | `macros_real.tex` | sections/07-real.tex |
 | `\RealEarlyWrong` | 3 | `macros_real.tex` | (unused) |
@@ -444,7 +444,7 @@ Total macros: 1275. Do not edit generated values by hand.
 | `\RealElemN` | 101 | `macros_real.tex` | sections/07-real.tex |
 | `\RealElemNofaultN` | 12 | `macros_real.tex` | sections/07-real.tex |
 | `\RealElemOnce` | 101 | `macros_real.tex` | (unused) |
-| `\RealElemRL` | 83 | `macros_real.tex` | figures/fig1.tex, sections/00-abstract.tex, sections/01-introduction.tex, sections/07-real.tex |
+| `\RealElemRL` | 83 | `macros_real.tex` | figures/fig1.tex, sections/01-introduction.tex, sections/07-real.tex |
 | `\RealElemSameTxn` | 65 | `macros_real.tex` | (unused) |
 | `\RealElemSentPolls` | 1{,}036 | `macros_real.tex` | sections/07-real.tex |
 | `\RealElemStd` | 60 | `macros_real.tex` | sections/07-real.tex |
@@ -453,18 +453,18 @@ Total macros: 1275. Do not edit generated values by hand.
 | `\RealElemStickyResend` | 2 | `macros_real.tex` | sections/07-real.tex |
 | `\RealElemStickySync` | 18 | `macros_real.tex` | sections/07-real.tex |
 | `\RealElemSyncOnly` | 18 | `macros_real.tex` | (unused) |
-| `\RealEmuCalDozeMedS` | 50.9 | `macros_real.tex` | (unused) |
+| `\RealEmuCalDozeMedS` | 50.9 | `macros_real.tex` | sections/08-discussion.tex |
 | `\RealEmuCalDozeN` | 3 | `macros_real.tex` | (unused) |
-| `\RealEmuCalKillMedS` | 52.5 | `macros_real.tex` | (unused) |
+| `\RealEmuCalKillMedS` | 52.5 | `macros_real.tex` | sections/08-discussion.tex |
 | `\RealEmuCalKillN` | 3 | `macros_real.tex` | (unused) |
 | `\RealEmuCalLmkMedS` | 39.6 | `macros_real.tex` | (unused) |
 | `\RealEmuCalLmkN` | 3 | `macros_real.tex` | (unused) |
 | `\RealEmuCalN` | 12 | `macros_real.tex` | (unused) |
-| `\RealEmuCalOnceN` | 11 | `macros_real.tex` | (unused) |
-| `\RealEmuCalValidN` | 11 | `macros_real.tex` | (unused) |
+| `\RealEmuCalOnceN` | 11 | `macros_real.tex` | sections/08-discussion.tex |
+| `\RealEmuCalValidN` | 11 | `macros_real.tex` | sections/08-discussion.tex |
 | `\RealEmuKDupLo` | 61.0 | `macros_real.tex` | (unused) |
-| `\RealEmuKDupN` | 6 | `macros_real.tex` | (unused) |
-| `\RealEmuKN` | 6 | `macros_real.tex` | (unused) |
+| `\RealEmuKDupN` | 6 | `macros_real.tex` | sections/08-discussion.tex |
+| `\RealEmuKN` | 6 | `macros_real.tex` | sections/08-discussion.tex |
 | `\RealFirstBot` | 33 | `macros_real.tex` | sections/07-real.tex |
 | `\RealFirstObs` | 68 | `macros_real.tex` | sections/07-real.tex |
 | `\RealFirstWrong` | 3 | `macros_real.tex` | sections/07-real.tex |
@@ -487,8 +487,8 @@ Total macros: 1275. Do not edit generated values by hand.
 | `\RealKRd` | 20 | `macros_real.tex` | figures/fig1.tex, sections/07-real.tex |
 | `\RealKRdNosent` | 12 | `macros_real.tex` | (unused) |
 | `\RealKRdSent` | 8 | `macros_real.tex` | (unused) |
-| `\RealKRecDup` | 20 | `macros_real.tex` | figures/fig1.tex, sections/00-abstract.tex, sections/01-introduction.tex, sections/07-real.tex |
-| `\RealKRecN` | 20 | `macros_real.tex` | figures/fig1.tex, sections/00-abstract.tex, sections/01-introduction.tex, sections/07-real.tex |
+| `\RealKRecDup` | 20 | `macros_real.tex` | figures/fig1.tex, sections/01-introduction.tex, sections/07-real.tex |
+| `\RealKRecN` | 20 | `macros_real.tex` | figures/fig1.tex, sections/01-introduction.tex, sections/07-real.tex |
 | `\RealKSendmsgsTapped` | 8 | `macros_real.tex` | sections/07-real.tex |
 | `\RealKSentAckedN` | 7 | `macros_real.tex` | (unused) |
 | `\RealKSentN` | 8 | `macros_real.tex` | sections/07-real.tex |
@@ -561,19 +561,34 @@ Total macros: 1275. Do not edit generated values by hand.
 | `\RealOneKnineRdN` | 15 | `macros_real.tex` | (unused) |
 | `\RealOneKnineRdPending` | 15 | `macros_real.tex` | (unused) |
 | `\RealOneN` | 72 | `macros_real.tex` | sections/07-real.tex |
-| `\RealPhoneAndroid` | 15 | `macros_real.tex` | (unused) |
+| `\RealPhoneAndroid` | 15 | `macros_real.tex` | sections/08-discussion.tex |
 | `\RealPhoneBgN` | 10 | `macros_real.tex` | (unused) |
 | `\RealPhoneDupLo` | 88.6 | `macros_real.tex` | (unused) |
-| `\RealPhoneDupN` | 30 | `macros_real.tex` | (unused) |
+| `\RealPhoneDupN` | 30 | `macros_real.tex` | sections/08-discussion.tex |
 | `\RealPhoneForceN` | 20 | `macros_real.tex` | (unused) |
-| `\RealPhoneN` | 30 | `macros_real.tex` | (unused) |
-| `\RealPhoneNoResendN` | 30 | `macros_real.tex` | (unused) |
+| `\RealPhoneN` | 30 | `macros_real.tex` | sections/08-discussion.tex |
+| `\RealPhoneNoResendN` | 30 | `macros_real.tex` | sections/08-discussion.tex |
 | `\RealPhoneNotifBgN` | 10 | `macros_real.tex` | (unused) |
 | `\RealPhoneNotifForceN` | 0 | `macros_real.tex` | (unused) |
 | `\RealPhoneObserveS` | 120 | `macros_real.tex` | (unused) |
 | `\RealPilotN` | 3 | `macros_real.tex` | sections/07-real.tex |
 | `\RealPilotStaleDigest` | 1 | `macros_real.tex` | sections/07-real.tex |
 | `\RealPresent` | yes | `macros_real.tex` | (unused) |
+| `\RealRentAndroid` | 15 | `macros_real.tex` | (unused) |
+| `\RealRentPixDozeMedS` | 27.4 | `macros_real.tex` | sections/08-discussion.tex |
+| `\RealRentPixDozeN` | 3 | `macros_real.tex` | (unused) |
+| `\RealRentPixN` | 9 | `macros_real.tex` | (unused) |
+| `\RealRentPixOnceN` | 9 | `macros_real.tex` | sections/08-discussion.tex |
+| `\RealRentPixStopMedS` | 52.7 | `macros_real.tex` | (unused) |
+| `\RealRentPixStopN` | 3 | `macros_real.tex` | (unused) |
+| `\RealRentPixValidN` | 9 | `macros_real.tex` | sections/08-discussion.tex |
+| `\RealRentSamDozeN` | 1 | `macros_real.tex` | (unused) |
+| `\RealRentSamDozeQuietS` | 1{,}028 | `macros_real.tex` | sections/08-discussion.tex |
+| `\RealRentSamN` | 9 | `macros_real.tex` | (unused) |
+| `\RealRentSamOnceN` | 7 | `macros_real.tex` | sections/08-discussion.tex |
+| `\RealRentSamStopMedS` | 30.0 | `macros_real.tex` | (unused) |
+| `\RealRentSamStopN` | 3 | `macros_real.tex` | (unused) |
+| `\RealRentSamValidN` | 7 | `macros_real.tex` | sections/08-discussion.tex |
 | `\RealTimeoutClean` | 3 | `macros_real.tex` | sections/08-discussion.tex |
 | `\RealTimeoutN` | 6 | `macros_real.tex` | sections/07-real.tex |
 | `\RealTimeoutOnce` | 6 | `macros_real.tex` | sections/07-real.tex |
@@ -607,7 +622,7 @@ Total macros: 1275. Do not edit generated values by hand.
 | `\RsimElemJointPv` | 0.00 | `macros.tex` | (unused) |
 | `\RsimElemJointPvHi` | 0.04 | `macros.tex` | sections/07-realsim.tex |
 | `\RsimElemJointSecs` | 70 | `macros.tex` | (unused) |
-| `\RsimElemProdAsk` | 3.0 | `macros.tex` | sections/07-realsim.tex |
+| `\RsimElemProdAsk` | 3.0 | `macros.tex` | sections/05-design.tex, sections/07-realsim.tex |
 | `\RsimElemProdDup` | 0.15 | `macros.tex` | (unused) |
 | `\RsimElemProdErr` | 0.24 | `macros.tex` | (unused) |
 | `\RsimElemProdLoss` | 0.09 | `macros.tex` | (unused) |
@@ -644,9 +659,9 @@ Total macros: 1275. Do not edit generated values by hand.
 | `\RsimElemSrcSecs` | 70 | `macros.tex` | (unused) |
 | `\RsimFitCoN` | 101 | `macros.tex` | sections/07-realsim.tex |
 | `\RsimFitCoWrong` | 0 | `macros.tex` | sections/07-realsim.tex |
-| `\RsimFitLateObs` | 297 | `macros.tex` | sections/07-realsim.tex |
+| `\RsimFitLateObs` | 99 | `macros.tex` | sections/07-realsim.tex |
 | `\RsimFitLateWrong` | 0 | `macros.tex` | sections/07-realsim.tex |
-| `\RsimFiveJointAsk` | 12.7 | `macros.tex` | sections/00-abstract.tex, sections/01-introduction.tex, sections/05-design.tex, sections/07-realsim.tex, sections/10-conclusion.tex |
+| `\RsimFiveJointAsk` | 12.7 | `macros.tex` | sections/01-introduction.tex, sections/05-design.tex, sections/07-realsim.tex |
 | `\RsimFiveJointDup` | 0.09 | `macros.tex` | (unused) |
 | `\RsimFiveJointErr` | 0.76 | `macros.tex` | (unused) |
 | `\RsimFiveJointLoss` | 0.67 | `macros.tex` | (unused) |
@@ -696,7 +711,7 @@ Total macros: 1275. Do not edit generated values by hand.
 | `\RsimKnineJointPv` | 0.00 | `macros.tex` | (unused) |
 | `\RsimKnineJointPvHi` | 0.04 | `macros.tex` | (unused) |
 | `\RsimKnineJointSecs` | 77 | `macros.tex` | (unused) |
-| `\RsimKnineProdAsk` | 100.0 | `macros.tex` | (unused) |
+| `\RsimKnineProdAsk` | 100.0 | `macros.tex` | sections/05-design.tex |
 | `\RsimKnineProdDup` | 3.96 | `macros.tex` | (unused) |
 | `\RsimKnineProdErr` | 6.01 | `macros.tex` | (unused) |
 | `\RsimKnineProdLoss` | 2.05 | `macros.tex` | (unused) |
@@ -787,7 +802,7 @@ Total macros: 1275. Do not edit generated values by hand.
 | `\RsimKsentPassSrcPv` | 0.00 | `macros.tex` | (unused) |
 | `\RsimKsentPassSrcPvHi` | 0.04 | `macros.tex` | (unused) |
 | `\RsimKsentPassSrcSecs` | 75 | `macros.tex` | (unused) |
-| `\RsimKsentProdAsk` | 100.0 | `macros.tex` | (unused) |
+| `\RsimKsentProdAsk` | 100.0 | `macros.tex` | sections/05-design.tex |
 | `\RsimKsentProdDup` | 4.09 | `macros.tex` | (unused) |
 | `\RsimKsentProdErr` | 6.04 | `macros.tex` | (unused) |
 | `\RsimKsentProdLoss` | 1.95 | `macros.tex` | (unused) |
@@ -1057,7 +1072,7 @@ Total macros: 1275. Do not edit generated values by hand.
 | `\SimCkptPv` | 100.0 | `macros.tex` | (unused) |
 | `\SimCkptPvHi` | 100.00 | `macros.tex` | (unused) |
 | `\SimCkptSecs` | 14 | `macros.tex` | (unused) |
-| `\SimGhostAsk` | 24.9 | `macros.tex` | sections/00-abstract.tex, sections/01-introduction.tex, sections/07-evaluation.tex |
+| `\SimGhostAsk` | 24.9 | `macros.tex` | sections/01-introduction.tex, sections/07-evaluation.tex |
 | `\SimGhostBg` | 2.1 | `macros.tex` | (unused) |
 | `\SimGhostCloss` | 0.00 | `macros.tex` | (unused) |
 | `\SimGhostDup` | 0.94 | `macros.tex` | (unused) |
@@ -1078,12 +1093,12 @@ Total macros: 1275. Do not edit generated values by hand.
 | `\SimGtwoPvHi` | 0.04 | `macros.tex` | (unused) |
 | `\SimGtwoSecs` | 55 | `macros.tex` | (unused) |
 | `\SimHalfWidth` | 0.9 | `macros.tex` | (unused) |
-| `\SimJointAsk` | 66.7 | `macros.tex` | sections/00-abstract.tex, sections/01-introduction.tex, sections/07-evaluation.tex |
+| `\SimJointAsk` | 66.7 | `macros.tex` | sections/01-introduction.tex, sections/07-evaluation.tex |
 | `\SimJointDup` | 3.1 | `macros.tex` | (unused) |
 | `\SimJointLoss` | 2.4 | `macros.tex` | (unused) |
 | `\SimJointLv` | 0.05 | `macros.tex` | (unused) |
 | `\SimJointP` | 0.00 | `macros.tex` | (unused) |
-| `\SimJointPv` | 0.05 | `macros.tex` | sections/00-abstract.tex, sections/01-introduction.tex, sections/07-evaluation.tex |
+| `\SimJointPv` | 0.05 | `macros.tex` | sections/01-introduction.tex, sections/07-evaluation.tex |
 | `\SimJointPvHi` | 0.12 | `macros.tex` | (unused) |
 | `\SimJointSecs` | 71 | `macros.tex` | (unused) |
 | `\SimKeyAsk` | 0.0 | `macros.tex` | (unused) |

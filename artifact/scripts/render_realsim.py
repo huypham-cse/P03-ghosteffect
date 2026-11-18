@@ -29,12 +29,13 @@ _fit = {r['family_read']: r for r in rd('real/campaign2/c2_element_families.csv'
 _late_names = {'a_indicator_late', 'b_row_late', 'c_digest_late'}
 if set(_fit) & _late_names != _late_names:
     raise ValueError('missing measured late family rows')
-_late_counts = {(int(_fit[name]['n_reads']), int(_fit[name]['observed'])) for name in _late_names}
+_late_counts = {(int(_fit[name]['n_reads']), int(_fit[name]['observed']), int(_fit[name]['wrong'])) for name in _late_names}
 if len(_late_counts) != 1:
     raise ValueError('inconsistent measured late family counts')
 _co = rd('real/campaign2/c2_element_cofailure.csv')
-M('RsimFitLateWrong', _fit['a_indicator_late']['wrong'])
-M('RsimFitLateObs', sum(int(_fit[name]['observed']) for name in _late_names))
+(_late_n, _late_obs, _late_wrong), = _late_counts   # every late family has the same counts: report one family's
+M('RsimFitLateWrong', _late_wrong)
+M('RsimFitLateObs', _late_obs)
 if len({(r['n'], r['both_wrong']) for r in _co}) != 1:
     raise ValueError('inconsistent late cofailure counts')
 M('RsimFitCoWrong', _co[0]['both_wrong'])
@@ -81,8 +82,8 @@ Policy & dup & loss & ask & $P_{\mathrm{v}}$ (hi) \\
 W('tab_realsim.tex', r'''\begin{table*}[t]
 \centering
 \caption{\emph{Measured-parameter simulation} (\RsimWorkflowN{} paired interrupted workflows per row; not an emulator run).
-Calibration and test draws follow the same fitted law. Element's measured late family errors are
-\RsimFitLateWrong/\RsimFitLateObs{} observed reads; pairwise late cofailures are \RsimFitCoWrong/\RsimFitCoN{} trials.
+Calibration and test draws follow the same fitted law. Element's measured late errors are
+\RsimFitLateWrong/\RsimFitLateObs{} observed reads in each family; pairwise late cofailures are \RsimFitCoWrong/\RsimFitCoN{} trials.
 This checks the certification machinery and asking cost under that law, rather than reader errors on real screens.
 Measured inputs (Table~\ref{tab:real}) include retry mechanisms and per-class lags; fault mix, absent-side errors, Monitor and user are modelled.
 K-9's queued-mail lag $U$(45\,s, 15\,min) is assumed. Element has no lag-free hop-1 family.
