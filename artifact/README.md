@@ -1,7 +1,10 @@
 # GhostEffect artifact
 
-Experiment runtime is **stdlib-only Python 3** (sqlite3 included) and simulations are **seeded**. On Linux/WSL, run
-`python3 artifact/run_all.py --output-dir /absolute/path/to/fresh-run --jobs 2` from the project root; `artifact/run_all.sh` is a thin wrapper.
+Experiment runtime is **stdlib-only Python 3.12** (sqlite3 included) and simulations are **seeded**. On Linux/WSL, reproduce with one command:
+`python3 artifact/run_all.py --output-dir /absolute/path/to/fresh-run --jobs 4`.
+The archived Linux/WSL2 run with this command recorded 824 seconds of child-job
+time (about 13 minutes 44 seconds) on an x86_64 WSL2 host; wall time varies with
+the host and worker scheduling. `artifact/run_all.sh` is a thin wrapper.
 The runner copies inputs/scripts into a fresh workspace, records hashes/exits/CSV structure, runs REAL4 and publishes generated fragments there.
 Archived results and the original manuscript are not overwritten. The full suite includes POSIX SIGKILL and rejects native Windows.
 Compile a reviewed generated workspace with `manuscript/build.sh`; LaTeX/BibTeX failures now propagate.
@@ -62,7 +65,7 @@ Etar+DAVx5+Radicale, Synapse txnId horizon). Campaign 1 (`results/real/*.csv`) s
 * Fault-class-keyed calibration (`keyed='all'`), lab fault mix (`cal_faults`), unknown-class fallback (`class_known`), no-observation reads (bot).
 * `sample_size.py`: product zero-event column and joint median-case column at a true region rate alpha_test/4.
 
-`retired/illustrative.py` and `retired/illustrative_results/` are the round-1 † projections (seeded draws around target rates). They are **not** measurements and are
+`retired/illustrative.py` and `retired/illustrative_results/` are the round-1 projections (seeded draws around target rates). They are **not** measurements and are
 **not** used by the paper. They are kept only so the change can be audited.
 
 ## Not done
@@ -70,4 +73,11 @@ Etar+DAVx5+Radicale, Synapse txnId horizon). Campaign 1 (`results/real/*.csv`) s
 - Device harness (AndroidWorld fault injector, on-device controller), power-loss ledger test on a device: see paper §6 and §7.
 
 Verification: `python -m unittest discover -s artifact/tests -v`; SciPy is an optional independent test reference, not a runtime dependency.
-The 2026-11-08 isolated25-job run passed, including16REAL4tags. Do not claim byte-identical reproduction of the archive: unmodified bundled source already differs from stored `ghost-src` outputs on both Windows and Linux, and floating CI/host timings also vary. See [`../codex/code-fixes.md`](../codex/code-fixes.md) for evidence, fixes and remaining gates. No archived CSV was replaced to hide differences.
+The isolated 25-job run passed, including all declared REAL4 tags. Ledger latency
+(`artifact/results/ledger_bench.csv` in the extracted bundle) and filesystem durability depend on the host.
+Other CSV values can differ between hosts only in floating-point tails (about 1e-10); for example, `ghost-src`
+reproduces the same 47.00833% ask rate on Windows and Linux.
+
+After extracting a bundle, run `sh team/scrub_check.sh <extracted-directory>`.
+The scrub checker scans the extracted directory; it does not inspect a ZIP
+container as a binary stream.

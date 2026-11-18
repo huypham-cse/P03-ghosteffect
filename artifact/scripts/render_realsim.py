@@ -8,15 +8,38 @@ _P = {(r['tag'], r['policy']): r for r in _pr}
 
 
 def _report_count(tag, column):
+    """Read a table-wide count from its rows, rejecting mixed inputs."""
     values = {int(r[column]) for r in _pr if r['tag'] == tag}
     if len(values) != 1:
         raise ValueError('inconsistent reporting count: ' + tag + '/' + column)
     return f'{values.pop():,}'.replace(',', '{,}')
 
 
+for _tag in {r['tag'] for r in _pr}:
+    for _column in ('n', 'ncal'):
+        _values = {int(r[_column]) for r in _pr if r['tag'] == _tag}
+        if len(_values) > 1:
+            raise ValueError('inconsistent reporting count: ' + _tag + '/' + _column)
+
+
 M('RsimWorkflowN', _report_count('main', 'n'))
 M('RsimBaseLabelN', _report_count('main', 'ncal'))
 M('RsimFiveLabelN', _report_count('five', 'ncal'))
+_fit = {r['family_read']: r for r in rd('real/campaign2/c2_element_families.csv') if r['cell'] == 'ALL'}
+_late_names = {'a_indicator_late', 'b_row_late', 'c_digest_late'}
+if set(_fit) & _late_names != _late_names:
+    raise ValueError('missing measured late family rows')
+_late_counts = {(int(_fit[name]['n_reads']), int(_fit[name]['observed']), int(_fit[name]['wrong'])) for name in _late_names}
+if len(_late_counts) != 1:
+    raise ValueError('inconsistent measured late family counts')
+_co = rd('real/campaign2/c2_element_cofailure.csv')
+(_late_n, _late_obs, _late_wrong), = _late_counts   # every late family has the same counts: report one family's
+M('RsimFitLateWrong', _late_wrong)
+M('RsimFitLateObs', _late_obs)
+if len({(r['n'], r['both_wrong']) for r in _co}) != 1:
+    raise ValueError('inconsistent late cofailure counts')
+M('RsimFitCoWrong', _co[0]['both_wrong'])
+M('RsimFitCoN', _co[0]['n'])
 _lab = {'redo': 'redo', 'app-state': 'trust app status', 'rules': 'rules, 10\\,s wait', 'rules-w30-all': 'rules, 30\\,s wait',
         'always-ask': 'always ask', 'g2-only': 'Thm.~\\ref{thm:twohop} only', 'ghost': 'product', 'ghost-src': 'source families',
         'ghost-joint': 'joint'}
@@ -58,11 +81,15 @@ Policy & dup & loss & ask & $P_{\mathrm{v}}$ (hi) \\
 '''
 W('tab_realsim.tex', r'''\begin{table*}[t]
 \centering
-\caption{\emph{Measured-parameter simulation} (\RsimWorkflowN{} paired interrupted workflows per row; not an emulator run). Measured (Table~\ref{tab:real}): G2 and its
-mechanisms, per-fault-class lag laws with lag-blind first reads, the 2\% late no-observation rate and zero late family errors (Element); the permanent failed state,
-the client-written Sent folder and its APPEND lag (K-9). Modelled: fault mix, absent-side errors, Monitor, user; K-9's queued-mail lag $U$(45\,s, 15\,min) is an
-assumption. Element has no hop-1 family (its indicator is not lag-free). Labels are simulated draws from the measured law. Tail: committed effects (the 95\%
-upper bound from 0/101 censored) visible only after 14--300\,s. Always ask: dup/loss \RsimElemAskAllDup/\RsimElemAskAllLoss{} (Element). dup, loss, ask: \% of workflows; $P_{\mathrm{v}}$: \% of committed effects the policy retried by itself
+\caption{\emph{Measured-parameter simulation} (\RsimWorkflowN{} paired interrupted workflows per row; not an emulator run).
+Calibration and test draws follow the same fitted law. Element's measured late errors are
+\RsimFitLateWrong/\RsimFitLateObs{} observed reads in each family; pairwise late cofailures are \RsimFitCoWrong/\RsimFitCoN{} trials.
+This checks the certification machinery and asking cost under that law, rather than reader errors on real screens.
+Measured inputs (Table~\ref{tab:real}) include retry mechanisms and per-class lags; fault mix, absent-side errors, Monitor and user are modelled.
+K-9's queued-mail lag $U$(45\,s, 15\,min) is assumed. Element has no lag-free hop-1 family.
+The tail case places \RsimTail\% of committed effects beyond the measured maximum.
+Always ask: dup/loss \RsimElemAskAllDup/\RsimElemAskAllLoss{} (Element).
+dup, loss and ask are percentages of workflows; $P_{\mathrm v}$ is the percentage of committed effects retried by the policy
 (CP 95\% upper bound; budget 1\%).}
 \label{tab:realsim}
 \scriptsize

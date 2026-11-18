@@ -319,6 +319,52 @@ trên manuscript, code/test artifact và receipts. Conclusion vẫn trang 13;
 Trạng thái C-03: triển khai/thí nghiệm/bảng/văn bản xong để review; chưa
 nghiệm thu. C-01/C-02/C-10 có nhánh/commit riêng; vẫn chờ người dùng hoàn
 thành GitHub device login để push và tạo các PR nối tiếp, không tự merge.
+
+## 18/11/2026 — C-10 cập nhật bộ đếm readability cho mã giả
+
+Thêm môi trường `algorithmic` vào danh sách khối không phải văn xuôi của
+`team/readability_count.py`. Bổ sung test bảo đảm dấu chấm phẩy và câu dài
+trong Algorithm 1 không bị tính như câu văn. Đây là sửa công cụ dùng chung,
+giúp YC-12 của phần A chạy đúng trên mã giả mà không thay đổi nội dung A.
+
+## 18/11/2026 — C-07 rà soát related work
+
+Đã tách câu so sánh Agent libOS khỏi câu RFC 1047 để mỗi nguồn có phạm vi
+riêng. Câu mới nêu rõ Agent libOS kiểm soát capability và checkpoint quanh
+tool dispatch, còn GhostEffect xử lý effect GUI đã externalize. Bib đã pin
+Agent libOS ở v3; `others/citation-audit.md` ghi URL nguồn và lý do không thêm
+Gray--Reuter hoặc Bailis.
+
+## 18/11/2026 — C-20 device and emulator evidence
+
+Thêm vào §8 hai câu dùng macro B-19: kết quả K-9 trên physical Android phone,
+kết quả lmkd trên emulator và DAVx5 dưới kill/Doze, ghi rõ loại phép đo và
+giới hạn chưa đo quản lý pin của hãng. Không sửa file sở hữu của B và không
+đưa số gõ tay vào văn bản. C-20 cần được kiểm lại cùng C-14/C-16 sau khi chuỗi
+agent và evaluation rebase lên main.
+
+## 18/11/2026 — C-12 kiểm đường dẫn dữ liệu phụ thuộc host
+
+README artifact và README nhúng trong bundle đều ghi rõ
+`artifact/results/ledger_bench.csv` là file phụ thuộc host. Bundle vẫn yêu
+cầu cây `artifact`, `testbed`, `manuscript` sạch, tạo manifest từ commit hiện
+tại, loại tài liệu nội bộ và chỉ scrub sau khi giải nén.
+
+## 18/11/2026 — C-14–C-19 rà soát agent và conclusion
+
+Đã chỉnh phần văn bản sở hữu C để khuyến nghị certification có điều kiện theo A2,
+mô tả đúng thí nghiệm agent trên emulator, và thay các câu cũ về agent/RQ7 trong
+evaluation. Conclusion hiện báo cáo các số agent bằng macro `Agent*`; các số mới vẫn
+cần review khi nội dung C-20 và các PR dữ liệu được tích hợp.
+
+## 19/11/2026: C-04 sửa theo review #57 (trưởng nhóm sửa trên nhánh)
+
+`\RsimFitLateObs` lấy số lượt quan sát của một họ muộn (ba họ có cùng số lượt, cùng số sai, renderer kiểm), nên caption Table 4 và §7.3 ghi 0/99 lượt đọc mỗi họ, không cộng thành 297. Caption `tab_nsize` trở lại "certified at δ/4" (δ trong caption là min(α,β)/(10K), keyed theo 4 lớp chia thêm 4, khớp `sample_size.py` và δ ở §4.3 với n_cls = 4). Render lại `tab_nsize`, `tab_planner`, `tab_realsim` và `others/notes.md` cho khớp renderer.
+
+## 19/11/2026: C-05 sửa theo review #58 (trưởng nhóm sửa trên nhánh)
+
+Thêm test: `render.py` phải thoát lỗi khi `planner_seed_variance.csv` thiếu hoặc trùng một dòng (thử đột biến: bỏ đoạn kiểm thì test fail). Renderer kiểm câu ở phụ lục (một seed duy nhất kéo SD của vetted rules trên Element), caption ghi loại số (model-based và measured-parameter simulation), câu phụ lục bỏ chữ "four" viết tay. Gộp `main` (#57), `tab_planner` khớp renderer. Meta còn ghi `git_commit` 09a20fd (trước force-push); chạy lại với code đã commit cho cùng số đếm, số thực lệch tối đa 1,2e-12; freeze 21/11 sẽ sinh lại meta.
+
  
 
 ## 10/11/2026 — Trạng thái publish sau C-03

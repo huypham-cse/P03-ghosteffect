@@ -32,10 +32,15 @@ Policies
   ghost-*                        ablations of the product planner
 """
 import csv
+import hashlib
+import json
 import math
 import os
+import platform
 import random
+import subprocess
 import sys
+from datetime import datetime, timezone
 from collections import Counter
 
 sys.path.insert(0, os.path.dirname(__file__))
@@ -2018,7 +2023,7 @@ def part_share():
     write('planner_share.csv', rows)
 
 
-# C-05: fixed reporting design; no new seed, budget or policy tuning.
+# C-05: fixed reporting cases; no seed, budget, or policy tuning during render.
 SEED_CASES = {
     'model': (['redo', 'g2-only', 'always-ask', 'rules', 'ghost', 'ghost-joint'], {}),
     'element': (['ghost', 'ghost-joint', 'rules-vetted'], dict(only_app='element', cal_pop='fault', keyed='all')),
@@ -2028,10 +2033,10 @@ SEED_CASES = {
 
 
 def part_seedvariance():
-    """Report the original Table 2/4 rows by original seed, without pooling away variability."""
+    """Record every original seed for the Table 2/4 reporting cases."""
     measured = real_overrides()
     if not measured:
-        raise ValueError('seed variance requires the archived measured parameters')
+        raise ValueError('seed variance requires archived measured parameters')
     measured.pop('elem_tail_ub', None)
     rows = []
     for case, (policies, extra) in SEED_CASES.items():
@@ -2043,6 +2048,28 @@ def part_seedvariance():
                            nlag=extra.get('nlag', N_LAG), keyed=extra.get('keyed', 'pooled'))
                 rows.append(row)
     write('planner_seed_variance.csv', rows)
+    csv_path = os.path.join(RES, 'planner_seed_variance.csv')
+    script_path = os.path.abspath(__file__)
+    try:
+        git_commit = subprocess.check_output(
+            ['git', '-C', os.path.dirname(os.path.dirname(script_path)), 'rev-parse', 'HEAD'],
+            text=True).strip()
+    except (OSError, subprocess.CalledProcessError):
+        git_commit = 'unknown'
+    with open(os.path.join(RES, 'planner_seed_variance.meta.json'), 'w', encoding='utf-8') as stream:
+        json.dump(dict(command='python3 artifact/scripts/planner_sim.py seedvariance',
+                       git_commit=git_commit, seed=SEEDS,
+                       python_version=sys.version, date=datetime.now(timezone.utc).isoformat(),
+                       host=platform.platform(),
+                       csv_sha256=hashlib.sha256(open(csv_path, 'rb').read()).hexdigest(),
+                       script_sha256=hashlib.sha256(open(script_path, 'rb').read()).hexdigest(),
+                       seeds=SEEDS, n_per_seed=N_PER_SEED,
+                       cases={name: dict(policies=policies, ncal=int(round(NCAL * extra.get('ncal_scale', 1))),
+                                         nlag=extra.get('nlag', N_LAG))
+                              for name, (policies, extra) in SEED_CASES.items()}), stream, indent=2)
+        stream.write('\n')
+
+
 
 
 

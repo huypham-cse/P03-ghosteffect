@@ -6,6 +6,7 @@ Emits booktabs tables (tab_*.tex), pgfplots figures with inline coordinates (fig
 written by a seeded script (or, for the ledger benchmark, a host measurement).
 """
 import csv
+import json
 import math
 import os
 import argparse
@@ -463,50 +464,54 @@ P['rules-vetted'] = _model_match['rules-vetted']
 for _suffix, _column, _fmt in (('Ask', 'ask', f1), ('Pv', 'cdup', f2), ('PvHi', 'cdup_hi', f2)):
     M('SimModelVetted' + _suffix, _fmt(P['rules-vetted'][_column]))
 
-# C-05: variability across fixed original seeds, not confidence intervals.
-import statistics as _statistics
-import importlib.util as _seed_import
-_seed_spec = _seed_import.spec_from_file_location('_seed_report_plan', os.path.join(HERE, 'planner_sim.py'))
-_seed_plan = _seed_import.module_from_spec(_seed_spec)
-_seed_spec.loader.exec_module(_seed_plan)
-_report_seeds, _seed_cases = _seed_plan.SEEDS, _seed_plan.SEED_CASES
+
+# C-05: renderer consumes the archived CSV plus its explicit reporting contract.
+with open(os.path.join(RES, 'planner_seed_variance.meta.json'), encoding='utf-8') as _seed_meta_file:
+    _seed_meta = json.load(_seed_meta_file)
 _seed_rows = rd('planner_seed_variance.csv')
+_seed_cases = _seed_meta['cases']
+_seed_values = _seed_meta['seeds']
 _seed_index = {(r['case'], r['policy'], int(r['seed'])): r for r in _seed_rows}
-_expected_seed_rows = {(case, policy, seed) for case, (policies, _) in _seed_cases.items()
-                       for policy in policies for seed in _report_seeds}
-if set(_seed_index) != _expected_seed_rows or len(_seed_rows) != len(_seed_index):
+_seed_expected = {(case, policy, seed) for case, spec in _seed_cases.items()
+                  for policy in spec['policies'] for seed in _seed_values}
+if set(_seed_index) != _seed_expected or len(_seed_rows) != len(_seed_index):
     raise ValueError('incomplete or duplicate seed variance rows')
-if any(int(r['n']) != 2400 for r in _seed_rows):
-    raise ValueError('unexpected seed workflow budget')
-M('SimSeedCount', str(len(_report_seeds)))
+if any(int(r['n']) != int(_seed_meta['n_per_seed']) for r in _seed_rows):
+    raise ValueError('seed variance workflow count disagrees with metadata')
+M('SimSeedCount', str(len(_seed_values)))
 _seed_lines = []
-for _case, (_policies, _) in _seed_cases.items():
-    for _policy in _policies:
-        _rows = [_seed_index[(_case, _policy, _seed)] for _seed in _report_seeds]
+for _case, _spec in _seed_cases.items():
+    for _policy in _spec['policies']:
+        _rows = [_seed_index[(_case, _policy, _seed)] for _seed in _seed_values]
         _ask = [float(r['ask']) for r in _rows]
-        _pv = [float(r['cdup']) for r in _rows if int(r['n1']) > 0]
-        _name = {'ghost': 'product', 'ghost-joint': 'joint', 'g2-only': 'theorem-only'}.get(_policy, _policy)
-        _spread = lambda values: (f'{_statistics.mean(values):.2f} $\\pm$ {_statistics.stdev(values):.2f}'
-                                  if len(values) == len(_report_seeds) else 'N/A')
-        _seed_lines.append(' & '.join([_case, _name, _spread(_ask),
-                           f'{min(_ask):.2f}--{max(_ask):.2f}', _spread(_pv)]) + r' \\')
-W('tab_seed_variance.tex', r"""\begin{table*}[t]
+        _mean = sum(_ask) / len(_ask)
+        _sd = math.sqrt(sum((x - _mean) ** 2 for x in _ask) / (len(_ask) - 1))
+        _label = {'ghost': 'product', 'ghost-joint': 'joint', 'g2-only': 'theorem-only',
+                  'rules-vetted': 'vetted rules'}.get(_policy, _policy)
+        _seed_lines.append(f"{_case} & {_label} & {_mean:.2f} $\\pm$ {_sd:.2f} & {min(_ask):.2f}--{max(_ask):.2f} \\\\")
+# prose (appendix-results.tex): one reporting seed drives the Element vetted-rule SD; the others cluster low
+_ev = sorted(float(_seed_index[('element', 'rules-vetted', _s)]['ask']) for _s in _seed_values)
+if not _ev[-1] > 3 * _ev[-2]:
+    raise ValueError('seed variance prose: Element vetted rules no longer have a single outlying seed')
+W('tab_seed_variance.tex', r'''\begin{table*}[t]
 \centering
-\caption{Across-seed variability for the original model-based and measured-parameter simulations.
-Each row reports the same \SimSeedCount{} original seeds with unchanged per-seed workflow and calibration budgets.
-Values are percentages: arithmetic mean $\pm$ sample standard deviation across seeds, and the asking-rate range.
-Standard deviation is not a confidence interval; aggregate CP bounds remain in the original result tables.}
+\caption{Across-seed asking-rate variability for the fixed Table~\ref{tab:planner} (model-based simulation) and Table~\ref{tab:realsim} (measured-parameter simulation) reporting cases.
+Each row reports the same \SimSeedCount{} original seeds; workflow, calibration, and lag budgets are recorded in the accompanying metadata.
+Values are percentages: arithmetic mean $\pm$ sample standard deviation and range; standard deviation is not a confidence interval.}
 \label{tab:seedvariance}
 \small
-\begin{tabular}{@{}llrrr@{}}
+\begin{tabular}{@{}llrr@{}}
 \toprule
-Profile & Policy & ask mean $\pm$ SD & ask range & $P_{\mathrm v}$ mean $\pm$ SD \\
+Profile & Policy & ask mean $\pm$ SD & ask range \\
 \midrule
-""" + '\n'.join(_seed_lines) + r"""
+''' + '\n'.join(_seed_lines) + r'''
 \bottomrule
 \end{tabular}
 \end{table*}
-""")
+''')
+_sim_counts = {int(r['n']) for r in ps}
+if len(_sim_counts) != 1:
+    raise ValueError('inconsistent reporting count: planner_sim/n')
 names = {'redo': 'Redo (AgentProg-style)', 'ckpt': 'Checkpoint-resume', 'atomix': 'Atomix-style, in-memory',
          'atomix-durable': 'Atomix-style, durable log', 'verify': 'Verify-before-retry', 'key': 'Ledger + key',
          'key-ask': 'Ledger + key + ask (look-alike)', 'always-ask': 'Ledger + always ask', 'nonce-ask': 'Ledger + nonce + ask',
@@ -553,6 +558,8 @@ Policy & dup & loss & ask & $P_{\mathrm{v}}$ & s \\
 W('tab_planner_extended.tex', _planner_full.replace('tab:planner}', 'tab:planner-extended}'))
 _main_rows = '\n'.join(prow(P[p]) for p in ('redo', 'g2-only', 'always-ask', 'rules', 'rules-vetted', 'ghost', 'ghost-joint'))
 _full_rows = '\n'.join(prow(P[p]) for p in order_b[:12]) + '\n\\midrule\n' + '\n'.join(prow(P[p]) for p in order_b[12:]) + '\n\\midrule\n' + '\n'.join(prow(P[p]) for p in order_a)
+if _planner_full.count(_full_rows) != 1 or _planner_full.count('tab:planner}') != 1:
+    raise ValueError('tab_planner: main rows or label not found once in the full table')
 _planner_main = _planner_full.replace(_full_rows, _main_rows)
 _caption_start = _planner_main.index(r'\caption{')
 _caption_end = _planner_main.index(r'\label{', _caption_start)
@@ -577,7 +584,7 @@ for key, pol in [('Redo', 'redo'), ('Ckpt', 'ckpt'), ('Atomix', 'atomix'), ('Ato
     M(f'Sim{key}Lv', mm('closs', pol, f1) if float(P[pol]['closs']) >= 1 else mm('closs', pol))
     M(f'Sim{key}Secs', f"{float(P[pol]['secs']):.0f}")
     M(f'Sim{key}P', f"{float(P[pol]['p_dup']):.2f}" if P[pol].get('p_dup') not in ('', 'nan', None) else '--')
-M('SimN', '12{,}000')
+M('SimN', f"{next(iter(_sim_counts)):,}".replace(',', '{,}'))
 M('SimGhostReads', f1(P['ghost']['obs']))
 M('SimGhostBg', f1(P['ghost']['bg']))
 M('SimGhostCloss', f2(P['ghost']['closs']))
@@ -613,6 +620,9 @@ for fn in sorted(os.listdir(RES)):
         if fn == 'planner_stress.csv' and any(x.startswith('planner_stress.part') for x in os.listdir(RES)):
             continue
         st += rd(fn)
+_stress_counts = {int(r['n']) for r in st}
+if _stress_counts != _sim_counts:
+    raise ValueError('inconsistent reporting count: planner_stress/n')
 ST = {(r['scenario'], r['policy']): r for r in st}
 scn = [('r1', 'independent re-reads'), ('r1+persist', '\\quad + persistent nonce misses'),
        ('default', 'default world (Table~\\ref{tab:planner})'), ('cross0.3', 'cross-view VLM correlation 0.3'),
@@ -628,7 +638,7 @@ for s_, lab in scn:
     lines.append(f"{lab} & {f2(a['cdup'])} & {f2(rr['cdup'])} & {f2(b['cdup'])} ({f2(b['cdup_hi'])}) & {f2(b['closs'])} & {f1(b['ask'])}" + r' \\')
 W('tab_stress.tex', r"""\begin{table}[t]
 \centering
-\caption{Misspecification and stress (model-based simulation, 12{,}000 paired workflows per row; the generative model departs from
+\caption{Misspecification and stress (model-based simulation, \SimN{} paired workflows per row; the generative model departs from
 the planner's assumptions as listed). $P_{\mathrm{v}}$: \% of committed effects retried by the planner (budget 1\%; CP 95\% upper bound in
 parentheses); $L_{\mathrm{v}}$: \% of absent effects the planner declared done; ask: \% of workflows. Rules: the same-evidence rule baseline.}
 \label{tab:stress}
@@ -676,6 +686,9 @@ pop = [('default', 'default world, passive labels'), ('iworld-passive', 'interru
        ('iworld-fault', 'interrupted world, fault-injected labels'), ('cm0.005-fault', 'stale history 0.5\\%, fault-injected'),
        ('cm0.02-fault', 'stale history 2\\%, fault-injected'), ('cm0.05-fault', 'stale history 5\\%, fault-injected')]
 nc = rd('planner_ncal.csv')
+_ncal_counts = {int(r['n']) for r in nc}
+if _ncal_counts != _sim_counts:
+    raise ValueError('inconsistent reporting count: planner_ncal/n')
 NC = {(r['study'], r.get('ncal') or '', r.get('kappa') or '', r.get('shift_test') or '', r['policy']): r for r in nc}
 cell = lambda r: f"{f2(r['cdup'])} / {float(r['ask']):.0f}"
 lines = []
@@ -689,7 +702,7 @@ for n_ in ncs:
                  ' & '.join(cell(NC[('ncal', str(n_), '', '', p)]) for p in ('ghost', 'ghost-src', 'ghost-joint')) + r' & -- \\')
 W('tab_pop.tex', r"""\begin{table}[t]
 \centering
-\caption{Calibration population, common mode and calibration size (model-based simulation, 12{,}000 paired workflows per row). Cells: $P_{\mathrm{v}}$ (\%, budget 1\%) /
+\caption{Calibration population, common mode and calibration size (model-based simulation, \SimN{} paired workflows per row). Cells: $P_{\mathrm{v}}$ (\%, budget 1\%) /
 escalations (\%). Interrupted world: 2\% stale history after a restart, 3\% optimistic ``sending'' entries for tapped-but-uncommitted effects, 20\% heavy-tailed lags.
 Passive labels come from uninterrupted effects; fault-injected labels from the interrupted population. Rules: $P_{\mathrm{v}}$ of the same-evidence rule baseline.}
 \label{tab:pop}
@@ -742,8 +755,8 @@ for r in ss:
     lines.append(f"{alpha_tex(r['alpha'])} & {float(r['p']) * 100:.1f}\\% & {nn(r['prod_n'])} & {nn(r['prod_n0'])} & {nn(r['joint_n'])} & {nn(r['joint_n_q'])} & {nn(r['joint_n_k'])} & {nn(r['lag_n'])}" + r' \\')
 W('tab_nsize.tex', r"""\begin{table}[t]
 \centering
-\caption{Calibration sizes that make certification possible (exact one-sided Clopper--Pearson, $\delta{=}\min(\alpha,\beta)/(10K n_{\mathrm{cls}})$, $\alpha{=}\beta$), per stratum. Keying by the four
-observable fault classes multiplies every entry by \NsizeKeyLo--\NsizeKeyHi{} (each class needs its own labels and is certified at $\delta/4$). Product (A2): effects so that two families, each with true wrong-verdict rate $p$, multiply to
+\caption{Calibration sizes that make certification possible (exact one-sided Clopper--Pearson, $\delta{=}\min(\alpha,\beta)/(10K)$, $\alpha{=}\beta$), per stratum. Keying by the four
+observable fault classes multiplies every entry by \NsizeKeyLo--\NsizeKeyHi{} (each class needs its own labels and is certified at $\delta/4$, that is $n_{\mathrm{cls}}{=}4$ in \S\ref{sec:theory-cal}). Product (A2): effects so that two families, each with true wrong-verdict rate $p$, multiply to
 $\alpha_{\mathrm{test}}{=}\alpha/2$; \emph{med.}: observed at the expected count $\lceil pn\rceil$ (about half of such sets fail), \emph{0}: zero wrong verdicts (minimum for any $p$).
 Joint: whole effects for a jointly calibrated region to certify $\alpha_{\mathrm{test}}$ with zero events (\emph{0}), at a true region rate $\alpha_{\mathrm{test}}/4$ (\emph{med.}), and with zero events for one
 step of a 3-effect workflow. Lag: logged times for one wait at $0.2\alpha$ with zero exceedances.}

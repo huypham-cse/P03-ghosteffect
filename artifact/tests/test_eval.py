@@ -145,6 +145,53 @@ class MatchedInputTests(unittest.TestCase):
             self.assertEqual(b'previously reviewed output', published.read_bytes())
             self.assertEqual([published], list(output.iterdir()))
 
+    def test_renderer_rejects_mixed_reporting_counts_without_replacing_output(self):
+        with tempfile.TemporaryDirectory() as temp:
+            work = Path(temp)
+            inputs, output = work / 'results', work / 'generated'
+            shutil.copytree(ROOT / 'artifact/results', inputs)
+            source = inputs / 'planner_real.csv'
+            with source.open(newline='') as stream:
+                reader = csv.DictReader(stream)
+                header, rows = reader.fieldnames, list(reader)
+            rows[1]['n'] = str(int(rows[0]['n']) + 1)
+            with source.open('w', newline='') as stream:
+                writer = csv.DictWriter(stream, fieldnames=header)
+                writer.writeheader()
+                writer.writerows(rows)
+            output.mkdir()
+            published = output / 'macros.tex'
+            published.write_bytes(b'previously reviewed output')
+            result = subprocess.run([sys.executable, str(ROOT / 'artifact/scripts/render.py'),
+                                     '--results-dir', str(inputs), '--output-dir', str(output)],
+                                    text=True, capture_output=True)
+            self.assertNotEqual(0, result.returncode)
+            self.assertIn('inconsistent reporting count: main/n', result.stderr)
+            self.assertEqual(b'previously reviewed output', published.read_bytes())
+            self.assertEqual([published], list(output.iterdir()))
+
+
+class SeedVarianceMetadataTests(unittest.TestCase):
+    def test_metadata_has_reproducibility_provenance(self):
+        metadata = json.loads((ROOT / 'artifact/results/planner_seed_variance.meta.json').read_text(encoding='utf-8'))
+        for key in ('command', 'git_commit', 'seed', 'python_version', 'date', 'host',
+                    'csv_sha256', 'script_sha256', 'cases'):
+            self.assertIn(key, metadata)
+        self.assertEqual(64, len(metadata['csv_sha256']))
+        self.assertEqual(64, len(metadata['script_sha256']))
+
+    def test_renderer_rejects_missing_or_duplicate_seed_rows(self):
+        source = (ROOT / 'artifact/results/planner_seed_variance.csv').read_text(encoding='utf-8').splitlines(keepends=True)
+        for name, rows in (('missing', source[:-1]), ('duplicate', source + source[-1:])):
+            with self.subTest(name), tempfile.TemporaryDirectory() as temp:
+                results = Path(temp) / 'results'
+                shutil.copytree(ROOT / 'artifact/results', results)
+                (results / 'planner_seed_variance.csv').write_text(''.join(rows), encoding='utf-8')
+                run = subprocess.run([sys.executable, str(ROOT / 'artifact/scripts/render.py'), '--results-dir', str(results),
+                                      '--output-dir', str(Path(temp) / 'generated')], capture_output=True, text=True, timeout=300)
+                self.assertNotEqual(0, run.returncode)
+                self.assertIn('incomplete or duplicate seed variance rows', run.stdout + run.stderr)
+
 
  
     def test_table_caption_rejects_mixed_label_budgets(self):
@@ -260,6 +307,18 @@ class ReadabilityTests(unittest.TestCase):
         report = self.count('Fig. 2 shows 12.7 and e.g. ' + 'word ' * 45 + '.')
         self.assertEqual(1, len(report['long_sentences']))
 
+    def test_algorithmic_pseudocode_is_not_counted_as_prose(self):
+        report = self.count(r'''\begin{algorithmic}[1]
+\State Read the evidence; update the ledger; ask the user.
+\If{the anchor is missing}
+  \State Wait; then retry; otherwise ask.
+\EndIf
+\end{algorithmic}
+
+This sentence is ordinary prose.''')
+        self.assertEqual([], report['long_sentences'])
+        self.assertEqual([], report['semicolon_paragraphs'])
+
     def test_strict_scope_limit_is_combined_across_files(self):
         with tempfile.TemporaryDirectory() as temp:
             paths = []
@@ -315,7 +374,6 @@ class ScrubTests(unittest.TestCase):
             (root / 'sub').mkdir()
             (root / 'sub/.env').write_text('harmless=value', encoding='utf-8')
             self.assertEqual(1, self.run_scrub(root).returncode)
-
 
 if __name__ == '__main__':
     unittest.main()

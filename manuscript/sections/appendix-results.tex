@@ -1,7 +1,8 @@
 \section{Additional results}
 \label{app:extra}
-Table~\ref{tab:position} positions recent recovery work; Tables~\ref{tab:stress} and~\ref{tab:pop} give the stress and calibration-population results;
-Table~\ref{tab:lag} prices the lag share; Table~\ref{tab:corr} gives the correlated-read experiment of RQ2; Table~\ref{tab:apps} lists testbed apps; Table~\ref{tab:realcone}
+Table~\ref{tab:position} positions recent recovery work; Tables~\ref{tab:stress} and~\ref{tab:pop} give the stress and calibration-population results.
+Table~\ref{tab:seedvariance} reports variability across the \SimSeedCount{} fixed reporting seeds.
+Table~\ref{tab:lag} prices the lag share; Table~\ref{tab:corr} gives the correlated-read experiment; Table~\ref{tab:apps} lists testbed apps; Table~\ref{tab:realcone}
 gives campaign~1 of the emulator measurements.
 Figure~\ref{fig:sprt} and Table~\ref{tab:sprt} check Theorem~\ref{thm:main}(a,c) for an i.i.d.\ probe (all 24 cells; Monte Carlo means match the exact $\bar N$ to \SprtMCdev reads;
 the strict thresholds over-deliver by up to \SprtSlackMax$\times$, median \SprtSlackMed$\times$); Table~\ref{tab:calib} shows calibration of one i.i.d.\ probe (Lemma~\ref{lem:calib}(i));
@@ -10,10 +11,13 @@ Table~\ref{tab:saga} details the saga allocation; Table~\ref{tab:sens} varies th
 
 \input{generated/tab_stress}
 \input{generated/tab_pop}
+\input{generated/tab_seed_variance}
+The relatively large Element vetted-rule standard deviation is driven by one reporting seed; the others cluster near the same low asking rate. This is seed variability in the fixed reporting runs, not a change to the pooled result.
 \input{generated/tab_lag}
 \input{generated/tab_corr}
 \input{sections/tab-apps}
 \input{generated/tab_realcone}
+\input{generated/tab_agent_arms}
 \input{generated/fig_sprt}
 \input{generated/tab_sprt}
 \input{generated/tab_calib}
@@ -36,7 +40,7 @@ with $K{=}11$ (product), 8 (source families) or 5 (joint). Here $n_{\mathrm{cls}
 McNemar tests against the product planner with Holm correction.
 
 \para{Baselines.} \emph{Redo}~\cite{tian2025agentprog}; \emph{checkpoint-resume}~\cite{langgraph_durable,khan2026resume}; \emph{Atomix-style} adapters with one
-read-back~\cite{mohammadi2026atomix}; \emph{verify-before-retry}~\cite{mansoor2026verified}; \emph{ledger + key}~\cite{li2026exactlyonce}; four that may ask; and the \emph{re-read
+read-back~\cite{mohammadi2026atomix}; \emph{verify-before-retry}~\cite{mansoor2026verified}; \emph{ledger + key}~\cite{li2026exactlyonce}; four baselines that may ask; and the \emph{re-read
 SPRT} of our earlier design. The \emph{same-evidence rules} have \sys's ledger, hop~1 with the same fallible Monitor, the same families read once per view, a fixed 10\,s wait and
 asking: an acknowledged entry or a nonce match means done, retry only if every available family reads absent, otherwise ask. A \emph{lenient} variant acts on the first
 unanimous family unless another contradicts it, and a \emph{rule family} sweeps the wait (5, 10, 30, 60\,s) and the quorum (all families, all but the VLM, any two). The
@@ -95,8 +99,8 @@ the product mode \UserGhostTwenty\%.
 \label{sec:eval-stress}\label{sec:eval-pop}
 Under generative models that depart from the planner's (Table~\ref{tab:stress}), the product mode stays within budget (CP upper at most \StressMaxHi\%) except where
 calibration misses what deployment sees: heavy lag tails absent from the logs give $P_{\mathrm{v}}{=}\StressLag\%$ (CP upper \StressLagHi\%; logged, it asks \StressLagCalAsk\%),
-and an undetected delayed recovery in Doze gives \StressDoze\% (detected, it asks \StressDozeAsk\%). A G2-classified app whose server does not deduplicate duplicates by
-itself (\StressNodedupDup\% of workflows): G2 is an app property. In an \emph{interrupted world} (stale history after restarts, optimistic entries, longer lags; Table~\ref{tab:pop}),
+and an undetected delayed recovery in Doze gives \StressDoze\% (detected, it asks \StressDozeAsk\%). A G2-classified app whose server does not deduplicate
+still duplicates \StressNodedupDup\% of workflows by itself: G2 is an app property. In an \emph{interrupted world} (stale history after restarts, optimistic entries, longer lags; Table~\ref{tab:pop}),
 passive labels bring the product mode to \PopIwPProd\% (CP upper \PopIwPProdHi\%) and joint to \PopIwPJoint\%, fault-injected labels to \PopIwFProd\% and \PopIwFJoint\%, while the
 rules stay at \PopIwFRules\%: certification uses what the labels show. Under a 5\% common-mode stale history (violating A2) the product mode retries \PopCmCProd\%, source
 families \PopCmCSrc\% and joint \PopCmCJoint\%. Their cost is labels: at 2{,}000 effects source and joint ask \NcalESrcAsk\% and \NcalEJointAsk\% against \NcalEProdAsk\%,
