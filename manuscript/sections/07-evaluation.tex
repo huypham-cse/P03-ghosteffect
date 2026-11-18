@@ -78,8 +78,8 @@ the product mode \UserGhostTwenty\%.
 \label{sec:eval-stress}\label{sec:eval-pop}
 Under generative models that depart from the planner's (Table~\ref{tab:stress}, appendix), the product mode stays within budget (CP upper at most \StressMaxHi\%) except where
 calibration misses what deployment sees: heavy lag tails absent from the logs give $P_{\mathrm{v}}{=}\StressLag\%$ (CP upper \StressLagHi\%; logged, it escalates \StressLagCalAsk\%),
-and an undetected delayed recovery in Doze gives \StressDoze\% (detected, it escalates \StressDozeAsk\%). For a G2-classified app whose server does not deduplicate,
-duplicates occur by itself (\StressNodedupDup\% of workflows): G2 is an app property. In an \emph{interrupted world} (stale history after restarts, optimistic entries, longer lags; Table~\ref{tab:pop}),
+and an undetected delayed recovery in Doze gives \StressDoze\% (detected, it escalates \StressDozeAsk\%). A G2-classified app whose server does not deduplicate
+still duplicates \StressNodedupDup\% of workflows by itself: G2 is an app property. In an \emph{interrupted world} (stale history after restarts, optimistic entries, longer lags; Table~\ref{tab:pop}),
 passive labels bring the product mode to \PopIwPProd\% (CP upper \PopIwPProdHi\%) and joint to \PopIwPJoint\%, fault-injected labels to \PopIwFProd\% and \PopIwFJoint\%, while the
 rules stay at \PopIwFRules\%: certification uses what the labels show. Under a 5\% common-mode stale history (violating A2) the product mode retries \PopCmCProd\%, source
 families \PopCmCSrc\% and joint \PopCmCJoint\%. Their cost is labels: at 2{,}000 effects source and joint escalate \NcalESrcAsk\% and \NcalEJointAsk\% against \NcalEProdAsk\%,
