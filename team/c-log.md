@@ -342,3 +342,10 @@ kết quả lmkd trên emulator và DAVx5 dưới kill/Doze, ghi rõ loại phé
 giới hạn chưa đo quản lý pin của hãng. Không sửa file sở hữu của B và không
 đưa số gõ tay vào văn bản. C-20 cần được kiểm lại cùng C-14/C-16 sau khi chuỗi
 agent và evaluation rebase lên main.
+
+## 18/11/2026 — C-12 kiểm đường dẫn dữ liệu phụ thuộc host
+
+README artifact và README nhúng trong bundle đều ghi rõ
+`artifact/results/ledger_bench.csv` là file phụ thuộc host. Bundle vẫn yêu
+cầu cây `artifact`, `testbed`, `manuscript` sạch, tạo manifest từ commit hiện
+tại, loại tài liệu nội bộ và chỉ scrub sau khi giải nén.
