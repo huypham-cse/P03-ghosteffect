@@ -7,10 +7,16 @@ reply, the fault lands while DAVx5 still waits, then the reply is dropped. Fault
 lmk (background, then real memory pressure until lmkd reaps it) on DAVx5; doze (screen off, unplugged and forced
 deep idle, entered before the drop and kept for --doze-seconds).
 Graded from Radicale's store (copies of the nonce) and the proxy journal (every PUT of the event's href, so
-the retry lag after the fault). Needs root on the AVD; never run on a phone.
+the retry lag after the fault). kill9 and lmk need root on the AVD.
+Rented phones (AWS Device Farm, b-log 18/11): only the rootless faults run there (none, force-stop, doze, and
+stop-app, which kills the app but keeps its scheduled jobs and alarms, so it stands in for kill -9); the phone
+reaches Radicale through `adb reverse` at http://127.0.0.1:5233/alice/, and GX_PHYSICAL_SERIAL must name it.
+Every trial samples the app's process every 10 s from the barrier on: procstate, frozen as seen by the activity
+manager and by the cgroup, and the deep-idle state.
 """
 import argparse
 import json
+import os
 import random
 import re
 import subprocess
@@ -37,7 +43,7 @@ def start_radicale(log_path):
     config.write_text('[server]\nhosts = 127.0.0.1:%d\n[auth]\ntype = none\n[rights]\ntype = owner_only\n'
                       '[storage]\nfilesystem_folder = %s\n[logging]\nlevel = info\n'
                       % (RADICALE_PORT, STORE.as_posix()), encoding='utf-8')
-    python = ROOT / 'runtime' / 'radicale-venv' / 'Scripts' / 'python.exe'
+    python = os.environ.get('GX_RADICALE_PYTHON') or ROOT / 'runtime' / 'radicale-venv' / 'Scripts' / 'python.exe'
     log = open(log_path, 'ab')
     process = subprocess.Popen([str(python), '-m', 'radicale', '--config', str(config)], stdout=log,
                                stderr=subprocess.STDOUT, stdin=subprocess.DEVNULL)
@@ -92,6 +98,34 @@ def doze_exit(shell):
     shell('dumpsys deviceidle unforce; dumpsys battery reset; input keyevent KEYCODE_WAKEUP')
 
 
+def proc_sample(shell, package=DAVX5):
+    """The app's process as the activity manager and the kernel see it (readable without root, pilot 18/11)."""
+    pid = shell('pidof ' + package).split()
+    sample = dict(utc_ns=time.time_ns(), pid=pid[0] if pid else None, deep=shell('dumpsys deviceidle get deep'))
+    if pid:
+        record = shell('dumpsys activity processes ' + package)
+        events = shell('cat /sys/fs/cgroup/uid_*/pid_%s/cgroup.events' % pid[0])
+        for key, pattern, cast in (('procstate', r'curProcState=(\d+)', int), ('am_frozen', r'isFrozen=(\w+)', str),
+                                   ('cgroup_frozen', r'frozen (\d)', int)):
+            match = re.search(pattern, events if key == 'cgroup_frozen' else record)
+            sample[key] = cast(match.group(1)) if match else None
+    return sample
+
+
+class Sampler(threading.Thread):
+    def __init__(self, shell, every=10):
+        super().__init__(daemon=True)
+        self.shell, self.every, self.samples, self.done = shell, every, [], threading.Event()
+
+    def run(self):
+        while not self.done.is_set():
+            try:
+                self.samples.append(proc_sample(self.shell))
+            except Exception as exc:   # a failed sample is recorded, never fatal to the trial
+                self.samples.append(dict(utc_ns=time.time_ns(), error=type(exc).__name__))
+            self.done.wait(self.every)
+
+
 def trial(args, shell, device, journal):
     receipt = dict(fault=args.fault, utc_ns=time.time_ns())
     deadline = time.monotonic() + 120
@@ -118,6 +152,8 @@ def trial(args, shell, device, journal):
         raise RuntimeError('no committed PUT within the barrier timeout')
     # The proxy holds Radicale's reply here; the fault lands while DAVx5 still waits, then the reply is dropped.
     href, receipt['barrier_utc_ns'] = status['request_id'], time.time_ns()
+    sampler = Sampler(shell)
+    sampler.start()
     if args.fault == 'force-stop':
         receipt['fault_receipt'] = device.force_stop(DAVX5)
     elif args.fault in ('kill9', 'kill9-doze'):
@@ -125,6 +161,13 @@ def trial(args, shell, device, journal):
         shell('kill -9 ' + pids)
         receipt['fault_receipt'] = dict(observed_class='app-sigkill', pids_before=pids.split())
         if args.fault == 'kill9-doze':   # the retry is then a rescheduled sync, which Doze can defer
+            receipt['fault_receipt']['doze'] = doze_enter(shell)
+    elif args.fault in ('stop-app', 'stop-app-doze'):   # rootless kill that keeps scheduled jobs and alarms
+        pids = device.pids(DAVX5)
+        shell('am stop-app ' + DAVX5)
+        receipt['fault_receipt'] = dict(observed_class='app-stop-keep-jobs', pids_before=pids.split(),
+                                        pids_after=shell('pidof ' + DAVX5).split())
+        if args.fault == 'stop-app-doze':
             receipt['fault_receipt']['doze'] = doze_enter(shell)
     elif args.fault == 'lmk':
         receipt['fault_receipt'] = lmk_kill(shell, device, DAVX5)
@@ -134,13 +177,15 @@ def trial(args, shell, device, journal):
         receipt['fault_receipt'] = dict(observed_class='none')
     receipt['fault_utc_ns'] = time.time_ns()
     control('release', dict(arm_id=arm, fault_receipt=receipt['fault_receipt']))
-    if args.fault in ('doze', 'kill9-doze'):
+    if args.fault in ('doze', 'kill9-doze', 'stop-app-doze'):
         try:
             time.sleep(args.doze_seconds)
         finally:
             doze_exit(shell)
             receipt['doze_exit_utc_ns'] = time.time_ns()
     time.sleep(args.window)
+    sampler.done.set()
+    receipt['proc_samples'] = sampler.samples
     events = [json.loads(line) for line in journal.read_text(encoding='utf-8').splitlines()]
     puts = [e['utc_ns'] for e in events if e['event'] == 'REQUEST' and e.get('request_id') == href]
     after = [t for t in puts if t > receipt['fault_utc_ns']]
@@ -173,21 +218,24 @@ def main():
     parser.add_argument('--adb', required=True)
     parser.add_argument('--adb-server-port', default='5038')
     parser.add_argument('--serial', default='emulator-5580')
-    parser.add_argument('--fault', choices=['none', 'force-stop', 'kill9', 'lmk', 'doze', 'kill9-doze'], required=True)
+    parser.add_argument('--fault', choices=['none', 'force-stop', 'kill9', 'lmk', 'doze', 'kill9-doze', 'stop-app',
+                                            'stop-app-doze'], required=True)
     parser.add_argument('--doze-seconds', type=float, default=600)
     parser.add_argument('--window', type=float, default=180, help='seconds after the fault (or Doze exit) before grading')
     parser.add_argument('--barrier-timeout', type=float, default=90)
     parser.add_argument('--output', type=Path, required=True)
     args = parser.parse_args()
-    if not args.serial.startswith('emulator-'):
-        raise SystemExit('AVD only: this fills memory, forces Doze and kills with root')
+    phone = not args.serial.startswith('emulator-')
+    if phone and args.serial != os.environ.get('GX_PHYSICAL_SERIAL'):
+        raise SystemExit('a phone needs GX_PHYSICAL_SERIAL set to its serial (rented phones only, b-log 18/11)')
+    if phone and args.fault in ('kill9', 'kill9-doze', 'lmk'):
+        raise SystemExit('kill -9 of another app and the lmk tmpfs need root: AVD only')
     args.output.mkdir(parents=True, exist_ok=False)
-    import os
     os.environ['ANDROID_ADB_SERVER_PORT'] = args.adb_server_port
     adb = [str(Path(args.adb).resolve()), '-P', args.adb_server_port, '-s', args.serial]
     shell = lambda c: subprocess.run(adb + ['shell', c], capture_output=True, text=True, encoding='utf-8',
                                      errors='replace', timeout=120).stdout.strip()
-    if shell('whoami') != 'root':   # kill -9 of another app and the tmpfs for lmk need root on the AVD
+    if not phone and shell('whoami') != 'root':   # kill -9 of another app and the tmpfs for lmk need root on the AVD
         subprocess.run(adb + ['root'], capture_output=True, timeout=60)
         subprocess.run(adb + ['wait-for-device'], capture_output=True, timeout=120)
     if not port_open(RADICALE_PORT):   # one Radicale (and store) serves the DAVx5 setup and every trial

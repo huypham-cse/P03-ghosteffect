@@ -93,6 +93,34 @@ class DeviceRig(unittest.TestCase):
                                                          macro('RealEmuCal%sN' % name), macro('RealEmuCal%sMedS' % name)),
                           summary('emu_caldav'))
 
+    def test_process_sample_reads_procstate_and_both_frozen_views(self):
+        import caldav_fault_case as cal
+        replies = {'pidof at.bitfire.davdroid': '13606', 'dumpsys deviceidle get deep': 'IDLE',
+                   'dumpsys activity processes at.bitfire.davdroid':
+                       '    curProcState=19 mRepProcState=19\n    isFreezeExempt=false isPendingFreeze=false isFrozen=true',
+                   'cat /sys/fs/cgroup/uid_*/pid_13606/cgroup.events': 'populated 1\nfrozen 1'}
+        sample = cal.proc_sample(lambda c: replies.get(c, ''))
+        self.assertEqual((sample['pid'], sample['procstate'], sample['am_frozen'], sample['cgroup_frozen'], sample['deep']),
+                         ('13606', 19, 'true', 1, 'IDLE'))
+        self.assertIsNone(cal.proc_sample(lambda c: '')['pid'])
+
+    def test_rented_phone_gets_only_rootless_faults(self):
+        import caldav_fault_case as cal
+        with patch.dict(os.environ, {'GX_PHYSICAL_SERIAL': 'RFCX0'}), \
+                patch('sys.argv', ['x', '--adb', 'adb', '--serial', 'RFCX0', '--fault', 'kill9', '--output', 'unused']), \
+                self.assertRaises(SystemExit):
+            cal.main()
+
+    def test_davx5_setup_finds_nodes_by_label_in_its_package_only(self):
+        sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'devicefarm'))
+        import davx5_setup
+        import xml.etree.ElementTree as ET
+        root = ET.fromstring('<hierarchy><node package="at.bitfire.davdroid" text="" content-desc="synchronize this '
+                             'collection" resource-id="" bounds="[901,592][1038,676]"/><node package="android" text="Login" '
+                             'content-desc="" resource-id="" bounds="[0,0][10,10]"/></hierarchy>')
+        self.assertEqual(davx5_setup.find(root, 'synchronize this collection'), (969, 634))
+        self.assertIsNone(davx5_setup.find(root, 'Login'))
+
     def test_lmk_and_doze_refuse_a_phone(self):
         import caldav_fault_case as cal
         with patch('sys.argv', ['x', '--adb', 'adb', '--serial', 'RFCX0', '--fault', 'doze', '--output', 'unused']), \

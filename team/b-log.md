@@ -487,3 +487,22 @@ Test: testbed 96 qua (4 bỏ qua), artifact 49 qua (1 bỏ qua); render không �
 - **Chưa đạt, chờ người khác:** YC-09 và YC-B12, `scrub_check.sh` trên `main` còn báo 579 dòng, toàn là địa chỉ tổng hợp (`@test.invalid` và Message-ID `<uuid>@ghost.local`), đã kiểm không có địa chỉ nào khác; ngoại lệ nằm ở C-19 (#55, #56). YC-B10, nhánh G2 của Fig. 1 phải theo `team/QUYET_DINH_CHUNG.md`, file này chưa có trên `main` (#61 chờ trưởng nhóm chốt).
 - **Việc B còn lại:** B-18 (dẫn `tab:agent-arms` ở §7.8, sau khi #55 gộp); bỏ "RQ7" ở `07-real.tex` và sửa chỗ dẫn ở §2 (sau khi #59 gộp).
 - **YC-B10 sau khi #61 gộp (trưởng nhóm duyệt nguyên ngày 18/11):** khung nhánh idempotent của Fig. 1 ghi đúng quy tắc của `QUYET_DINH_CHUNG.md`: \sys không retry qua GUI, chờ có chứng nhận rồi "Sent" thì committed, không thì hỏi. Ô "Hop 1" rút còn "K-9's failed entry ..." vì câu dài ở #68 làm ô cao 5 dòng và đè lên nhãn (b) (đã xem ảnh trang 2). Build 22 trang, không ô tràn mới.
+
+## 18/11/2026 (điện thoại thuê trên AWS Device Farm: lượt thử và kế hoạch đợt DAVx5, ghi trước khi chạy)
+
+- **Quyền:** trưởng nhóm cấp AWS Device Farm (us-west-2), chỉ dùng lệnh `aws devicefarm`, tối đa 300 phút cho việc này, mỗi lượt tối đa 150 phút, xong phải dừng ngay. Máy thuê không root, bị xóa sạch sau mỗi lượt, không có dữ liệu cá nhân, nên được ép Doze và đổi cài đặt.
+- **Rig (`testbed/devicefarm/`):** kiểu test APPIUM_PYTHON với test spec tự viết, Appium không dùng. Host Amazon Linux 2023, Java 17, Python 3.12, có `adb` và internet. GreenMail, Radicale và fault proxy chạy trên host, điện thoại tới host qua `adb reverse`. `df.py` upload, lên lịch, chờ, tải artifact và ghi số phút.
+- **Lượt thử p01 (Samsung Galaxy A36 SM-A366U1, Android 15, One UI 7, 7,71 phút máy):**
+  - Đọc được không cần root: `curProcState`, `isFrozen` của activity manager, `frozen 0/1` trong cgroup của process, `/proc/<pid>/status`, trạng thái deep idle.
+  - Freezer: Samsung tắt (`use_freezer=false`). `am freeze` báo đã freeze nhưng `isFrozen` và cgroup vẫn 0.
+  - Giết app không root: `kill -9` bị từ chối (Operation not permitted). `am kill`, `am crash`, `am stop-app` và `am force-stop` đều làm process chết. Help của Android ghi `stop-app` "không hủy alarm và job đã lên lịch", nên `stop-app` thay cho `kill -9`.
+  - Doze: giả rút sạc, tắt màn hình, `deviceidle force-idle deep` cho IDLE; thoát thì về ACTIVE.
+  - K-9 dev p01, rig điện thoại không sửa dòng nào: REPRODUCED, mọi kiểm đạt, K-9 không gửi lại, redo ra 2 bản với 2 Message-ID, như trên máy cá nhân. Vì vậy không chạy lại 30 lượt K-9: cùng code, lượt kiểm cho cùng kết quả.
+- **Kiểm trên AVD (không tính):** DAVx5 cài lại từ đầu bằng `davx5_setup.py`. `stop-app`: đúng một bản, PUT lại sau 52,7 s (`kill -9` trên AVD: 52,5 s). `stop-app-doze` với Doze 60 s: đúng một bản, PUT lại sau 50,1 s, lúc máy còn IDLE. Hai lỗi rig sửa trên đường: `adb root` trên AVD xóa `adb reverse` (chỉ AVD); DAVx5 giữ kết nối từ lúc cài, nên sau khi đổi cổng phải `am stop-app` một lần.
+- **Kế hoạch đợt chính (ghi trước khi chạy):**
+  - Máy: R1 Samsung Galaxy A36, Android 15 (One UI, freezer tắt); sau đó R2 Google Pixel 9, Android 15 (AOSP). R2 chỉ chạy khi R1 không lộ lỗi rig; nếu lộ thì sửa, ghi lại ở đây rồi chạy lại R1.
+  - Mỗi máy, thứ tự cố định: dev-c00 none (dev, không tính); c01 none, c02 stop-app, c03 none, c04 stop-app, c05 none, c06 stop-app; d01 đến d03 stop-app-doze, giữ deep idle 600 s. Cửa sổ 180 s, barrier 90 s. Lượt INVALID không thay.
+  - Chấm như E2 trên AVD: số bản mang nonce trong store của Radicale; thời gian từ lỗi tới lần PUT lại cùng href (journal của proxy); với Doze, PUT lại lúc IDLE hay sau khi thoát. Mẫu process mỗi 10 s: procstate, `isFrozen`, cgroup frozen, trạng thái deep idle.
+  - Câu hỏi: (1) DAVx5 có giữ đúng một bản trên điện thoại thật khi bị `stop-app` và Doze (H3); (2) Doze ép trên điện thoại thật (One UI và AOSP) có hoãn lần sync lại không, khác AVD; (3) process DAVx5 có bị freezer đóng băng lúc chờ không.
+  - Ngân sách: mỗi lượt khoảng 80 phút, timeout 110 phút. Tổng tối đa 7,5 + 2 × 110 = 227,5 phút, dưới 300.
+- **Sổ phút (trialMinutes.remaining):** trước 995,88; sau p01 988,37 (dùng 7,51).
