@@ -12,7 +12,7 @@ The agent study uses an emulator; physical-phone evidence is reported in the Dis
 \subsection{Model-based recovery comparison}
 \label{sec:setup}
 The default model contains eight app profiles, persistent reader errors, correlated VLM errors and a fallible Monitor.
-Calibration uses whole effects; each policy sees the same \SimN{} interrupted workflows.
+Calibration uses whole effects; each policy sees the same \SimN{} interrupted workflows (Table~\ref{tab:planner}).
 The user can answer incorrectly, so total duplicate/loss rates include user errors as well as planner decisions.
 The guaranteed quantity $P_{\mathrm v}$ instead counts committed effects retried by the planner itself.
 We use $\delta=\min(\alpha,\beta)/(10K n_{\mathrm{cls}})$, matching the calibration accounting in Section~\ref{sec:theory}.

@@ -547,3 +547,7 @@ C-12 precheck trên toàn artifact/testbed báo email và internal runs, nên ch
 không sửa raw dữ liệu và không tự coi mọi chuỗi giống email là danh tính thật.
 Tiếp theo: C-07 kiểm nguồn related work, C-11 readability và C-12 bundle;
 C-08/C-09 chỉ chốt các nhận định agent sau khi B có kết quả thật.
+
+## 19/11/2026: C-06 sửa theo review #59 (trưởng nhóm sửa trên nhánh)
+
+Gộp `main` (có #55, #57, #58). Phần seed variance (C-05) lấy đúng bản của #58 trên `main`: `SEED_CASES`, `part_seedvariance`, CSV, meta và khối render; #59 không còn đổi seed hay CSV nào ngoài `planner_model_matched` (hết vấn đề YC-08 và trùng phạm vi). Khối kiểm model-matched (C-06) giữ nguyên. Câu mở §7 nêu đủ loại số như #55; các sửa của #55 ở phần Setup và stress (nay nằm trong phụ lục) được áp lại. Thêm kiểm `replace` của bảng planner; caption `tab_nsize` theo #57 (δ/4); bỏ "RQ2", "RQ4 and RQ5" ở phụ lục; §7 dẫn Table `tab:planner`. Render lại `tab_planner`, `tab_planner_extended`, `notes.md`. Build: Kết luận và References bắt đầu ở trang 13.
