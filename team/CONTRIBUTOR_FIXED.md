@@ -80,6 +80,7 @@
 | B-16 | Làm sạch `testbed/` để đóng gói: không `runtime/`, `runs/`, `*.local.json`, `.env`; `testbed/README.md` bằng tiếng Anh (bản tiếng Việt đổi tên thành `README.vi.md`, không đưa vào gói). | 19/11 |
 | B-17 | **Bỏ (trưởng nhóm quyết 15/11, lý do trong `team/b-log.md`).** (Chỉ khi trưởng nhóm duyệt và B-09 xong trước 13/11) Đo độ trễ Element độc lập; cần thêm kill -9 và netcut vào `run_case.py` và một bộ phân tích ra schema `c2_element_first_visible.csv`. | 19/11 |
 | B-18 | **(Thêm 15/11.)** Khi C đặt `tab_agent_arms.tex` (C-17), thêm một chỗ dẫn bảng ở §7.8 nếu vẫn giữ được 0,6 cột (YC-B6). | 19/11 |
+| B-19 | **(Thêm 18/11, trưởng nhóm duyệt.)** Render macro cho đợt điện thoại thật và emulator: `\RealPhone*`, `\RealEmu*` từ `artifact/results/real/device_k9`, `emu_k9_lmk`, `emu_caldav` (#65, #66); sửa `\RealDataLimitation` (câu cũ nói không đo agent, VLM và điện thoại). Có test so macro với `SUMMARY.md`. | 18/11 |
 
 ### Phần C: Đánh giá so sánh và câu chuyện của bài
 
@@ -114,6 +115,7 @@
 | C-17 | **Đặt bảng 5 arm** `generated/tab_agent_arms.tex` (B render, nhãn `tab:agent-arms`) vào `appendix-results.tex`; báo B để thêm chỗ dẫn (B-18). | 18/11 |
 | C-18 | **Chạy lại pipeline sau dữ liệu mới của B:** manifest của `run_all.py` ghi bốn thư mục `artifact/results/real/agent_guarded`, `agent_rules`, `agent_t3a`, `agent_killagent` là input như phần `real/`; sinh lại `others/notes.md` từ macro hiện tại (thêm khoảng 70 macro agent). | 19/11 |
 | C-19 | **Hai việc cũ đang chặn nghiệm thu B:** `scrub_check.sh` thêm ngoại lệ cho địa chỉ tổng hợp `@test.invalid` (review #12; YC-B12 chỉ còn báo nhầm loại này); `make_bundle.sh` loại `testbed/README.vi.md` và `testbed/RUNBOOK_B.md` (tiếng Việt, nội bộ) khỏi gói (C-12). | 17/11 |
+| C-20 | **(Thêm 18/11, trưởng nhóm chốt.)** Viết 1 đến 2 câu ở §8 (đoạn giới hạn hoặc Android realism) về đợt điện thoại thật và emulator, chỉ dùng macro của B-19: trên điện thoại thật (Android \RealPhoneAndroid) K-9 không tự gửi lại sau khi bị kill ở \RealPhoneNoResendN/\RealPhoneN lượt, và làm lại bước gửi bằng GUI ra bản trùng ở \RealPhoneDupN/\RealPhoneN lượt (không có agent); trên emulator, lmkd giết K-9 cho cùng kết quả (\RealEmuKDupN/\RealEmuKN), DAVx5 giữ đúng một bản ở \RealEmuCalOnceN/\RealEmuCalValidN lượt kể cả khi bị lmkd giết hay ở Doze; Doze ép trên emulator không làm DAVx5 gửi lại trễ hơn (\RealEmuCalDozeMedS s so với \RealEmuCalKillMedS s), trình quản lý pin của hãng chưa đo. Ghi đúng loại số (physical-phone measurement, emulator measurement). Nguồn: `team/b-log.md` 18/11, các `SUMMARY.md`. | 20/11 |
 
 ## 3. Phụ thuộc giữa các phần
 
