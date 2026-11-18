@@ -1,0 +1,22 @@
+# Device Farm pilot (b-log 18/11): probe what the rented phone allows, then one K-9 dev trial with the phone rig.
+version: 0.1
+android_test_host: amazon_linux_2023
+phases:
+  install:
+    commands:
+      - devicefarm-cli use java 17
+      - devicefarm-cli use python 3.12
+      - java -version 2>&1 | head -1
+      - python3 --version
+  pre_test:
+    commands:
+      - adb -s $DEVICEFARM_DEVICE_UDID wait-for-device
+  test:
+    commands:
+      - cd $DEVICEFARM_TEST_PACKAGE_PATH && bash testbed/devicefarm/probe.sh || true
+      - cd $DEVICEFARM_TEST_PACKAGE_PATH && GX_PHYSICAL_SERIAL=$DEVICEFARM_DEVICE_UDID timeout 900 python3 testbed/k9_fault_case.py --config sent --adb "$(command -v adb)" --adb-server-port 5037 --serial $DEVICEFARM_DEVICE_UDID --java java --observe 60 --action recompose --action-window 30 --output $DEVICEFARM_LOG_DIR/k9-dev-p01 > $DEVICEFARM_LOG_DIR/k9-dev-p01.log 2>&1 || true
+  post_test:
+    commands:
+      - adb -s $DEVICEFARM_DEVICE_UDID reverse --remove-all || true
+artifacts:
+  - $DEVICEFARM_LOG_DIR

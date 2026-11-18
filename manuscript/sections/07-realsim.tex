@@ -2,7 +2,7 @@
 
 
 \para{Scope of the fitted-law experiment.} Calibration and test records in Table~\ref{tab:realsim} are simulated draws from the same fitted distribution.
-The underlying emulator measurements found \RsimFitLateWrong/\RsimFitLateObs{} wrong late Element family reads and
+The underlying emulator measurements found \RsimFitLateWrong/\RsimFitLateObs{} wrong late reads in each Element family and
 \RsimFitCoWrong/\RsimFitCoN{} pairwise late cofailures.
 These zero counts do not establish error-free readers on new screens.
 The table instead tests certification decisions and their asking cost under the fitted law.
@@ -19,7 +19,8 @@ interrupted Element send. On \emph{K-9} no family can certify, so every mode, li
 \RsimKnineAppPv\% of committed mail (and loses \RsimKnineAppLoss\% of workflows), unvetted fixed-wait rules retry \RsimKnineRulesPv\% in this simulation under the assumed K-9 queued-mail lag law. With a \emph{Sent folder} fault-injected labels
 show committed mail that never becomes visible, so no wait certifies and \sys asks, while unvetted fixed-wait rules retry \RsimKsentRulesPv\% under the same assumed K-9 lag law, and passive labels
 lead joint certification to retry \RsimKsentPassJointPv\% (\RsimKsentPassFiveProdPv\% for the product mode with \RsimFiveLabelN{} labels). On real apps the decisive pieces are Outbox evidence classification, fault-injected labels, and asking when the GUI cannot reveal the outcome; calibration adds a guarantee that follows
-the labels.
+the labels. In the LLM-agent experiment on the emulator (\S\ref{sec:eval-agent}), the same-evidence rule cascade retried \AgentRulesRetryN{} of \AgentRulesValidN{} valid Sent-folder
+K-9 episodes, as this simulation warns.
 
 \input{generated/tab_matched}
 
