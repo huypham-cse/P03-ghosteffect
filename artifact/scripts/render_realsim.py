@@ -15,13 +15,26 @@ def _report_count(tag, column):
     return f'{values.pop():,}'.replace(',', '{,}')
 
 
+for _tag in {r['tag'] for r in _pr}:
+    for _column in ('n', 'ncal'):
+        _values = {int(r[_column]) for r in _pr if r['tag'] == _tag}
+        if len(_values) > 1:
+            raise ValueError('inconsistent reporting count: ' + _tag + '/' + _column)
+
+
 M('RsimWorkflowN', _report_count('main', 'n'))
 M('RsimBaseLabelN', _report_count('main', 'ncal'))
 M('RsimFiveLabelN', _report_count('five', 'ncal'))
 _fit = {r['family_read']: r for r in rd('real/campaign2/c2_element_families.csv') if r['cell'] == 'ALL'}
+_late_names = {'a_indicator_late', 'b_row_late', 'c_digest_late'}
+if set(_fit) & _late_names != _late_names:
+    raise ValueError('missing measured late family rows')
+_late_counts = {(int(_fit[name]['n_reads']), int(_fit[name]['observed'])) for name in _late_names}
+if len(_late_counts) != 1:
+    raise ValueError('inconsistent measured late family counts')
 _co = rd('real/campaign2/c2_element_cofailure.csv')
 M('RsimFitLateWrong', _fit['a_indicator_late']['wrong'])
-M('RsimFitLateObs', _fit['a_indicator_late']['observed'])
+M('RsimFitLateObs', sum(int(_fit[name]['observed']) for name in _late_names))
 if len({(r['n'], r['both_wrong']) for r in _co}) != 1:
     raise ValueError('inconsistent late cofailure counts')
 M('RsimFitCoWrong', _co[0]['both_wrong'])
