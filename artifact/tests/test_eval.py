@@ -204,6 +204,5 @@ class ScrubTests(unittest.TestCase):
             (root / 'sub/.env').write_text('harmless=value', encoding='utf-8')
             self.assertEqual(1, self.run_scrub(root).returncode)
 
-
 if __name__ == '__main__':
     unittest.main()

@@ -349,3 +349,10 @@ README artifact và README nhúng trong bundle đều ghi rõ
 `artifact/results/ledger_bench.csv` là file phụ thuộc host. Bundle vẫn yêu
 cầu cây `artifact`, `testbed`, `manuscript` sạch, tạo manifest từ commit hiện
 tại, loại tài liệu nội bộ và chỉ scrub sau khi giải nén.
+
+## 18/11/2026 — C-14–C-19 rà soát agent và conclusion
+
+Đã chỉnh phần văn bản sở hữu C để khuyến nghị certification có điều kiện theo A2,
+mô tả đúng thí nghiệm agent trên emulator, và thay các câu cũ về agent/RQ7 trong
+evaluation. Conclusion hiện báo cáo các số agent bằng macro `Agent*`; các số mới vẫn
+cần review khi nội dung C-20 và các PR dữ liệu được tích hợp.
