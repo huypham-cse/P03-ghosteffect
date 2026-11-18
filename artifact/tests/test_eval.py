@@ -112,6 +112,16 @@ class MatchedInputTests(unittest.TestCase):
             self.assertEqual([published], list(output.iterdir()))
 
 
+class SeedVarianceMetadataTests(unittest.TestCase):
+    def test_metadata_has_reproducibility_provenance(self):
+        metadata = json.loads((ROOT / 'artifact/results/planner_seed_variance.meta.json').read_text(encoding='utf-8'))
+        for key in ('command', 'git_commit', 'seed', 'python_version', 'date', 'host',
+                    'csv_sha256', 'script_sha256', 'cases'):
+            self.assertIn(key, metadata)
+        self.assertEqual(64, len(metadata['csv_sha256']))
+        self.assertEqual(64, len(metadata['script_sha256']))
+
+
 class ReadabilityTests(unittest.TestCase):
     def count(self, source):
         with tempfile.TemporaryDirectory() as temp:
