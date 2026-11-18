@@ -97,7 +97,7 @@ are exchangeable within a stratum (app version, locale, VLM), and per-device dri
 \State \Call{VerifyForeground}{$e$.app}; $P\gets1$; $d\gets\bot$; $\ell\gets\alpha_l$
 \If{$e$.app has a hop-1 family}
   \State $\ell\gets\alpha_l/2$; $(s,r)\gets$ \Call{Readout}{hop-1} \Comment{entries after $t_0$}\label{alg:hop1}
-  \If{$s=$ com $\wedge$ (G2 $\vee$ local)} $P\gets q^{\mathrm{com}}_{\text{hop1}}(r)$; $d\gets$ com
+  \If{$s=$ com $\wedge$ (G2 $\vee$ local)} $P\gets q^{\mathrm{com}}_{\text{hop1}}(r)$; $d\gets$ com\label{alg:g2}
     \State $o\gets$ acked; \textbf{if} G2: $o\gets$ \Call{Monitor}{$e$} \Comment{bkgd., fallible}
     \State \textbf{if} $o=$ acked $\wedge\,P\le\tau_c$: \Return \Call{Mark}{$e$, \textsf{COMMITTED}}
     \State \textbf{if} $o\in\{$failed, stuck$\}$: $P\gets1$; $d\gets\bot$ \Comment{hand over, once}
@@ -125,15 +125,15 @@ the smallest logged lag $T_c$ of the effect's fault class (the latest deadline o
 its argument; a logged effect that never became visible counts as an exceedance at every wait. \textsc{Retry} reuses the nonce.
 
 Two runs show the algorithm at work. In the first, K-9 lost the SMTP reply to a send that the server applied. K-9 then keeps the mail in its Outbox in a permanent failed
-state, so hop~1 reads ``absent'' (line~\ref{alg:hop1}). Fault-injected calibration sees the same reading on committed sends, so $q^{\mathrm{abs}}_{\text{hop1}}$ is far above
-$\tau_a$ and the planner does not retry (line~\ref{alg:abs1}). Without a Sent folder no other family can see the mail, so nothing reaches $\tau_a$ or $\tau_c$ and the planner
-asks (line~\ref{alg:ask}). With a Sent folder the certified wait for its lag exceeds $W_{\max}$, and the planner asks at line~\ref{alg:wait}. In measured-parameter simulation
+state, so hop~1 counts an entry after $t_0$ and reads the committed side (line~\ref{alg:hop1}). That entry is ambiguous, since K-9 shows the same failed entry when the server
+never applied the send. Line~\ref{alg:g2} therefore trusts the committed side only for apps with idempotent retries and local apps, and for K-9 it leaves $P{=}1$ and $d{=}\bot$. Without a Sent folder no other family
+can see the mail, so nothing reaches $\tau_a$ or $\tau_c$ and the planner asks (line~\ref{alg:ask}). With a Sent folder the certified wait for its lag exceeds $W_{\max}$, and the planner asks at line~\ref{alg:wait}. In measured-parameter simulation
 both K-9 profiles ask on every interrupted send (\RsimKnineProdAsk\% and \RsimKsentProdAsk\%).
 
 In the second run, an Element message is interrupted. Element has no hop-1 family, so the planner skips line~\ref{alg:hop1} and computes the certified wait of the effect's
 fault class (line~\ref{alg:cw}). It waits until $r_e+w$ (line~\ref{alg:wait}) and then reads nonce, digest and VLM once per view (line~\ref{alg:read}). If the timeline shows the
 message, their ``committed'' verdicts multiply until $P\le\tau_c$, and the planner marks the effect committed (line~\ref{alg:com}). If it does not, the ``absent'' verdicts
-lead to a retry with the same nonce. In measured-parameter simulation, product certification asks on \RsimElemProdAsk\% of Element workflows.
+lead to a retry with the same nonce once $P\le\tau_a$, and otherwise the planner asks. In measured-parameter simulation, product certification asks on \RsimElemProdAsk\% of Element workflows.
 
 \para{Hop 1 and monitoring.} A hop-1 verdict starts the product on either side, so the ``committed'' side of a G2 or local app is certified like any other declaration
 (its bound enters $B_{\mathrm{com}}$), and a hop-1 ``absent'' verdict relaxes its own wait $w_1$, with half of the lag share (Eq.~\eqref{eq:lagsplit}). For a G2 app with an outbox entry,

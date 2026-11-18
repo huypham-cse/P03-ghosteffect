@@ -194,7 +194,7 @@ Under G2$'$, dedup still gives $C_e\le1$; retransmission stops before an acknowl
 so the horizon condition in H3 is necessary; Synapse showed exactly this after we aged a transaction-id row past 24\,h (\S\ref{sec:eval-real}).
 
 Dedup scopes differ by protocol. Matrix clients send with a client-chosen transaction id that makes retransmission idempotent~\cite{matrix_spec}. Synapse keeps
-these ids per device in a 30--60\,min cache and a 24\,h table~\cite{synapse_txn,matrix_spec}, and we measured both scopes (\S\ref{sec:eval-real}). CalDAV creates resources
+these ids per device in a cache that lasts from 30 to 60\,min and a 24\,h table~\cite{synapse_txn,matrix_spec}, and we measured both scopes (\S\ref{sec:eval-real}). CalDAV creates resources
 at a client-chosen URL with a conditional \texttt{PUT}~\cite{rfc4791,rfc9110}. SMTP has no end-to-end dedup~\cite{rfc5321}. Element and DAVx5 resolved every force-stop
 by relaunch, although force-stop violates H3.
 

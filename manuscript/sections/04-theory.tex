@@ -5,13 +5,14 @@ We state the classical results, then the reductions the agent setting needs. App
 
 \subsection{The price of a budget, and two floors}
 \label{sec:theory-main}
-A policy is \emph{verification-only} if it ends by retrying or declaring. Theorem~\ref{thm:main} takes conditionally i.i.d.\ views with lag tail $G$. In parts (b) and (c) the
-policy is verification-only and meets $\PP(\text{declare}\mid X{=}0)\le\beta$, and in part (d) it never asks.
+A policy is \emph{verification-only} if it ends by retrying or declaring. Theorem~\ref{thm:main} takes conditionally i.i.d.\ views with lag tail $G$, and $d$ is
+the binary relative entropy. In parts (b) and (c) the policy is verification-only and meets $\PP(\text{declare}\mid X{=}0)\le\beta$, and in (b) it decides by $r_e{+}w$
+from end-to-end reads alone. In part (d) it never asks, and the effect is committed with prior $\pi$, so $\bar\pi=\min(\pi,1{-}\pi)$ is the prior floor.
 
 \begin{theorem}
 \label{thm:main}
-(a)~If $G(w){<}\alpha$, waiting until $r_e{+}w$ and then an SPRT meet $(\alpha,\beta)$. (b)~End-to-end reads alone, by $r_e{+}w$, retry committed effects at
-rate ${\ge}(1{-}\beta)G(w)$. (c,\,d)~Reads and errors have floors.
+(a)~If $G(w){<}\alpha$, waiting until $r_e{+}w$ and then an SPRT meet $(\alpha,\beta)$. (b)~$\PP(\text{retry}\mid X{=}1)\ge(1{-}\beta)G(w)$.
+(c)~$\E_0[N]\ge d(1{-}\beta\,\|\,\alpha)/D_0$. (d)~$\PP(\dup){+}\PP(\loss)\ge\bar\pi\big(1{-}\sqrt{D_0\E_0[N]/2}\big)$.
 \end{theorem}
 
 \para{What is classical.} We claim none of these inequalities, and Appendix~\ref{app:proofs} states them in full. Part~(a) is Wald's bound~\cite{wald1945sprt} plus a union bound on
@@ -84,7 +85,8 @@ Lemma~\ref{lem:drift} in the appendix bounds drift that is independent across fa
 \subsection{Mobile structure: nonces and two hops}
 \label{sec:twohop}
 A content-carried nonce turns look-alike effects into text the probe can match. The planner writes $k$ random symbols from an alphabet of size $m$ and reuses them on retry.
-A view's false-match rate then falls as $m^{-k}$, whatever look-alikes are on screen, and its miss rate is at most the hidden-field rate plus OCR errors (Lemma~\ref{lem:nonce}).
+If the probe never reads drafts, failed entries or notifications, a view with $M$ visible tokens and match distance $t$ has false-match rate at most $M|B_t|/m^k$, whatever
+look-alikes are on screen, where $|B_t|$ counts the strings near a token. Its miss rate is at most the hidden-field rate plus OCR errors (Lemma~\ref{lem:nonce}).
 Reusing the nonce also makes a later duplicate detectable, because two items carry the same tag.
 
 \begin{theorem}[Two-hop decomposition]
