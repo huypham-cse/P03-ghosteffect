@@ -374,13 +374,13 @@ $^{\S}$Force-stop clears the app's notifications. The shade was cleared between 
     (_android_rent,) = _ra
     M('RealRentAndroid', _android_rent)
     # prose: the Pixel resent while still in deep idle; the A36's one valid Doze trial never resent, and its event was
-    # still dirty when d03 gave up (batch.log), so d02 and d03 had no clean start
+    # still dirty when d03 gave up (batch.txt, the run's batch.log), so d02 and d03 had no clean start
     assert all(r['doze_state'] == 'IDLE' and float(r['first_put_after_doze_exit_s']) < 0
                for r in _rr('trials.csv', os.path.join(REAL, 'device_caldav_pixel9')) if r['fault'] == 'stop-app-doze')
     _sam = os.path.join(REAL, 'device_caldav_a36')
     _d1 = json.load(open(os.path.join(_sam, 'receipts', 'd01.json'), encoding='utf-8'))
     assert _d1['first_put_after_fault_s'] is None and 'dirty=1' in _d1['dirty_after']
-    (_gave_up,) = [l.split()[0] for l in open(os.path.join(_sam, 'batch.log'), encoding='utf-8') if ' d03 ' in l and 'dirty' in l]
+    (_gave_up,) = [l.split()[0] for l in open(os.path.join(_sam, 'batch.txt'), encoding='utf-8') if ' d03 ' in l and 'dirty' in l]
     _t0 = datetime.datetime.fromtimestamp(_d1['fault_utc_ns'] / 1e9, datetime.timezone.utc)
     _t1 = datetime.datetime.combine(_t0.date(), datetime.time.fromisoformat(_gave_up), datetime.timezone.utc)
     M('RealRentSamDozeQuietS', f'{(_t1 - _t0).total_seconds():,.0f}'.replace(',', '{,}'))
