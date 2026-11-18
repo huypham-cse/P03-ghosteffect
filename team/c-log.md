@@ -319,6 +319,22 @@ trên manuscript, code/test artifact và receipts. Conclusion vẫn trang 13;
 Trạng thái C-03: triển khai/thí nghiệm/bảng/văn bản xong để review; chưa
 nghiệm thu. C-01/C-02/C-10 có nhánh/commit riêng; vẫn chờ người dùng hoàn
 thành GitHub device login để push và tạo các PR nối tiếp, không tự merge.
+
+## 18/11/2026 — C-10 cập nhật bộ đếm readability cho mã giả
+
+Thêm môi trường `algorithmic` vào danh sách khối không phải văn xuôi của
+`team/readability_count.py`. Bổ sung test bảo đảm dấu chấm phẩy và câu dài
+trong Algorithm 1 không bị tính như câu văn. Đây là sửa công cụ dùng chung,
+giúp YC-12 của phần A chạy đúng trên mã giả mà không thay đổi nội dung A.
+
+## 18/11/2026 — C-07 rà soát related work
+
+Đã tách câu so sánh Agent libOS khỏi câu RFC 1047 để mỗi nguồn có phạm vi
+riêng. Câu mới nêu rõ Agent libOS kiểm soát capability và checkpoint quanh
+tool dispatch, còn GhostEffect xử lý effect GUI đã externalize. Bib đã pin
+Agent libOS ở v3; `others/citation-audit.md` ghi URL nguồn và lý do không thêm
+Gray--Reuter hoặc Bailis.
+
 ## 18/11/2026 — C-20 device and emulator evidence
 
 Thêm vào §8 hai câu dùng macro B-19: kết quả K-9 trên physical Android phone,

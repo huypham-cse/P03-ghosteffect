@@ -193,3 +193,83 @@ Tổng 105 macro (24 + 12 + 16 + 18 + 7 + 24 + 2 + 2). Phần A không dùng mac
 **Trạng thái task:** A-01 xong cả văn bản, test và bảng (chờ nghiệm thu).
 
 **Tiếp theo:** A-07 (rút §4 còn 1,5 trang, walk-through K-9 và Element ở §5.4) kèm lượt đọc YC-12; nhắn C xác nhận C-02 và hai chỗ δ của C.
+
+## 11/11/2026 (tối)
+
+**Đã làm:** A-07, nhánh `a/a07-shorten` (dựng trên `a/a01-table`):
+- Đo bằng script đọc tọa độ tiêu đề trong PDF (pypdf): trước khi sửa, từ tiêu đề §4 đến tiêu đề §5 là khoảng 5,0 cột; sau khi sửa là **2,86 cột** (≤ 3 cột).
+- Thm 4.1 trong thân bài còn **3 dòng** (đã kiểm bằng `pdftotext`), giả thiết đặt ở câu dẫn ngay trước (views i.i.d. có điều kiện; (b), (c) cho policy verification-only đạt β; (d) cho policy không hỏi). Đoạn "What is classical" ghi nguồn của từng phần và nói (c), (d) bằng lời. Phát biểu đầy đủ kèm Eq. `eq:ub`, `eq:lb` chuyển sang App. A.
+- Giữ đủ Prop 4.4 (joint, giờ là Prop 4.3) và Thm 4.8 (two-hop, giờ là Thm 4.5). Corollary 4.2 giữ nguyên.
+- Chuyển xuống App. A, có câu trỏ tới trong §4: Prop 4.3 (product, `prop:family`), Lemma 4.5 (`lem:floor`), Lemma 4.6(iii) thành `lem:drift` riêng, Lemma 4.7 (`lem:nonce`), đoạn saga, công thức source families, chi tiết dedup theo giao thức (Synapse, Matrix, CalDAV, SMTP).
+- Lemma 4.6 trong thân bài chỉ còn (i), (ii) và đoạn δ của A-05 (giữ công thức `δ = min(α,β)/(10·K·n_cls)`).
+- §5.4: hai walk-through dẫn số dòng của Alg. 1 qua `\label` (dòng 5, 10, 12, 13, 15, 19, 20; đã đối chiếu từng nhãn với số dòng trong PDF). K-9: hop 1 đọc "absent" vì thư nằm ở Outbox trạng thái lỗi, calibration thấy cùng cách đọc trên thư đã commit nên không retry, không Sent thì hỏi ở dòng 20, có Sent thì hỏi ở dòng 13 vì chờ vượt `W_max` (khớp `why_struct` 100% và `why_wait` 100% trong `planner_real.csv`). Element: không hop 1, chờ theo lớp, đọc mỗi view một lần, đánh dấu committed ở dòng 19.
+- Hình 2 (`fig-arch`) đang nổi lên đầu cột chứa tiêu đề §5 và đẩy tiêu đề xuống; chuyển `\input` xuống cuối §5.1 để hình nằm sau tiêu đề.
+- Nhãn "Proof." mới trong App. A dùng môi trường `proof` để không tăng `\emph`.
+
+**Kiểm:** build thoát 0, 21 trang, overfull lớn nhất 3,46 pt, không tham chiếu thiếu, kết luận vẫn trang 13. Test: 42, 1 fail cũ của C, 1 skip. Độ dễ đọc bốn file của A: trước `para 21, emph 49, câu dài 16, đoạn chấm phẩy 19`; sau `20, 47, 12, 13`.
+
+**Trạng thái task:** A-07 xong (chờ nghiệm thu). Còn lại của A: lượt đọc YC-12 (giới hạn `\para` 5, `\emph` 10, 0 câu dài, ≤ 1 chấm phẩy mỗi đoạn) và giá trị A-08 (chờ B, 18/11).
+
+## 11/11/2026 (khuya)
+
+**Đã làm:** YC-12 (độ dễ đọc) và YC-10 (thuật ngữ) trên mọi file `.tex` của A (`03-model`, `04-theory`, `05-design`, `appendix-proofs`, `figures/fig-arch`), nhánh `a/yc12-readability` (dựng trên `a/a07-shorten`):
+- `\para{`: 20 → 5. Giữ ba đoạn thiết lập ở §3 và "Calibration labels", "How many labels" ở §5.3; các đoạn khác mở bằng câu thường.
+- `\emph{`: 47 → 10. Chỉ giữ chỗ định nghĩa lần đầu: committed, duplicate, loss, view, probe family, guarantee, verification-only, family verdicts, evidence sources, dedup horizon. Nhãn trong chứng minh ở App. A đổi thành câu ("For the miss rate, …") hoặc môi trường `proof`.
+- Câu > 45 từ: 12 → 0 (ngoài Alg. 1). Tách câu ở Lemma 4.4(ii), Thm 4.5 (H1, H2, H3 thành câu riêng), §5.1, §5.3, §5.4, App. A (Lemma 4.4 (ii), Lemma nonce, chứng minh Thm 4.5).
+- Đoạn > 1 dấu chấm phẩy: 13 → 0 (ngoài Alg. 1).
+- YC-10: không còn "escalat"; "G2" chỉ còn trong Thm 4.5 và mã giả Alg. 1. Văn xuôi dùng "app with idempotent retries" theo C-02; nhãn Hình 2 đổi "G2" thành "retry class".
+
+**Về Alg. 1:** `team/readability_count.py` (của C, nhánh `c/10-checks`) bỏ qua `tabular`, TikZ và code nhưng chưa bỏ qua `algorithmic`, nên tính cả thuật toán thành 2 "câu" dài và 1 đoạn 16 dấu chấm phẩy. Đề nghị C thêm `algorithmic` vào danh sách môi trường bỏ qua (một từ trong regex dòng 24). Với thay đổi đó, bốn file của A đạt đủ: `para 5, emph 10, câu dài 0, đoạn chấm phẩy 0`.
+
+**Kiểm:** §4 vẫn 2,89 cột, Thm 4.1 vẫn 3 dòng, build thoát 0, overfull lớn nhất 3,46 pt, không tham chiếu thiếu, kết luận trang 13. Đã xem Hình 2 sau khi đổi nhãn. Test: 42, 1 fail cũ của C, 1 skip. Lệnh grep YC-A6 và YC-A8 vẫn rỗng.
+
+**Trạng thái:** YC-12, YC-10 trên file của A xong, chờ C sửa công cụ cho Alg. 1. Còn lại: giá trị A-08 (chờ `label_cost.csv` của B, 18/11), PR nghiệm thu `[A] Nghiệm thu` chậm nhất 19/11.
+
+## 18/11/2026
+
+**Đã đọc:** review của trưởng nhóm ở #23 (9 ghi chú không chặn), #24 (1 lỗi chặn, 4 lỗi nhỏ), #25 (4 mục); `team/QUYET_DINH_CHUNG.md` (đã duyệt 18/11); `planner_sim.py` (cách tính `h1` của K-9, dòng 312; `calibration_deltas`; `N_LAG`); `07-agent.tex` (§7.8).
+
+**Dựng lại nhánh:** #23 đã squash cả chuỗi A, nên rebase từng commit cũ chỉ sinh xung đột. `a/a07-shorten` dựng lại từ `main` bằng cherry-pick commit A-07; `a/yc12-readability` xếp trên nó bằng cherry-pick commit YC-12. Không xung đột (trên `main`, file của A trùng đầu nhánh `a/a01-table`).
+
+**Đã làm, #24 (`a/a07-shorten`):**
+1. Lỗi chặn, walk-through K-9 ở §5.4: thư lỗi trong Outbox cho hop 1 đọc phía committed (`h1=1` trong simulator), không phải "absent". Mục đó mơ hồ vì K-9 hiện cùng mục lỗi khi server chưa áp dụng thư. Dòng 6 của Alg. 1 (nhãn mới `alg:g2`) chỉ tin phía này với app tự retry idempotent và app local, nên với K-9 thì `P = 1`, `d = ⊥`, và planner hỏi.
+2. Walk-through Element: "absent" chỉ retry khi `P ≤ τ_a`, nếu không thì hỏi.
+3. Thm 4.1: (c) và (d) giờ là bất đẳng thức (`E_0[N] ≥ d(1−β‖α)/D_0`; `P(dup)+P(loss) ≥ π̄(1−√(D_0 E_0[N]/2))`). Câu dẫn nêu prior π, `π̄ = min(π, 1−π)`, `d` là entropy tương đối nhị phân và điều kiện "chỉ đọc đầu-cuối" của (b). Định lý vẫn 3 dòng (đã xem ảnh trang 4).
+4. Câu nonce ở §4.3 giữ hệ số `M|B_t|/m^k` và điều kiện hiển thị (không đọc nháp, mục lỗi, thông báo).
+5. App. A: "from 30 to 60 min".
+
+**Đã làm, #25 (`a/yc12-readability`):**
+1. Alg. 1 không còn G2: dùng `idem` (định nghĩa ở dòng Require). G2 chỉ còn trong Thm 4.5 và chứng minh của nó.
+2. Hình 2: "retry class" thành "idempotent retries".
+3. "Clopper-Pearson" (gạch nối) ở §4.3, §5.3, App. A và chú thích bảng do `render_guarantee.py` sinh; đã render lại `tab_cert_*.tex`.
+4. YC-12 với Alg. 1: không sửa được bằng câu chữ. Mã giả dùng dấu chấm phẩy để ngăn lệnh và không có dấu chấm, còn `readability_count.py` trên `main` vẫn chưa bỏ qua `algorithmic`. Theo luật 1.3, A không sửa file của C. Đã kiểm: bỏ riêng khối `algorithmic` khỏi bản sao `05-design.tex` thì năm file của A đạt `para 5, emph 10, câu dài 0, đoạn chấm phẩy 0`.
+
+**Đã làm, nhánh mới `a/acceptance` (xếp trên `a/yc12-readability`):**
+- A-10 (a): render lại `macros_guarantee.tex` từ `real/agent/label_cost.csv` của B: `\CertLabelMedS` = 412 s, `\CertDeviceHoursFive` = 4.577 giờ. File macro không còn `??`.
+- A-10 (b): walk-through K-9 dẫn sang §7.8 (thí nghiệm LLM agent chạy đường này end to end), không thêm số.
+- Ghi chú #23:
+  1. Câu đuôi trễ ở mốc 5.000 nêu thêm `\CertLagBootN` mục lag.
+  2. `n_cls = 4` khi keyed theo lớp, `1` khi gộp (khớp `calibration_deltas`).
+  3. H3: Element thỏa H3, chỉ không có họ hop 1 vì cửa sổ ngắn hơn một lần đọc accessibility.
+  4. Alg. 1 có deadline `D ← r_e + w` (lớp không biết: `max_c(r_c + w_c)`), hỏi khi thiếu mốc `D` cần, bỏ `elapsed` chưa định nghĩa. Chứng minh Cor. 4.2 dùng `T > t_n − r_e` và `G(t_n − r_e)`.
+  5. §3: `r_1 = r_0 = 0` ghi là giả định của simulator; thêm cận loss (`\CertBoundElemProdLoss`, `\CertBoundElemJointLoss`). Docstring `render_guarantee.py` định nghĩa r như §3.
+  6. Hợp đồng macro: xem mục bổ sung bên dưới.
+  7. `render_guarantee.py`: dòng không có cột `nlag` (`planner_real.csv`, tag `main`, `five`) dùng `N_LAG = 20000` (hằng số mặc định của simulator), không mượn `nlag` của `down5`. Renderer thoát 1 nếu `nlag` của các dòng bootstrap (`down5`, `tail5`) khác `N_LAG`. Test mới so `N_LAG` với `planner_sim.N_LAG`. Giá trị bảng không đổi.
+  8. Clopper-Pearson: như #25 mục 3.
+  9. Thuộc B (`07-real.tex`), không làm.
+
+**Bổ sung hợp đồng macro của A (ghi chú 6 của #23, báo C):** §5.3 và §5.4 của A dùng các macro của C sau, chỉ đọc, không đổi tên: `\RsimFiveJointAsk`, `\RsimTail`, `\RsimTailJointAsk`, `\RsimTailJointPv`, `\RsimKnineProdAsk`, `\RsimKsentProdAsk`, `\RsimElemProdAsk`. Câu "Phần A không dùng macro của C" ở mục 10/11 không còn đúng; mục này thay nó.
+
+**Kiểm (Windows, MiKTeX, Python 3.12):**
+- Build thoát 0, 23 trang, overfull lớn nhất 3,46 pt, không tham chiếu thiếu, PDF không còn `??`.
+- §4 dài 2,96 cột (pypdf: tọa độ tiêu đề §4 trang 4 và §5 trang 5, chia theo chiều cao cột lấy từ số dòng lề). Đạt nhưng sát giới hạn 3 cột: phần tăng từ 2,89 là do (c), (d) giờ là công thức.
+- Kết luận ở trang 14, giống bản build `main` (`ad27858`) trong worktree tạm. Thay đổi của A không đẩy trang.
+- Test artifact: 55 test, 1 fail cũ của C (`test_failed_publication_restores_the_original_directory`, lỗi cả trên cây sạch), 1 skip. Test testbed: 116, OK, 4 skip.
+- YC-A9: chạy hai lần cùng SHA-256 (5 file); đổi tên `planner_real4_tail5.csv` thì thoát 1 và không ghi file nào.
+- YC-04: chỉ còn `0.5/0.4/0.1` (tham số). YC-A1, YC-A6, YC-A8, YC-10: grep đạt.
+- Scrub qua trên file bài và code của A. `a-log.md` bị báo tên người ở dòng 1, như `c-log.md`; log là tài liệu nội bộ của nhóm, không vào gói.
+- Lưu ý kỹ thuật: heredoc trong Git Bash gộp `\\` thành `\`. Đã quét mọi file của A: không có ký tự điều khiển hay CR lạc.
+
+**Cho C:** (1) thêm `algorithmic` vào danh sách môi trường bỏ qua trong `team/readability_count.py` (regex ở hàm `prose`), để YC-12 của A đạt trên công cụ; (2) hợp đồng macro bổ sung ở trên.
+
+**Trạng thái:** A-01 đến A-10 xong. #24, #25 đã sửa theo review và nằm trên `main`. PR `[A] Nghiệm thu` mở từ `a/acceptance`. Chặn duy nhất còn lại: YC-12 chờ C sửa công cụ cho Alg. 1.
