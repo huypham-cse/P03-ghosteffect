@@ -319,3 +319,10 @@ trên manuscript, code/test artifact và receipts. Conclusion vẫn trang 13;
 Trạng thái C-03: triển khai/thí nghiệm/bảng/văn bản xong để review; chưa
 nghiệm thu. C-01/C-02/C-10 có nhánh/commit riêng; vẫn chờ người dùng hoàn
 thành GitHub device login để push và tạo các PR nối tiếp, không tự merge.
+## 18/11/2026 — C-20 device and emulator evidence
+
+Thêm vào §8 hai câu dùng macro B-19: kết quả K-9 trên physical Android phone,
+kết quả lmkd trên emulator và DAVx5 dưới kill/Doze, ghi rõ loại phép đo và
+giới hạn chưa đo quản lý pin của hãng. Không sửa file sở hữu của B và không
+đưa số gõ tay vào văn bản. C-20 cần được kiểm lại cùng C-14/C-16 sau khi chuỗi
+agent và evaluation rebase lên main.
