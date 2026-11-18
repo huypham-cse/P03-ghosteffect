@@ -259,10 +259,6 @@ class RunnerTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             runner.prepare_workspace(ARTIFACT / 'results' / 'bad-workspace')
 
-    def test_runner_declares_all_agent_input_directories(self):
-        self.assertEqual(('real/agent_guarded', 'real/agent_rules', 'real/agent_t3a', 'real/agent_killagent'),
-                         runner.AGENT_INPUT_DIRS)
-
     def test_real4_job_covers_all_existing_sensitivity_files(self):
         existing = {p.name for p in (ARTIFACT / 'results').glob('planner_real4_*.csv')}
         declared = {'planner_real4_%s.csv' % tag for tag in planner.REAL4}

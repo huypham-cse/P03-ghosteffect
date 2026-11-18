@@ -34,7 +34,6 @@ PART_OUTPUTS = {
         'boot10k', 'tail5', 'tail5tied', 'down5', 'down15', 't0down5',
         't0down15', 'netlab', 'netlabkey')],
 }
-AGENT_INPUT_DIRS = ('real/agent_guarded', 'real/agent_rules', 'real/agent_t3a', 'real/agent_killagent')
 NUMERIC_JOBS = [
     ('sim_sprt.py', ['sprt_validation.csv', 'sprt_asym.csv', 'calibration.csv', 'correlation.csv']),
     ('sim_impossibility.py', ['impossibility.csv', 'bayes_floor.csv', 'cost_policy.csv', 'late_commit.csv', 'lag_wait.csv']),
@@ -105,11 +104,9 @@ def main(argv=None):
     destination = args.output_dir or ROOT / 'codex' / 'runs' / ('artifact_%s_%s' % (stamp, os.getpid()))
     destination, inputs = prepare_workspace(destination)
     scripts, results = destination / 'artifact' / 'scripts', destination / 'artifact' / 'results'
-    agent_inputs = {name: inputs[name] for name in inputs if any(name.startswith(prefix + '/') for prefix in AGENT_INPUT_DIRS)}
     manifest = dict(status='RUNNING', kind='artifact-reproduction', created_utc=stamp,
                     workspace=str(destination), source_inputs=inputs, jobs=args.jobs,
-                    timeout_seconds=args.timeout, agent_input_directories=AGENT_INPUT_DIRS,
-                    agent_inputs=agent_inputs, completed=[], errors=[])
+                    timeout_seconds=args.timeout, completed=[], errors=[])
     manifest_path = destination / 'RUN.json'
 
     def save():

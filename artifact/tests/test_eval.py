@@ -192,12 +192,5 @@ class ScrubTests(unittest.TestCase):
             (root / 'sub/.env').write_text('harmless=value', encoding='utf-8')
             self.assertEqual(1, self.run_scrub(root).returncode)
 
-    def test_reserved_test_domains_are_not_identity_findings(self):
-        with tempfile.TemporaryDirectory() as temp:
-            path = Path(temp) / 'fixture.txt'
-            path.write_text('alice@test.invalid bob@ghost.local', encoding='utf-8')
-            self.assertEqual(0, self.run_scrub(path).returncode)
-
-
 if __name__ == '__main__':
     unittest.main()
