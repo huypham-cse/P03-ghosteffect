@@ -319,3 +319,11 @@ trên manuscript, code/test artifact và receipts. Conclusion vẫn trang 13;
 Trạng thái C-03: triển khai/thí nghiệm/bảng/văn bản xong để review; chưa
 nghiệm thu. C-01/C-02/C-10 có nhánh/commit riêng; vẫn chờ người dùng hoàn
 thành GitHub device login để push và tạo các PR nối tiếp, không tự merge.
+
+## 18/11/2026 — C-07 rà soát related work
+
+Đã tách câu so sánh Agent libOS khỏi câu RFC 1047 để mỗi nguồn có phạm vi
+riêng. Câu mới nêu rõ Agent libOS kiểm soát capability và checkpoint quanh
+tool dispatch, còn GhostEffect xử lý effect GUI đã externalize. Bib đã pin
+Agent libOS ở v3; `others/citation-audit.md` ghi URL nguồn và lý do không thêm
+Gray--Reuter hoặc Bailis.
