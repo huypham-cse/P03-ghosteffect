@@ -16,6 +16,10 @@ fi
 repo=$(git rev-parse --show-toplevel)
 script="$repo/team/scrub_check.sh"
 output=$(cd "$(dirname "$1")" && pwd)/$(basename "$1")
+if [ -n "$(git -C "$repo" status --porcelain --untracked-files=all -- artifact testbed manuscript)" ]; then
+  echo 'artifact/testbed/manuscript must be clean before bundling' >&2
+  exit 1
+fi
 python3 - "$repo" "$script" "$output" <<'PY'
 import hashlib
 import json
@@ -58,9 +62,12 @@ with tempfile.TemporaryDirectory(prefix='ghosteffect-bundle-') as temporary:
     readme.write_text(
         '# GhostEffect anonymous artifact\n\n'
         'Reproduce on Linux/WSL with Python 3.12: '
-        '`python3 artifact/run_all.py --output-dir /absolute/path/to/fresh-run --jobs 2`.\n\n'
-        'Simulation outputs are seeded. `results/ledger_bench.csv` and floating-point tail values are host-dependent. '
-        'Run time depends on the host and selected worker count. '
+        '`python3 artifact/run_all.py --output-dir /absolute/path/to/fresh-run --jobs 4`.\n\n'
+        'The archived Linux/WSL2 run with this command recorded 824 seconds of child-job time '
+        '(about 13 minutes 44 seconds) on an x86_64 WSL2 host; wall time varies with the host and worker scheduling. '
+        '`results/ledger_bench.csv` and floating-point tail values are host-dependent. '
+        'The archived ghost-src outputs differ between Windows and Linux because of line-ending and host rendering details. '
+        'After extraction, run `sh team/scrub_check.sh <extracted-directory>`; the scrub checker does not inspect a ZIP container as a binary stream. '
         'Android experiments require the separately documented emulator, apps, and local test backends.\n',
         encoding='utf-8')
     manifest = {

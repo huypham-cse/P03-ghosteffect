@@ -1,8 +1,10 @@
 # GhostEffect artifact
 
 Experiment runtime is **stdlib-only Python 3.12** (sqlite3 included) and simulations are **seeded**. On Linux/WSL, reproduce with one command:
-`python3 artifact/run_all.py --output-dir /absolute/path/to/fresh-run --jobs 2`.
-Run time depends on the host and selected worker count. `artifact/run_all.sh` is a thin wrapper.
+`python3 artifact/run_all.py --output-dir /absolute/path/to/fresh-run --jobs 4`.
+The archived Linux/WSL2 run with this command recorded 824 seconds of child-job
+time (about 13 minutes 44 seconds) on an x86_64 WSL2 host; wall time varies with
+the host and worker scheduling. `artifact/run_all.sh` is a thin wrapper.
 The runner copies inputs/scripts into a fresh workspace, records hashes/exits/CSV structure, runs REAL4 and publishes generated fragments there.
 Archived results and the original manuscript are not overwritten. The full suite includes POSIX SIGKILL and rejects native Windows.
 Compile a reviewed generated workspace with `manuscript/build.sh`; LaTeX/BibTeX failures now propagate.
@@ -71,4 +73,12 @@ Etar+DAVx5+Radicale, Synapse txnId horizon). Campaign 1 (`results/real/*.csv`) s
 - Device harness (AndroidWorld fault injector, on-device controller), power-loss ledger test on a device: see paper §6 and §7.
 
 Verification: `python -m unittest discover -s artifact/tests -v`; SciPy is an optional independent test reference, not a runtime dependency.
-The isolated 25-job run passed, including all declared REAL4 tags. Ledger latency (`results/ledger_bench.csv`), filesystem durability, and floating-point tails can vary by host. The bundled source and archived `ghost-src` outputs are retained for audit rather than claimed to be byte-identical. No archived CSV was replaced to hide differences.
+The isolated 25-job run passed, including all declared REAL4 tags. Ledger latency
+(`results/ledger_bench.csv`), filesystem durability, and floating-point tails
+can vary by host. The archived `ghost-src` outputs differ between Windows and
+Linux because of line-ending and host rendering details; both copies are
+retained for audit. No archived CSV was replaced to hide differences.
+
+After extracting a bundle, run `sh team/scrub_check.sh <extracted-directory>`.
+The scrub checker scans the extracted directory; it does not inspect a ZIP
+container as a binary stream.
