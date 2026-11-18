@@ -555,3 +555,7 @@ Gộp `main` (có #55, #57, #58). Phần seed variance (C-05) lấy đúng bản
 ## 19/11/2026: C-01, C-18 sửa theo review #63 (trưởng nhóm sửa trên nhánh)
 
 Xóa `artifact/runs/2026-11-17/MANIFEST.json` (bản 11-18 đã thay; bản cũ còn đường dẫn máy, scrub lỗi). `run_all.py`: khi thư mục không có `.git` (gói ẩn danh của `make_bundle.sh`) thì lấy `source_commit` từ `BUNDLE-MANIFEST.json`, `source_tree_clean` để `None`, thay vì dừng với lỗi git; có test. Gộp `main` và sinh lại `others/notes.md` từ macro hiện tại (có `\RealRent*`). `macros_guarantee.tex` nay trùng `main` (A đã gộp ở #73). Manifest 11-18 lấy từ 0729af4, trước #76; freeze 21/11 chạy lại toàn bộ.
+
+## 19/11/2026: C-11 làm lại theo review #64 (trưởng nhóm làm trên nhánh)
+
+Bản #64 cũ biến tiêu đề `\para` thành mẩu chữ, đổi danh sách chấm phẩy thành mẩu câu và chồng lên #55, #72, nên nhánh lấy lại đúng cây của `main` rồi làm lại lượt đọc. Mỗi tiêu đề bị bỏ được gộp vào một câu chủ đề thật hoặc gộp đoạn; giữ 5 `\para` (Contributions, Limitations, Ethics and threat model, Model-based simulation, Baselines) và 10 `\emph` (định nghĩa lần đầu). Thuật ngữ theo QUYET_DINH_CHUNG: không còn escalate, không còn G2 trong văn xuôi. Kiểm: readability các file C 5/10/0/0, cả bài 14/29/0/0; tập macro, cite, ref, label trước và sau trùng nhau (186, 104, 46, 14); build 24 trang, Kết luận trang 13 như trước; test qua. `others/readability-c11.md` của bản cũ không giữ (không thuộc file của C).
