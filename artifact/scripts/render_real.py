@@ -353,9 +353,40 @@ $^{\S}$Force-stop clears the app's notifications. The shade was cleared between 
         _d = [float(r['first_put_after_fault_s']) for r in _ecv if r['fault'] == _fault]
         M('RealEmuCal%sN' % _name, len(_d))
         M('RealEmuCal%sMedS' % _name, f'{statistics.median(_d):.1f}')
+    # Rented phones without root (AWS Device Farm, b-log 18/11): DAVx5 after am stop-app (stands in for kill -9, which
+    # needs root) and after stop-app + forced deep Doze. One folder and one macro prefix per phone: never pooled.
+    import datetime
+    _ra = set()
+    for _folder, _p in (('device_caldav_a36', 'RealRentSam'), ('device_caldav_pixel9', 'RealRentPix')):
+        _dir = os.path.join(REAL, _folder)
+        _rs = [r for r in _rr('trials.csv', _dir) if r['phase'] == 'scheduled']
+        _rv = [r for r in _rs if r['verdict'] != 'INVALID']
+        _ra |= {l.split('=')[1].strip() for l in open(os.path.join(_dir, 'device.txt'), encoding='utf-8')
+                if l.startswith('ro.build.version.release=')}
+        M(_p + 'N', len(_rs))
+        M(_p + 'ValidN', len(_rv))
+        M(_p + 'OnceN', sum(r['verdict'] == 'EXACTLY_ONCE' for r in _rv))
+        for _fault, _name in (('stop-app', 'Stop'), ('stop-app-doze', 'Doze')):
+            _d = [float(r['first_put_after_fault_s']) for r in _rv if r['fault'] == _fault and r['first_put_after_fault_s']]
+            M(_p + _name + 'N', sum(r['fault'] == _fault for r in _rv))
+            if _d:
+                M(_p + _name + 'MedS', f'{statistics.median(_d):.1f}')
+    (_android_rent,) = _ra
+    M('RealRentAndroid', _android_rent)
+    # prose: the Pixel resent while still in deep idle; the A36's one valid Doze trial never resent, and its event was
+    # still dirty when d03 gave up (batch.txt, the run's batch.log), so d02 and d03 had no clean start
+    assert all(r['doze_state'] == 'IDLE' and float(r['first_put_after_doze_exit_s']) < 0
+               for r in _rr('trials.csv', os.path.join(REAL, 'device_caldav_pixel9')) if r['fault'] == 'stop-app-doze')
+    _sam = os.path.join(REAL, 'device_caldav_a36')
+    _d1 = json.load(open(os.path.join(_sam, 'receipts', 'd01.json'), encoding='utf-8'))
+    assert _d1['first_put_after_fault_s'] is None and 'dirty=1' in _d1['dirty_after']
+    (_gave_up,) = [l.split()[0] for l in open(os.path.join(_sam, 'batch.txt'), encoding='utf-8') if ' d03 ' in l and 'dirty' in l]
+    _t0 = datetime.datetime.fromtimestamp(_d1['fault_utc_ns'] / 1e9, datetime.timezone.utc)
+    _t1 = datetime.datetime.combine(_t0.date(), datetime.time.fromisoformat(_gave_up), datetime.timezone.utc)
+    M('RealRentSamDozeQuietS', f'{(_t1 - _t0).total_seconds():,.0f}'.replace(',', '{,}'))
 
     # ------------------------------------------------------------------ prose hooks
-    M('RealDataLimitation', r'Emulator measurements (\S\ref{sec:eval-real}) cover three apps on an emulator, with $n$ small outside Element; the agent study (\S\ref{sec:eval-agent}) runs one model on the emulator, and on a physical phone only K-9 was measured, without an agent.')
+    M('RealDataLimitation', r'Emulator measurements (\S\ref{sec:eval-real}) cover three apps on an emulator, with $n$ small outside Element; the agent study (\S\ref{sec:eval-agent}) runs one model on the emulator. Physical phones ran only K-9 and DAVx5, without an agent; the two rented phones have no root, so \texttt{am stop-app} stands in for \texttt{kill -9} and \texttt{lmkd} was not tested on them.')
     exec(open(os.path.join(HERE, 'render_agent.py'), encoding='utf-8').read(), globals())
     render_agent()   # \Agent*, \LabelTrial* (B-10, B-11); ?? until artifact/results/real/agent/ exists
     M('RealPresent', 'yes')

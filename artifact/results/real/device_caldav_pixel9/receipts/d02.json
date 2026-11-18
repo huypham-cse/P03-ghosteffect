@@ -1,0 +1,646 @@
+{
+  "fault": "stop-app-doze",
+  "utc_ns": 1795020111440524218,
+  "dirty_before": "No result found.",
+  "save_tap": {
+    "at": [
+      821,
+      256
+    ],
+    "utc_ns": 1795020119790983795
+  },
+  "barrier_utc_ns": 1795020172849383510,
+  "fault_receipt": {
+    "observed_class": "app-stop-keep-jobs",
+    "pids_before": [
+      "29885"
+    ],
+    "pids_after": [],
+    "doze": {
+      "observed_class": "device-doze-deep",
+      "state": "IDLE"
+    }
+  },
+  "fault_utc_ns": 1795020175554109699,
+  "doze_exit_utc_ns": 1795020775700553119,
+  "proc_samples": [
+    {
+      "utc_ns": 1795020172989763692,
+      "pid": "29885",
+      "deep": "ACTIVE",
+      "procstate": null,
+      "am_frozen": null,
+      "cgroup_frozen": null
+    },
+    {
+      "utc_ns": 1795020183609487863,
+      "pid": "28787",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020194034834271,
+      "pid": "28787",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020204402959850,
+      "pid": "28787",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020214918230276,
+      "pid": "28787",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020225423188733,
+      "pid": "28787",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020235881136521,
+      "pid": "28787",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020246284095249,
+      "pid": "28787",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020256646352068,
+      "pid": "28787",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020267041502419,
+      "pid": "28787",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020277423864511,
+      "pid": "28787",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020287851697745,
+      "pid": "28787",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020298179960004,
+      "pid": "28787",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020308545857970,
+      "pid": "28787",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020318918087468,
+      "pid": "28787",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020329225200514,
+      "pid": "28787",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020339604502158,
+      "pid": "28787",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020350004550869,
+      "pid": "28787",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020360403631726,
+      "pid": "28787",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020370773670109,
+      "pid": "28787",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020381159162283,
+      "pid": "28787",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020391541250640,
+      "pid": "28787",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020401948871224,
+      "pid": "28787",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020412351248009,
+      "pid": "28787",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020422727180928,
+      "pid": "28787",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020433161486472,
+      "pid": "28787",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020443607048790,
+      "pid": "28787",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020453982562504,
+      "pid": "28787",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020464406506787,
+      "pid": "28787",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020474748465997,
+      "pid": "28787",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020485141053235,
+      "pid": "28787",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020495491047271,
+      "pid": "28787",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020505802924677,
+      "pid": "28787",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020516183365797,
+      "pid": "28787",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020526511815145,
+      "pid": "28787",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020536916550348,
+      "pid": "28787",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020547318509382,
+      "pid": "28787",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020557724457757,
+      "pid": "28787",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020568158518396,
+      "pid": "28787",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020578494904768,
+      "pid": "28787",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020588902804018,
+      "pid": "28787",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020599388884057,
+      "pid": "28787",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020609788445618,
+      "pid": "28787",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020620186611378,
+      "pid": "28787",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020630543890494,
+      "pid": "28787",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020640935871428,
+      "pid": "28787",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020651333277826,
+      "pid": "28787",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020661767077049,
+      "pid": "28787",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020672166336104,
+      "pid": "28787",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020682566294704,
+      "pid": "28787",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020692892808965,
+      "pid": "28787",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020703263600401,
+      "pid": "28787",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020713680020543,
+      "pid": "28787",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020724084068260,
+      "pid": "28787",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020734467267540,
+      "pid": "28787",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020744833239107,
+      "pid": "28787",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020755273931558,
+      "pid": "28787",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020765727859253,
+      "pid": "28787",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020776076526657,
+      "pid": "28787",
+      "deep": "ACTIVE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020786349625699,
+      "pid": "28787",
+      "deep": "ACTIVE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020796793418083,
+      "pid": "28787",
+      "deep": "ACTIVE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020807276045301,
+      "pid": "28787",
+      "deep": "ACTIVE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020817744506780,
+      "pid": "28787",
+      "deep": "ACTIVE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020828218257179,
+      "pid": "28787",
+      "deep": "ACTIVE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020838743547030,
+      "pid": "28787",
+      "deep": "ACTIVE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020849176135171,
+      "pid": "28787",
+      "deep": "ACTIVE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020859674659017,
+      "pid": "28787",
+      "deep": "ACTIVE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020870171107008,
+      "pid": "28787",
+      "deep": "ACTIVE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020880575824817,
+      "pid": "28787",
+      "deep": "ACTIVE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020891051770033,
+      "pid": "28787",
+      "deep": "ACTIVE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020901454234857,
+      "pid": "28787",
+      "deep": "ACTIVE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020911897649974,
+      "pid": "28787",
+      "deep": "ACTIVE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020922354286508,
+      "pid": "28787",
+      "deep": "ACTIVE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020932788699759,
+      "pid": "28787",
+      "deep": "ACTIVE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020943227952757,
+      "pid": "28787",
+      "deep": "ACTIVE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795020953704839669,
+      "pid": "28787",
+      "deep": "ACTIVE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    }
+  ],
+  "nonce": "gx:XQ7AX1",
+  "href": "/alice/cal/585f33cb-c00b-4b89-94f7-85d9a8519aee.ics",
+  "puts": 2,
+  "server_copies": [
+    "585f33cb-c00b-4b89-94f7-85d9a8519aee.ics"
+  ],
+  "first_put_after_fault_s": 27.40642761,
+  "dirty_after": "No result found.",
+  "first_put_after_doze_exit_s": -572.74001581,
+  "verdict": "EXACTLY_ONCE"
+}
