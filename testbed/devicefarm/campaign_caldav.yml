@@ -7,9 +7,8 @@ phases:
       - devicefarm-cli use java 17
       - devicefarm-cli use python 3.12
       - python3 --version
-      - python3 -m venv $HOME/radvenv
-      - $HOME/radvenv/bin/pip install --no-index --find-links $DEVICEFARM_TEST_PACKAGE_PATH/wheelhouse radicale==3.9.0 || $HOME/radvenv/bin/pip install radicale==3.9.0
-      - $HOME/radvenv/bin/python -m radicale --version
+      - python3 -m pip install --target $HOME/radlib --no-index --find-links $DEVICEFARM_TEST_PACKAGE_PATH/wheelhouse radicale==3.9.0 || python3 -m pip install --target $HOME/radlib radicale==3.9.0
+      - PYTHONPATH=$HOME/radlib python3 -m radicale --version
   pre_test:
     commands:
       - adb -s $DEVICEFARM_DEVICE_UDID wait-for-device

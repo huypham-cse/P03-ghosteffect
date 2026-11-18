@@ -4,7 +4,8 @@
 # The phone is wiped after the run, so the settings changed here (stay awake, forced Doze) do not outlive it.
 set -u
 cd "$DEVICEFARM_TEST_PACKAGE_PATH"
-export GX_PHYSICAL_SERIAL="$DEVICEFARM_DEVICE_UDID" GX_RADICALE_PYTHON="$HOME/radvenv/bin/python"
+# Radicale is pip-installed into $HOME/radlib (the host's Python has no ensurepip, so no venv; run 18/11 R1).
+export GX_PHYSICAL_SERIAL="$DEVICEFARM_DEVICE_UDID" GX_RADICALE_PYTHON="$(command -v python3)" PYTHONPATH="$HOME/radlib"
 LOG="$DEVICEFARM_LOG_DIR"
 ADB="$(command -v adb)"
 S() { timeout 60 "$ADB" -s "$GX_PHYSICAL_SERIAL" shell "$@" 2>&1 | tr -d '\r'; }

@@ -31,17 +31,22 @@ def find(root, key, package=DAVX5):
 
 
 def tap(shell, key, timeout=30):
-    deadline = time.monotonic() + timeout
+    deadline, misses = time.monotonic() + timeout, 0
     while time.monotonic() < deadline:
         hit = find(screen(shell), key)
         if hit:
             shell('input tap %d %d' % hit)
             return hit
+        misses += 1
+        if misses % 3 == 0:   # Compose lists build only what is visible: drop a keyboard (Galaxy A36), then scroll
+            hide_ime(shell)
+            shell('input swipe 540 1500 540 900 300' if misses % 6 == 3 else 'input swipe 540 900 540 1500 300')
         time.sleep(1)
     raise RuntimeError('DAVx5 setup: %r not on screen' % key)
 
 
 def hide_ime(shell):
+    # mIsInputViewShown stays true with no keyboard on screen (AVD 18/11), so only mInputShown is trusted
     if 'mInputShown=true' in shell('dumpsys input_method | grep mInputShown'):
         shell('input keyevent KEYCODE_BACK')
         time.sleep(1)
@@ -56,6 +61,8 @@ def setup(shell, url='http://127.0.0.1:5233/alice/', user='alice', password='ali
     for permission in ('READ_CALENDAR', 'WRITE_CALENDAR', 'POST_NOTIFICATIONS'):
         shell('pm grant %s android.permission.%s' % (DAVX5, permission))
     shell("am start -W -a android.intent.action.VIEW -d '%s' -n %s/.ui.setup.LoginActivity" % (url, DAVX5))
+    time.sleep(2)
+    hide_ime(shell)                           # the Galaxy A36 opened its keyboard on the URL field
     tap(shell, 'User name')
     shell('input text ' + user)
     hide_ime(shell)

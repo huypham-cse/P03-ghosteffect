@@ -28,8 +28,8 @@ def build(out, wheels=None):
         z.writestr('tests/test_placeholder.py', 'def test_placeholder():\n    pass\n')
         for path in sorted((ROOT / 'testbed').glob('*.py')) + [ROOT / 'testbed/assets.lock.json']:
             z.write(path, 'testbed/' + path.name)
-        for path in sorted((ROOT / 'testbed/devicefarm').glob('*')):
-            z.write(path, 'testbed/devicefarm/' + path.name)
+        for path in sorted((ROOT / 'testbed/devicefarm').glob('*')):   # LF on the Linux host whatever git checked out
+            z.writestr('testbed/devicefarm/' + path.name, path.read_bytes().replace(b'\r\n', b'\n'))
         z.write(ROOT / 'artifact/scripts/sim_nonce.py', 'artifact/scripts/sim_nonce.py')
         for name in ASSETS:
             path = ROOT / 'runtime/assets' / name

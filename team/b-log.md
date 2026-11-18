@@ -506,3 +506,4 @@ Test: testbed 96 qua (4 bỏ qua), artifact 49 qua (1 bỏ qua); render không �
   - Câu hỏi: (1) DAVx5 có giữ đúng một bản trên điện thoại thật khi bị `stop-app` và Doze (H3); (2) Doze ép trên điện thoại thật (One UI và AOSP) có hoãn lần sync lại không, khác AVD; (3) process DAVx5 có bị freezer đóng băng lúc chờ không.
   - Ngân sách: mỗi lượt khoảng 80 phút, timeout 110 phút. Tổng tối đa 7,5 + 2 × 110 = 227,5 phút, dưới 300.
 - **Sổ phút (trialMinutes.remaining):** trước 995,88; sau p01 988,37 (dùng 7,51).
+- **R1 lần đầu hỏng rig, chưa có lượt nào (1,61 phút máy, dùng 1,20; còn 987,17):** Python 3.12 của host không có `ensurepip` nên `python3 -m venv` hỏng và Radicale không chạy; trên A36 bàn phím tự mở ở ô URL nên ô User name không được dựng (danh sách Compose). Sửa: Radicale cài bằng `pip install --target` và `PYTHONPATH`; `davx5_setup.py` ẩn bàn phím sau khi mở màn hình đăng nhập và cuộn khi không thấy nhãn. Chạy lại R1 nguyên kế hoạch (caldav-r1b).
