@@ -5,7 +5,7 @@ Values below come from the current CSV render; this is not a fresh experiment re
 Measurement, fitted-law simulation, model simulation and host timings remain distinct.
 See artifact/README.md for the experiment and CSV provenance.
 
-Total macros: 1268. Do not edit generated values by hand.
+Total macros: 1294. Do not edit generated values by hand.
 
 | Macro | Value | Macro file | Used in |
 |---|---|---|---|
@@ -18,13 +18,13 @@ Total macros: 1268. Do not edit generated values by hand.
 | `\AgentDoneNoResendN` | 1 | `macros_real.tex` | sections/07-agent.tex |
 | `\AgentDupHi` | 99.0 | `macros_real.tex` | (unused) |
 | `\AgentDupLo` | 74.2 | `macros_real.tex` | (unused) |
-| `\AgentDupN` | 17 | `macros_real.tex` | sections/07-agent.tex |
+| `\AgentDupN` | 17 | `macros_real.tex` | sections/00-abstract.tex, sections/01-introduction.tex, sections/07-agent.tex, sections/10-conclusion.tex |
 | `\AgentDupPct` | 94.4 | `macros_real.tex` | (unused) |
 | `\AgentFramework` | M3A | `macros_real.tex` | sections/02-background-motivation.tex, sections/07-agent.tex |
-| `\AgentGuardAskN` | 19 | `macros_real.tex` | sections/07-agent.tex |
+| `\AgentGuardAskN` | 19 | `macros_real.tex` | sections/01-introduction.tex, sections/07-agent.tex, sections/10-conclusion.tex |
 | `\AgentGuardDupHi` | 24.6 | `macros_real.tex` | sections/07-agent.tex |
 | `\AgentGuardDupLo` | 0.9 | `macros_real.tex` | sections/07-agent.tex |
-| `\AgentGuardDupN` | 1 | `macros_real.tex` | sections/07-agent.tex |
+| `\AgentGuardDupN` | 1 | `macros_real.tex` | sections/00-abstract.tex, sections/01-introduction.tex, sections/07-agent.tex, sections/10-conclusion.tex |
 | `\AgentGuardDupPct` | 5.3 | `macros_real.tex` | sections/07-agent.tex |
 | `\AgentGuardFisherP` | $<$0.001 | `macros_real.tex` | sections/07-agent.tex |
 | `\AgentGuardInvalidN` | 1 | `macros_real.tex` | (unused) |
@@ -33,7 +33,7 @@ Total macros: 1268. Do not edit generated values by hand.
 | `\AgentGuardSentDupN` | 0 | `macros_real.tex` | sections/07-agent.tex |
 | `\AgentGuardSentValidN` | 10 | `macros_real.tex` | sections/07-agent.tex |
 | `\AgentGuardUserErrN` | 1 | `macros_real.tex` | sections/07-agent.tex |
-| `\AgentGuardValidN` | 19 | `macros_real.tex` | sections/07-agent.tex |
+| `\AgentGuardValidN` | 19 | `macros_real.tex` | sections/00-abstract.tex, sections/07-agent.tex |
 | `\AgentHEvalS` | 300 | `macros_real.tex` | sections/07-agent.tex |
 | `\AgentHost` | one NVIDIA L40S (48 GB) cloud VM; x86-64 laptop running the Android emulator (API 33) | `macros_real.tex` | sections/07-agent.tex |
 | `\AgentInvalidMeasureN` | 0 | `macros_real.tex` | (unused) |
@@ -74,9 +74,9 @@ Total macros: 1268. Do not edit generated values by hand.
 | `\AgentRulesFisherP` | $<$0.001 | `macros_real.tex` | sections/07-agent.tex |
 | `\AgentRulesInvalidN` | 5 | `macros_real.tex` | (unused) |
 | `\AgentRulesNoCandN` | 0 | `macros_real.tex` | (unused) |
-| `\AgentRulesRetryN` | 15 | `macros_real.tex` | sections/07-agent.tex |
+| `\AgentRulesRetryN` | 15 | `macros_real.tex` | sections/07-agent.tex, sections/07-realsim.tex |
 | `\AgentRulesScheduledN` | 20 | `macros_real.tex` | (unused) |
-| `\AgentRulesValidN` | 15 | `macros_real.tex` | sections/07-agent.tex |
+| `\AgentRulesValidN` | 15 | `macros_real.tex` | sections/07-agent.tex, sections/07-realsim.tex |
 | `\AgentScheduledN` | 20 | `macros_real.tex` | sections/07-agent.tex |
 | `\AgentSentDupN` | 10 | `macros_real.tex` | (unused) |
 | `\AgentSentValidN` | 10 | `macros_real.tex` | (unused) |
@@ -98,12 +98,12 @@ Total macros: 1268. Do not edit generated values by hand.
 | `\AgentTextScheduledN` | 23 | `macros_real.tex` | sections/07-agent.tex |
 | `\AgentTextTaskFailN` | 1 | `macros_real.tex` | (unused) |
 | `\AgentTextValidN` | 10 | `macros_real.tex` | sections/02-background-motivation.tex, sections/07-agent.tex |
-| `\AgentValidN` | 18 | `macros_real.tex` | sections/02-background-motivation.tex, sections/07-agent.tex |
+| `\AgentValidN` | 18 | `macros_real.tex` | sections/00-abstract.tex, sections/01-introduction.tex, sections/02-background-motivation.tex, sections/07-agent.tex, sections/10-conclusion.tex |
 | `\AgentWallMedS` | 412 | `macros_real.tex` | sections/07-agent.tex |
 | `\CalCPENhundred` | 5.7 | `macros.tex` | (unused) |
 | `\CalCPViolMax` | 1.6 | `macros.tex` | (unused) |
 | `\CalCPWorst` | 1.79 | `macros.tex` | (unused) |
-| `\CalNomViol` | 94 | `macros.tex` | sections/07-evaluation.tex |
+| `\CalNomViol` | 94 | `macros.tex` | sections/appendix-results.tex |
 | `\CalPlugENhundred` | 4.3 | `macros.tex` | (unused) |
 | `\CalPlugViolHi` | 56 | `macros.tex` | (unused) |
 | `\CalPlugViolLo` | 12 | `macros.tex` | (unused) |
@@ -131,13 +131,13 @@ Total macros: 1268. Do not edit generated values by hand.
 | `\CertBoundElemJointDup` | 5.12 | `macros_guarantee.tex` | sections/03-model.tex |
 | `\CertBoundElemJointEpsOne` | 6.33 | `macros_guarantee.tex` | (unused) |
 | `\CertBoundElemJointEpsZero` | 5.63 | `macros_guarantee.tex` | (unused) |
-| `\CertBoundElemJointLoss` | 6.63 | `macros_guarantee.tex` | (unused) |
+| `\CertBoundElemJointLoss` | 6.63 | `macros_guarantee.tex` | sections/03-model.tex |
 | `\CertBoundElemJointQone` | 65.06 | `macros_guarantee.tex` | sections/03-model.tex |
 | `\CertBoundElemJointQzero` | 100.00 | `macros_guarantee.tex` | (unused) |
 | `\CertBoundElemProdDup` | 1.19 | `macros_guarantee.tex` | sections/03-model.tex |
 | `\CertBoundElemProdEpsOne` | 10.06 | `macros_guarantee.tex` | (unused) |
 | `\CertBoundElemProdEpsZero` | 6.01 | `macros_guarantee.tex` | (unused) |
-| `\CertBoundElemProdLoss` | 1.25 | `macros_guarantee.tex` | (unused) |
+| `\CertBoundElemProdLoss` | 1.25 | `macros_guarantee.tex` | sections/03-model.tex |
 | `\CertBoundElemProdQone` | 1.92 | `macros_guarantee.tex` | (unused) |
 | `\CertBoundElemProdQzero` | 4.19 | `macros_guarantee.tex` | (unused) |
 | `\CertClassesN` | 4 | `macros_guarantee.tex` | sections/05-design.tex |
@@ -173,7 +173,7 @@ Total macros: 1268. Do not edit generated values by hand.
 | `\CertLabelMedS` | 412 | `macros_guarantee.tex` | sections/05-design.tex |
 | `\CertLabelsBase` | 2{,}000 | `macros_guarantee.tex` | sections/05-design.tex |
 | `\CertLabelsFive` | 5{,}000 | `macros_guarantee.tex` | sections/05-design.tex |
-| `\CertLagBootN` | 20{,}000 | `macros_guarantee.tex` | sections/05-design.tex |
+| `\CertLagBootN` | 20{,}000 | `macros_guarantee.tex` | sections/05-design.tex, sections/07-realsim.tex |
 | `\CertPilotFive` | 500 | `macros_guarantee.tex` | sections/05-design.tex |
 | `\CertTailFiveJointAsk` | 13.7 | `macros_guarantee.tex` | sections/05-design.tex |
 | `\CertTailFiveJointOver` | over budget | `macros_guarantee.tex` | sections/05-design.tex |
@@ -215,31 +215,31 @@ Total macros: 1268. Do not edit generated values by hand.
 | `\CertTiedTwoProdAsk` | 100.0 | `macros_guarantee.tex` | (unused) |
 | `\CertTiedTwoProdPv` | 0.00 | `macros_guarantee.tex` | (unused) |
 | `\CertTiedTwoProdPvHi` | 0.04 | `macros_guarantee.tex` | (unused) |
-| `\ClassGtwoAsk` | 8.9 | `macros.tex` | sections/07-evaluation.tex |
+| `\ClassGtwoAsk` | 8.9 | `macros.tex` | sections/appendix-results.tex |
 | `\ClassGtwoSecs` | 33 | `macros.tex` | (unused) |
-| `\ClassKeyGtwoPv` | 27.8 | `macros.tex` | sections/07-evaluation.tex |
-| `\ClassLocalAsk` | 1.2 | `macros.tex` | sections/07-evaluation.tex |
+| `\ClassKeyGtwoPv` | 27.8 | `macros.tex` | sections/appendix-results.tex |
+| `\ClassLocalAsk` | 1.2 | `macros.tex` | sections/appendix-results.tex |
 | `\ClassLocalSecs` | 6 | `macros.tex` | (unused) |
-| `\ClassNonGtwoAsk` | 20.2 | `macros.tex` | sections/07-evaluation.tex |
+| `\ClassNonGtwoAsk` | 20.2 | `macros.tex` | sections/appendix-results.tex |
 | `\ClassNonGtwoSecs` | 21 | `macros.tex` | (unused) |
 | `\ClassSrcGtwoAsk` | 30.4 | `macros.tex` | (unused) |
 | `\ClassSrcLocalAsk` | 6.5 | `macros.tex` | (unused) |
 | `\ClassSrcNonGtwoAsk` | 63.9 | `macros.tex` | (unused) |
 | `\ClassSrcVlmAsk` | 98.8 | `macros.tex` | (unused) |
-| `\ClassVlmAsk` | 98.8 | `macros.tex` | sections/07-evaluation.tex |
+| `\ClassVlmAsk` | 98.8 | `macros.tex` | sections/appendix-results.tex |
 | `\ClassVlmSecs` | 67 | `macros.tex` | (unused) |
-| `\CorrCertMaxHi` | 0.19 | `macros.tex` | sections/07-evaluation.tex |
-| `\CorrNaiveOne` | 9.6 | `macros.tex` | sections/07-evaluation.tex |
+| `\CorrCertMaxHi` | 0.19 | `macros.tex` | sections/appendix-results.tex |
+| `\CorrNaiveOne` | 9.6 | `macros.tex` | sections/appendix-results.tex |
 | `\CorrViewAsk` | 27 | `macros.tex` | (unused) |
 | `\CorrViewCrossOne` | 10.4 | `macros.tex` | (unused) |
-| `\CorrViewCrossTwo` | 1.13 | `macros.tex` | sections/07-evaluation.tex |
-| `\CorrViewWithinMax` | 0.20 | `macros.tex` | sections/07-evaluation.tex |
+| `\CorrViewCrossTwo` | 1.13 | `macros.tex` | sections/appendix-results.tex |
+| `\CorrViewWithinMax` | 0.20 | `macros.tex` | sections/appendix-results.tex |
 | `\CorrVoneEight` | 1.76 | `macros.tex` | (unused) |
 | `\CorrVoneOne` | 1.89 | `macros.tex` | (unused) |
 | `\CorrVoneSix` | 0.99 | `macros.tex` | (unused) |
-| `\DecompBcp` | 0.38 | `macros.tex` | sections/07-evaluation.tex |
-| `\DecompBtrue` | 0.104 | `macros.tex` | sections/07-evaluation.tex |
-| `\DecompCPratio` | 3.6 | `macros.tex` | sections/07-evaluation.tex |
+| `\DecompBcp` | 0.38 | `macros.tex` | sections/appendix-results.tex |
+| `\DecompBtrue` | 0.104 | `macros.tex` | sections/appendix-results.tex |
+| `\DecompCPratio` | 3.6 | `macros.tex` | sections/appendix-results.tex |
 | `\DecompRealized` | 0.029 | `macros.tex` | (unused) |
 | `\DriftFiveAsk` | 29.6 | `macros.tex` | (unused) |
 | `\DriftFivePv` | 0.24 | `macros.tex` | (unused) |
@@ -254,11 +254,11 @@ Total macros: 1268. Do not edit generated values by hand.
 | `\DriftOneTestPv` | 0.05 | `macros.tex` | (unused) |
 | `\DriftOneTestPvHi` | 0.12 | `macros.tex` | (unused) |
 | `\DriftTenAsk` | 33.5 | `macros.tex` | (unused) |
-| `\DriftTenPv` | 0.79 | `macros.tex` | sections/07-evaluation.tex |
-| `\DriftTenPvHi` | 1.00 | `macros.tex` | sections/07-evaluation.tex |
+| `\DriftTenPv` | 0.79 | `macros.tex` | sections/appendix-results.tex |
+| `\DriftTenPvHi` | 1.00 | `macros.tex` | sections/appendix-results.tex |
 | `\DriftTenTestAsk` | 54.3 | `macros.tex` | (unused) |
 | `\DriftTenTestPv` | 0.00 | `macros.tex` | (unused) |
-| `\DriftTenTestPvHi` | 0.04 | `macros.tex` | sections/07-evaluation.tex |
+| `\DriftTenTestPvHi` | 0.04 | `macros.tex` | sections/appendix-results.tex |
 | `\DriftThreeAsk` | 27.6 | `macros.tex` | (unused) |
 | `\DriftThreePv` | 0.16 | `macros.tex` | (unused) |
 | `\DriftThreePvHi` | 0.27 | `macros.tex` | (unused) |
@@ -276,9 +276,9 @@ Total macros: 1268. Do not edit generated values by hand.
 | `\LabelTrialObservationMedS` | 300.3 | `macros_real.tex` | (unused) |
 | `\LabelTrialRelaunchMedS` | 1.9 | `macros_real.tex` | (unused) |
 | `\LabelTrialResetMedS` | 4.4 | `macros_real.tex` | (unused) |
-| `\LagLogThree` | 12\,s | `macros.tex` | sections/07-evaluation.tex |
-| `\LagParetoThree` | 98\,min | `macros.tex` | sections/07-evaluation.tex |
-| `\LagParetoTwo` | 3\,min | `macros.tex` | sections/07-evaluation.tex |
+| `\LagLogThree` | 12\,s | `macros.tex` | sections/appendix-results.tex |
+| `\LagParetoThree` | 98\,min | `macros.tex` | sections/appendix-results.tex |
+| `\LagParetoTwo` | 3\,min | `macros.tex` | sections/appendix-results.tex |
 | `\LedgerBytes` | 205 | `macros_real.tex` | sections/06-implementation.tex |
 | `\LedgerCand` | 112 | `macros_real.tex` | (unused) |
 | `\LedgerFullPfifty` | -- | `macros_real.tex` | (unused) |
@@ -312,17 +312,17 @@ Total macros: 1268. Do not edit generated values by hand.
 | `\NcalDProdPv` | 0.05 | `macros.tex` | (unused) |
 | `\NcalDSrcAsk` | 59.9 | `macros.tex` | (unused) |
 | `\NcalDSrcPv` | 0.00 | `macros.tex` | (unused) |
-| `\NcalEJointAsk` | 66.7 | `macros.tex` | sections/07-evaluation.tex |
+| `\NcalEJointAsk` | 66.7 | `macros.tex` | sections/appendix-results.tex |
 | `\NcalEJointPv` | 0.05 | `macros.tex` | (unused) |
-| `\NcalEProdAsk` | 24.9 | `macros.tex` | sections/07-evaluation.tex |
+| `\NcalEProdAsk` | 24.9 | `macros.tex` | sections/appendix-results.tex |
 | `\NcalEProdPv` | 0.05 | `macros.tex` | (unused) |
-| `\NcalESrcAsk` | 47.0 | `macros.tex` | sections/07-evaluation.tex |
+| `\NcalESrcAsk` | 47.0 | `macros.tex` | sections/appendix-results.tex |
 | `\NcalESrcPv` | 0.01 | `macros.tex` | (unused) |
-| `\NcalFJointAsk` | 33.8 | `macros.tex` | sections/01-introduction.tex, sections/07-evaluation.tex |
+| `\NcalFJointAsk` | 33.8 | `macros.tex` | sections/01-introduction.tex, sections/appendix-results.tex |
 | `\NcalFJointPv` | 0.04 | `macros.tex` | (unused) |
 | `\NcalFProdAsk` | 23.4 | `macros.tex` | (unused) |
 | `\NcalFProdPv` | 0.02 | `macros.tex` | (unused) |
-| `\NcalFSrcAsk` | 27.1 | `macros.tex` | sections/07-evaluation.tex |
+| `\NcalFSrcAsk` | 27.1 | `macros.tex` | sections/appendix-results.tex |
 | `\NcalFSrcPv` | 0.04 | `macros.tex` | (unused) |
 | `\NcalGJointAsk` | 26.4 | `macros.tex` | (unused) |
 | `\NcalGJointPv` | 0.07 | `macros.tex` | (unused) |
@@ -332,7 +332,7 @@ Total macros: 1268. Do not edit generated values by hand.
 | `\NcalGSrcPv` | 0.04 | `macros.tex` | (unused) |
 | `\NonceEN` | 1.5 | `macros.tex` | (unused) |
 | `\NonceEpsOne` | 0.016 | `macros.tex` | (unused) |
-| `\NonceEpsZero` | \ensuremath{7.2{\times}10^{-6}} | `macros.tex` | sections/05-design.tex, sections/07-evaluation.tex |
+| `\NonceEpsZero` | \ensuremath{7.2{\times}10^{-6}} | `macros.tex` | sections/05-design.tex, sections/appendix-results.tex |
 | `\NsizeJointQTwo` | 3{,}723 | `macros.tex` | (unused) |
 | `\NsizeJointThree` | 21{,}635 | `macros.tex` | (unused) |
 | `\NsizeJointTwo` | 1{,}700 | `macros.tex` | (unused) |
@@ -370,44 +370,44 @@ Total macros: 1268. Do not edit generated values by hand.
 | `\PopCmBSrc` | 0.00 | `macros.tex` | (unused) |
 | `\PopCmBSrcAsk` | 49.4 | `macros.tex` | (unused) |
 | `\PopCmBSrcHi` | 0.04 | `macros.tex` | (unused) |
-| `\PopCmCJoint` | 0.00 | `macros.tex` | sections/07-evaluation.tex |
+| `\PopCmCJoint` | 0.00 | `macros.tex` | sections/07-evaluation.tex, sections/appendix-results.tex |
 | `\PopCmCJointAsk` | 74.5 | `macros.tex` | (unused) |
 | `\PopCmCJointHi` | 0.04 | `macros.tex` | (unused) |
-| `\PopCmCProd` | 0.33 | `macros.tex` | sections/07-evaluation.tex |
+| `\PopCmCProd` | 0.33 | `macros.tex` | sections/07-evaluation.tex, sections/appendix-results.tex |
 | `\PopCmCProdAsk` | 33.5 | `macros.tex` | (unused) |
 | `\PopCmCProdHi` | 0.47 | `macros.tex` | (unused) |
 | `\PopCmCRules` | 2.16 | `macros.tex` | (unused) |
 | `\PopCmCRulesAsk` | 24.4 | `macros.tex` | (unused) |
 | `\PopCmCRulesHi` | 2.50 | `macros.tex` | (unused) |
-| `\PopCmCSrc` | 0.01 | `macros.tex` | sections/07-evaluation.tex |
+| `\PopCmCSrc` | 0.01 | `macros.tex` | sections/appendix-results.tex |
 | `\PopCmCSrcAsk` | 50.2 | `macros.tex` | (unused) |
 | `\PopCmCSrcHi` | 0.07 | `macros.tex` | (unused) |
-| `\PopIwFJoint` | 0.00 | `macros.tex` | sections/07-evaluation.tex |
+| `\PopIwFJoint` | 0.00 | `macros.tex` | sections/appendix-results.tex |
 | `\PopIwFJointAsk` | 79.6 | `macros.tex` | (unused) |
 | `\PopIwFJointHi` | 0.04 | `macros.tex` | (unused) |
-| `\PopIwFProd` | 0.11 | `macros.tex` | sections/07-evaluation.tex |
+| `\PopIwFProd` | 0.11 | `macros.tex` | sections/appendix-results.tex |
 | `\PopIwFProdAsk` | 46.2 | `macros.tex` | (unused) |
 | `\PopIwFProdHi` | 0.21 | `macros.tex` | (unused) |
-| `\PopIwFRules` | 1.34 | `macros.tex` | sections/07-evaluation.tex |
+| `\PopIwFRules` | 1.34 | `macros.tex` | sections/appendix-results.tex |
 | `\PopIwFRulesAsk` | 24.7 | `macros.tex` | (unused) |
 | `\PopIwFRulesHi` | 1.61 | `macros.tex` | (unused) |
 | `\PopIwFSrc` | 0.00 | `macros.tex` | (unused) |
 | `\PopIwFSrcAsk` | 55.0 | `macros.tex` | (unused) |
 | `\PopIwFSrcHi` | 0.04 | `macros.tex` | (unused) |
-| `\PopIwPJoint` | 0.34 | `macros.tex` | sections/07-evaluation.tex |
+| `\PopIwPJoint` | 0.34 | `macros.tex` | sections/appendix-results.tex |
 | `\PopIwPJointAsk` | 67.4 | `macros.tex` | (unused) |
 | `\PopIwPJointHi` | 0.49 | `macros.tex` | (unused) |
-| `\PopIwPProd` | 0.87 | `macros.tex` | sections/07-evaluation.tex |
+| `\PopIwPProd` | 0.87 | `macros.tex` | sections/appendix-results.tex |
 | `\PopIwPProdAsk` | 26.4 | `macros.tex` | (unused) |
-| `\PopIwPProdHi` | 1.09 | `macros.tex` | sections/07-evaluation.tex |
+| `\PopIwPProdHi` | 1.09 | `macros.tex` | sections/appendix-results.tex |
 | `\PopIwPRules` | 1.34 | `macros.tex` | (unused) |
 | `\PopIwPRulesAsk` | 24.7 | `macros.tex` | (unused) |
 | `\PopIwPRulesHi` | 1.61 | `macros.tex` | (unused) |
 | `\PopIwPSrc` | 0.16 | `macros.tex` | (unused) |
 | `\PopIwPSrcAsk` | 48.0 | `macros.tex` | (unused) |
 | `\PopIwPSrcHi` | 0.27 | `macros.tex` | (unused) |
-| `\PopRows` | 5 | `macros.tex` | sections/07-evaluation.tex |
-| `\PopRulesOver` | 4 | `macros.tex` | sections/07-evaluation.tex |
+| `\PopRows` | 5 | `macros.tex` | sections/appendix-results.tex |
+| `\PopRulesOver` | 4 | `macros.tex` | sections/appendix-results.tex |
 | `\RealAmkillKnine` | 15 | `macros_real.tex` | sections/07-real.tex |
 | `\RealAmkillNoopElem` | 13 | `macros_real.tex` | sections/07-real.tex |
 | `\RealAuditAttemptsN` | 36 | `macros_real.tex` | sections/07-real.tex |
@@ -428,15 +428,15 @@ Total macros: 1268. Do not edit generated values by hand.
 | `\RealBlindLagHi` | 13.6 | `macros_real.tex` | (unused) |
 | `\RealBlindLagLo` | 4.6 | `macros_real.tex` | (unused) |
 | `\RealCalKill` | 5 | `macros_real.tex` | sections/07-real.tex |
-| `\RealCalN` | 8 | `macros_real.tex` | sections/00-abstract.tex, sections/01-introduction.tex, sections/07-real.tex |
+| `\RealCalN` | 8 | `macros_real.tex` | sections/01-introduction.tex, sections/07-real.tex |
 | `\RealCalOnce` | 8 | `macros_real.tex` | sections/07-real.tex |
-| `\RealCalRecDup` | 3 | `macros_real.tex` | sections/00-abstract.tex, sections/01-introduction.tex, sections/07-real.tex |
-| `\RealCalRecN` | 3 | `macros_real.tex` | sections/00-abstract.tex, sections/01-introduction.tex, sections/07-real.tex |
+| `\RealCalRecDup` | 3 | `macros_real.tex` | sections/01-introduction.tex, sections/07-real.tex |
+| `\RealCalRecN` | 3 | `macros_real.tex` | sections/01-introduction.tex, sections/07-real.tex |
 | `\RealCensored` | 0 | `macros_real.tex` | sections/07-real.tex |
 | `\RealCoBot` | 2 | `macros_real.tex` | (unused) |
 | `\RealCoN` | 101 | `macros_real.tex` | sections/01-introduction.tex, sections/07-real.tex, sections/08-discussion.tex |
 | `\RealCoWrong` | 0 | `macros_real.tex` | (unused) |
-| `\RealDataLimitation` | Emulator measurements (\S\ref{sec:eval-real}) cover three apps on an emulator, with $n$ small outside Element; the agent study (\S\ref{sec:eval-agent}) runs one model on the emulator, and on a physical phone only K-9 was measured, without an agent. | `macros_real.tex` | sections/08-discussion.tex |
+| `\RealDataLimitation` | Emulator measurements (\S\ref{sec:eval-real}) cover three apps on an emulator, with $n$ small outside Element; the agent study (\S\ref{sec:eval-agent}) runs one model on the emulator. Physical phones ran only K-9 and DAVx5, without an agent; the two rented phones have no root, so \texttt{am stop-app} stands in for \texttt{kill -9} and \texttt{lmkd} was not tested on them. | `macros_real.tex` | sections/08-discussion.tex |
 | `\RealDumpHi` | 2.5 | `macros_real.tex` | sections/07-real.tex |
 | `\RealDumpLo` | 2 | `macros_real.tex` | sections/07-real.tex |
 | `\RealEarlyWrong` | 3 | `macros_real.tex` | (unused) |
@@ -444,7 +444,7 @@ Total macros: 1268. Do not edit generated values by hand.
 | `\RealElemN` | 101 | `macros_real.tex` | sections/07-real.tex |
 | `\RealElemNofaultN` | 12 | `macros_real.tex` | sections/07-real.tex |
 | `\RealElemOnce` | 101 | `macros_real.tex` | (unused) |
-| `\RealElemRL` | 83 | `macros_real.tex` | figures/fig1.tex, sections/00-abstract.tex, sections/01-introduction.tex, sections/07-real.tex |
+| `\RealElemRL` | 83 | `macros_real.tex` | figures/fig1.tex, sections/01-introduction.tex, sections/07-real.tex |
 | `\RealElemSameTxn` | 65 | `macros_real.tex` | (unused) |
 | `\RealElemSentPolls` | 1{,}036 | `macros_real.tex` | sections/07-real.tex |
 | `\RealElemStd` | 60 | `macros_real.tex` | sections/07-real.tex |
@@ -453,18 +453,18 @@ Total macros: 1268. Do not edit generated values by hand.
 | `\RealElemStickyResend` | 2 | `macros_real.tex` | sections/07-real.tex |
 | `\RealElemStickySync` | 18 | `macros_real.tex` | sections/07-real.tex |
 | `\RealElemSyncOnly` | 18 | `macros_real.tex` | (unused) |
-| `\RealEmuCalDozeMedS` | 50.9 | `macros_real.tex` | (unused) |
+| `\RealEmuCalDozeMedS` | 50.9 | `macros_real.tex` | sections/08-discussion.tex |
 | `\RealEmuCalDozeN` | 3 | `macros_real.tex` | (unused) |
-| `\RealEmuCalKillMedS` | 52.5 | `macros_real.tex` | (unused) |
+| `\RealEmuCalKillMedS` | 52.5 | `macros_real.tex` | sections/08-discussion.tex |
 | `\RealEmuCalKillN` | 3 | `macros_real.tex` | (unused) |
 | `\RealEmuCalLmkMedS` | 39.6 | `macros_real.tex` | (unused) |
 | `\RealEmuCalLmkN` | 3 | `macros_real.tex` | (unused) |
 | `\RealEmuCalN` | 12 | `macros_real.tex` | (unused) |
-| `\RealEmuCalOnceN` | 11 | `macros_real.tex` | (unused) |
-| `\RealEmuCalValidN` | 11 | `macros_real.tex` | (unused) |
+| `\RealEmuCalOnceN` | 11 | `macros_real.tex` | sections/08-discussion.tex |
+| `\RealEmuCalValidN` | 11 | `macros_real.tex` | sections/08-discussion.tex |
 | `\RealEmuKDupLo` | 61.0 | `macros_real.tex` | (unused) |
-| `\RealEmuKDupN` | 6 | `macros_real.tex` | (unused) |
-| `\RealEmuKN` | 6 | `macros_real.tex` | (unused) |
+| `\RealEmuKDupN` | 6 | `macros_real.tex` | sections/08-discussion.tex |
+| `\RealEmuKN` | 6 | `macros_real.tex` | sections/08-discussion.tex |
 | `\RealFirstBot` | 33 | `macros_real.tex` | sections/07-real.tex |
 | `\RealFirstObs` | 68 | `macros_real.tex` | sections/07-real.tex |
 | `\RealFirstWrong` | 3 | `macros_real.tex` | sections/07-real.tex |
@@ -487,8 +487,8 @@ Total macros: 1268. Do not edit generated values by hand.
 | `\RealKRd` | 20 | `macros_real.tex` | figures/fig1.tex, sections/07-real.tex |
 | `\RealKRdNosent` | 12 | `macros_real.tex` | (unused) |
 | `\RealKRdSent` | 8 | `macros_real.tex` | (unused) |
-| `\RealKRecDup` | 20 | `macros_real.tex` | figures/fig1.tex, sections/00-abstract.tex, sections/01-introduction.tex, sections/07-real.tex |
-| `\RealKRecN` | 20 | `macros_real.tex` | figures/fig1.tex, sections/00-abstract.tex, sections/01-introduction.tex, sections/07-real.tex |
+| `\RealKRecDup` | 20 | `macros_real.tex` | figures/fig1.tex, sections/01-introduction.tex, sections/07-real.tex |
+| `\RealKRecN` | 20 | `macros_real.tex` | figures/fig1.tex, sections/01-introduction.tex, sections/07-real.tex |
 | `\RealKSendmsgsTapped` | 8 | `macros_real.tex` | sections/07-real.tex |
 | `\RealKSentAckedN` | 7 | `macros_real.tex` | (unused) |
 | `\RealKSentN` | 8 | `macros_real.tex` | sections/07-real.tex |
@@ -561,23 +561,39 @@ Total macros: 1268. Do not edit generated values by hand.
 | `\RealOneKnineRdN` | 15 | `macros_real.tex` | (unused) |
 | `\RealOneKnineRdPending` | 15 | `macros_real.tex` | (unused) |
 | `\RealOneN` | 72 | `macros_real.tex` | sections/07-real.tex |
-| `\RealPhoneAndroid` | 15 | `macros_real.tex` | (unused) |
+| `\RealPhoneAndroid` | 15 | `macros_real.tex` | sections/08-discussion.tex |
 | `\RealPhoneBgN` | 10 | `macros_real.tex` | (unused) |
 | `\RealPhoneDupLo` | 88.6 | `macros_real.tex` | (unused) |
-| `\RealPhoneDupN` | 30 | `macros_real.tex` | (unused) |
+| `\RealPhoneDupN` | 30 | `macros_real.tex` | sections/08-discussion.tex |
 | `\RealPhoneForceN` | 20 | `macros_real.tex` | (unused) |
-| `\RealPhoneN` | 30 | `macros_real.tex` | (unused) |
-| `\RealPhoneNoResendN` | 30 | `macros_real.tex` | (unused) |
+| `\RealPhoneN` | 30 | `macros_real.tex` | sections/08-discussion.tex |
+| `\RealPhoneNoResendN` | 30 | `macros_real.tex` | sections/08-discussion.tex |
 | `\RealPhoneNotifBgN` | 10 | `macros_real.tex` | (unused) |
 | `\RealPhoneNotifForceN` | 0 | `macros_real.tex` | (unused) |
 | `\RealPhoneObserveS` | 120 | `macros_real.tex` | (unused) |
 | `\RealPilotN` | 3 | `macros_real.tex` | sections/07-real.tex |
 | `\RealPilotStaleDigest` | 1 | `macros_real.tex` | sections/07-real.tex |
 | `\RealPresent` | yes | `macros_real.tex` | (unused) |
+| `\RealRentAndroid` | 15 | `macros_real.tex` | (unused) |
+| `\RealRentPixDozeMedS` | 27.4 | `macros_real.tex` | sections/08-discussion.tex |
+| `\RealRentPixDozeN` | 3 | `macros_real.tex` | (unused) |
+| `\RealRentPixN` | 9 | `macros_real.tex` | (unused) |
+| `\RealRentPixOnceN` | 9 | `macros_real.tex` | sections/08-discussion.tex |
+| `\RealRentPixStopMedS` | 52.7 | `macros_real.tex` | (unused) |
+| `\RealRentPixStopN` | 3 | `macros_real.tex` | (unused) |
+| `\RealRentPixValidN` | 9 | `macros_real.tex` | sections/08-discussion.tex |
+| `\RealRentSamDozeN` | 1 | `macros_real.tex` | (unused) |
+| `\RealRentSamDozeQuietS` | 1{,}028 | `macros_real.tex` | sections/08-discussion.tex |
+| `\RealRentSamN` | 9 | `macros_real.tex` | (unused) |
+| `\RealRentSamOnceN` | 7 | `macros_real.tex` | sections/08-discussion.tex |
+| `\RealRentSamStopMedS` | 30.0 | `macros_real.tex` | (unused) |
+| `\RealRentSamStopN` | 3 | `macros_real.tex` | (unused) |
+| `\RealRentSamValidN` | 7 | `macros_real.tex` | sections/08-discussion.tex |
 | `\RealTimeoutClean` | 3 | `macros_real.tex` | sections/08-discussion.tex |
 | `\RealTimeoutN` | 6 | `macros_real.tex` | sections/07-real.tex |
 | `\RealTimeoutOnce` | 6 | `macros_real.tex` | sections/07-real.tex |
 | `\RealTwoN` | 149 | `macros_real.tex` | sections/01-introduction.tex |
+| `\RsimBaseLabelN` | 2{,}000 | `macros.tex` | sections/07-realsim.tex |
 | `\RsimElemAppAsk` | 0.0 | `macros.tex` | (unused) |
 | `\RsimElemAppDup` | 1.03 | `macros.tex` | (unused) |
 | `\RsimElemAppErr` | 1.03 | `macros.tex` | (unused) |
@@ -606,7 +622,7 @@ Total macros: 1268. Do not edit generated values by hand.
 | `\RsimElemJointPv` | 0.00 | `macros.tex` | (unused) |
 | `\RsimElemJointPvHi` | 0.04 | `macros.tex` | sections/07-realsim.tex |
 | `\RsimElemJointSecs` | 70 | `macros.tex` | (unused) |
-| `\RsimElemProdAsk` | 3.0 | `macros.tex` | sections/07-realsim.tex |
+| `\RsimElemProdAsk` | 3.0 | `macros.tex` | sections/05-design.tex, sections/07-realsim.tex |
 | `\RsimElemProdDup` | 0.15 | `macros.tex` | (unused) |
 | `\RsimElemProdErr` | 0.24 | `macros.tex` | (unused) |
 | `\RsimElemProdLoss` | 0.09 | `macros.tex` | (unused) |
@@ -641,13 +657,18 @@ Total macros: 1268. Do not edit generated values by hand.
 | `\RsimElemSrcPv` | 0.00 | `macros.tex` | (unused) |
 | `\RsimElemSrcPvHi` | 0.04 | `macros.tex` | (unused) |
 | `\RsimElemSrcSecs` | 70 | `macros.tex` | (unused) |
-| `\RsimFiveJointAsk` | 12.7 | `macros.tex` | sections/00-abstract.tex, sections/01-introduction.tex, sections/05-design.tex, sections/07-realsim.tex, sections/10-conclusion.tex |
+| `\RsimFitCoN` | 101 | `macros.tex` | sections/07-realsim.tex |
+| `\RsimFitCoWrong` | 0 | `macros.tex` | sections/07-realsim.tex |
+| `\RsimFitLateObs` | 99 | `macros.tex` | sections/07-realsim.tex |
+| `\RsimFitLateWrong` | 0 | `macros.tex` | sections/07-realsim.tex |
+| `\RsimFiveJointAsk` | 12.7 | `macros.tex` | sections/01-introduction.tex, sections/05-design.tex, sections/07-realsim.tex |
 | `\RsimFiveJointDup` | 0.09 | `macros.tex` | (unused) |
 | `\RsimFiveJointErr` | 0.76 | `macros.tex` | (unused) |
 | `\RsimFiveJointLoss` | 0.67 | `macros.tex` | (unused) |
 | `\RsimFiveJointPv` | 0.00 | `macros.tex` | (unused) |
 | `\RsimFiveJointPvHi` | 0.04 | `macros.tex` | sections/01-introduction.tex |
 | `\RsimFiveJointSecs` | 24 | `macros.tex` | (unused) |
+| `\RsimFiveLabelN` | 5{,}000 | `macros.tex` | sections/07-realsim.tex |
 | `\RsimFiveProdAsk` | 2.7 | `macros.tex` | (unused) |
 | `\RsimFiveProdDup` | 0.05 | `macros.tex` | (unused) |
 | `\RsimFiveProdErr` | 0.14 | `macros.tex` | (unused) |
@@ -690,7 +711,7 @@ Total macros: 1268. Do not edit generated values by hand.
 | `\RsimKnineJointPv` | 0.00 | `macros.tex` | (unused) |
 | `\RsimKnineJointPvHi` | 0.04 | `macros.tex` | (unused) |
 | `\RsimKnineJointSecs` | 77 | `macros.tex` | (unused) |
-| `\RsimKnineProdAsk` | 100.0 | `macros.tex` | (unused) |
+| `\RsimKnineProdAsk` | 100.0 | `macros.tex` | sections/05-design.tex |
 | `\RsimKnineProdDup` | 3.96 | `macros.tex` | (unused) |
 | `\RsimKnineProdErr` | 6.01 | `macros.tex` | (unused) |
 | `\RsimKnineProdLoss` | 2.05 | `macros.tex` | (unused) |
@@ -781,7 +802,7 @@ Total macros: 1268. Do not edit generated values by hand.
 | `\RsimKsentPassSrcPv` | 0.00 | `macros.tex` | (unused) |
 | `\RsimKsentPassSrcPvHi` | 0.04 | `macros.tex` | (unused) |
 | `\RsimKsentPassSrcSecs` | 75 | `macros.tex` | (unused) |
-| `\RsimKsentProdAsk` | 100.0 | `macros.tex` | (unused) |
+| `\RsimKsentProdAsk` | 100.0 | `macros.tex` | sections/05-design.tex |
 | `\RsimKsentProdDup` | 4.09 | `macros.tex` | (unused) |
 | `\RsimKsentProdErr` | 6.04 | `macros.tex` | (unused) |
 | `\RsimKsentProdLoss` | 1.95 | `macros.tex` | (unused) |
@@ -986,50 +1007,51 @@ Total macros: 1268. Do not edit generated values by hand.
 | `\RsimUnkSrcPv` | 0.00 | `macros.tex` | (unused) |
 | `\RsimUnkSrcPvHi` | 0.04 | `macros.tex` | (unused) |
 | `\RsimUnkSrcSecs` | 78 | `macros.tex` | (unused) |
-| `\RuleBestTenAsk` | 16.3 | `macros.tex` | sections/07-evaluation.tex |
+| `\RsimWorkflowN` | 12{,}000 | `macros.tex` | (unused) |
+| `\RuleBestTenAsk` | 16.3 | `macros.tex` | sections/appendix-results.tex |
 | `\RuleBestTenName` | wait 60 s, all but VLM | `macros.tex` | (unused) |
 | `\RuleBestTenPv` | 0.47 | `macros.tex` | (unused) |
-| `\RuleBestThreeAsk` | 17.6 | `macros.tex` | sections/07-evaluation.tex |
-| `\RuleBestThreeName` | wait 60 s, any two | `macros.tex` | sections/07-evaluation.tex |
+| `\RuleBestThreeAsk` | 17.6 | `macros.tex` | sections/appendix-results.tex |
+| `\RuleBestThreeName` | wait 60 s, any two | `macros.tex` | sections/appendix-results.tex |
 | `\RuleBestThreePv` | 0.10 | `macros.tex` | (unused) |
-| `\RuleMinAsk` | 16.2 | `macros.tex` | sections/07-evaluation.tex |
+| `\RuleMinAsk` | 16.2 | `macros.tex` | sections/appendix-results.tex |
 | `\RuleMinPv` | 0.08 | `macros.tex` | (unused) |
 | `\RuleMinPvAsk` | 24.2 | `macros.tex` | (unused) |
-| `\RuleN` | 12 | `macros.tex` | sections/07-evaluation.tex |
+| `\RuleN` | 12 | `macros.tex` | sections/appendix-results.tex |
 | `\RuleOver` | 1 | `macros.tex` | (unused) |
 | `\SagaMaxDup` | 0.86 | `macros.tex` | (unused) |
 | `\SagaMixMaxEight` | 14 | `macros.tex` | (unused) |
 | `\SagaMixMaxFour` | 18 | `macros.tex` | (unused) |
 | `\SagaMixSave` | 5.6 | `macros.tex` | (unused) |
-| `\SagaNaiveSixteen` | 9.6 | `macros.tex` | sections/07-evaluation.tex |
+| `\SagaNaiveSixteen` | 9.6 | `macros.tex` | sections/appendix-results.tex |
 | `\SagaPredEight` | 1.5 | `macros.tex` | (unused) |
 | `\SagaSaveEight` | 1.5 | `macros.tex` | (unused) |
 | `\SagaWorseSixteen` | 4 | `macros.tex` | (unused) |
 | `\SagaWorseTwo` | 38 | `macros.tex` | (unused) |
 | `\SensPvHiMax` | 0.26 | `macros.tex` | (unused) |
 | `\SensPvMax` | 0.09 | `macros.tex` | (unused) |
-| `\ShareDigest` | 44 | `macros.tex` | sections/07-evaluation.tex |
-| `\ShareHop` | 69 | `macros.tex` | sections/07-evaluation.tex |
-| `\ShareNonce` | 63 | `macros.tex` | sections/07-evaluation.tex |
+| `\ShareDigest` | 44 | `macros.tex` | sections/appendix-results.tex |
+| `\ShareHop` | 69 | `macros.tex` | sections/appendix-results.tex |
+| `\ShareNonce` | 63 | `macros.tex` | sections/appendix-results.tex |
 | `\ShareSrcDigest` | 72 | `macros.tex` | (unused) |
 | `\ShareSrcHop` | 83 | `macros.tex` | (unused) |
 | `\ShareSrcNonce` | 72 | `macros.tex` | (unused) |
 | `\ShareSrcVlm` | 19 | `macros.tex` | (unused) |
-| `\ShareVlm` | 16 | `macros.tex` | sections/07-evaluation.tex |
-| `\SimAltered` | 37 | `macros.tex` | sections/07-evaluation.tex |
+| `\ShareVlm` | 16 | `macros.tex` | sections/appendix-results.tex |
+| `\SimAltered` | 37 | `macros.tex` | sections/appendix-results.tex |
 | `\SimAskAllAsk` | 100.0 | `macros.tex` | (unused) |
-| `\SimAskAllDup` | 4.4 | `macros.tex` | sections/07-evaluation.tex |
-| `\SimAskAllLoss` | 2.7 | `macros.tex` | sections/07-evaluation.tex |
+| `\SimAskAllDup` | 4.4 | `macros.tex` | sections/07-evaluation.tex, sections/appendix-results.tex |
+| `\SimAskAllLoss` | 2.7 | `macros.tex` | sections/07-evaluation.tex, sections/appendix-results.tex |
 | `\SimAskAllLv` | 0.00 | `macros.tex` | (unused) |
 | `\SimAskAllP` | 0.00 | `macros.tex` | (unused) |
 | `\SimAskAllPv` | 0.00 | `macros.tex` | (unused) |
 | `\SimAskAllPvHi` | 0.04 | `macros.tex` | (unused) |
 | `\SimAskAllSecs` | 75 | `macros.tex` | (unused) |
 | `\SimAtomixAsk` | 0.0 | `macros.tex` | (unused) |
-| `\SimAtomixDup` | 34.5 | `macros.tex` | sections/07-evaluation.tex |
+| `\SimAtomixDup` | 34.5 | `macros.tex` | sections/appendix-results.tex |
 | `\SimAtomixDurAsk` | 0.0 | `macros.tex` | (unused) |
-| `\SimAtomixDurDup` | 5.4 | `macros.tex` | sections/07-evaluation.tex |
-| `\SimAtomixDurLoss` | 10.0 | `macros.tex` | sections/07-evaluation.tex |
+| `\SimAtomixDurDup` | 5.4 | `macros.tex` | sections/appendix-results.tex |
+| `\SimAtomixDurLoss` | 10.0 | `macros.tex` | sections/appendix-results.tex |
 | `\SimAtomixDurLv` | 21.8 | `macros.tex` | (unused) |
 | `\SimAtomixDurP` | 0.00 | `macros.tex` | (unused) |
 | `\SimAtomixDurPv` | 7.8 | `macros.tex` | (unused) |
@@ -1041,28 +1063,28 @@ Total macros: 1268. Do not edit generated values by hand.
 | `\SimAtomixPv` | 52.3 | `macros.tex` | (unused) |
 | `\SimAtomixPvHi` | 53.36 | `macros.tex` | (unused) |
 | `\SimAtomixSecs` | 14 | `macros.tex` | (unused) |
-| `\SimBudgetRatio` | 21 | `macros.tex` | sections/07-evaluation.tex |
+| `\SimBudgetRatio` | 21 | `macros.tex` | sections/appendix-results.tex |
 | `\SimCkptAsk` | 0.0 | `macros.tex` | (unused) |
-| `\SimCkptDup` | 67.7 | `macros.tex` | sections/07-evaluation.tex |
+| `\SimCkptDup` | 67.7 | `macros.tex` | sections/appendix-results.tex |
 | `\SimCkptLoss` | 0.00 | `macros.tex` | (unused) |
 | `\SimCkptLv` | 0.00 | `macros.tex` | (unused) |
 | `\SimCkptP` | 0.00 | `macros.tex` | (unused) |
 | `\SimCkptPv` | 100.0 | `macros.tex` | (unused) |
 | `\SimCkptPvHi` | 100.00 | `macros.tex` | (unused) |
 | `\SimCkptSecs` | 14 | `macros.tex` | (unused) |
-| `\SimGhostAsk` | 24.9 | `macros.tex` | sections/00-abstract.tex, sections/01-introduction.tex, sections/07-evaluation.tex |
+| `\SimGhostAsk` | 24.9 | `macros.tex` | sections/01-introduction.tex, sections/07-evaluation.tex, sections/appendix-results.tex |
 | `\SimGhostBg` | 2.1 | `macros.tex` | (unused) |
 | `\SimGhostCloss` | 0.00 | `macros.tex` | (unused) |
 | `\SimGhostDup` | 0.94 | `macros.tex` | (unused) |
 | `\SimGhostLoss` | 0.84 | `macros.tex` | (unused) |
 | `\SimGhostLv` | 0.00 | `macros.tex` | (unused) |
 | `\SimGhostP` | -- | `macros.tex` | (unused) |
-| `\SimGhostPv` | 0.05 | `macros.tex` | sections/07-evaluation.tex |
-| `\SimGhostPvHi` | 0.12 | `macros.tex` | sections/07-evaluation.tex |
+| `\SimGhostPv` | 0.05 | `macros.tex` | sections/07-evaluation.tex, sections/appendix-results.tex |
+| `\SimGhostPvHi` | 0.12 | `macros.tex` | sections/07-evaluation.tex, sections/appendix-results.tex |
 | `\SimGhostReads` | 4.9 | `macros.tex` | (unused) |
 | `\SimGhostSecs` | 35 | `macros.tex` | (unused) |
 | `\SimGhostVsAskAll` | 4.0 | `macros.tex` | (unused) |
-| `\SimGtwoAsk` | 73.0 | `macros.tex` | sections/07-evaluation.tex |
+| `\SimGtwoAsk` | 73.0 | `macros.tex` | sections/07-evaluation.tex, sections/appendix-results.tex |
 | `\SimGtwoDup` | 2.1 | `macros.tex` | (unused) |
 | `\SimGtwoLoss` | 2.8 | `macros.tex` | (unused) |
 | `\SimGtwoLv` | 0.07 | `macros.tex` | (unused) |
@@ -1071,12 +1093,12 @@ Total macros: 1268. Do not edit generated values by hand.
 | `\SimGtwoPvHi` | 0.04 | `macros.tex` | (unused) |
 | `\SimGtwoSecs` | 55 | `macros.tex` | (unused) |
 | `\SimHalfWidth` | 0.9 | `macros.tex` | (unused) |
-| `\SimJointAsk` | 66.7 | `macros.tex` | sections/00-abstract.tex, sections/01-introduction.tex, sections/07-evaluation.tex |
+| `\SimJointAsk` | 66.7 | `macros.tex` | sections/01-introduction.tex, sections/07-evaluation.tex, sections/appendix-results.tex |
 | `\SimJointDup` | 3.1 | `macros.tex` | (unused) |
 | `\SimJointLoss` | 2.4 | `macros.tex` | (unused) |
 | `\SimJointLv` | 0.05 | `macros.tex` | (unused) |
 | `\SimJointP` | 0.00 | `macros.tex` | (unused) |
-| `\SimJointPv` | 0.05 | `macros.tex` | sections/00-abstract.tex, sections/01-introduction.tex, sections/07-evaluation.tex |
+| `\SimJointPv` | 0.05 | `macros.tex` | sections/01-introduction.tex, sections/07-evaluation.tex, sections/appendix-results.tex |
 | `\SimJointPvHi` | 0.12 | `macros.tex` | (unused) |
 | `\SimJointSecs` | 71 | `macros.tex` | (unused) |
 | `\SimKeyAsk` | 0.0 | `macros.tex` | (unused) |
@@ -1092,7 +1114,7 @@ Total macros: 1268. Do not edit generated values by hand.
 | `\SimKeyLoss` | 2.6 | `macros.tex` | (unused) |
 | `\SimKeyLv` | 5.7 | `macros.tex` | (unused) |
 | `\SimKeyP` | 0.00 | `macros.tex` | (unused) |
-| `\SimKeyPv` | 9.5 | `macros.tex` | sections/07-evaluation.tex |
+| `\SimKeyPv` | 9.5 | `macros.tex` | sections/appendix-results.tex |
 | `\SimKeyPvHi` | 10.20 | `macros.tex` | (unused) |
 | `\SimKeySecs` | 13 | `macros.tex` | (unused) |
 | `\SimMajAsk` | 52.2 | `macros.tex` | (unused) |
@@ -1103,25 +1125,28 @@ Total macros: 1268. Do not edit generated values by hand.
 | `\SimMajPv` | 4.0 | `macros.tex` | (unused) |
 | `\SimMajPvHi` | 4.47 | `macros.tex` | (unused) |
 | `\SimMajSecs` | 50 | `macros.tex` | (unused) |
-| `\SimN` | 12{,}000 | `macros.tex` | sections/01-introduction.tex, sections/07-evaluation.tex |
+| `\SimModelVettedAsk` | 100.0 | `macros.tex` | sections/07-evaluation.tex |
+| `\SimModelVettedPv` | 0.00 | `macros.tex` | sections/07-evaluation.tex |
+| `\SimModelVettedPvHi` | 0.04 | `macros.tex` | sections/07-evaluation.tex |
+| `\SimN` | 12{,}000 | `macros.tex` | sections/01-introduction.tex, sections/07-evaluation.tex, sections/appendix-results.tex |
 | `\SimNoAskAsk` | 4.3 | `macros.tex` | (unused) |
 | `\SimNoAskDup` | 0.23 | `macros.tex` | (unused) |
 | `\SimNoAskLoss` | 9.3 | `macros.tex` | (unused) |
-| `\SimNoAskLv` | 20.2 | `macros.tex` | sections/07-evaluation.tex |
+| `\SimNoAskLv` | 20.2 | `macros.tex` | sections/07-evaluation.tex, sections/appendix-results.tex |
 | `\SimNoAskP` | 0.00 | `macros.tex` | (unused) |
 | `\SimNoAskPv` | 0.02 | `macros.tex` | (unused) |
 | `\SimNoAskPvHi` | 0.09 | `macros.tex` | (unused) |
 | `\SimNoAskSecs` | 21 | `macros.tex` | (unused) |
-| `\SimNoCalAsk` | 12.4 | `macros.tex` | sections/07-evaluation.tex |
+| `\SimNoCalAsk` | 12.4 | `macros.tex` | sections/appendix-results.tex |
 | `\SimNoCalDup` | 1.3 | `macros.tex` | (unused) |
 | `\SimNoCalLoss` | 0.49 | `macros.tex` | (unused) |
 | `\SimNoCalLv` | 0.18 | `macros.tex` | (unused) |
 | `\SimNoCalP` | 0.06 | `macros.tex` | (unused) |
-| `\SimNoCalPv` | 1.1 | `macros.tex` | sections/07-evaluation.tex |
+| `\SimNoCalPv` | 1.1 | `macros.tex` | sections/07-evaluation.tex, sections/appendix-results.tex |
 | `\SimNoCalPvHi` | 1.30 | `macros.tex` | (unused) |
 | `\SimNoCalRatio` | 22 | `macros.tex` | (unused) |
 | `\SimNoCalSecs` | 18 | `macros.tex` | (unused) |
-| `\SimNoDigestAsk` | 45.3 | `macros.tex` | sections/07-evaluation.tex |
+| `\SimNoDigestAsk` | 45.3 | `macros.tex` | sections/07-evaluation.tex, sections/appendix-results.tex |
 | `\SimNoDigestDup` | 1.8 | `macros.tex` | (unused) |
 | `\SimNoDigestLoss` | 1.4 | `macros.tex` | (unused) |
 | `\SimNoDigestLv` | 0.00 | `macros.tex` | (unused) |
@@ -1129,7 +1154,7 @@ Total macros: 1268. Do not edit generated values by hand.
 | `\SimNoDigestPv` | 0.04 | `macros.tex` | (unused) |
 | `\SimNoDigestPvHi` | 0.11 | `macros.tex` | (unused) |
 | `\SimNoDigestSecs` | 48 | `macros.tex` | (unused) |
-| `\SimNoHopAsk` | 48.4 | `macros.tex` | sections/07-evaluation.tex |
+| `\SimNoHopAsk` | 48.4 | `macros.tex` | sections/07-evaluation.tex, sections/appendix-results.tex |
 | `\SimNoHopDup` | 1.7 | `macros.tex` | (unused) |
 | `\SimNoHopLoss` | 1.6 | `macros.tex` | (unused) |
 | `\SimNoHopLv` | 0.00 | `macros.tex` | (unused) |
@@ -1137,7 +1162,7 @@ Total macros: 1268. Do not edit generated values by hand.
 | `\SimNoHopPv` | 0.05 | `macros.tex` | (unused) |
 | `\SimNoHopPvHi` | 0.12 | `macros.tex` | (unused) |
 | `\SimNoHopSecs` | 45 | `macros.tex` | (unused) |
-| `\SimNoNonceAsk` | 35.2 | `macros.tex` | sections/07-evaluation.tex |
+| `\SimNoNonceAsk` | 35.2 | `macros.tex` | sections/07-evaluation.tex, sections/appendix-results.tex |
 | `\SimNoNonceDup` | 1.4 | `macros.tex` | (unused) |
 | `\SimNoNonceLoss` | 1.1 | `macros.tex` | (unused) |
 | `\SimNoNonceLv` | 0.00 | `macros.tex` | (unused) |
@@ -1145,41 +1170,42 @@ Total macros: 1268. Do not edit generated values by hand.
 | `\SimNoNoncePv` | 0.02 | `macros.tex` | (unused) |
 | `\SimNoNoncePvHi` | 0.09 | `macros.tex` | (unused) |
 | `\SimNoNonceSecs` | 43 | `macros.tex` | (unused) |
-| `\SimNonceAskAsk` | 14.2 | `macros.tex` | sections/07-evaluation.tex |
+| `\SimNonceAskAsk` | 14.2 | `macros.tex` | sections/appendix-results.tex |
 | `\SimNonceAskDup` | 5.7 | `macros.tex` | (unused) |
 | `\SimNonceAskLoss` | 0.49 | `macros.tex` | (unused) |
 | `\SimNonceAskLv` | 0.00 | `macros.tex` | (unused) |
 | `\SimNonceAskP` | 0.00 | `macros.tex` | (unused) |
-| `\SimNonceAskPv` | 7.5 | `macros.tex` | sections/07-evaluation.tex |
+| `\SimNonceAskPv` | 7.5 | `macros.tex` | sections/appendix-results.tex |
 | `\SimNonceAskPvHi` | 8.13 | `macros.tex` | (unused) |
 | `\SimNonceAskSecs` | 22 | `macros.tex` | (unused) |
-| `\SimPUni` | 0.57 | `macros.tex` | sections/07-evaluation.tex |
+| `\SimPUni` | 0.57 | `macros.tex` | sections/appendix-results.tex |
 | `\SimRedoAsk` | 0.0 | `macros.tex` | (unused) |
-| `\SimRedoDup` | 63.3 | `macros.tex` | sections/07-evaluation.tex |
+| `\SimRedoDup` | 63.3 | `macros.tex` | sections/07-evaluation.tex, sections/appendix-results.tex |
 | `\SimRedoLoss` | 0.00 | `macros.tex` | (unused) |
 | `\SimRedoLv` | 0.00 | `macros.tex` | (unused) |
 | `\SimRedoP` | 0.00 | `macros.tex` | (unused) |
 | `\SimRedoPv` | 100.0 | `macros.tex` | (unused) |
 | `\SimRedoPvHi` | 100.00 | `macros.tex` | (unused) |
 | `\SimRedoSecs` | 14 | `macros.tex` | (unused) |
-| `\SimRulesAsk` | 23.9 | `macros.tex` | sections/07-evaluation.tex |
+| `\SimRulesAsk` | 23.9 | `macros.tex` | sections/07-evaluation.tex, sections/appendix-results.tex |
 | `\SimRulesDup` | 0.98 | `macros.tex` | (unused) |
 | `\SimRulesLenAsk` | 8.1 | `macros.tex` | (unused) |
 | `\SimRulesLenDup` | 1.2 | `macros.tex` | (unused) |
 | `\SimRulesLenLoss` | 0.36 | `macros.tex` | (unused) |
 | `\SimRulesLenLv` | 0.34 | `macros.tex` | (unused) |
 | `\SimRulesLenP` | 0.17 | `macros.tex` | (unused) |
-| `\SimRulesLenPv` | 1.2 | `macros.tex` | sections/07-evaluation.tex |
+| `\SimRulesLenPv` | 1.2 | `macros.tex` | sections/appendix-results.tex |
 | `\SimRulesLenPvHi` | 1.42 | `macros.tex` | (unused) |
 | `\SimRulesLenSecs` | 21 | `macros.tex` | (unused) |
 | `\SimRulesLoss` | 1.0 | `macros.tex` | (unused) |
 | `\SimRulesLv` | 0.29 | `macros.tex` | (unused) |
-| `\SimRulesP` | 0.84 | `macros.tex` | sections/07-evaluation.tex |
-| `\SimRulesPv` | 0.52 | `macros.tex` | sections/07-evaluation.tex |
-| `\SimRulesPvHi` | 0.70 | `macros.tex` | sections/07-evaluation.tex |
-| `\SimRulesRatio` | 11 | `macros.tex` | sections/01-introduction.tex, sections/07-evaluation.tex |
+| `\SimRulesP` | 0.84 | `macros.tex` | sections/appendix-results.tex |
+| `\SimRulesPv` | 0.52 | `macros.tex` | sections/07-evaluation.tex, sections/appendix-results.tex |
+| `\SimRulesPvHi` | 0.70 | `macros.tex` | sections/07-evaluation.tex, sections/appendix-results.tex |
+| `\SimRulesRatio` | 11 | `macros.tex` | sections/01-introduction.tex, sections/appendix-results.tex |
 | `\SimRulesSecs` | 35 | `macros.tex` | (unused) |
-| `\SimSrcAsk` | 47.0 | `macros.tex` | sections/07-evaluation.tex |
+| `\SimSeedCount` | 5 | `macros.tex` | sections/appendix-results.tex |
+| `\SimSrcAsk` | 47.0 | `macros.tex` | sections/appendix-results.tex |
 | `\SimSrcDup` | 2.1 | `macros.tex` | (unused) |
 | `\SimSrcLoss` | 1.5 | `macros.tex` | (unused) |
 | `\SimSrcLv` | 0.02 | `macros.tex` | (unused) |
@@ -1203,7 +1229,7 @@ Total macros: 1268. Do not edit generated values by hand.
 | `\SimVerifyPv` | 16.2 | `macros.tex` | (unused) |
 | `\SimVerifyPvHi` | 17.04 | `macros.tex` | (unused) |
 | `\SimVerifySecs` | 14 | `macros.tex` | (unused) |
-| `\SimVisAsk` | 19.8 | `macros.tex` | sections/07-evaluation.tex |
+| `\SimVisAsk` | 19.8 | `macros.tex` | sections/appendix-results.tex |
 | `\SimVisDup` | 0.67 | `macros.tex` | (unused) |
 | `\SimVisLoss` | 0.57 | `macros.tex` | (unused) |
 | `\SimVisLv` | 0.00 | `macros.tex` | (unused) |
@@ -1216,14 +1242,14 @@ Total macros: 1268. Do not edit generated values by hand.
 | `\SimVoneLoss` | 1.1 | `macros.tex` | (unused) |
 | `\SimVoneLv` | 1.9 | `macros.tex` | (unused) |
 | `\SimVoneP` | 0.00 | `macros.tex` | (unused) |
-| `\SimVonePv` | 3.7 | `macros.tex` | sections/07-evaluation.tex |
+| `\SimVonePv` | 3.7 | `macros.tex` | sections/appendix-results.tex |
 | `\SimVonePvHi` | 4.12 | `macros.tex` | (unused) |
 | `\SimVoneSecs` | 20 | `macros.tex` | (unused) |
-| `\SprtAllWithin` | all | `macros.tex` | sections/07-evaluation.tex |
-| `\SprtCells` | 24 | `macros.tex` | sections/07-evaluation.tex |
+| `\SprtAllWithin` | all | `macros.tex` | sections/appendix-results.tex |
+| `\SprtCells` | 24 | `macros.tex` | sections/appendix-results.tex |
 | `\SprtENfive` | 3.3 | `macros.tex` | (unused) |
 | `\SprtENthirty` | 22.5 | `macros.tex` | (unused) |
-| `\SprtGapMax` | 2.4 | `macros.tex` | sections/07-evaluation.tex |
+| `\SprtGapMax` | 2.4 | `macros.tex` | sections/appendix-results.tex |
 | `\SprtMCN` | 40{,}000 | `macros.tex` | (unused) |
 | `\SprtMCdev` | 0.03 | `macros.tex` | sections/appendix-results.tex |
 | `\SprtRatioMax` | 1.28 | `macros.tex` | (unused) |
@@ -1233,47 +1259,47 @@ Total macros: 1268. Do not edit generated values by hand.
 | `\StressCombinedAsk` | 47.9 | `macros.tex` | (unused) |
 | `\StressCommon` | 0.19 | `macros.tex` | (unused) |
 | `\StressCrossAsk` | 26.7 | `macros.tex` | (unused) |
-| `\StressDoze` | 5.8 | `macros.tex` | sections/07-evaluation.tex |
-| `\StressDozeAsk` | 46.1 | `macros.tex` | sections/07-evaluation.tex |
+| `\StressDoze` | 5.8 | `macros.tex` | sections/appendix-results.tex |
+| `\StressDozeAsk` | 46.1 | `macros.tex` | sections/appendix-results.tex |
 | `\StressDozeVone` | 11.2 | `macros.tex` | (unused) |
 | `\StressGbreakLoss` | 0.00 | `macros.tex` | (unused) |
 | `\StressGbreakVoneLoss` | 3.4 | `macros.tex` | (unused) |
-| `\StressLag` | 0.98 | `macros.tex` | sections/07-evaluation.tex |
-| `\StressLagCalAsk` | 48.7 | `macros.tex` | sections/07-evaluation.tex |
-| `\StressLagHi` | 1.22 | `macros.tex` | sections/07-evaluation.tex |
+| `\StressLag` | 0.98 | `macros.tex` | sections/07-evaluation.tex, sections/appendix-results.tex |
+| `\StressLagCalAsk` | 48.7 | `macros.tex` | sections/07-evaluation.tex, sections/appendix-results.tex |
+| `\StressLagHi` | 1.22 | `macros.tex` | sections/appendix-results.tex |
 | `\StressLagRules` | 0.95 | `macros.tex` | (unused) |
-| `\StressMaxHi` | 0.58 | `macros.tex` | sections/07-evaluation.tex |
+| `\StressMaxHi` | 0.58 | `macros.tex` | sections/appendix-results.tex |
 | `\StressMon` | 0.05 | `macros.tex` | (unused) |
 | `\StressMonAsk` | 25.6 | `macros.tex` | (unused) |
 | `\StressMonLv` | 0.00 | `macros.tex` | (unused) |
-| `\StressNodedupDup` | 2.4 | `macros.tex` | sections/07-evaluation.tex |
+| `\StressNodedupDup` | 2.4 | `macros.tex` | sections/appendix-results.tex |
 | `\StressNodedupPv` | 0.05 | `macros.tex` | (unused) |
-| `\StressNover` | 2 | `macros.tex` | (unused) |
+| `\StressNover` | 2 | `macros.tex` | sections/07-evaluation.tex, sections/appendix-results.tex |
 | `\StressPersistVone` | 0.42 | `macros.tex` | (unused) |
 | `\StressRoneVone` | 0.04 | `macros.tex` | (unused) |
-| `\StressRulesOver` | 3 | `macros.tex` | sections/07-evaluation.tex |
-| `\SweepAskHi` | 54.7 | `macros.tex` | sections/07-evaluation.tex |
-| `\SweepAskLo` | 10.4 | `macros.tex` | sections/07-evaluation.tex |
-| `\SweepJointTenAsk` | 8.7 | `macros.tex` | sections/07-evaluation.tex |
-| `\SweepJointTenPv` | 0.88 | `macros.tex` | sections/07-evaluation.tex |
-| `\SweepJointThreeAsk` | 27.3 | `macros.tex` | sections/07-evaluation.tex |
-| `\SweepJointThreePv` | 0.21 | `macros.tex` | sections/07-evaluation.tex |
+| `\StressRulesOver` | 3 | `macros.tex` | sections/07-evaluation.tex, sections/appendix-results.tex |
+| `\SweepAskHi` | 54.7 | `macros.tex` | sections/appendix-results.tex |
+| `\SweepAskLo` | 10.4 | `macros.tex` | sections/appendix-results.tex |
+| `\SweepJointTenAsk` | 8.7 | `macros.tex` | sections/appendix-results.tex |
+| `\SweepJointTenPv` | 0.88 | `macros.tex` | sections/appendix-results.tex |
+| `\SweepJointThreeAsk` | 27.3 | `macros.tex` | sections/appendix-results.tex |
+| `\SweepJointThreePv` | 0.21 | `macros.tex` | sections/appendix-results.tex |
 | `\SweepNocalLoPv` | 1.39 | `macros.tex` | (unused) |
 | `\SweepPvLo` | 0.53 | `macros.tex` | (unused) |
 | `\SweepSecsHi` | 53 | `macros.tex` | (unused) |
 | `\SweepSecsLo` | 21 | `macros.tex` | (unused) |
-| `\SweepTenAsk` | 10.4 | `macros.tex` | sections/07-evaluation.tex |
+| `\SweepTenAsk` | 10.4 | `macros.tex` | sections/appendix-results.tex |
 | `\SweepThreeAsk` | 17.6 | `macros.tex` | (unused) |
 | `\SweepThreePv` | 0.10 | `macros.tex` | (unused) |
-| `\UserAskAllTwenty` | 28.2 | `macros.tex` | sections/07-evaluation.tex |
-| `\UserGhostTwenty` | 6.8 | `macros.tex` | sections/07-evaluation.tex |
+| `\UserAskAllTwenty` | 28.2 | `macros.tex` | sections/appendix-results.tex |
+| `\UserGhostTwenty` | 6.8 | `macros.tex` | sections/appendix-results.tex |
 | `\UserGhostZero` | 0.03 | `macros.tex` | (unused) |
 | `\UserMajTwenty` | 19.4 | `macros.tex` | (unused) |
 | `\UserNonceZero` | 5.2 | `macros.tex` | (unused) |
-| `\UserRulesTwenty` | 6.4 | `macros.tex` | sections/07-evaluation.tex |
+| `\UserRulesTwenty` | 6.4 | `macros.tex` | sections/appendix-results.tex |
 | `\VlmEN` | 4.4 | `macros.tex` | (unused) |
-| `\WhyContra` | 2.2 | `macros.tex` | sections/07-evaluation.tex |
-| `\WhyStruct` | 12.0 | `macros.tex` | sections/07-evaluation.tex |
+| `\WhyContra` | 2.2 | `macros.tex` | sections/appendix-results.tex |
+| `\WhyStruct` | 12.0 | `macros.tex` | sections/appendix-results.tex |
 | `\WhyTotal` | 22.4 | `macros.tex` | (unused) |
-| `\WhyUncert` | 4.5 | `macros.tex` | sections/07-evaluation.tex |
-| `\WhyWait` | 3.8 | `macros.tex` | sections/07-evaluation.tex |
+| `\WhyUncert` | 4.5 | `macros.tex` | sections/appendix-results.tex |
+| `\WhyWait` | 3.8 | `macros.tex` | sections/appendix-results.tex |

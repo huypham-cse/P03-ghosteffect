@@ -1,0 +1,17 @@
+{
+  "kind": "supplemental-matched-model-comparison",
+  "status": "FAIL",
+  "source_commit": "8cfe1268ed0c2838dfe75917722c72fe7ae52ccd",
+  "python": "3.12.3 (main, Jul 15 2026, 23:46:41) [GCC 13.3.0]",
+  "host": "Linux-6.18.58.1-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "seeds": [
+    101,
+    202,
+    303,
+    404,
+    505
+  ],
+  "n_per_seed": 2400,
+  "seconds": 0.7835968900000125,
+  "exit_code": 1
+}
