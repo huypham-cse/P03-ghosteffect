@@ -29,6 +29,7 @@ PART_OUTPUTS = {
     'decomp': ['planner_decomp.csv'], 'share': ['planner_share.csv'],
     'real': ['planner_real.csv'],
     'real4': ['planner_real4_%s.csv' % tag for tag in (
+        'match2k', 'match5k', 'matchk9', 'matchk9sent',
         'vet', 'vetk9', 'vetk9sent', 'lag2k', 'lag5k', 'lag10k', 'lag20k',
         'boot10k', 'tail5', 'tail5tied', 'down5', 'down15', 't0down5',
         't0down15', 'netlab', 'netlabkey')],

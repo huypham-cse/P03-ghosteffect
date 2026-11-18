@@ -261,3 +261,61 @@ chuẩn hóa shell script; không thay code hay dữ liệu để né test.
 Bộ artifact trên nhánh C-03 kế thừa C-10: 46/46 test qua trên WSL sau sửa
 môi trường. C-10 triển khai xong, chờ review/merge #12; không tự nghiệm thu.
 Tiếp theo: retarget #12 về main, kiểm build và scrub trước publish.
+## 10/11/2026 — C-03: freeze thiết kế trước thí nghiệm
+
+Thêm bốn tag match2k, match5k (Element), matchk9 và matchk9sent. Mỗi tag
+so rules-vetted với ghost-joint bằng cùng bản ghi calibration và cùng object
+lag table. Budget 2.000 nhãn/outcome (và/class khi keyed) đi cùng 2.000 lag;
+Element có thêm cấu hình 5.000/5.000. Các seed, budget rủi ro, tag lịch sử,
+pilot/holdout và công thức joint không đổi.
+
+Đã xác nhận AST: chỉ hai hàm cũ của C là vetting/run đổi; không sửa các hàm
+hiệu chuẩn/chứng nhận của A. Hàm mới chỉ tạo input chung rồi gọi certifier
+hiện có. Có 4 test C-03 mới: cùng object dữ liệu, cùng kết quả certifier cũ,
+ngân sách/tag đúng và từ chối input thiếu/sai. Artifact 45/45 test PASS.
+
+Đây là commit thiết kế trước khi chạy các tag mới, chưa có kết quả để chọn
+cấu hình theo ý muốn. Bước tiếp theo chạy riêng tag mới từ snapshot commit
+sạch của C-03, lưu rõ source branch/commit; không gọi đó là một lần rerun
+pipeline từ main, và không thay 16 CSV REAL4 lịch sử.
+
+## 10/11/2026 — C-03: kết quả cùng dữ liệu, renderer và văn bản
+
+Thiết kế đã freeze ở d87fb23 trước khi thu kết quả. Chạy bốn tag mới từ
+snapshot commit sạch `tmp/c03-frozen`; job thoát 0, source commit, hash input,
+seed và command nằm trong `artifact/runs/2026-11-10/C03-MANIFEST.json`.
+Chỉ thêm bốn CSV mới và metadata; không thay 16 CSV REAL4 lịch sử, dữ liệu
+thô, baseline parameters hoặc các công thức chứng nhận của A.
+
+| Profile | Nhãn/lag | Vetted ASK | Joint ASK | P_v quan sát |
+|---|---|---|---|---|
+| Element, keyed | 2.000/2.000 | 2,2% | 100% | Cả hai 0 |
+| Element, keyed | 5.000/5.000 | 7,8% | 30,6% | Cả hai 0 |
+| K-9 không Sent | 2.000/2.000 | 100% | 100% | Cả hai 0 |
+| K-9 có Sent | 2.000/2.000 | 100% | 100% | Cả hai 0 |
+
+Nhãn tính theo outcome và class khi keyed; bảng lag cũng keyed tương ứng.
+Mỗi cấu hình dùng năm seed đã định, tổng 12.000 workflow. Các dòng đều là
+mô phỏng với luật tham số đo, không phải phép đo GUI/agent mới. Vetted có
+zero observed error không đồng nghĩa nó có certificate như joint.
+
+Kết quả vetted 2,2% ở dòng 2k khác ví dụ 5,3% trong phân công do nay dùng
+chính các records và lag của joint thay vì draw riêng của baseline cũ. Đã
+kiểm trước kết quả rằng joint_from_matched cho cùng output với certifier
+cũ trên cùng RNG/records. Không tune seed hoặc budget để ép ra 5,3%.
+
+Đã thêm bảng generated `tab_matched.tex` và macro RsimMatch*, giữ đầy đủ
+cả hai policy cho ba profile. Renderer từ chối budget/metadata không khớp,
+và test chứng minh lỗi đó không ghi đè output đã publish. Bỏ tỷ lệ rules
+K-9 khỏi abstract; sửa intro/evaluation/realsim để phân biệt fixed-wait
+unvetted rules dưới giả định lag K-9 với vetted rules dùng input chung.
+Các câu liên quan số liệu B còn cần B duyệt trong PR.
+
+Kiểm tra: **46/46 artifact test PASS**, build PDF thật thoát 0, 20 trang,
+max overfull 7.89293 pt, không ?? hoặc ref/cite chưa định nghĩa. Scrub PASS
+trên manuscript, code/test artifact và receipts. Conclusion vẫn trang 13;
+đó là việc biên tập C-06, không coi bản này đạt cổng nộp cuối.
+
+Trạng thái C-03: triển khai/thí nghiệm/bảng/văn bản xong để review; chưa
+nghiệm thu. C-01/C-02/C-10 có nhánh/commit riêng; vẫn chờ người dùng hoàn
+thành GitHub device login để push và tạo các PR nối tiếp, không tự merge.

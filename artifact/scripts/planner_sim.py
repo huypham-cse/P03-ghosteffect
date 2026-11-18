@@ -879,13 +879,48 @@ def _lag_draw(wrng, S, app, cls=None):
             return math.inf if e['never'] else e['lag']
 
 
-def vetting(wrng, app_eps, S, policy):
+def matched_labels(wrng, app_eps, S):
+    """C-03: acquire one frozen label corpus for both joint and vetted rules.
+
+    Preserve the app/class/outcome order of the existing joint calibration.
+    Its pilot and holdout split remains inside joint_calibration, unchanged.
+    """
+    if S.get('catalog') != 'measured' or S['cal_pop'] != 'fault':
+        raise ValueError('matched labels require a measured, fault-injected profile')
+    n = max(50, int(round(NCAL * S['ncal_scale'])))
+    labels = {}
+    for app in catalog(S):
+        A = app_cfg(app, S)
+        labels[app] = {}
+        for c in (CLASSES if S.get('keyed') == 'all' else [None]):
+            labels[app][c] = (cal_effects(wrng, app, A, S, app_eps, 1, n, cls=c),
+                              cal_effects(wrng, app, A, S, app_eps, 0, n, cls=c))
+    return labels
+
+
+def joint_from_matched(labels, S, delta):
+    """Pass the shared records to A's existing joint certifier, without edits."""
+    out = {}
+    for app, per in labels.items():
+        A = app_cfg(app, S)
+        names = cal_families(A, S)
+        tables = {c: joint_calibration(app, A, e1, e0, names, delta)
+                  for c, (e1, e0) in per.items()}
+        out[app] = dict(keyed=tables) if S.get('keyed') == 'all' else tables[None]
+    return out
+
+
+def vetting(wrng, app_eps, S, policy, labels=None, lagx=None):
     """R1 M1: rules vetted on fault-injected labels.  For each observable class (or pooled), keep only the families that
     were NEVER wrong on that class's labels (an 'absent' verdict on a committed label or 'committed' on an absent one),
     and set the wait to the longest logged lag of the class (at least 30 s); if a logged lag exceeds W_MAX or never
     became visible, the rule never retries on end-to-end absence.  'rules-vetted' uses as many labels as GhostEffect,
     'rules-vetted-small' 30 per class and outcome (the size of an emulator campaign cell).  No guarantee is computed."""
     assert S.get('catalog') == 'measured'
+    if (labels is None) != (lagx is None):
+        raise ValueError('matched vetting needs both shared labels and lag tables')
+    if labels is not None and policy.endswith('-small'):
+        raise ValueError('small-budget vetted rules cannot use full-budget matched labels')
     n = 30 if policy.endswith('-small') else max(50, int(round(NCAL * S['ncal_scale'])))
     out = {}
     for app in catalog(S):
@@ -893,12 +928,23 @@ def vetting(wrng, app_eps, S, policy):
         names = cal_families(A, S)
         per = {}
         for c in (CLASSES if S.get('keyed') == 'all' else [None]):
-            e1 = cal_effects(wrng, app, A, S, app_eps, 1, n, cls=c)
-            e0 = cal_effects(wrng, app, A, S, app_eps, 0, n, cls=c)
+            if labels is None:
+                e1 = cal_effects(wrng, app, A, S, app_eps, 1, n, cls=c)
+                e0 = cal_effects(wrng, app, A, S, app_eps, 0, n, cls=c)
+            else:
+                e1, e0 = labels[app][c]
+                if len(e1) != n or len(e0) != n:
+                    raise ValueError('matched label budget mismatch')
             ok = {f for f in names
                   if not any(verdict_of(f, rec[f])[0] == 'abs' for rec in e1)
                   and not any(verdict_of(f, rec[f])[0] == 'com' for rec in e0)}
-            mx = max(_lag_draw(wrng, S, app, c) for _ in range(n))
+            if lagx is None:
+                mx = max(_lag_draw(wrng, S, app, c) for _ in range(n))
+            else:
+                times = lagx['cls'][c] if c is not None else lagx['g2' if A['G2'] else 'ng2']
+                if len(times) != (S.get('nlag') or N_LAG):
+                    raise ValueError('matched lag budget mismatch')
+                mx = max(times)
             per[c] = (ok, max(30.0, mx) if mx <= W_MAX else 30.0, mx <= W_MAX)
         out[app] = per
     return out
@@ -1487,15 +1533,19 @@ def run(policies, scenario='default', seeds=SEEDS, n_per_seed=N_PER_SEED, alpha=
         need_j = 'ghost-joint' in policies
         need_s = 'ghost-src' in policies
         crng = random.Random(s * 31 + 7)
+        shared_labels = matched_labels(random.Random(s * 31 + 7), app_eps, S) if S.get('matched_inputs') else None
         skey = tuple(sorted((k, str(v)) for k, v in S.items() if k not in ('user_err', 'nonce_policy', 'mon_err')))
         Qp = calibrate(random.Random(s * 31 + 7), app_eps, S, d_prod, 'product', key=(s, d_prod, 'p', skey)) \
             if need_p else None
-        Qj = calibrate(random.Random(s * 31 + 7), app_eps, S, d_joint, 'joint', key=(s, d_joint, 'j', skey)) \
+        Qj = (joint_from_matched(shared_labels, S, d_joint) if shared_labels is not None else
+              calibrate(random.Random(s * 31 + 7), app_eps, S, d_joint, 'joint', key=(s, d_joint, 'j', skey))) \
             if need_j else None
         Qs = calibrate(random.Random(s * 31 + 7), app_eps, S, d_src, 'src', key=(s, d_src, 's', skey)) \
             if need_s else None
-        lagx = lag_tables(random.Random(s * 31 + 11), S) if (need_p or need_j or need_s) else None
-        VET = {p: vetting(random.Random(s * 31 + 13), app_eps, S, p) for p in policies if p.startswith('rules-vetted')}
+        lagx = lag_tables(random.Random(s * 31 + 11), S) if (need_p or need_j or need_s or shared_labels is not None) else None
+        VET = {p: vetting(random.Random(s * 31 + 13), app_eps, S, p,
+                          labels=shared_labels, lagx=lagx if shared_labels is not None else None)
+               for p in policies if p.startswith('rules-vetted')}
         for p in policies:
             prng = random.Random(s * 7919 + (ALL_POLICIES + EXTRA_POLICIES).index(p))
             Sp = dict(S)
@@ -1892,6 +1942,12 @@ GH2 = ['ghost', 'ghost-joint']
 VETTED = ['rules-vetted', 'rules-vetted-small']
 NET_LAB = [('agent-kill', 0.0), ('app-kill', 0.0), ('net-blackout', 1.0), ('kill+net', 0.0)]   # lab injects network cuts only
 REAL4 = {
+    # C-03: both policies receive the SAME label records and the SAME lag tables.
+    # Existing tags retain their historical semantics and seeds.
+    'match2k': ('element', dict(cal_pop='fault', keyed='all', nlag=2000, matched_inputs=True), ['rules-vetted', 'ghost-joint']),
+    'match5k': ('element', dict(cal_pop='fault', keyed='all', ncal_scale=2.5, nlag=5000, matched_inputs=True), ['rules-vetted', 'ghost-joint']),
+    'matchk9': ('k9', dict(cal_pop='fault', nlag=2000, matched_inputs=True), ['rules-vetted', 'ghost-joint']),
+    'matchk9sent': ('k9sent', dict(cal_pop='fault', nlag=2000, matched_inputs=True), ['rules-vetted', 'ghost-joint']),
     # R1 M1: rules vetted on the same fault-injected labels (and on 30 per class), every measured profile
     'vet':       ('element', dict(cal_pop='fault', keyed='all'), VETTED + ['rules-w30-all']),
     'vetk9':     ('k9', dict(cal_pop='fault'), VETTED),
