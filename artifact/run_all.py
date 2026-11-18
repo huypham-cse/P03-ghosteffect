@@ -22,6 +22,8 @@ import time
 ROOT = Path(__file__).resolve().parent.parent
 PART_OUTPUTS = {
     'main': ['planner_sim.csv', 'planner_class.csv'],
+    'seedvariance': ['planner_seed_variance.csv'],
+    'modelmatched': ['planner_model_matched.csv'],
     'rulesweep': ['planner_rules_sweep.csv'],
     **{'stress%d/6' % i: ['planner_stress.part%d.csv' % i] for i in range(6)},
     'sweep': ['planner_alpha_sweep.csv'], 'user': ['planner_user.csv'],
@@ -34,6 +36,8 @@ PART_OUTPUTS = {
         'boot10k', 'tail5', 'tail5tied', 'down5', 'down15', 't0down5',
         't0down15', 'netlab', 'netlabkey')],
 }
+AGENT_INPUT_DIRS = tuple('artifact/results/real/' + name for name in (
+    'agent_guarded', 'agent_rules', 'agent_t3a', 'agent_killagent'))
 NUMERIC_JOBS = [
     ('sim_sprt.py', ['sprt_validation.csv', 'sprt_asym.csv', 'calibration.csv', 'correlation.csv']),
     ('sim_impossibility.py', ['impossibility.csv', 'bayes_floor.csv', 'cost_policy.csv', 'late_commit.csv', 'lag_wait.csv']),
@@ -64,11 +68,46 @@ def run_command(command, cwd, log, expected=(), timeout=7200):
     with log.open('w', encoding='utf-8') as stream:
         result = subprocess.run(command, cwd=cwd, stdout=stream, stderr=subprocess.STDOUT,
                                 timeout=timeout, check=False)
+    record = dict(command=[_manifest_path(arg, cwd) for arg in command],
+                  log=_manifest_path(log, cwd), exit_code=result.returncode,
+                  seconds=time.monotonic() - started, outputs={})
     if result.returncode:
-        raise RuntimeError('%s exited %s; see %s' % (command, result.returncode, log))
+        error = RuntimeError('%s exited %s; see %s' % (command, result.returncode, log))
+        error.record = record
+        raise error
     outputs = {str(p.relative_to(cwd)): validate_csv(p) for p in expected}
+    record['outputs'] = outputs
     print('PASS', log.stem, flush=True)
-    return dict(command=command, log=str(log), seconds=time.monotonic() - started, outputs=outputs)
+    return record
+
+
+def _manifest_path(value, cwd):
+    """Use workspace-relative paths in the manifest, never host checkout paths."""
+    path = Path(value)
+    try:
+        return str(path.resolve().relative_to(Path(cwd).resolve())).replace(os.sep, '/')
+    except ValueError:
+        return str(value)
+
+
+def source_provenance():
+    """Return the source commit and whether the checkout is clean.
+
+    The anonymous bundle (team/make_bundle.sh) ships no .git: there the commit comes from
+    BUNDLE-MANIFEST.json and cleanliness is unknown (None), so the one-line reproduce command still runs.
+    """
+    if not (ROOT / '.git').exists():
+        bundle = ROOT / 'BUNDLE-MANIFEST.json'
+        commit = json.loads(bundle.read_text(encoding='utf-8')).get('source_commit') if bundle.is_file() else None
+        return dict(source_commit=commit, source_tree_clean=None)
+    commit = subprocess.check_output(
+        ['git', '-c', 'core.autocrlf=true', '-C', str(ROOT), 'rev-parse', 'HEAD'],
+        text=True).strip()
+    status = subprocess.check_output(
+        ['git', '-c', 'core.autocrlf=true', '-C', str(ROOT),
+         'status', '--porcelain', '--untracked-files=all'],
+        text=True)
+    return dict(source_commit=commit, source_tree_clean=not bool(status.strip()))
 
 
 def prepare_workspace(destination):
@@ -90,6 +129,12 @@ def prepare_workspace(destination):
     return destination, inputs
 
 
+def agent_input_hashes(inputs):
+    """Return provenance entries belonging to the four agent input corpora."""
+    return {name: inputs[name] for name in inputs
+            if any(name.startswith(prefix + '/') for prefix in AGENT_INPUT_DIRS)}
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output-dir', type=Path)
@@ -104,9 +149,15 @@ def main(argv=None):
     destination = args.output_dir or ROOT / 'codex' / 'runs' / ('artifact_%s_%s' % (stamp, os.getpid()))
     destination, inputs = prepare_workspace(destination)
     scripts, results = destination / 'artifact' / 'scripts', destination / 'artifact' / 'results'
+    agent_inputs = agent_input_hashes(inputs)
+    provenance = source_provenance()
     manifest = dict(status='RUNNING', kind='artifact-reproduction', created_utc=stamp,
-                    workspace=str(destination), source_inputs=inputs, jobs=args.jobs,
-                    timeout_seconds=args.timeout, completed=[], errors=[])
+                    workspace='.', source_commit=provenance['source_commit'],
+                    source_tree_clean=provenance['source_tree_clean'],
+                    source_inputs=inputs, jobs=args.jobs,
+                    timeout_seconds=args.timeout, agent_input_directories=AGENT_INPUT_DIRS,
+                    agent_inputs=agent_inputs, python_executable=sys.executable,
+                    python_version=sys.version, completed=[], failed_jobs=[], errors=[])
     manifest_path = destination / 'RUN.json'
 
     def save():
@@ -115,12 +166,19 @@ def main(argv=None):
         os.replace(temp, manifest_path)
 
     def run(name, script, expected, *extra):
-        return run_command([sys.executable, '-u', str(scripts / script), *extra], destination,
-                           destination / 'logs' / (name + '.log'),
-                           [results / p for p in expected], args.timeout)
+        try:
+            return run_command([sys.executable, '-u', str(scripts / script), *extra], destination,
+                               destination / 'logs' / (name + '.log'),
+                               [results / p for p in expected], args.timeout)
+        except RuntimeError as exc:
+            if hasattr(exc, 'record'):
+                manifest['failed_jobs'].append(exc.record)
+            raise
 
     save()
     try:
+        if not provenance['source_tree_clean']:
+            raise RuntimeError('source checkout must be clean before reproduction')
         for script, expected in NUMERIC_JOBS:
             manifest['completed'].append(run(Path(script).stem, script, expected))
             save()
@@ -140,10 +198,18 @@ def main(argv=None):
         for script, expected in (('sample_size.py', ['sample_size.csv']), ('bench_ledger.py', ['ledger_bench.csv'])):
             manifest['completed'].append(run(Path(script).stem, script, expected))
             save()
-        manifest['completed'].append(run('render', 'render.py', []))
+        render_record = run('render', 'render.py', [])
         generated = destination / 'manuscript' / 'generated'
         if not (generated / 'macros.tex').is_file() or not (generated / 'tab_real4.tex').is_file():
             raise RuntimeError('renderer did not publish expected fragments')
+        render_record['outputs'] = {
+            str(path.relative_to(destination)).replace(os.sep, '/'): {
+                'sha256': hashlib.sha256(path.read_bytes()).hexdigest(),
+                'bytes': path.stat().st_size,
+            }
+            for path in generated.iterdir() if path.is_file()
+        }
+        manifest['completed'].append(render_record)
         manifest['status'] = 'PASS'
     except BaseException as exc:
         manifest['status'] = 'FAILED'

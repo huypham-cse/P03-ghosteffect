@@ -319,17 +319,239 @@ trên manuscript, code/test artifact và receipts. Conclusion vẫn trang 13;
 Trạng thái C-03: triển khai/thí nghiệm/bảng/văn bản xong để review; chưa
 nghiệm thu. C-01/C-02/C-10 có nhánh/commit riêng; vẫn chờ người dùng hoàn
 thành GitHub device login để push và tạo các PR nối tiếp, không tự merge.
-## 18/11/2026 — C-11 làm lại theo nội dung agent/device mới
 
-Đã khôi phục các câu có ý nghĩa trong introduction/evaluation/discussion, dùng macro
-cho kết quả agent, sửa khuyến nghị product-vs-joint theo A2, và bổ sung rõ phạm vi
-physical-phone/emulator. Readability strict hiện PASS: 0 para, 1 emph, 0 câu dài,
-0 đoạn có hơn một dấu chấm phẩy. C-11 vẫn cần rebase sau khi các PR nội dung được
-merge vào `main`.
-## 18/11/2026 — C-11 rà soát lần hai sau review nội dung
+## 18/11/2026 — C-10 cập nhật bộ đếm readability cho mã giả
 
-Đã khôi phục macro, citation và chi tiết khoa học bị mất trong lượt readability
-trước; đưa kết quả agent/device vào đúng phạm vi; giữ năm tiêu đề `\para{}` thực sự
-và tách các câu dài/dấu chấm phẩy. Strict readability hiện PASS: 5 `\para{}`, 4
-`\emph{}`, 0 câu dài và 0 đoạn có hơn một dấu chấm phẩy. Bản này vẫn cần rebase
-với các PR nội dung trước khi nghiệm thu.
+Thêm môi trường `algorithmic` vào danh sách khối không phải văn xuôi của
+`team/readability_count.py`. Bổ sung test bảo đảm dấu chấm phẩy và câu dài
+trong Algorithm 1 không bị tính như câu văn. Đây là sửa công cụ dùng chung,
+giúp YC-12 của phần A chạy đúng trên mã giả mà không thay đổi nội dung A.
+
+## 18/11/2026 — C-07 rà soát related work
+
+Đã tách câu so sánh Agent libOS khỏi câu RFC 1047 để mỗi nguồn có phạm vi
+riêng. Câu mới nêu rõ Agent libOS kiểm soát capability và checkpoint quanh
+tool dispatch, còn GhostEffect xử lý effect GUI đã externalize. Bib đã pin
+Agent libOS ở v3; `others/citation-audit.md` ghi URL nguồn và lý do không thêm
+Gray--Reuter hoặc Bailis.
+
+## 18/11/2026 — C-20 device and emulator evidence
+
+Thêm vào §8 hai câu dùng macro B-19: kết quả K-9 trên physical Android phone,
+kết quả lmkd trên emulator và DAVx5 dưới kill/Doze, ghi rõ loại phép đo và
+giới hạn chưa đo quản lý pin của hãng. Không sửa file sở hữu của B và không
+đưa số gõ tay vào văn bản. C-20 cần được kiểm lại cùng C-14/C-16 sau khi chuỗi
+agent và evaluation rebase lên main.
+
+## 18/11/2026 — C-12 kiểm đường dẫn dữ liệu phụ thuộc host
+
+README artifact và README nhúng trong bundle đều ghi rõ
+`artifact/results/ledger_bench.csv` là file phụ thuộc host. Bundle vẫn yêu
+cầu cây `artifact`, `testbed`, `manuscript` sạch, tạo manifest từ commit hiện
+tại, loại tài liệu nội bộ và chỉ scrub sau khi giải nén.
+
+## 18/11/2026 — C-14–C-19 rà soát agent và conclusion
+
+Đã chỉnh phần văn bản sở hữu C để khuyến nghị certification có điều kiện theo A2,
+mô tả đúng thí nghiệm agent trên emulator, và thay các câu cũ về agent/RQ7 trong
+evaluation. Conclusion hiện báo cáo các số agent bằng macro `Agent*`; các số mới vẫn
+cần review khi nội dung C-20 và các PR dữ liệu được tích hợp.
+
+## 19/11/2026: C-04 sửa theo review #57 (trưởng nhóm sửa trên nhánh)
+
+`\RsimFitLateObs` lấy số lượt quan sát của một họ muộn (ba họ có cùng số lượt, cùng số sai, renderer kiểm), nên caption Table 4 và §7.3 ghi 0/99 lượt đọc mỗi họ, không cộng thành 297. Caption `tab_nsize` trở lại "certified at δ/4" (δ trong caption là min(α,β)/(10K), keyed theo 4 lớp chia thêm 4, khớp `sample_size.py` và δ ở §4.3 với n_cls = 4). Render lại `tab_nsize`, `tab_planner`, `tab_realsim` và `others/notes.md` cho khớp renderer.
+
+## 19/11/2026: C-05 sửa theo review #58 (trưởng nhóm sửa trên nhánh)
+
+Thêm test: `render.py` phải thoát lỗi khi `planner_seed_variance.csv` thiếu hoặc trùng một dòng (thử đột biến: bỏ đoạn kiểm thì test fail). Renderer kiểm câu ở phụ lục (một seed duy nhất kéo SD của vetted rules trên Element), caption ghi loại số (model-based và measured-parameter simulation), câu phụ lục bỏ chữ "four" viết tay. Gộp `main` (#57), `tab_planner` khớp renderer. Meta còn ghi `git_commit` 09a20fd (trước force-push); chạy lại với code đã commit cho cùng số đếm, số thực lệch tối đa 1,2e-12; freeze 21/11 sẽ sinh lại meta.
+
+ 
+
+## 10/11/2026 — Trạng thái publish sau C-03
+
+Đã commit C-01 (84aa339), C-02 (d901d5b), C-10 (afb023a), thiết kế C-03
+(d87fb23) và kết quả C-03 (c3e6ab5). Các nhánh c/01-pipeline,
+c/02-conventions, c/10-checks, c/03-matched đã có; c/eval giữ toàn bộ chuỗi
+phát triển. Working tree sạch sau các commit, chưa push hoặc mở PR.
+
+Đã cài GitHub CLI portable từ release chính thức, kiểm SHA-256. GitHub
+plugin được khai báo installed nhưng không có tool repo khả dụng trong phiên
+này, nên dùng CLI. Device login đầu tiên hết thời gian chờ mà chưa được
+xác nhận. Lệnh tự mở trình duyệt bị automatic approval review từ chối với
+lý do 'blocked by policy'; không thử cách khác để vượt chặn đó. Người dùng
+cần tự mở trang GitHub device login để hoàn tất xác thực. Không ghi token
+hoặc mã đăng nhập vào repo.
+
+Mô tả cho bốn PR đã chuẩn bị ở tmp/pr-bodies/ (git-ignore), nêu đúng test,
+manifest, kết quả bất lợi và các điểm review còn mở. Khi xác thực xong,
+push các nhánh và tạo PR nối tiếp theo từng task; chỉ trưởng nhóm merge.
+
+## 10/11/2026 — Push và mở bốn PR thành công
+
+Người dùng đã hoàn tất đăng nhập CLI trực tiếp trong Terminal. Đã xác minh
+account GitHub LeNguyenBaNguyen có quyền push repo huypham-cse/P03-ghosteffect.
+Đã push bốn nhánh và kiểm tra lại các PR trên GitHub:
+
+| Task | Nhánh | PR | Base |
+|---|---|---|---|
+| C-01 | c/01-pipeline | https://github.com/huypham-cse/P03-ghosteffect/pull/10 | main |
+| C-02 | c/02-conventions | https://github.com/huypham-cse/P03-ghosteffect/pull/11 | c/01-pipeline |
+| C-10 | c/10-checks | https://github.com/huypham-cse/P03-ghosteffect/pull/12 | c/02-conventions |
+| C-03 | c/03-matched | https://github.com/huypham-cse/P03-ghosteffect/pull/13 | c/10-checks |
+
+Tất cả ở trạng thái draft. Các PR nối tiếp để mỗi diff chỉ chứa đúng task;
+sau khi trưởng nhóm squash/merge PR trước, cần rebase và retarget PR sau
+lên main tương ứng trước khi merge tiếp. Không tự merge, không yêu cầu
+review/nhắn người khác bằng công cụ, không nhận thay xác nhận A/B.
+
+Các mô tả PR có test/manifest và ghi rõ điểm còn mở: provenance do B sở hữu,
+đề xuất C-02 chưa được nhóm duyệt, phần body vẫn kết thúc trang 13 và chưa
+đạt cổng nộp cuối. C-03 giữ đầy đủ kết quả bất lợi cho joint.
+
+Tiếp theo: nhóm review C-01 trước để gỡ chờ A/B; phía C tiếp tục C-04
+(chú thích và nguồn số của Table 4), C-05 (variance theo seed), C-06
+(cấu trúc evaluation và rút độ dài). Đăng nhập không còn là blocker.
+
+## 11/11/2026 — C-02 sau khi C-01 được squash-merge
+
+C-01 đã được trưởng nhóm duyệt và merge tại PR #10. Đã rebase C-02 lên
+main mới, giữ PR #11 chỉ chứa tài liệu quy ước và nhật ký của C-02.
+Review của trưởng nhóm xác nhận nội dung đúng R06. A đã cung cấp hợp đồng
+105 macro tại PR #9; không nhận thay quyết định hoặc sự đồng ý của A/B.
+C-02 còn chờ trưởng nhóm chốt quyền sửa paper, chỉ định người nghiệm thu C,
+và hợp đồng Agent*/LabelTrial* từ B theo review #11 ngày 11/11.
+Tiếp theo: retarget #11 về main; chờ xác nhận để chốt tài liệu, không tự merge.
+## 11/11/2026 — C-04 Table 4 và cập nhật chuỗi PR
+
+C-01 đã được duyệt/merge #10. Đã rebase #11 và #12 lên main rồi retarget
+cả hai về main; #13 vẫn dựa #12 để không lẫn thay đổi công cụ vào diff C-03.
+Các bản trước rebase được giữ ở backup/c02-pre-main, backup/c10-pre-main,
+backup/c03-pre-main. Không chạy lại thí nghiệm C-03; receipt vẫn chỉ đến commit
+thiết kế lịch sử d87fb23 đã có trước CSV. Việc rebase không đổi dữ liệu hay seed.
+C-10 kiểm độc lập tại tmp/c10-review: 41 test qua, build 20 trang, không ref
+chưa định nghĩa, overfull lớn nhất 3,46388 pt. Log nằm trong worktree local.
+
+C-04: renderer lấy số workflow/ngân sách nhãn từ CSV, kiểm nhất quán giữa
+các policy; lấy số đo late Element từ CSV campaign2 chỉ đọc. Caption và văn
+bản phân biệt calibration/test cùng fitted law với reader trên màn hình thật;
+giữ kết quả zero late family errors 0/99 và pairwise cofailures 0/101, không
+đánh đồng hai mẫu số. Bỏ số 12.000, 2.000, 5.000 viết cứng trong caption/nhãn.
+Thêm 7 macro Rsim* cho số đếm; không thay tên macro/schema cũ hoặc số liệu.
+Chưa dẫn nhãn bảng ngân sách chưa merge của A; dùng sec:design-probes hiện hữu.
+
+Validation C-04: 47 test artifact qua; build 20 trang, không ref/cite chưa định
+nghĩa, overfull lớn nhất 3,46388 pt; scrub manuscript/scripts/tests PASS.
+Sinh lại others/notes.md. Không thay CSV/raw measurements hay hàm của A/B.
+C-04 xong triển khai, chờ review; vẫn cần A review cách diễn giải ngân sách.
+Tiếp theo: C-06 cấu trúc đánh giá và rút bài; C-05 seed variance; C-02 chờ
+quyết định trưởng nhóm/hợp đồng B. Chỉ trưởng nhóm merge và người khác nghiệm thu.
+## 11/11/2026 — C-06 sắp lại đánh giá và rút phần thân
+
+Đưa emulator, agent placeholder và measured-parameter simulation lên trước
+model-based comparison. Chuyển RQ1/RQ2, cấu hình chi tiết, so sánh baseline và
+ablation đầy đủ xuống appendix-results; giữ mọi kết quả bất lợi. Renderer sinh
+bảng model gọn 6 policy và bảng đầy đủ riêng ở phụ lục, không xóa CSV hay kết quả.
+Bảng vetted matched vẫn ở phần fitted-law: planner_sim.csv chưa có dòng vetted
+matched trong default model; không ghép số từ thế giới khác thành một hàng giả.
+Cần review yêu cầu hàng vetted của C-06 trước khi nghiệm thu toàn bộ task.
+
+Sửa delta trong setup và caption tab_nsize theo công thức A-05 (#17), có số lớp;
+đưa StressNover cạnh kết quả stress, và rút planned study thành một câu.
+Build đầu thất bại do bỏ label sec:device-plan còn được B dẫn; đã giữ label ở
+câu scope/future work. Lỗi cú pháp renderer khi tách biểu thức đã sửa trước build.
+Bản cuối build 21 trang tổng, Conclusion ở trang 12 (trước là 13), không ref/cite
+thiếu; overfull còn 3,46388 pt ở discussion chưa xử lý. 47 test artifact qua,
+scrub manuscript/scripts/tests PASS. Macro values và CSV không đổi; notes sinh lại
+để chỉ đúng vị trí văn bản mới. C-06 xong phần cấu trúc/rút bài, chờ review; chưa
+nghiệm thu toàn task, đặc biệt hàng vetted cùng mô hình và readability C-11.
+
+Tổng việc còn lại: C-02 chờ quyết định lead/hợp đồng B; C-10 chờ review #12;
+C-03 chờ review #13; C-04 chờ review #26; C-05 seed variance chưa triển khai;
+C-07 related work, C-08 abstract, C-09 intro/discussion/conclusion, C-11 readability,
+C-12 anonymous bundle còn phải làm. Chỉ chốt nhận định agent khi B có dữ liệu thật.
+C-13 là freeze/submit đúng lịch, không thực hiện sớm hoặc tự nghiệm thu thay nhóm.
+
+## 11/11/2026 — C-05 freeze thiết kế trước khi chạy
+
+Đóng băng part seedvariance: dùng nguyên SEEDS 101,202,303,404,505 và 2.400
+workflow mỗi seed; alpha/beta mặc định, không sửa ngân sách hoặc calibrator.
+Dòng model: redo, theorem-only, always-ask, rules, product, joint. Dòng measured:
+Element 2k/5k, K9 không/có Sent, product/joint, đúng ngân sách Table 4 hiện hữu.
+Xuất riêng từng seed (70 dòng), báo mean/sample SD/range, không coi SD là CI.
+Sẽ kiểm weighted pooled metrics khớp CSV gốc trước khi promote. Part mới được
+commit trước output, chạy trong workspace riêng từ snapshot commit sạch;
+đây là thí nghiệm bổ sung theo seed, không gọi là rerun toàn pipeline trên main.
+Không đổi dữ liệu raw hoặc số aggregate cũ. C-05 đang làm; chưa có kết quả.
+
+
+## 11/11/2026 — C-05 kết quả theo seed và kiểm pooled equivalence
+
+Đã chạy snapshot thiết kế db47f5595b07a24dc4365203e086d43f8ad37919 trong
+/root/ghosteffect-runs/c05-20261111; chỉ part mới, không phải full main rerun.
+70 dòng (14 policy/profile × 5 seed), giữ nguyên toàn bộ seed/budget. Cả 14
+nhóm đều khớp n,n1,n0 và weighted pooled ask/dup/loss/cdup/closs của CSV cũ
+(sai số tối đa cho phép 1e-10). Không thay các CSV aggregate cũ hoặc raw.
+Receipt tại artifact/runs/2026-11-11/C05-MANIFEST.json; CSV kèm .meta.json.
+
+Sinh tab_seed_variance ở phụ lục: mean ± sample SD và range asking; không gọi
+SD là CI, không lấy trung bình CP interval. Có test kiểm tách seed không đổi
+workflow/effect counts và renderer từ chối seed trùng mà giữ output cũ.
+Lần test đầu phát hiện import planner_sim không hoạt động khi renderer chạy
+qua runpy; đã load bằng đường dẫn script để không phụ thuộc sys.path.
+Bản cuối 49 test qua, build 22 trang, không ref/cite thiếu; scrub PASS.
+Chỉ thêm macro SimSeedCount, không đổi giá trị macro kết quả cũ; notes sinh lại.
+C-05 xong triển khai và thí nghiệm, chờ review/merge; không tự nghiệm thu.
+Tiếp theo: hoàn thiện C-06 model-vetted trên cùng label records/lag table,
+đóng băng thiết kế riêng trước khi sinh CSV; sau đó C-07 và C-11/C-12.
+
+
+## 11/11/2026 — C-06 freeze model-vetted trước kết quả
+
+Thêm part modelmatched riêng: giữ default model, passive calibration population,
+2k labels/outcome/app, 20k lag samples và 5 seed/2.400 workflows như Table 2.
+So joint/vetted bằng cùng record objects và lag table objects; product giữ
+calibrator cũ, dùng làm control cùng joint để kiểm tương đương aggregate cũ.
+Chỉ mở guard trong helper C-owned matched_labels bằng flag matched_model;
+không sửa calibrator của A hoặc lịch sử thí nghiệm C-03. Vetted ở đây dùng
+passive labels đúng default model, không gọi là fault-injected labels.
+Commit thiết kế trước output. Dự kiến thêm một dòng vetted vào bảng model,
+chỉ publish nếu hai control product/joint khớp CSV cũ. C-06 vẫn đang làm.
+
+C-06 lần chạy đầu dừng ở guard measured-only trong vetting, chưa sinh CSV.
+Đã mở guard C-owned chỉ khi matched_model; không đổi seed/budget. Giữ receipt
+FAIL tại workspace c06-model-20261111, commit sửa trước lần chạy v2.
+
+
+## 11/11/2026 — C-06 model-vetted và hoàn thiện baseline
+
+Run v2 từ commit 206a7cfd3c052997dad2de90f3b92b463fb67f39 thành công.
+Vetted dùng cùng passive label records/lag objects với joint trong default
+model; không đánh đồng với measured/fault-injected experiment của C-03.
+Vetted hỏi 100%, P_v 0% (CP upper 0,0446064%); product/joint khớp CSV cũ về
+n,n1,n0,dup,loss,ask,cdup/closs và CP bounds, thời gian (tol 1e-10).
+Giữ nguyên raw/aggregate cũ, thêm planner_model_matched.csv cùng .meta.json.
+Receipt PASS và receipt FAIL đầu ở artifact/runs/2026-11-11/C06-*.json.
+
+Đưa đủ 7 baseline chính vào bảng model; renderer kiểm control tương đương
+trước khi publish. Thêm 3 SimModelVetted* macro, không đổi giá trị macro cũ.
+Test kiểm cùng record objects/lag object, control decisions không đổi và
+renderer rollback khi control khác. Lần test đầu dùng lag budget nhỏ cho
+model nhưng lag_tables model cố định 20k; đã sửa fixture dùng ngân sách thật,
+không sửa A-owned lag_tables hoặc số liệu để né lỗi. Bản cuối 52 test qua;
+build 22 trang không ref/cite thiếu, overfull 3,46388 pt; scrub trên manuscript,
+scripts/tests/receipts PASS. notes.md sinh lại. C-06 xong triển khai, chờ review
+và nghiệm thu độc lập, kể cả A review công thức delta và thuật ngữ.
+
+C-12 precheck trên toàn artifact/testbed báo email và internal runs, nên chưa
+đóng gói/phát hành. Cần phân loại địa chỉ giả/Message-ID trước khi làm gói;
+không sửa raw dữ liệu và không tự coi mọi chuỗi giống email là danh tính thật.
+Tiếp theo: C-07 kiểm nguồn related work, C-11 readability và C-12 bundle;
+C-08/C-09 chỉ chốt các nhận định agent sau khi B có kết quả thật.
+
+## 19/11/2026: C-06 sửa theo review #59 (trưởng nhóm sửa trên nhánh)
+
+Gộp `main` (có #55, #57, #58). Phần seed variance (C-05) lấy đúng bản của #58 trên `main`: `SEED_CASES`, `part_seedvariance`, CSV, meta và khối render; #59 không còn đổi seed hay CSV nào ngoài `planner_model_matched` (hết vấn đề YC-08 và trùng phạm vi). Khối kiểm model-matched (C-06) giữ nguyên. Câu mở §7 nêu đủ loại số như #55; các sửa của #55 ở phần Setup và stress (nay nằm trong phụ lục) được áp lại. Thêm kiểm `replace` của bảng planner; caption `tab_nsize` theo #57 (δ/4); bỏ "RQ2", "RQ4 and RQ5" ở phụ lục; §7 dẫn Table `tab:planner`. Render lại `tab_planner`, `tab_planner_extended`, `notes.md`. Build: Kết luận và References bắt đầu ở trang 13.
+
+## 19/11/2026: C-01, C-18 sửa theo review #63 (trưởng nhóm sửa trên nhánh)
+
+Xóa `artifact/runs/2026-11-17/MANIFEST.json` (bản 11-18 đã thay; bản cũ còn đường dẫn máy, scrub lỗi). `run_all.py`: khi thư mục không có `.git` (gói ẩn danh của `make_bundle.sh`) thì lấy `source_commit` từ `BUNDLE-MANIFEST.json`, `source_tree_clean` để `None`, thay vì dừng với lỗi git; có test. Gộp `main` và sinh lại `others/notes.md` từ macro hiện tại (có `\RealRent*`). `macros_guarantee.tex` nay trùng `main` (A đã gộp ở #73). Manifest 11-18 lấy từ 0729af4, trước #76; freeze 21/11 chạy lại toàn bộ.

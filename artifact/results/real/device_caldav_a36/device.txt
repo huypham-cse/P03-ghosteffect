@@ -1,0 +1,7 @@
+ro.product.manufacturer=samsung
+ro.product.model=SM-A366U1
+ro.build.version.release=15
+ro.build.version.sdk=35
+ro.build.version.oneui=70000
+ro.build.display.id=AP3A.240905.015.A2.A366U1UEU1AYBB
+  use_freezer=true

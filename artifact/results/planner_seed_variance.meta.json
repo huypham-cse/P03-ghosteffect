@@ -1,0 +1,63 @@
+{
+  "command": "python3 artifact/scripts/planner_sim.py seedvariance",
+  "git_commit": "09a20fd52d693821f5e5d23011e641a2f40eaea8",
+  "seed": [
+    101,
+    202,
+    303,
+    404,
+    505
+  ],
+  "python_version": "3.12.3 (main, Jul 15 2026, 23:46:41) [GCC 13.3.0]",
+  "date": "2026-11-18T11:29:34.131744+00:00",
+  "host": "Linux-6.18.58.1-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "csv_sha256": "edaaace4346182eaac582c2a54958752a0a6f79332e0b355f8ee0854e16902e2",
+  "script_sha256": "55d257a2e99f9e3033a9c09819c6ef2793a2b0d0f7ed185440f10f191e8fbeef",
+  "seeds": [
+    101,
+    202,
+    303,
+    404,
+    505
+  ],
+  "n_per_seed": 2400,
+  "cases": {
+    "model": {
+      "policies": [
+        "redo",
+        "g2-only",
+        "always-ask",
+        "rules",
+        "ghost",
+        "ghost-joint"
+      ],
+      "ncal": 2000,
+      "nlag": 20000
+    },
+    "element": {
+      "policies": [
+        "ghost",
+        "ghost-joint",
+        "rules-vetted"
+      ],
+      "ncal": 2000,
+      "nlag": 20000
+    },
+    "k9": {
+      "policies": [
+        "ghost",
+        "ghost-joint"
+      ],
+      "ncal": 2000,
+      "nlag": 20000
+    },
+    "k9sent": {
+      "policies": [
+        "ghost",
+        "ghost-joint"
+      ],
+      "ncal": 2000,
+      "nlag": 20000
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "kind": "supplemental-matched-model-comparison",
+  "status": "PASS",
+  "source_commit": "206a7cfd3c052997dad2de90f3b92b463fb67f39",
+  "python": "3.12.3 (main, Jul 15 2026, 23:46:41) [GCC 13.3.0]",
+  "host": "Linux-6.18.58.1-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "seeds": [
+    101,
+    202,
+    303,
+    404,
+    505
+  ],
+  "n_per_seed": 2400,
+  "seconds": 6.512497680999957,
+  "exit_code": 0,
+  "sha256": "ea1d38ac392dd1a6b73e230e5d6d500b8832c8466d1e28dcc8409ba515e59c87",
+  "date": "2026-11-11",
+  "command": "python3 artifact/scripts/planner_sim.py modelmatched",
+  "validation": "product/joint controls reproduce original aggregate counts, rates, CP bounds and time to 1e-10",
+  "source_inputs": {
+    "real/params.csv": "not used; default model"
+  },
+  "validation_summary": "52 artifact tests pass; PDF build passes; scrub scan passes"
+}

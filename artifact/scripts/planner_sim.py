@@ -32,10 +32,15 @@ Policies
   ghost-*                        ablations of the product planner
 """
 import csv
+import hashlib
+import json
 import math
 import os
+import platform
 import random
+import subprocess
 import sys
+from datetime import datetime, timezone
 from collections import Counter
 
 sys.path.insert(0, os.path.dirname(__file__))
@@ -885,8 +890,10 @@ def matched_labels(wrng, app_eps, S):
     Preserve the app/class/outcome order of the existing joint calibration.
     Its pilot and holdout split remains inside joint_calibration, unchanged.
     """
-    if S.get('catalog') != 'measured' or S['cal_pop'] != 'fault':
+    if not S.get('matched_model') and (S.get('catalog') != 'measured' or S['cal_pop'] != 'fault'):
         raise ValueError('matched labels require a measured, fault-injected profile')
+    if S.get('matched_model') and (S.get('catalog') == 'measured' or S['cal_pop'] != 'passive'):
+        raise ValueError('matched model requires the original default passive calibration population')
     n = max(50, int(round(NCAL * S['ncal_scale'])))
     labels = {}
     for app in catalog(S):
@@ -916,7 +923,7 @@ def vetting(wrng, app_eps, S, policy, labels=None, lagx=None):
     and set the wait to the longest logged lag of the class (at least 30 s); if a logged lag exceeds W_MAX or never
     became visible, the rule never retries on end-to-end absence.  'rules-vetted' uses as many labels as GhostEffect,
     'rules-vetted-small' 30 per class and outcome (the size of an emulator campaign cell).  No guarantee is computed."""
-    assert S.get('catalog') == 'measured'
+    assert S.get('catalog') == 'measured' or S.get('matched_model')
     if (labels is None) != (lagx is None):
         raise ValueError('matched vetting needs both shared labels and lag tables')
     if labels is not None and policy.endswith('-small'):
@@ -2016,7 +2023,68 @@ def part_share():
     write('planner_share.csv', rows)
 
 
-PARTS = dict(share=part_share, main=part_main, rulesweep=part_rulesweep, stress=part_stress, sweep=part_sweep, user=part_user, sens=part_sens, ncal=part_ncal,
+# C-05: fixed reporting cases; no seed, budget, or policy tuning during render.
+SEED_CASES = {
+    'model': (['redo', 'g2-only', 'always-ask', 'rules', 'ghost', 'ghost-joint'], {}),
+    'element': (['ghost', 'ghost-joint', 'rules-vetted'], dict(only_app='element', cal_pop='fault', keyed='all')),
+    'k9': (['ghost', 'ghost-joint'], dict(only_app='k9', cal_pop='fault')),
+    'k9sent': (['ghost', 'ghost-joint'], dict(only_app='k9sent', cal_pop='fault')),
+}
+
+
+def part_seedvariance():
+    """Record every original seed for the Table 2/4 reporting cases."""
+    measured = real_overrides()
+    if not measured:
+        raise ValueError('seed variance requires archived measured parameters')
+    measured.pop('elem_tail_ub', None)
+    rows = []
+    for case, (policies, extra) in SEED_CASES.items():
+        overrides = dict(extra) if case == 'model' else dict(measured, catalog='measured', **extra)
+        for seed in SEEDS:
+            out, eff = run(policies, seeds=[seed], overrides=overrides)
+            for row in summarize(out, eff, policies):
+                row.update(case=case, seed=seed, ncal=int(round(NCAL * extra.get('ncal_scale', 1))),
+                           nlag=extra.get('nlag', N_LAG), keyed=extra.get('keyed', 'pooled'))
+                rows.append(row)
+    write('planner_seed_variance.csv', rows)
+    csv_path = os.path.join(RES, 'planner_seed_variance.csv')
+    script_path = os.path.abspath(__file__)
+    try:
+        git_commit = subprocess.check_output(
+            ['git', '-C', os.path.dirname(os.path.dirname(script_path)), 'rev-parse', 'HEAD'],
+            text=True).strip()
+    except (OSError, subprocess.CalledProcessError):
+        git_commit = 'unknown'
+    with open(os.path.join(RES, 'planner_seed_variance.meta.json'), 'w', encoding='utf-8') as stream:
+        json.dump(dict(command='python3 artifact/scripts/planner_sim.py seedvariance',
+                       git_commit=git_commit, seed=SEEDS,
+                       python_version=sys.version, date=datetime.now(timezone.utc).isoformat(),
+                       host=platform.platform(),
+                       csv_sha256=hashlib.sha256(open(csv_path, 'rb').read()).hexdigest(),
+                       script_sha256=hashlib.sha256(open(script_path, 'rb').read()).hexdigest(),
+                       seeds=SEEDS, n_per_seed=N_PER_SEED,
+                       cases={name: dict(policies=policies, ncal=int(round(NCAL * extra.get('ncal_scale', 1))),
+                                         nlag=extra.get('nlag', N_LAG))
+                              for name, (policies, extra) in SEED_CASES.items()}), stream, indent=2)
+        stream.write('\n')
+
+
+
+
+
+def part_modelmatched():
+    """C-06: add a vetted baseline to the original default model, with shared joint inputs."""
+    policies = ['rules-vetted', 'ghost', 'ghost-joint']
+    out, eff = run(policies, overrides=dict(matched_inputs=True, matched_model=True))
+    rows = summarize(out, eff, policies)
+    for row in rows:
+        row.update(profile='default-model', cal_pop='passive', ncal=NCAL, nlag=N_LAG,
+                   matched_inputs=True, seeds=';'.join(map(str, SEEDS)))
+    write('planner_model_matched.csv', rows)
+
+
+PARTS = dict(modelmatched=part_modelmatched, seedvariance=part_seedvariance, share=part_share, main=part_main, rulesweep=part_rulesweep, stress=part_stress, sweep=part_sweep, user=part_user, sens=part_sens, ncal=part_ncal,
              decomp=part_decomp, real=part_real)
 
 if __name__ == '__main__':
