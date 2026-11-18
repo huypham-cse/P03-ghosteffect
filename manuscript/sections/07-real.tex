@@ -6,19 +6,19 @@ Campaign~2 on the testbed of \S\ref{sec:impl} ran \RealElemN{} Element~1.6.62~\c
 (\RealElemNofaultN{} without fault, \RealElemRL{} with a lost reply, \RealElemAckedN{} acknowledged then killed), plus \RealTimeoutN{} with a withheld reply. It also ran K-9~Mail~24.0~\cite{k9mail}
 against GreenMail~2.1.2~\cite{greenmail} without and with an IMAP Sent folder, with the nonce in the subject, which the recipient sees, on test accounts that opted in.
 CalDAV ran on Etar, DAVx5 and Radicale, and a Synapse transaction-id sequence completes the set (Table~\ref{tab:real}).
-Campaign~1 (\RealOneN{} trials, no screen check) agrees on every G2 classification (Table~\ref{tab:realcone}, appendix). Eight Element attempts left no row. Six failed at trial start, before the send, behind a system ANR dialog of an unused accessibility service. Two had committed their
+Campaign~1 (\RealOneN{} trials, no screen check) agrees on which apps retry idempotently (Table~\ref{tab:realcone}, appendix). Eight Element attempts left no row. Six failed at trial start, before the send, behind a system ANR dialog of an unused accessibility service. Two had committed their
 message (one stopped by the operator, one we cannot trace). Their lags are unknown, so the lag table covers the \RealElemN{} recorded trials. Four campaign-1 trials were discarded because Android had re-spawned
 Element (in two, a queued message stayed unsent for 45\,s). Outside Element $n$ is small (from 2 to 4 per K-9 cell), so these are characterizations. Lags are upper bounds:
 one read is a uiautomator dump of \RealDumpLo{} to \RealDumpHi\,s. The host's load average was \RealHostLoadLo{} to \RealHostLoadHi{} on \RealHostCores{} cores.
 
 \input{generated/tab_real}
 
-\para{G2 per app, and measured redo duplicates.} Element resolved every lost reply exactly once (\RealElemRL/\RealElemRL). In the \RealElemStd{} standard cells its own same-txnId retry, sent 20 to 100\,ms after the reset,
+\para{Idempotent retries per app, and measured redo duplicates.} Element resolved every lost reply exactly once (\RealElemRL/\RealElemRL). In the \RealElemStd{} standard cells its own same-txnId retry, sent 20 to 100\,ms after the reset,
 was acknowledged before the fault (``retry, then fault''). In the \RealElemSticky{} sticky cells the fault came first. Element then re-sent the same txnId (\RealElemStickyResend)
 or, without re-sending, reconciled its local echo with the event \texttt{/sync} returned (\RealElemStickySync). With a withheld reply it showed ``Sent'' via that echo, re-sent
 after a 70\,s timeout, and stayed exactly once (\RealTimeoutOnce/\RealTimeoutN). Synapse deduplicated a retry from the same device, also after a re-login with the same device id
-or a restart. It did not deduplicate one from another device, nor one after we aged the row past 24\,h by shifting its timestamp. So G2 holds within $H_{\mathrm{dedup}}{=}24$\,h on one device. DAVx5 re-sent to the same URL with \texttt{If-None-Match}, Radicale answered 412, and every event existed
-once (\RealCalOnce/\RealCalN, \RealCalKill{} after \texttt{kill -9} or force-stop): G2 by a client-chosen name. K-9 is non-G2 by design: once the final ``.'' is written, a failure is recorded as permanent and later send passes skip the
+or a restart. It did not deduplicate one from another device, nor one after we aged the row past 24\,h by shifting its timestamp. So its retries are idempotent within $H_{\mathrm{dedup}}{=}24$\,h on one device. DAVx5 re-sent to the same URL with \texttt{If-None-Match}, Radicale answered 412, and every event existed
+once (\RealCalOnce/\RealCalN, \RealCalKill{} after \texttt{kill -9} or force-stop): idempotent by a client-chosen name. K-9 has no idempotent retry by design: once the final ``.'' is written, a failure is recorded as permanent and later send passes skip the
 message, which stays in the Outbox (campaign~1's ``gone after sync'' came from a field never recorded). Campaign~2 recorded a tap on ``Sync account'' in
 \RealKSyncTapped/\RealKRd{} lost-reply trials but on ``Send messages'' only in \RealKSendmsgsTapped. An audit without a Sent folder therefore logged every tap and waited
 \RealAuditWindow\,s after one action, too short for K-9's 15-min poll. Of its \RealAuditAttemptsN{} attempts, \RealAuditN{} were valid, and the rest failed before their action. New DATA followed ``Sync account'' in \RealAuditSyncData/\RealAuditSyncN{} trials, ``Send messages'' in
