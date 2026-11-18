@@ -1,0 +1,13 @@
+15:17:05 dev-c00 none EXACTLY_ONCE 0.017725705 
+15:21:05 dev-c01 none EXACTLY_ONCE 0.023184652 
+15:25:39 c01 none EXACTLY_ONCE 0.024572394 
+15:29:41 c02 stop-app EXACTLY_ONCE 29.907392984 
+15:33:42 c03 none EXACTLY_ONCE 0.025217678 
+15:37:43 c04 stop-app EXACTLY_ONCE 29.968212873 
+15:41:44 c05 none EXACTLY_ONCE 0.023509242 
+15:45:46 c06 stop-app EXACTLY_ONCE 39.041679124 
+15:59:50 d01 stop-app-doze EXACTLY_ONCE None 
+16:01:53 d02 stop-app-doze INVALID None calendar provider still has dirty events; not a clean start
+16:03:56 d03 stop-app-doze INVALID None calendar provider still has dirty events; not a clean start
+16:03:56 ABORT: rig failure (d03)
+16:03:56 CAMPAIGN DONE

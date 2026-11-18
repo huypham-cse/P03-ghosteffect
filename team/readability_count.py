@@ -21,7 +21,7 @@ def prose(source):
     text = strip_comments(source)
     # Ignore code, tabular material, TikZ and display math. Inline math is one
     # placeholder word so formula punctuation does not create sentence breaks.
-    text = re.sub(r'\\begin\{(verbatim|lstlisting|tabular\*?|tikzpicture|equation\*?|align\*?)\}.*?'
+    text = re.sub(r'\\begin\{(verbatim|lstlisting|algorithmic|tabular\*?|tikzpicture|equation\*?|align\*?)\}.*?'
                   r'\\end\{\1\}', ' ', text, flags=re.S)
     text = re.sub(r'\$\$.*?\$\$|\\\[.*?\\\]', ' ', text, flags=re.S)
     text = re.sub(r'(?<!\\)\$(?:\\.|[^$])*?\$|\\\(.*?\\\)', ' FORMULA ', text, flags=re.S)

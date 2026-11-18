@@ -1,0 +1,12 @@
+trial,phase,fault,verdict,server_copies,puts,first_put_after_fault_s,first_put_after_doze_exit_s,doze_state,lmkd_filled_mb,lmkd_line,dirty_after,nonce,href,error_type,reason,proc_samples,frozen_seen,procstates
+c01,scheduled,none,EXACTLY_ONCE,1,2,0.024572394,,,,,No result found.,gx:QY7PS5,/alice/cal/91741afa-4dee-477c-bbb8-7be8642731b2.ics,,,18,False,6
+c02,scheduled,stop-app,EXACTLY_ONCE,1,2,29.907392984,,,,,No result found.,gx:F3888X,/alice/cal/e31f7373-c88e-4f32-bea1-392ff765fb43.ics,,,18,False,19
+c03,scheduled,none,EXACTLY_ONCE,1,2,0.025217678,,,,,No result found.,gx:0KEJ43,/alice/cal/c1f6b5d6-0f68-40bb-8c80-3516d0dc2c7e.ics,,,18,False,19 8
+c04,scheduled,stop-app,EXACTLY_ONCE,1,2,29.968212873,,,,,No result found.,gx:GG2XJD,/alice/cal/0a9786b8-3b70-4724-b1c5-b8de109a6d23.ics,,,18,False,19
+c05,scheduled,none,EXACTLY_ONCE,1,2,0.023509242,,,,,No result found.,gx:GSSTS3,/alice/cal/385c2bbd-e426-4663-8ee9-b9eb9df985e7.ics,,,18,False,19 8
+c06,scheduled,stop-app,EXACTLY_ONCE,1,2,39.041679124,,,,,No result found.,gx:WERNNV,/alice/cal/379f599b-6776-4c85-a45b-8f1a4a32e522.ics,,,18,False,19
+d01,scheduled,stop-app-doze,EXACTLY_ONCE,1,1,,,IDLE,,,"Row: 0 _id=17, title=gx:QYV3JD, dirty=1",gx:QYV3JD,/alice/cal/70aba72a-a161-42c1-bb2a-c63ab4a6fb60.ics,,,75,False,19
+d02,scheduled,stop-app-doze,INVALID,,,,,,,,,,,RuntimeError,calendar provider still has dirty events; not a clean start,,,
+d03,scheduled,stop-app-doze,INVALID,,,,,,,,,,,RuntimeError,calendar provider still has dirty events; not a clean start,,,
+dev-c00,dev,none,EXACTLY_ONCE,1,2,0.017725705,,,,,No result found.,gx:W13NK3,/alice/cal/b70ba76e-d4f1-49b9-b506-9fb6e73ce7c2.ics,,,18,False,6
+dev-c01,dev,none,EXACTLY_ONCE,1,2,0.023184652,,,,,No result found.,gx:ZDXFYM,/alice/cal/2cb4934b-98ce-4f8b-b5f6-2e78eab0bb3e.ics,,,18,False,6

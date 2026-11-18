@@ -13,13 +13,17 @@ budget (Tables~\ref{tab:realsim},~\ref{tab:stress}); drift within a version is n
 (4)~\emph{Escalations.} Joint certification escalates two thirds of interrupted workflows at 2{,}000 labels in the model and every interrupted K-9 send; each ask interrupts a
 user who delegated the task. We have not run a user study of the prompt (it needs IRB approval).
 (5)~\emph{Effects.} A missed commit point is invisible to \sys, and an app that commits half a batch needs app-specific probes.
+(6)~\emph{Agent scope.} The agent evidence covers emulator runs on one app with two agents and one model configuration. The physical-phone measurements below have no agent; results for agents on phones, other models, and VLM evidence remain future work.
 
 \para{Android realism.}
 Payment apps resist exactly this agent: \texttt{FLAG\_SECURE} blocks screenshots; since Android~14, \texttt{accessibility\-Data\-Sensitive} views are hidden from services that do
 not declare \texttt{isAccessibilityTool}~\cite{android_a11ysensitive}, which Google Play reserves for assistive tools~\cite{googleplay_a11ypolicy}; banking apps may detect
 accessibility services and gate the commit behind BiometricPrompt. Hence our measurements use open-source apps with self-hosted servers, and payments need MockBank, a test app we
-plan to build. Element, Simple SMS and Thunderbird offer only counterparty-visible nonce fields (Table~\ref{tab:apps}); our Element runs opted in. Physical phones kill and defer
-more aggressively, so we expect lag tails beyond the 13.6\,s we measured (Table~\ref{tab:lag} prices them). A withheld reply took another code path in Element (sync echo, 70\,s
+plan to build. Element, Simple SMS and Thunderbird offer only counterparty-visible nonce fields (Table~\ref{tab:apps}); our Element runs opted in. On a physical Android~\RealPhoneAndroid{} phone, K-9 did not resend after a kill in \RealPhoneNoResendN{} of \RealPhoneN{} valid trials, and a GUI redo duplicated the mail in \RealPhoneDupN{} of them.
+On the emulator, a GUI redo after an lmkd kill duplicated K-9 mail in \RealEmuKDupN{} of \RealEmuKN{} trials. DAVx5 kept exactly one copy in every valid trial: \RealEmuCalOnceN/\RealEmuCalValidN{} on the emulator,
+\RealRentSamOnceN/\RealRentSamValidN{} on a rented Galaxy A36 and \RealRentPixOnceN/\RealRentPixValidN{} on a rented Pixel 9. Forced Doze did not delay its resend on the emulator (median
+\RealEmuCalDozeMedS\,s from fault to PUT, \RealEmuCalKillMedS\,s after \texttt{kill -9}) or on the Pixel (\RealRentPixDozeMedS\,s, still idle). The A36 (One UI) did not resend within
+\RealRentSamDozeQuietS\,s in its one valid Doze trial. Lag tails on physical phones can thus exceed those we measured (Table~\ref{tab:lag} prices them). A withheld reply took another code path in Element (sync echo, 70\,s
 timeout) and stayed exactly once in \RealTimeoutClean{} clean trials; end-to-end encrypted rooms, Element's default for direct messages, are untested.
 
 \para{Ethics and threat model.}
