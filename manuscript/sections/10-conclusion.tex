@@ -1,7 +1,8 @@
 \section{Conclusion}
 \label{sec:conclusion}
 Ghost effects are real: after a lost reply K-9~Mail shows accepted mail as unsent, and a GUI redo duplicates effects that the server has already accepted; apps with an idempotent
-retry can resolve the fault themselves, within the server's dedup horizon. The emulator agent experiment shows the same recovery failure and shows that a ledger boundary can
-turn an unsafe redo into a user confirmation. Calibration of structured evidence on whole fault-injected effects, keyed by fault class, makes a duplicate budget certifiable:
+retry can resolve the fault themselves, within the server's dedup horizon. The emulator agent experiment shows the same recovery failure: M3A duplicated \AgentDupN{} of
+\AgentValidN{} valid K-9 episodes, while the guarded agent asked in \AgentGuardAskN{} valid episodes and left \AgentGuardDupN{} duplicates after the simulated user's wrong answer.
+A ledger boundary can turn an unsafe redo into a user confirmation. Calibration of structured evidence on whole fault-injected effects, keyed by fault class, makes a duplicate budget certifiable:
 use product certification when its independence assumptions have a structural basis, and joint certification otherwise. Fault-injected labels and a visible lag anchor are
 necessary conditions for that conclusion; physical-phone evidence is reported in the Discussion, while VLM evidence, more agents and more models remain future work.

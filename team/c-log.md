@@ -319,3 +319,9 @@ trên manuscript, code/test artifact và receipts. Conclusion vẫn trang 13;
 Trạng thái C-03: triển khai/thí nghiệm/bảng/văn bản xong để review; chưa
 nghiệm thu. C-01/C-02/C-10 có nhánh/commit riêng; vẫn chờ người dùng hoàn
 thành GitHub device login để push và tạo các PR nối tiếp, không tự merge.
+## 18/11/2026 — C-14–C-19 rà soát agent và conclusion
+
+Đã chỉnh phần văn bản sở hữu C để khuyến nghị certification có điều kiện theo A2,
+mô tả đúng thí nghiệm agent trên emulator, và thay các câu cũ về agent/RQ7 trong
+evaluation. Conclusion hiện báo cáo các số agent bằng macro `Agent*`; các số mới vẫn
+cần review khi nội dung C-20 và các PR dữ liệu được tích hợp.
