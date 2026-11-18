@@ -91,9 +91,11 @@ def _manifest_path(value, cwd):
 def source_provenance():
     """Return the source commit and require a clean checkout for a run."""
     commit = subprocess.check_output(
-        ['git', '-C', str(ROOT), 'rev-parse', 'HEAD'], text=True).strip()
+        ['git', '-c', 'core.autocrlf=true', '-C', str(ROOT), 'rev-parse', 'HEAD'],
+        text=True).strip()
     status = subprocess.check_output(
-        ['git', '-C', str(ROOT), 'status', '--porcelain', '--untracked-files=all'],
+        ['git', '-c', 'core.autocrlf=true', '-C', str(ROOT),
+         'status', '--porcelain', '--untracked-files=all'],
         text=True)
     return dict(source_commit=commit, source_tree_clean=not bool(status.strip()))
 
