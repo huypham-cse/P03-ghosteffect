@@ -10,7 +10,7 @@ the assigned reviewer must repeat the checks on a clean clone.
 
 | Gate | Evidence | Status |
 |---|---|---|
-| YC-C1 / C-18 | Fresh run `tmp/c13-main-20261119/RUN.json`: PASS, source tree clean, 27 completed jobs, 0 failed, 0 errors; 108 CSVs compared, 107 hashes match and only host-dependent `ledger_bench.csv` differs | Pass; archive manifest after final commit |
+| YC-C1 / C-18 | `artifact/runs/2026-11-19/MANIFEST.json` from source `5fdbb276`: PASS, source tree clean, 27 completed jobs, 0 failed, 0 errors; 108 CSVs compared, 107 hashes match and only host-dependent `ledger_bench.csv` differs | Pass; repeat on the final freeze commit |
 | YC-C2 | Artifact renderer and generated-fragment tests pass in the integrated tree; generated fragments rebuilt by `manuscript/build.sh` | Pass; reviewer rerun required |
 | YC-C4 / C-05/C-06 | Artifact suite PASS (68/68), including matched-input and vetted-baseline regression checks | Pass; reviewer rerun required |
 | YC-C5 | Table captions and inline result values come from generated macros; no hard-coded renderer count captions remain | Pass by integrated source/PDF review |
@@ -23,8 +23,8 @@ the assigned reviewer must repeat the checks on a clean clone.
 
 1. The integrated run and build recorded below are pre-freeze evidence. After
    approval, repeat them from a clean clone at `main`.
-2. Freeze on 21/11 only after A, B and C are accepted. Copy the final manifest
-   into `artifact/runs/2026-11-19/MANIFEST.json` and record its commit.
+2. Freeze on 21/11 only after A, B and C are accepted. Repeat the pipeline from
+   the final freeze commit and record its manifest separately from this run.
 3. Create the anonymous bundle from that freeze, scrub it, extract it and rerun
    the pipeline. Add the artifact link to §8 and rerun the PDF gate.
 
