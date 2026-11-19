@@ -46,10 +46,12 @@ commit.
 - ZIP URL: <https://drive.google.com/file/d/1FX__khUXHwlnqINXI90CYPZNzVuM6pqE/view?usp=drivesdk>
 - SHA-256: `5A6D9C8C26C808CCCF55A2D7AD42C27BD63F6FB87F226640AA6E3E16FDECF927`
 - Upload result: verified by the connected Drive account on 19 Nov 2026.
-- Public-link check: `PENDING`. The current connector can upload and share with
-  a named account/domain, but cannot grant `anyone` access for this personal
-  Gmail account. Before YC-F2, set **General access → Anyone with the link →
-  Viewer** in Drive, then verify from a signed-out/incognito browser.
+- Public-link check: `NOT PASS` (a signed-out HTTP request redirected to
+  `accounts.google.com`, so the file is still private). The current connector
+  can upload and share with a named account/domain, but cannot grant `anyone`
+  access for this personal Gmail account. Before YC-F2, set **General access →
+  Anyone with the link → Viewer** in Drive, then repeat the signed-out/incognito
+  check and record the successful download status here.
 
 Do not replace the `PENDING` final fields with this staging URL or checksum.
 
