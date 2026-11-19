@@ -577,7 +577,7 @@ C-owned readability is 5/10/0/0 and whole-paper readability is 14/28/0/0,
 within the 5/10 and 15/30 limits. HotCRP registration proof and the independent
 C reviewer assignment remain external acceptance items.
 
-The same pipeline was rerun from clean source commit `5fdbb276` after this
-acceptance update. Its manifest is archived at
+The same pipeline was rerun from clean source commit `bffa2f1e` after the
+abstract number fix and acceptance update. Its manifest is archived at
 `artifact/runs/2026-11-19/MANIFEST.json`; the 21/11 freeze still requires one
 last rerun after all three roles are accepted.

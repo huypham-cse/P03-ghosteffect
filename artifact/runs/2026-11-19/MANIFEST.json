@@ -1,9 +1,9 @@
 {
   "status": "PASS",
   "kind": "artifact-reproduction",
-  "created_utc": "20261119T025259Z",
+  "created_utc": "20261119T030428Z",
   "workspace": ".",
-  "source_commit": "5fdbb2763ed4dd3236921d986350fe1e27f6a82e",
+  "source_commit": "bffa2f1efeaf506537722b3c7a7a2c140f9aa39b",
   "source_tree_clean": true,
   "source_inputs": {
     "manuscript/build.sh": "5f9c409a41b98a9dc7ca273a7736079c26875331ca2c28e08b5f5f7a45dff4e5",
@@ -322,7 +322,7 @@
     "artifact/results/real/emu_k9_lmk/receipts/e06.json": "3b3722b2e89b6709690378ab46150139c8e965dd569a4f0bc801403ff71d3968",
     "manuscript/figures/fig-arch.tex": "4774eab63c57e8e22f04aee82e66f7e1ade254f5e68bccebfd0b173fd946b59a",
     "manuscript/figures/fig1.tex": "18b8bb7e94369f82027db8aa8159029a85a1595f1a54ac2a2c249ad6fc89e0bc",
-    "manuscript/sections/00-abstract.tex": "b54a83acb736ddce6b6a92ffecf772f6442bed19aeb5b0cb6952efb69594a031",
+    "manuscript/sections/00-abstract.tex": "cb107196c2b059687e92027dcbcf5c2fe7c3e4a86349eb24c01ea2b7badc0215",
     "manuscript/sections/01-introduction.tex": "7be1261c8370e7cb2b49d8ba03bc2ad88eb8e14b71613f9c9d13fd09e210950d",
     "manuscript/sections/02-background-motivation.tex": "711d372c97f004c12837059460e55468930b9931554516909143e51ca7033704",
     "manuscript/sections/03-model.tex": "294edadc5ef126929779236637446592233c9cffdcb6b951f89d29d9c3ec4000",
@@ -501,7 +501,7 @@
       ],
       "log": "logs/sim_sprt.log",
       "exit_code": 0,
-      "seconds": 19.518332717,
+      "seconds": 19.484129166999992,
       "outputs": {
         "artifact/results/sprt_validation.csv": {
           "rows": 24,
@@ -598,7 +598,7 @@
       ],
       "log": "logs/sim_impossibility.log",
       "exit_code": 0,
-      "seconds": 20.04294863799999,
+      "seconds": 19.950677321000057,
       "outputs": {
         "artifact/results/impossibility.csv": {
           "rows": 9,
@@ -678,7 +678,7 @@
       ],
       "log": "logs/sim_saga.log",
       "exit_code": 0,
-      "seconds": 5.785124961000008,
+      "seconds": 5.8641908490000105,
       "outputs": {
         "artifact/results/saga_alloc.csv": {
           "rows": 4,
@@ -725,7 +725,7 @@
       ],
       "log": "logs/sim_nonce.log",
       "exit_code": 0,
-      "seconds": 33.282557976999996,
+      "seconds": 33.68636278199995,
       "outputs": {
         "artifact/results/nonce.csv": {
           "rows": 9,
@@ -771,7 +771,7 @@
       ],
       "log": "logs/markov_planner.log",
       "exit_code": 0,
-      "seconds": 4.766317724999993,
+      "seconds": 4.621772434000036,
       "outputs": {
         "artifact/results/markov_planner.csv": {
           "rows": 7,
@@ -816,7 +816,7 @@
       ],
       "log": "logs/real_params.log",
       "exit_code": 0,
-      "seconds": 0.17179568299999914,
+      "seconds": 0.2685586229999899,
       "outputs": {
         "artifact/results/real/params.csv": {
           "rows": 22,
@@ -838,7 +838,7 @@
       ],
       "log": "logs/planner_rulesweep.log",
       "exit_code": 0,
-      "seconds": 4.473157810999993,
+      "seconds": 4.685814063000066,
       "outputs": {
         "artifact/results/planner_rules_sweep.csv": {
           "rows": 12,
@@ -892,7 +892,7 @@
       ],
       "log": "logs/planner_modelmatched.log",
       "exit_code": 0,
-      "seconds": 6.482528689999995,
+      "seconds": 6.676046847999942,
       "outputs": {
         "artifact/results/planner_model_matched.csv": {
           "rows": 3,
@@ -952,7 +952,7 @@
       ],
       "log": "logs/planner_main.log",
       "exit_code": 0,
-      "seconds": 18.232053283000013,
+      "seconds": 18.282448600000066,
       "outputs": {
         "artifact/results/planner_sim.csv": {
           "rows": 24,
@@ -1020,7 +1020,7 @@
       ],
       "log": "logs/planner_seedvariance.log",
       "exit_code": 0,
-      "seconds": 22.805716904000008,
+      "seconds": 23.40873539200004,
       "outputs": {
         "artifact/results/planner_seed_variance.csv": {
           "rows": 65,
@@ -1079,7 +1079,7 @@
       ],
       "log": "logs/planner_stress1_6.log",
       "exit_code": 0,
-      "seconds": 23.93967671999998,
+      "seconds": 24.30893817499998,
       "outputs": {
         "artifact/results/planner_stress.part1.csv": {
           "rows": 15,
@@ -1134,7 +1134,7 @@
       ],
       "log": "logs/planner_stress0_6.log",
       "exit_code": 0,
-      "seconds": 31.489973277000004,
+      "seconds": 31.73244914499992,
       "outputs": {
         "artifact/results/planner_stress.part0.csv": {
           "rows": 20,
@@ -1189,7 +1189,7 @@
       ],
       "log": "logs/planner_stress2_6.log",
       "exit_code": 0,
-      "seconds": 24.46689187300001,
+      "seconds": 24.727962136000087,
       "outputs": {
         "artifact/results/planner_stress.part2.csv": {
           "rows": 15,
@@ -1244,7 +1244,7 @@
       ],
       "log": "logs/planner_stress3_6.log",
       "exit_code": 0,
-      "seconds": 25.267685301,
+      "seconds": 25.967196177000005,
       "outputs": {
         "artifact/results/planner_stress.part3.csv": {
           "rows": 15,
@@ -1299,7 +1299,7 @@
       ],
       "log": "logs/planner_stress4_6.log",
       "exit_code": 0,
-      "seconds": 25.16899258700002,
+      "seconds": 24.904922472999942,
       "outputs": {
         "artifact/results/planner_stress.part4.csv": {
           "rows": 15,
@@ -1354,7 +1354,7 @@
       ],
       "log": "logs/planner_user.log",
       "exit_code": 0,
-      "seconds": 11.875794538999997,
+      "seconds": 12.154419600999972,
       "outputs": {
         "artifact/results/planner_user.csv": {
           "rows": 20,
@@ -1409,7 +1409,7 @@
       ],
       "log": "logs/planner_stress5_6.log",
       "exit_code": 0,
-      "seconds": 24.99223268,
+      "seconds": 25.65608036800006,
       "outputs": {
         "artifact/results/planner_stress.part5.csv": {
           "rows": 15,
@@ -1464,7 +1464,7 @@
       ],
       "log": "logs/planner_sens.log",
       "exit_code": 0,
-      "seconds": 8.894430897999996,
+      "seconds": 9.478830345999995,
       "outputs": {
         "artifact/results/planner_sensitivity.csv": {
           "rows": 28,
@@ -1519,7 +1519,7 @@
       ],
       "log": "logs/planner_share.log",
       "exit_code": 0,
-      "seconds": 8.349307733999979,
+      "seconds": 7.95611545700001,
       "outputs": {
         "artifact/results/planner_share.csv": {
           "rows": 15,
@@ -1543,7 +1543,7 @@
       ],
       "log": "logs/planner_decomp.log",
       "exit_code": 0,
-      "seconds": 23.91486036500001,
+      "seconds": 23.95287533899989,
       "outputs": {
         "artifact/results/planner_decomp.csv": {
           "rows": 40,
@@ -1568,7 +1568,7 @@
       ],
       "log": "logs/planner_sweep.log",
       "exit_code": 0,
-      "seconds": 48.201215391000005,
+      "seconds": 48.152810596999984,
       "outputs": {
         "artifact/results/planner_alpha_sweep.csv": {
           "rows": 20,
@@ -1623,7 +1623,7 @@
       ],
       "log": "logs/planner_ncal.log",
       "exit_code": 0,
-      "seconds": 79.31109148499999,
+      "seconds": 81.818147178,
       "outputs": {
         "artifact/results/planner_ncal.csv": {
           "rows": 29,
@@ -1681,7 +1681,7 @@
       ],
       "log": "logs/planner_real.log",
       "exit_code": 0,
-      "seconds": 103.60534785900003,
+      "seconds": 104.31031206199998,
       "outputs": {
         "artifact/results/planner_real.csv": {
           "rows": 59,
@@ -1741,7 +1741,7 @@
       ],
       "log": "logs/planner_real4.log",
       "exit_code": 0,
-      "seconds": 224.05255889300003,
+      "seconds": 220.69085823499995,
       "outputs": {
         "artifact/results/planner_real4_match2k.csv": {
           "rows": 2,
@@ -2753,7 +2753,7 @@
       ],
       "log": "logs/sample_size.log",
       "exit_code": 0,
-      "seconds": 0.1692833010000072,
+      "seconds": 0.2490170640000997,
       "outputs": {
         "artifact/results/sample_size.csv": {
           "rows": 4,
@@ -2789,7 +2789,7 @@
       ],
       "log": "logs/bench_ledger.log",
       "exit_code": 0,
-      "seconds": 75.465454287,
+      "seconds": 75.06027405100008,
       "outputs": {
         "artifact/results/ledger_bench.csv": {
           "rows": 1,
@@ -2806,7 +2806,7 @@
             "fullfsync_supported",
             "kill_window_origin"
           ],
-          "sha256": "a1781aca55e8dcb3b3e3aa371386cc583750838c56343e95aff54af368655966"
+          "sha256": "ff3c6f4ff3a72afae39824ff44fc15638a0b014725c2b71b0f35e1679254b5a5"
         }
       }
     },
@@ -2818,7 +2818,7 @@
       ],
       "log": "logs/render.log",
       "exit_code": 0,
-      "seconds": 3.0777873129999875,
+      "seconds": 3.228225833000124,
       "outputs": {
         "manuscript/generated/fig_floor.tex": {
           "sha256": "838c34323f770b8b781a708f82003b62d480910e8988642dd7286652844b2cab",
@@ -2841,8 +2841,8 @@
           "bytes": 5411
         },
         "manuscript/generated/macros_real.tex": {
-          "sha256": "a5a295844c2e95b06ea6dadd9fac2b01248afdce73c7c50ef59c99562aa384d9",
-          "bytes": 12704
+          "sha256": "b40e19917e1b9e9df8a095bbd73d2857afac21775ee26ad52b80d549cf920f9e",
+          "bytes": 12703
         },
         "manuscript/generated/real_section.tex": {
           "sha256": "c1ef49823023e0c30e7c148f1c0f38c76661a767495b5dc269035c1f354ebf05",
