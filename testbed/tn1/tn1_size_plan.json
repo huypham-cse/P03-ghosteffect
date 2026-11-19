@@ -1,0 +1,29 @@
+{
+ "kind": "fixed acquisition sizing reference",
+ "mode": "product",
+ "K_total": 9,
+ "delta": 0.0011111111111111111,
+ "strata": [
+  {
+   "stratum": "etar-davx5-avd",
+   "classes": [
+    "none",
+    "app-kill",
+    "force-stop"
+   ],
+   "fixed_quota": {
+    "pilot0": 0,
+    "pilot1": 0,
+    "calibration0": 30,
+    "calibration1": 133,
+    "lag1": 0
+   },
+   "zero_event_joint_retry_minimum": 133,
+   "zero_event_joint_declare_minimum": 73,
+   "zero_exceedance_unconditional_wait_minimum": 167,
+   "note": "per outcome/class; product/source utility depends on family/region data; not a sufficient sample-size guarantee"
+  }
+ ],
+ "evidence_kind": "interrupted_measurement",
+ "warning": "Do not collect-until-pass or treat B0/eval/bootstrap as fresh calibration"
+}
