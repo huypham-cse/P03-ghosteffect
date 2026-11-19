@@ -559,3 +559,26 @@ Xóa `artifact/runs/2026-11-17/MANIFEST.json` (bản 11-18 đã thay; bản cũ 
 ## 19/11/2026: C-11 làm lại theo review #64 (trưởng nhóm làm trên nhánh)
 
 Bản #64 cũ biến tiêu đề `\para` thành mẩu chữ, đổi danh sách chấm phẩy thành mẩu câu và chồng lên #55, #72, nên nhánh lấy lại đúng cây của `main` rồi làm lại lượt đọc. Mỗi tiêu đề bị bỏ được gộp vào một câu chủ đề thật hoặc gộp đoạn; giữ 5 `\para` (Contributions, Limitations, Ethics and threat model, Model-based simulation, Baselines) và 10 `\emph` (định nghĩa lần đầu). Thuật ngữ theo QUYET_DINH_CHUNG: không còn escalate, không còn G2 trong văn xuôi. Kiểm: readability các file C 5/10/0/0, cả bài 14/29/0/0; tập macro, cite, ref, label trước và sau trùng nhau (186, 104, 46, 14); build 24 trang, Kết luận trang 13 như trước; test qua. `others/readability-c11.md` của bản cũ không giữ (không thuộc file của C).
+
+## 19/11/2026: C-13 integrated acceptance rerun and page gate
+
+Merged `origin/main` at `4d50067` into the acceptance branch and ran the
+integrated artifact pipeline from a clean tree. The fresh run reports PASS,
+27 completed jobs, 0 failed jobs and 0 errors. Of 108 CSV outputs, 107 hashes
+match the committed results; only `ledger_bench.csv` differs as a host
+measurement. Artifact tests pass 68/68 and testbed tests pass 119 with 3
+environment skips. Scrub passes on `manuscript/` and `testbed/`.
+
+For YC-F3, C shortened the C-owned Related Work and Conclusion prose while
+preserving the required comparisons, citations and agent macros. The build is
+23 pages, the Conclusion ends on page 12, References starts on page 13,
+`pdftotext` finds zero `??`, and the largest overfull box is 1.53427pt.
+C-owned readability is 5/10/0/0 and whole-paper readability is 14/28/0/0,
+within the 5/10 and 15/30 limits. HotCRP submission #3 was registered and the
+screenshot plus confirmation were added to PR #75; only the independent C
+reviewer rerun and team acceptance remain external acceptance items.
+
+The same pipeline was rerun from clean source commit `bffa2f1e` after the
+abstract number fix and acceptance update. Its manifest is archived at
+`artifact/runs/2026-11-19/MANIFEST.json`; the 21/11 freeze still requires one
+last rerun after all three roles are accepted.
