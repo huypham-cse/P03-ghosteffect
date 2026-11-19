@@ -574,8 +574,9 @@ preserving the required comparisons, citations and agent macros. The build is
 23 pages, the Conclusion ends on page 12, References starts on page 13,
 `pdftotext` finds zero `??`, and the largest overfull box is 1.53427pt.
 C-owned readability is 5/10/0/0 and whole-paper readability is 14/28/0/0,
-within the 5/10 and 15/30 limits. HotCRP registration proof and the independent
-C reviewer assignment remain external acceptance items.
+within the 5/10 and 15/30 limits. HotCRP submission #3 was registered and the
+screenshot plus confirmation were added to PR #75; only the independent C
+reviewer rerun and team acceptance remain external acceptance items.
 
 The same pipeline was rerun from clean source commit `bffa2f1e` after the
 abstract number fix and acceptance update. Its manifest is archived at

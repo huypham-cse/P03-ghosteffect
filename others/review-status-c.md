@@ -18,4 +18,4 @@ Checked against the integrated `main` and PR #75 on 19 November 2026. PRs
 - C-10/#74: merged; readability pseudocode regression test passes.
 - C-11/#64: merged after the lead's readability redo; C-13 reports 5/10/0/0 and the page gate now places Conclusion on page 12.
 - C-20/#72: merged; physical-phone and emulator macros are integrated.
-- C-13/#75: open as `[C] Nghiệm thu`; independent reviewer requested, HotCRP receipt pending, and final freeze waits for A/B/C acceptance.
+- C-13/#75: open as `[C] Nghiệm thu`; HotCRP submission #3 is evidenced in the registration comment, independent reviewer rerun remains pending, and final freeze waits for A/B/C acceptance.

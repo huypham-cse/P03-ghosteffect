@@ -39,7 +39,8 @@ within the 15/30/0/0 limits; C-owned readability is 5/10/0/0.
 
 ## Current blockers / owners
 
-- HotCRP abstract-registration evidence is still missing from #75.
+- HotCRP abstract registration is evidenced in #75 by submission **#3**; the
+  screenshot and confirmation are attached in the [registration comment](https://github.com/huypham-cse/P03-ghosteffect/pull/75#issuecomment-6999016501).
 - The team lead must name the independent C reviewer. The reviewer must rerun the
   checklist on a clean clone and record the result.
 - A/B still own their files and must remain available for reviewer-requested
