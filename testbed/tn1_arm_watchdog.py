@@ -2,8 +2,8 @@
 
 caldav_planner.py arms the CalDAV proxy before the save tap. When DAVx5 makes no PUT within the barrier timeout the trial
 is INVALID, but the arm stays unreleased (faultproxy has no disarm), so every later committed-effect trial fails at
-arm time. This helper, run beside the collector, watches the proxy journal: when an ARM has had no MATCH for --stale
-seconds, it sends one rig PUT (a dummy event, title gx-rig-clear) through the proxy so the arm reaches its barrier, then
+arm time. This helper, run beside the collector, watches batch.log and the proxy journal: once the collector logs an
+INVALID trial after an unreleased ARM, it sends one rig PUT (dummy event gx-rig-clear) if the arm has no barrier yet, then
 releases it with observed_class=none and a rig note. The dummy event is removed by the next trial's cleanup. It never
 touches a trial's own effect and does not change caldav_planner.py (whose hash is part of the frozen domain).
 """
@@ -58,25 +58,33 @@ def clear(arm_id, log):
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--run', type=Path, required=True)
-    p.add_argument('--stale', type=float, default=95)
-    p.add_argument('--poll', type=float, default=2)
+    p.add_argument('--poll', type=float, default=.5)
     a = p.parse_args()
-    journal, done = a.run / 'proxy.jsonl', set()
+    # Clear an arm only after the collector has logged an INVALID trial at least 1 s after the arm was created: the
+    # owning trial has then given up (a live trial can wait up to about 116 s, so an age threshold alone is unsafe:
+    # 16:41 c0162 was cleared while still waiting and went INVALID). The next trial arms at least 2 s after that line.
+    journal, batch, done, invalid_at = a.run / 'proxy.jsonl', a.run / 'batch.log', set(), []
+    seen = len(batch.read_text(encoding='utf-8').splitlines()) if batch.exists() else 0
     with open(a.run / 'arm_watchdog.log', 'a', encoding='utf-8') as log:
         while True:
-            arms, matched, released = {}, set(), set()
+            lines = batch.read_text(encoding='utf-8').splitlines() if batch.exists() else []
+            for line in lines[seen:]:
+                if ' INVALID ' in line:
+                    now = time.time()
+                    h, m, s = map(int, line[:8].split(':'))
+                    t = time.mktime(time.localtime(now)[:3] + (h, m, s, 0, 0, -1))
+                    invalid_at.append(t - 86400 if t > now + 60 else t)   # a line just before midnight
+            seen = len(lines)
+            arms, released = {}, set()
             if journal.exists():
                 for line in journal.read_text(encoding='utf-8').splitlines():
                     e = json.loads(line)
                     if e['event'] == 'ARM':
                         arms[e['arm_id']] = e['utc_ns']
-                    elif e['event'] == 'MATCH':
-                        matched.add(e['arm_id'])
                     elif e['event'] == 'FAULT_RECEIPT':
                         released.add(e['arm_id'])
-            now = time.time_ns()
             for arm_id, t in arms.items():
-                if arm_id not in released and arm_id not in done and (now - t) / 1e9 > a.stale:
+                if arm_id not in released and arm_id not in done and any(x >= t / 1e9 + 1 for x in invalid_at):
                     done.add(arm_id)
                     try:
                         clear(arm_id, log)
