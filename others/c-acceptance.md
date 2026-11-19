@@ -1,10 +1,10 @@
 # C acceptance checklist (C-13)
 
-Status: **integration evidence updated 19 November 2026; reviewer acceptance pending**.
+Status: **Part C accepted by the team lead on 19 November 2026; pre-freeze integration evidence retained**.
 
-This checklist records a fresh run from the integrated `main` after PRs #55--#64,
-#72 and #74 were merged. It is not a final freeze or a claim of team acceptance;
-the assigned reviewer must repeat the checks on a clean clone.
+This checklist records the integrated `main` after PRs #55--#64, #72, #74 and
+#75 were merged. The run below is pre-freeze evidence; YC-F1--YC-F4 still require
+the final freeze, anonymous bundle check, PDF gate and HotCRP submission.
 
 ## Evidence already collected
 
@@ -41,7 +41,6 @@ within the 15/30/0/0 limits; C-owned readability is 5/10/0/0.
 
 - HotCRP abstract registration is evidenced in #75 by submission **#3**; the
   screenshot and confirmation are attached in the [registration comment with image](https://github.com/huypham-cse/P03-ghosteffect/pull/75#issuecomment-6999044362).
-- The team lead must name the independent C reviewer. The reviewer must rerun the
-  checklist on a clean clone and record the result.
-- A/B still own their files and must remain available for reviewer-requested
-  changes; C cannot mark team acceptance or freeze the final artifact alone.
+- The team lead recorded acceptance of A, B and C in `team/CONTRIBUTOR_FIXED.md`.
+- A/B remain owners of their files and must review any new changes that affect
+  their evidence before the final freeze.
