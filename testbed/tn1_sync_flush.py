@@ -4,8 +4,8 @@ On the AVD the sync manager starts an upload about 55 s after the save, and ever
 app-kill and force-stop classes kills DAVx5 in the middle of its upload, after which the sync manager and WorkManager
 back off further. DAVx5's next upload then missed the trial's 90 s barrier more and more often (c0121, c0143, c0160,
 c0164, c0171). This helper, run beside the collector, polls DAVx5's scheduled jobs every second and force-runs
-(`cmd jobscheduler run -f`) each account sync job (uid 1000) and each WorkManager job whose minimum latency is under
-10 min, once per job id. Jobs with a longer latency (periodic and maintenance work) are left alone.
+(`cmd jobscheduler run -f`) each account sync job (uid 1000), once per job id. WorkManager jobs are left alone:
+forcing them early is useless and used up DAVx5's job quota (20/11 00:45).
 It only moves when DAVx5 uploads. The interruption point (after the server commit, before the reply) is the same, no
 event or Etar state is touched, caldav_planner.py is unchanged, and hop-1 reads are Etar's local store.
 """
@@ -43,7 +43,10 @@ def main():
                     if not m or (m.group(1), m.group(2)) in forced:
                         continue
                     uid, job = m.groups()
-                    if uid != '1000' and latency_seconds(block) >= 600:
+                    # Only the account sync job (uid 1000). Forcing WorkManager jobs early is useless (WorkManager
+                    # reschedules work "executed before schedule") and, run hundreds of times, used up DAVx5's job
+                    # quota (WITHIN_QUOTA unsatisfied, 20/11 00:45), which stopped every upload.
+                    if uid != '1000':
                         continue
                     package = 'android' if uid == '1000' else 'at.bitfire.davdroid'
                     out = subprocess.run(adb + ['cmd jobscheduler run -f %s %s' % (package, job)], capture_output=True,
