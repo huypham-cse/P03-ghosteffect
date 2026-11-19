@@ -272,7 +272,7 @@ C điều phối (C-13), trưởng nhóm nghiệm thu. Ngày 22/11 cả ba vai t
 
 ## 8. Cần trưởng nhóm quyết
 
-1. Chỉ định người nghiệm thu cho từng phần (cách chia đã duyệt ngày 09/11/2026; người làm A, B, C ghi ở §2). ~~Người nghiệm thu phần B phải là Gia Huy hoặc Bá Nguyên, vì trưởng nhóm cũng là chủ phần B.~~ **Đã chốt 18/11:** trưởng nhóm tự nghiệm thu phần B (ngoại lệ ở §7.1 điểm 2). **19/11:** trưởng nhóm đã nghiệm thu phần A (#73). Người nghiệm thu C chưa chỉ định.
+1. Chỉ định người nghiệm thu cho từng phần (cách chia đã duyệt ngày 09/11/2026; người làm A, B, C ghi ở §2). ~~Người nghiệm thu phần B phải là Gia Huy hoặc Bá Nguyên, vì trưởng nhóm cũng là chủ phần B.~~ **Đã chốt 18/11:** trưởng nhóm tự nghiệm thu phần B (ngoại lệ ở §7.1 điểm 2). **19/11:** trưởng nhóm đã nghiệm thu phần A (#73) và phần C (#75; trưởng nhóm sửa YC-04, YC-C9, YC-C10 trên nhánh trước khi gộp). Cả ba phần đã được nghiệm thu; việc tiếp theo là freeze 21/11 (C-13, YC-F1).
 2. Xác nhận nhóm **được sửa paper**: `resolve.md` còn ghi quyết định cũ "không chỉnh paper, paper để sau".
 3. Đường model cho B: máy GPU Linux hay API (kèm ngân sách).
 4. Mode khuyến nghị cuối cùng (mặc định theo `resolve.md` R06). **Đã chốt 18/11:** duyệt nguyên `team/QUYET_DINH_CHUNG.md` (#61), cả bảng mode và bảng thuật ngữ; YC-10, YC-C3 và YC-B10 kiểm theo file này.
