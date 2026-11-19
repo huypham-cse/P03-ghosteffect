@@ -25,7 +25,13 @@ Preparation evidence from commit `15ccc64`:
 
 ## Anonymous artifact (YC-F2)
 
-- Hosting service: Google Drive.
+- Proposed hosting service: `anonymous.4open.science` (pending lead
+  confirmation).
+- The source for the final snapshot must be an artifact-only repository or
+  equivalent frozen bundle view containing the files selected by
+  `team/make_bundle.sh`; do not expose the full team repository, its history,
+  or this checklist with author/contact data.
+- 4open snapshot URL: `PENDING lead confirmation`
 - Final ZIP name: `ghost-effect-c13-freeze-<commit>.zip`
 - ZIP SHA-256: `PENDING`
 - Anonymous download URL: `PENDING`
@@ -35,11 +41,11 @@ Preparation evidence from commit `15ccc64`:
 - Downloaded CSV hash comparison: `PENDING`
 - Allowed host-dependent differences: `PENDING`
 
-### Staging upload (pre-freeze; not the submission artifact)
+### Drive staging upload (pre-freeze; historical test only)
 
-The following upload only verifies the Drive destination and hash procedure. It
-must not be cited as the final YC-F2 artifact because it predates the freeze
-commit.
+The following upload only verified a temporary Drive destination and hash
+procedure. It must not be cited as the final YC-F2 artifact because it
+predates the freeze commit and is not an anonymous public link.
 
 - Drive folder: <https://drive.google.com/drive/folders/1jp7xPlvLgLbaCk7ii5mZvw7oRWy5nLOJ>
 - ZIP: `ghost-effect-c13-pre-freeze-15ccc64.zip`
@@ -47,13 +53,21 @@ commit.
 - SHA-256: `5A6D9C8C26C808CCCF55A2D7AD42C27BD63F6FB87F226640AA6E3E16FDECF927`
 - Upload result: verified by the connected Drive account on 19 Nov 2026.
 - Public-link check: `NOT PASS` (a signed-out HTTP request redirected to
-  `accounts.google.com`, so the file is still private). The current connector
-  can upload and share with a named account/domain, but cannot grant `anyone`
-  access for this personal Gmail account. Before YC-F2, set **General access →
-  Anyone with the link → Viewer** in Drive, then repeat the signed-out/incognito
-  check and record the successful download status here.
+  `accounts.google.com`, so the file is still private). This staging result is
+  retained only for audit; it is not the proposed final host.
 
 Do not replace the `PENDING` final fields with this staging URL or checksum.
+
+### 4open preparation
+
+- GitHub account authorization for the selected private artifact repository:
+  `PENDING`
+- Terms to redact: repository owner/organization, team names, author names,
+  author emails, local-user paths, and any non-synthetic host identifiers.
+- Snapshot expiry: `PENDING conference/lead confirmation`
+- Signed-out mirror browse check: `PENDING`
+- Mirror ZIP download and extracted-directory scrub: `PENDING`
+- Mirror ZIP pipeline and CSV comparison: `PENDING`
 
 Hash commands:
 
