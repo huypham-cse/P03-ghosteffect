@@ -1,0 +1,199 @@
+{
+  "schema": "ghosteffect-calibration-v1",
+  "mode": "product",
+  "evidence_kind": "interrupted_measurement",
+  "alpha": 0.1,
+  "beta": 0.1,
+  "K_total": 9,
+  "delta": 0.0011111111111111111,
+  "spec_sha256": "4657b986f19b42c7846087784f06dfaddb7918c032d380b3f51ad0be7f754157",
+  "spec": {
+    "schema": "ghosteffect-calibration-v1",
+    "mode": "product",
+    "evidence_kind": "interrupted_measurement",
+    "alpha": 0.1,
+    "beta": 0.1,
+    "strata": [
+      {
+        "id": "etar-davx5-avd",
+        "domain": {
+          "app_package": "ws.xsoh.etar",
+          "app_version": "etar-1.0.57(57)",
+          "backend_revision": "radicale-3.9.0;davx5-4.5.21-ose(405210002);faultproxy",
+          "reader_revision": "eabfe00375577f0226dd8765226428f35e8b1bf0b8884f2109d10d0454d5c3d1",
+          "verifier_revision": "none",
+          "locale": "en-US",
+          "abi": "x86_64",
+          "load_profile": "avd-api33-x86_64-whpx-host",
+          "policy_revision": "aa113ce9846040cd7010bfcb208e30a5c93cda5c900c1dea03d8bfb5b0854cdd",
+          "origin_kind": "recovery"
+        },
+        "families": {
+          "hop1": [
+            "search",
+            "agenda"
+          ]
+        },
+        "classes": [
+          "none",
+          "app-kill",
+          "force-stop"
+        ],
+        "capabilities": {
+          "local": false,
+          "G2": false,
+          "hop1_qualified": true,
+          "family_independence_qualified": true,
+          "nonce_analytic_qualified": false,
+          "source_independence_qualified": false,
+          "hop1_lag_independent": false,
+          "backend_visibility_domain_qualified": true
+        },
+        "quota": {
+          "pilot0": 0,
+          "pilot1": 0,
+          "calibration0": 30,
+          "calibration1": 133,
+          "lag1": 0
+        },
+        "lag_splits": [
+          "calibration"
+        ]
+      }
+    ]
+  },
+  "effects": 489,
+  "strata": [
+    {
+      "id": "etar-davx5-avd",
+      "domain": {
+        "app_package": "ws.xsoh.etar",
+        "app_version": "etar-1.0.57(57)",
+        "backend_revision": "radicale-3.9.0;davx5-4.5.21-ose(405210002);faultproxy",
+        "reader_revision": "eabfe00375577f0226dd8765226428f35e8b1bf0b8884f2109d10d0454d5c3d1",
+        "verifier_revision": "none",
+        "locale": "en-US",
+        "abi": "x86_64",
+        "load_profile": "avd-api33-x86_64-whpx-host",
+        "policy_revision": "aa113ce9846040cd7010bfcb208e30a5c93cda5c900c1dea03d8bfb5b0854cdd",
+        "origin_kind": "recovery"
+      },
+      "families": {
+        "hop1": [
+          "search",
+          "agenda"
+        ]
+      },
+      "classes": [
+        "none",
+        "app-kill",
+        "force-stop"
+      ],
+      "capabilities": {
+        "local": false,
+        "G2": false,
+        "hop1_qualified": true,
+        "family_independence_qualified": true,
+        "nonce_analytic_qualified": false,
+        "source_independence_qualified": false,
+        "hop1_lag_independent": false,
+        "backend_visibility_domain_qualified": true
+      },
+      "quota": {
+        "pilot0": 0,
+        "pilot1": 0,
+        "calibration0": 30,
+        "calibration1": 133,
+        "lag1": 0
+      },
+      "lag_splits": [
+        "calibration"
+      ],
+      "calibrated": {
+        "none": {
+          "q": {
+            "hop1": {
+              "abs": {
+                "2": 0.04985989402517471
+              },
+              "com": {
+                "2": 0.202877166394772
+              },
+              "ge1": {},
+              "ge0": {},
+              "n1": 133,
+              "n0": 30
+            }
+          },
+          "qh": 0.04985989402517471,
+          "lag_seconds": [],
+          "lag_censored": 133,
+          "counts": {
+            "pilot0": 0,
+            "pilot1": 0,
+            "calibration0": 30,
+            "calibration1": 133,
+            "lag0": 0,
+            "lag1": 0
+          }
+        },
+        "app-kill": {
+          "q": {
+            "hop1": {
+              "abs": {
+                "2": 0.04985989402517471
+              },
+              "com": {
+                "2": 0.202877166394772
+              },
+              "ge1": {},
+              "ge0": {},
+              "n1": 133,
+              "n0": 30
+            }
+          },
+          "qh": 0.04985989402517471,
+          "lag_seconds": [],
+          "lag_censored": 133,
+          "counts": {
+            "pilot0": 0,
+            "pilot1": 0,
+            "calibration0": 30,
+            "calibration1": 133,
+            "lag0": 0,
+            "lag1": 0
+          }
+        },
+        "force-stop": {
+          "q": {
+            "hop1": {
+              "abs": {
+                "2": 0.04985989402517471
+              },
+              "com": {
+                "2": 0.202877166394772
+              },
+              "ge1": {},
+              "ge0": {},
+              "n1": 133,
+              "n0": 30
+            }
+          },
+          "qh": 0.04985989402517471,
+          "lag_seconds": [],
+          "lag_censored": 133,
+          "counts": {
+            "pilot0": 0,
+            "pilot1": 0,
+            "calibration0": 30,
+            "calibration1": 133,
+            "lag0": 0,
+            "lag1": 0
+          }
+        }
+      }
+    }
+  ],
+  "qualification_scope": "conditional on stated domain/population/independence assumptions; file hashes do not prove them",
+  "content_sha256": "ae07c66e9f74b25dfbee7cf038161b54a1663ad68a5c5fff4d7e00b54f320afa"
+}
