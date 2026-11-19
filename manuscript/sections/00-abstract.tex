@@ -1,5 +1,5 @@
 \begin{abstract}
-Mobile GUI agents send messages, mail and calendar entries by tapping through apps. If an interruption lands between a commit tap and its confirmation, the effect becomes a \emph{ghost}: it may have happened, and redoing it through the GUI creates a new request that nothing deduplicates. On Android~13 emulators with self-hosted servers we
+Mobile GUI agents send messages, mail and calendar entries by tapping through apps. If an interruption lands between a commit tap and its confirmation, the effect becomes a \emph{ghost}: it may have happened, and redoing it through the GUI creates a new request that nothing deduplicates. On Android emulators with self-hosted servers we
 observe this directly. After a lost SMTP reply, K-9~Mail keeps accepted mail in a permanent Outbox error state, while Element and DAVx5 resolve the same fault through their
 own idempotent retries. \sys decides ghost effects against a duplicate/loss budget $(\alpha,\beta)$ with a write-ahead ledger, accessibility-text evidence, a certified wait
 for visibility lag, and asking when nothing certifies. Verdicts are calibrated on whole fault-injected effects, keyed by fault class. We recommend product certification when
