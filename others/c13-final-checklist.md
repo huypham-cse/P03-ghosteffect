@@ -25,8 +25,7 @@ Preparation evidence from commit `15ccc64`:
 
 ## Anonymous artifact (YC-F2)
 
-- Hosting service: Google Drive shared link (the Drive connector must be
-  connected before upload).
+- Hosting service: Google Drive.
 - Final ZIP name: `ghost-effect-c13-freeze-<commit>.zip`
 - ZIP SHA-256: `PENDING`
 - Anonymous download URL: `PENDING`
@@ -35,6 +34,24 @@ Preparation evidence from commit `15ccc64`:
 - Extracted pipeline exit code and manifest: `PENDING`
 - Downloaded CSV hash comparison: `PENDING`
 - Allowed host-dependent differences: `PENDING`
+
+### Staging upload (pre-freeze; not the submission artifact)
+
+The following upload only verifies the Drive destination and hash procedure. It
+must not be cited as the final YC-F2 artifact because it predates the freeze
+commit.
+
+- Drive folder: <https://drive.google.com/drive/folders/1jp7xPlvLgLbaCk7ii5mZvw7oRWy5nLOJ>
+- ZIP: `ghost-effect-c13-pre-freeze-15ccc64.zip`
+- ZIP URL: <https://drive.google.com/file/d/1FX__khUXHwlnqINXI90CYPZNzVuM6pqE/view?usp=drivesdk>
+- SHA-256: `5A6D9C8C26C808CCCF55A2D7AD42C27BD63F6FB87F226640AA6E3E16FDECF927`
+- Upload result: verified by the connected Drive account on 19 Nov 2026.
+- Public-link check: `PENDING`. The current connector can upload and share with
+  a named account/domain, but cannot grant `anyone` access for this personal
+  Gmail account. Before YC-F2, set **General access → Anyone with the link →
+  Viewer** in Drive, then verify from a signed-out/incognito browser.
+
+Do not replace the `PENDING` final fields with this staging URL or checksum.
 
 Hash commands:
 
@@ -68,6 +85,23 @@ Get-FileHash .\ghost-effect-c13-freeze-<commit>.zip -Algorithm SHA256
 - Final PDF uploaded: `PENDING`
 - Submission confirmation URL or screenshot: `PENDING`
 - Text comparison between submitted PDF and the freeze build: `PENDING`
+
+### Author and contact handoff
+
+These values are for the HotCRP record only; keep the manuscript and artifact
+double-blind. The order and the A/B details must be confirmed by the team
+before YC-F4.
+
+| Order | Full name | Email | Affiliation | Status |
+|---|---|---|---|---|
+| 1 | `PENDING A` | `PENDING A` | `PENDING A` | Team confirmation required |
+| 2 | `PENDING B` | `PENDING B` | `PENDING B` | Team confirmation required |
+| 3 | Lê Nguyễn Bá Nguyên | `lenguyenbanguyen20192020@gmail.com` | `PENDING C` | C; affiliation and order confirmation required |
+
+- ACM corresponding author: `PENDING team confirmation`
+- HotCRP contact account currently connected: Lê Nguyễn Bá Nguyên
+- Do not guess missing A/B names, emails, affiliations, author order, or the
+  corresponding author from Git commit metadata.
 
 ## Freeze rule
 
