@@ -1,52 +1,46 @@
 # C acceptance checklist (C-13)
 
-Status: **draft — integration pending** (18 November 2026).
+Status: **integration evidence updated 19 November 2026; reviewer acceptance pending**.
 
-This checklist records the evidence collected by Part C. It is not a final
-freeze or a claim that the whole paper has passed acceptance. The acceptance run
-must be repeated from the integrated `main` after the content PRs below are merged.
+This checklist records a fresh run from the integrated `main` after PRs #55--#64,
+#72 and #74 were merged. It is not a final freeze or a claim of team acceptance;
+the assigned reviewer must repeat the checks on a clean clone.
 
 ## Evidence already collected
 
 | Gate | Evidence | Status |
 |---|---|---|
-| YC-C1 / C-18 | `artifact/runs/2026-11-18/MANIFEST.json`; independent run from `c2b8b541` reports `source_tree_clean=true`, PASS, 25 completed jobs, 0 errors; 104 comparable CSV hashes match and only `ledger_bench.csv` differs as a host measurement | Ready for reviewer re-run |
-| YC-C2 | Renderer regression suite and generated-fragment preservation tests pass on the C-04/C-06 branches | Re-run after integration |
-| YC-C4 / C-05/C-06 | Matched-input renderer checks and vetted baseline checks pass on their PR branches | Re-run after integration |
-| YC-C5 | Caption macros are generated from CSV; hard-coded count captions removed on #57/#58 | Review pending |
-| YC-C10 / C-07 | Related-work citation audit and C-log entry pushed on #60 | Review pending |
-| YC-C11 / C-11 | `readability_count.py --strict` passes C-owned sections after `2d47788`: 0 long sentences, 0 multi-semicolon paragraphs, 5 `\para{}`, 4 `\emph{}`; before/after report in `others/readability-c11.md` | Re-run after integration |
-| YC-C12 / C-12 | Bundle `c12-current-1818.zip` created, extracted, scrub PASS, extracted pipeline PASS with 25/25 jobs and 0 errors; all comparable CSV hashes match and only `ledger_bench.csv` differs | Review pending |
-| YC-C13 / C-14–C-20 | Abstract, introduction Results, evaluation, Discussion and conclusion use agent/device macros; #55 and #72 remain open for review | Blocked on merge/review |
+| YC-C1 / C-18 | Fresh run `tmp/c13-main-20261119/RUN.json`: PASS, source tree clean, 27 completed jobs, 0 failed, 0 errors; 108 CSVs compared, 107 hashes match and only host-dependent `ledger_bench.csv` differs | Pass; archive manifest after final commit |
+| YC-C2 | Artifact renderer and generated-fragment tests pass in the integrated tree; generated fragments rebuilt by `manuscript/build.sh` | Pass; reviewer rerun required |
+| YC-C4 / C-05/C-06 | Artifact suite PASS (68/68), including matched-input and vetted-baseline regression checks | Pass; reviewer rerun required |
+| YC-C5 | Table captions and inline result values come from generated macros; no hard-coded renderer count captions remain | Pass by integrated source/PDF review |
+| YC-C10 / C-07 | Related-work comparisons and citation audit are present; #60 is merged | Pass |
+| YC-C11 / C-11 | C-owned readability: 5 `\para{}`, 10 `\emph{}`, 0 long sentences, 0 multi-semicolon paragraphs; whole paper totals 14/28/0/0 within 15/30/0/0. Report in `others/readability-c13.md` | Pass |
+| YC-C12 / C-12 | Bundle instructions document the one-line command, Python 3.12, runtime and host-dependent ledger; bundle scrub/pipeline evidence from #56 is retained | Pass; final bundle must be made from freeze commit |
+| YC-C13 / C-14–C-20 | Abstract, introduction, evaluation, Discussion and conclusion use agent/device macros; stale agent wording is absent and `tab_agent_arms` is input | Pass by source/PDF/manifest checks |
 
 ## Required final run
 
-1. Merge/rebase the content PRs #55–#60, #63, #64, #72 and #74 as approved;
-   do not freeze from this draft branch.
-2. From a clean integrated `main`, run `artifact/run_all.py --jobs 4`, compare
-   CSV hashes, rebuild the manuscript, run all artifact tests, strict readability,
-   scrub, and `make_bundle.sh`.
-3. Check YC-F3: conclusion at page 12 or earlier, References at page 13 or
-   earlier, no `??`, no identifying PDF metadata, and no acknowledgements.
-4. Only after the reviewer signs off, mark this PR ready for review and record
-   the freeze commit and artifact link.
+1. The integrated run and build recorded below are pre-freeze evidence. After
+   approval, repeat them from a clean clone at `main`.
+2. Freeze on 21/11 only after A, B and C are accepted. Copy the final manifest
+   into `artifact/runs/2026-11-19/MANIFEST.json` and record its commit.
+3. Create the anonymous bundle from that freeze, scrub it, extract it and rerun
+   the pipeline. Add the artifact link to §8 and rerun the PDF gate.
 
 ## Latest integrated-main diagnostic
 
-The current `main` build exits 0 and produces a 22-page PDF. `pdftotext` finds no
-`??`, `pdfinfo` exposes no author name, and `team/scrub_check.sh manuscript`
-passes. The artifact suite is **55/55 PASS** and the testbed suite is **116 PASS,
-3 skipped**. The strict whole-paper readability check still fails: the whole paper has 44
-`\para{}`, 91 `\emph{}`, 33 long sentences and 36 multi-semicolon paragraphs
-(A and B's files alone: 25, 57, 16 and 19; measured 18/11). Conclusion and References both begin on page 14, so
-YC-F3 remains open until A/B readability and the integrated page reduction are
-complete.
+The integrated build exits 0 and produces a 23-page PDF. `pdftotext` finds no
+`??`, `pdfinfo` exposes no author name, and scrub passes on manuscript and
+testbed. The artifact suite is **68/68 PASS** and the testbed suite is **119 PASS,
+3 skipped**. The largest overfull box is 1.53427pt. Conclusion is entirely on
+page 12 and References starts on page 13. Whole-paper readability is 14/28/0/0,
+within the 15/30/0/0 limits; C-owned readability is 5/10/0/0.
 
 ## Current blockers / owners
 
-- A and B owners must complete their pending readability and review fixes in
-  their own files.
-- The team lead must merge the accepted content PRs and assign the C reviewer;
-  C-13 cannot be accepted while those PRs are separate.
-- The final 22-page build still fails YC-F3's 12-page conclusion/13-page
-  References gate, so this draft does not claim final acceptance.
+- HotCRP abstract-registration evidence is still missing from #75.
+- The team lead must name the independent C reviewer. The reviewer must rerun the
+  checklist on a clean clone and record the result.
+- A/B still own their files and must remain available for reviewer-requested
+  changes; C cannot mark team acceptance or freeze the final artifact alone.
