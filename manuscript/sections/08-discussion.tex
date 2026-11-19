@@ -3,7 +3,7 @@
 
 \para{Limitations.}
 (1)~The evidence for our decision results comes from simulation, model-based or with measured parameters. The generative model departs from the planner's assumptions on purpose,
-but it is ours. \RealDataLimitation{} Labels in the measured runs are simulated draws from laws estimated from 8--101 trials, so a tail beyond what we saw (up to 2.9\% on
+but it is ours. \RealDataLimitation{} Labels in the measured runs are simulated draws from laws estimated from at most \RealElemN{} trials, so a tail beyond what we saw (up to \RsimTail\% on
 Element) cannot be excluded, and it would either break the budget or make \sys ask.
 (2)~Product certification assumes A2, independence across families. A stale history violates it in the model (\S\ref{sec:eval-pop}). On Element no two families were wrong
 together in \RealCoN{} emulator trials, which bounds co-failure only at a few percent. Joint certification removes the assumption but needs about $\ln(1/\delta)/\alpha_{\mathrm{test}}$ labels
