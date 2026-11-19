@@ -26,11 +26,13 @@ CERT_DIR = Path(__file__).resolve().parent
 
 # Parameters of the runs, not results (CONTRIBUTOR_FIXED YC-04): the risk budgets of every planner run
 # (planner_sim.run defaults), the number of observable fault classes (planner_sim.CLASSES) and the per-class
-# bound counts K (planner_sim.K_PRODUCT, K_JOINT).  test_guarantee.py checks these against planner_sim.
+# bound counts K (planner_sim.K_PRODUCT, K_JOINT), and the default lag-table size planner_sim.N_LAG that rows
+# without an nlag column (planner_real.csv) use.  test_guarantee.py checks these against planner_sim.
 ALPHA_PCT = 1.0
 BETA_PCT = 1.0
 N_CLASSES = 4
 K_PRODUCT, K_JOINT = 11, 5
+N_LAG = 20000
 OUTCOMES = 2                      # committed and absent labels
 
 POLICIES = (('ghost', 'Prod'), ('ghost-joint', 'Joint'))
@@ -123,8 +125,8 @@ def composed_bound(row, side, what):
     """A-04: P(dup | X=1) <= min(1, alpha + q1 eps1 + r1) and P(loss | X=0) <= min(1, beta + q0 eps0 + r0), in %.
 
     q is the share of effects with that outcome the planner asked about (q1 = ask1/n1), eps the simulated user's
-    error rate among those asks (user_e1), r the planner's own residual beyond the budget, which the simulator
-    assumes is 0.  q*eps is computed from counts, so a zero denominator gives N/A, never 0."""
+    error rate among those asks (user_e1), r the rate of errors that neither the planner nor the user causes (an
+    app that retransmits without dedup, as in section 3), which the simulator assumes is 0.  q*eps is computed from counts, so a zero denominator gives N/A, never 0."""
     n = num(cert_col(row, 'n1' if side == 1 else 'n0', what))
     asked = num(cert_col(row, 'ask1' if side == 1 else 'ask0', what))
     eps = num(row.get('user_e1' if side == 1 else 'user_e0'))
@@ -146,10 +148,8 @@ def delta(k):
 
 
 def label_median(results):
-    """B's measured seconds per fault-injected label (row 'total'); None until B delivers label_cost.csv."""
+    """B's measured seconds per fault-injected label (row 'total'); a missing file is an input error (YC-A9)."""
     path = Path(results) / 'real' / 'agent' / 'label_cost.csv'
-    if not path.is_file():
-        return None
     rows = read_csv(path.parent, path.name)
     v = num(cert_col(one(rows, 'label_cost.csv', component='total'), 'median_s', 'label_cost.csv'))
     if not v > 0:
@@ -182,7 +182,7 @@ POL_HEAD = (' & \\multicolumn{2}{c}{product} & \\multicolumn{2}{c}{joint} \\\\\n
             '\\cmidrule(lr){2-3}\\cmidrule(lr){4-5}\n'
             '%s & $P_{\\mathrm v}$ (CP) & ask & $P_{\\mathrm v}$ (CP) & ask \\\\')
 PV_NOTE = ('$P_{\\mathrm v}$: \\% of committed effects the planner retried by itself, with the upper end of its '
-           'two-sided 95\\% Clopper--Pearson interval (CP). Ask: \\% of workflows. Budget $\\alpha=' + f'{ALPHA_PCT:g}'
+           'two-sided 95\\% Clopper-Pearson interval (CP). Ask: \\% of workflows. Budget $\\alpha=' + f'{ALPHA_PCT:g}'
            + '\\%$. $^\\dagger$: CP bound over budget.')
 
 
@@ -231,7 +231,10 @@ def render(results):
     M['CertLabelsFive'] = count(labels5)
     M['CertPilotFive'] = count(labels5 // 10)
     M['CertHoldoutFive'] = count(labels5 - labels5 // 10)
-    M['CertLagBootN'] = count(int(num(R4['down5']['Prod']['nlag'])))
+    for tag in ('down5', 'tail5'):          # bootstrap-lag rows must record the default size
+        if int(num(R4[tag]['Prod']['nlag'])) != N_LAG:
+            raise InputError(f'planner_real4_{tag}.csv: nlag differs from N_LAG={N_LAG}')
+    M['CertLagBootN'] = count(N_LAG)
     M['CertClassesN'] = str(N_CLASSES)
 
     # A-04 composed bounds
@@ -252,13 +255,8 @@ def render(results):
 
     # A-08: B's measured label time
     med = label_median(results)
-    if med is None:
-        print('render_guarantee: real/agent/label_cost.csv not yet delivered by B; label-cost macros are ??',
-              file=sys.stderr)
-        M['CertLabelMedS'] = M['CertDeviceHoursFive'] = '??'
-    else:
-        M['CertLabelMedS'] = f'{med:.0f}'
-        M['CertDeviceHoursFive'] = count(round(labels5 * N_CLASSES * OUTCOMES * med / 3600))
+    M['CertLabelMedS'] = f'{med:.0f}'
+    M['CertDeviceHoursFive'] = count(round(labels5 * N_CLASSES * OUTCOMES * med / 3600))
 
     files = {'macros_guarantee.tex': HEADER + ''.join(
         f'\\newcommand{{\\{k}}}{{{v}\\xspace}}\n' for k, v in sorted(M.items()))}
@@ -280,7 +278,7 @@ def render(results):
     body = []
     for tag, rows, tail in budget_rows:
         r = rows['Prod']
-        nlag = lagn(r) if 'nlag' in r and r['nlag'] not in (None, '') else count(int(num(R4['down5']['Prod']['nlag'])))
+        nlag = lagn(r) if r.get('nlag') not in (None, '') else count(N_LAG)
         body.append(budget_label(r, nlag, ', tail' if tail else '') + ' & '
                     + f"{pv_cell(rows['Prod'])} & {pv_cell(rows['Joint'])}" + ' \\\\')
     tail_pct = cert_f1(100 * num(R4['tail5']['Prod']['lag_tail']))

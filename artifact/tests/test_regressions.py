@@ -228,6 +228,20 @@ class NonceTests(unittest.TestCase):
 
 
 class RunnerTests(unittest.TestCase):
+    def test_successful_command_records_relative_paths_exit_code_and_output_hash(self):
+        with tempfile.TemporaryDirectory() as temp:
+            work = Path(temp)
+            (work / 'logs').mkdir()
+            output = work / 'result.csv'
+            result = runner.run_command(
+                [sys.executable, '-c', "open('result.csv','w').write('n,value\\n1,0\\n')"],
+                work, work / 'logs' / 'child.log', [output])
+            self.assertEqual(0, result['exit_code'])
+            self.assertEqual('logs/child.log', result['log'])
+            self.assertEqual(64, len(result['outputs']['result.csv']['sha256']))
+            self.assertTrue(all(not str(value).startswith(str(work))
+                                for value in result.values() if isinstance(value, str)))
+
     def test_child_failure_cannot_pass_with_an_old_csv(self):
         with tempfile.TemporaryDirectory() as temp:
             work = Path(temp)
@@ -264,6 +278,33 @@ class RunnerTests(unittest.TestCase):
         declared = {'planner_real4_%s.csv' % tag for tag in planner.REAL4}
         self.assertEqual(declared, set(runner.PART_OUTPUTS['real4']))
         self.assertEqual(existing, declared)
+
+    def test_source_provenance_in_a_bundle_without_git_reads_the_bundle_manifest(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            (root / 'BUNDLE-MANIFEST.json').write_text('{"source_commit": "abc123"}', encoding='utf-8')
+            with patch.object(runner, 'ROOT', root):
+                self.assertEqual({'source_commit': 'abc123', 'source_tree_clean': None}, runner.source_provenance())
+                (root / 'BUNDLE-MANIFEST.json').unlink()
+                self.assertEqual({'source_commit': None, 'source_tree_clean': None}, runner.source_provenance())
+        self.assertIn('source_commit', runner.source_provenance())   # the real checkout still asks git
+
+    def test_agent_input_hashes_include_only_the_four_agent_corpora(self):
+        inputs = {
+            'artifact/results/real/agent_guarded/episodes.csv': 'guarded',
+            'artifact/results/real/agent_rules/episodes.csv': 'rules',
+            'artifact/results/real/agent_t3a/episodes.csv': 't3a',
+            'artifact/results/real/agent_killagent/episodes.csv': 'killagent',
+            'artifact/results/real/agent/episodes.csv': 'legacy',
+            'artifact/results/real/params.csv': 'params',
+        }
+        selected = runner.agent_input_hashes(inputs)
+        self.assertEqual({
+            'artifact/results/real/agent_guarded/episodes.csv',
+            'artifact/results/real/agent_rules/episodes.csv',
+            'artifact/results/real/agent_t3a/episodes.csv',
+            'artifact/results/real/agent_killagent/episodes.csv',
+        }, set(selected))
 
     @unittest.skipUnless(os.name == 'posix', 'full runner uses POSIX host-crash semantics')
     def test_parallel_job_failure_records_failed_and_never_renders(self):
