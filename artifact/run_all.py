@@ -177,7 +177,9 @@ def main(argv=None):
 
     save()
     try:
-        if not provenance['source_tree_clean']:
+        # An extracted anonymous bundle has no .git directory, so provenance
+        # reports cleanliness as None. Reject only a real dirty checkout.
+        if provenance['source_tree_clean'] is False:
             raise RuntimeError('source checkout must be clean before reproduction')
         for script, expected in NUMERIC_JOBS:
             manifest['completed'].append(run(Path(script).stem, script, expected))

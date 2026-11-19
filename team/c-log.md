@@ -582,3 +582,22 @@ The same pipeline was rerun from clean source commit `bffa2f1e` after the
 abstract number fix and acceptance update. Its manifest is archived at
 `artifact/runs/2026-11-19/MANIFEST.json`; the 21/11 freeze still requires one
 last rerun after all three roles are accepted.
+
+## 19/11/2026: C-13 post-acceptance documentation and bundle verification
+
+On branch `c/post-acceptance-docs`, commit `afc8353` updates the acceptance
+checklist and review matrix after PR #75 was merged and Part C was accepted.
+Commit `15ccc64` fixes `artifact/run_all.py` so an extracted anonymous bundle
+(`source_tree_clean=None` because it has no `.git`) is reproducible; a real
+dirty checkout (`False`) is still rejected. Regression tests pass 37/37.
+
+The rebuilt bundle `tmp/c13-post-freeze-15ccc64.zip` scrubbed successfully.
+Running the complete pipeline from its extracted directory passed 27/27 jobs
+and produced 56 CSV outputs; 55 hashes match the source and only
+`artifact/results/ledger_bench.csv` differs because it is host-dependent.
+The bundle SHA-256 is
+`5a6d9c8c26c808cccf55a2d7ad42c27bd63f6fb87f226640aa6e3e16fdecf927`.
+The PDF build from the same branch exits 0, has 23 pages, Conclusion on page
+12, References on page 13, zero `??`, and largest overfull box 1.53427pt.
+The final freeze still needs to be rerun from the post-merge `main` commit and
+the resulting artifact must be uploaded to an anonymous link.
