@@ -1,0 +1,524 @@
+{
+  "fault": "stop-app-doze",
+  "utc_ns": 1795071955713785122,
+  "dirty_before": "No result found.",
+  "save_tap": {
+    "at": [
+      822,
+      181
+    ],
+    "utc_ns": 1795071965108123246
+  },
+  "barrier_utc_ns": 1795072023179655059,
+  "fault_receipt": {
+    "observed_class": "app-stop-keep-jobs",
+    "pids_before": [
+      "11832"
+    ],
+    "pids_after": [
+      "12644"
+    ],
+    "doze": {
+      "observed_class": "device-doze-deep",
+      "state": "IDLE"
+    }
+  },
+  "fault_utc_ns": 1795072025837826228,
+  "standby_at_fault": "",
+  "doze_exit_utc_ns": 1795072626033618871,
+  "standby_at_window_end": "",
+  "jobs_at_window_end": "Settings:\n  min_ready_cpu_only_jobs_count=3 \n  min_ready_non_active_jobs_count=5 \n  max_cpu_only_job_batch_delay_ms=1860000 \n  max_non_active_job_batch_delay_ms=1860000 \n  heavy_use_factor=0.9 \n  moderate_use_factor=0.5 \n  min_linear_backoff_time_ms=10000 \n  min_exp_backoff_time_ms=10000 \n  system_stop_to_failure_ratio=3 \n  conn_congestion_delay_frac=0.5 \n  conn_prefetch_relax_frac=0.5 \n  conn_use_cell_signal_strength=true \n  conn_update_all_jobs_min_interval_ms=60000 \n  conn_low_signal_strength_relax_frac=0.5 \n  conn_transport_batch_threshold={0=3} \n  conn_max_connectivity_job_batch_delay_ms=1860000 \n  sec_conn_max_connectivity_job_batch_delay_ms=120000 \n  prefetch_force_batch_relax_threshold_ms=3600000 \n  enable_api_quotas=true \n  aq_schedule_count=250 \n  aq_schedule_window_ms=60000 \n  aq_schedule_throw_exception=true \n  aq_schedule_return_failure=false \n  enable_execution_safeguards_udc=true \n  es_u_timeout_uij_count=2 \n  es_u_timeout_ej_count=5 \n  es_u_timeout_reg_count=3 \n  es_u_timeout_total_count=10 \n  es_u_timeout_window_ms=86400000 \n  es_u_anr_count=3 \n  es_u_anr_window_ms=21600000 \n  runtime_min_guarantee_ms=600000 \n  runtime_min_ej_guarantee_ms=180000 \n  runtime_free_quota_max_limit_ms=1800000 \n  runtime_min_ui_guarantee_ms=21600000 \n  runtime_ui_limit_ms=43200000 \n  runtime_min_ui_data_transfer_guarantee_buffer_factor=1.35 \n  runtime_min_ui_data_transfer_guarantee_ms=21600000 \n  runtime_cumulative_ui_limit_ms=86400000 \n  runtime_use_data_estimates_for_limits=false \n  persist_in_split_files=true \n  max_num_persisted_job_work_items=100000 \n  \n  PrefetchController:\n    pc_launch_time_threshold_ms=3600000 \n    pc_launch_time_allowance_ms=1800000 \n  \n  FlexibilityController:\n    fc_applied_constraints=0 (nothing)\n    fc_flexibility_deadline_proximity_limit_ms=900000 \n    fc_fallback_flexibility_deadline_ms=86400000 \n    fc_fallback_flexibility_deadlines={100=172800000, 200=86400000, 300=43200000, 400=21600000, 500=3600000} \n    fc_fallback_flexibility_deadline_scores={100=1, 200=2, 300=3, 400=4, 500=5} \n    fc_fallback_flexibility_deadline_additional_score_time_factors={100=60000, 200=60000, 300=120000, 400=180000, 500=0} \n    fc_min_time_between_flexibility_alarms_ms=60000 \n    fc_percents_to_drop_flexible_constraints={100=[I@95933ca, 200=[I@fec93b, 300=[I@c6dd858, 400=[I@ec01db1, 500=[I@8bec296} \n    fc_rescheduled_job_deadline_ms=3600000 \n    fc_max_rescheduled_deadline_ms=86400000 \n    fc_unseen_constraint_grace_period_ms=259200000 \n  \n  ConnectivityController:\n    conn_avoid_undefined_transport_affinity=false \n    conn_network_activation_expiration_ms=10000 \n    conn_network_activation_max_wait_time_ms=1860000 \n  \n  IdleController:\n    DeviceIdlenessTracker:\n      ic_dit_inactivity_idle_threshold_ms=1860000 \n      ic_dit_inactivity_idle_stable_power_threshold_ms=1860000 \n      ic_dit_idle_window_slop_ms=300000 \n  \n  QuotaController:\n    qc_allowed_time_per_period_exempted_ms=600000 \n    qc_allowed_time_per_period_active_ms=600000 \n    qc_allowed_time_per_period_working_ms=600000 \n    qc_allowed_time_per_period_frequent_ms=600000 \n    qc_allowed_time_per_period_rare_ms=600000 \n    qc_allowed_time_per_period_restricted_ms=600000 \n    qc_in_quota_buffer_ms=30000 \n    qc_window_size_exempted_ms=600000 \n    qc_window_size_active_ms=600000 \n    qc_window_size_working_ms=7200000 \n    qc_window_size_frequent_ms=28800000 \n    qc_window_size_rare_ms=86400000 \n    qc_window_size_restricted_ms=86400000 \n    qc_max_execution_time_ms=14400000 \n    qc_max_job_count_exempted=75 \n    qc_max_job_count_active=75 \n    qc_max_job_count_working=120 \n    qc_max_job_count_frequent=200 \n    qc_max_job_count_rare=48 \n    qc_max_job_count_restricted=10 \n    qc_rate_limiting_window_ms=60000 \n    qc_max_job_count_per_rate_limiting_window=20 \n    qc_max_session_count_exempted=75 \n    qc_max_session_count_active=75 \n    qc_max_session_count_working=10 \n    qc_max_session_count_frequent=8 \n    qc_max_session_count_rare=3 \n    qc_max_session_count_restricted=1 \n    qc_max_session_count_per_rate_limiting_window=20 \n    qc_timing_session_coalescing_duration_ms=5000 \n    qc_min_quota_check_delay_ms=60000 \n    qc_ej_limit_exempted_ms=3600000 \n    qc_ej_limit_active_ms=1800000 \n    qc_ej_limit_working_ms=1800000 \n    qc_ej_limit_frequent_ms=600000 \n    qc_ej_limit_rare_ms=600000 \n    qc_ej_limit_restricted_ms=300000 \n    qc_ej_limit_addition_installer_ms=1800000 \n    qc_ej_limit_addition_special_ms=900000 \n    qc_ej_window_size_ms=86400000 \n    qc_ej_top_app_time_chunk_size_ms=30000 \n    qc_ej_reward_top_app_ms=10000 \n    qc_ej_reward_interaction_ms=15000 \n    qc_ej_reward_notification_seen_ms=0 \n    qc_ej_grace_period_temp_allowlist_ms=180000 \n    qc_ej_grace_period_top_app_ms=60000 \n    qc_quota_bump_additional_duration_ms=60000 \n    qc_quota_bump_additional_job_count=2 \n    qc_quota_bump_additional_session_count=1 \n    qc_quota_bump_window_size_ms=28800000 \n    qc_quota_bump_limit=8 \n\n\n  [BatchNetworkJob] JobCountForMaybeReadyJobs: 9\n1970-01-01 00:00:00,0,0,0\n2026-11-19 05:46:19,56,16,0\n2026-11-19 05:58:19,20,4,0\n2026-11-19 06:08:19,15,1,0\n2026-11-19 06:18:19,15,0,0\n2026-11-19 06:28:19,15,1,0\n2026-11-19 06:38:19,16,1,0\n2026-11-19 06:48:19,15,0,0\n2026-11-19 06:58:20,68,13,0\n  [BatchNetworkJob] version = 2\n  [BatchNetworkJob] DeferrableNetworkJob = n:0,2,56,0,12,d:14\n  [BatchNetworkJob] AcceptCount: u:0,3,0,4,70,198,b:2,0,14,0\nAconfig flags:\n  com.android.server.job.batch_active_bucket_jobs=false \n  com.android.server.job.batch_connectivity_jobs_per_network=false \n  Force batch connectivity jobs: true\n  com.android.server.job.do_not_force_rush_execution_at_boot=false \n  android.app.job.backup_jobs_exemption=false \n\nOlaf status: false\nThermal status: 0\n\nCountQuotaTracker:\n  QuotaTracker:\n    Is enabled: true\n    Is global quota free: false\n    Current elapsed time: 5495610\n    \n    \n    In quota alarms:\n      NOT WAITING\n    \n    Per-app free quota:\n  \n  Instantaneous events:\n    <0>com.samsung.android.themestore",
+  "proc_samples": [
+    {
+      "utc_ns": 1795072023276650268,
+      "pid": "11832",
+      "deep": "ACTIVE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": null
+    },
+    {
+      "utc_ns": 1795072033713135800,
+      "pid": "12644",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072044127063277,
+      "pid": "12644",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072054607098666,
+      "pid": "12644",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072065056327134,
+      "pid": "12644",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072075498525390,
+      "pid": "12644",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072085911871993,
+      "pid": "12644",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072096327291794,
+      "pid": "12644",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072106785115475,
+      "pid": "12644",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072117199861939,
+      "pid": "12644",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072127663889072,
+      "pid": "12644",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072138133583296,
+      "pid": "12644",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072148599498711,
+      "pid": "12644",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072159030756540,
+      "pid": "12644",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072169502430853,
+      "pid": "12644",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072179966312298,
+      "pid": "12644",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072190436195670,
+      "pid": "12644",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072200812367804,
+      "pid": "12644",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072211208072384,
+      "pid": "12644",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072221672745246,
+      "pid": "12644",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072232128016078,
+      "pid": "12644",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072242566723152,
+      "pid": "12644",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072252935049201,
+      "pid": "12644",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072263407477563,
+      "pid": "12644",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072273783297135,
+      "pid": "12644",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072284255334488,
+      "pid": "12644",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072294717823578,
+      "pid": "12644",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072305110041598,
+      "pid": "12644",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072315566538477,
+      "pid": "12644",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072326037467058,
+      "pid": "12644",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072336430902725,
+      "pid": "12644",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072346850032430,
+      "pid": "12644",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072357262032464,
+      "pid": "12644",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072367690395487,
+      "pid": "12644",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072378136782557,
+      "pid": "12644",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072388548400284,
+      "pid": "12644",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072398909753088,
+      "pid": "12644",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072409353275093,
+      "pid": "12644",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072419821981244,
+      "pid": "12644",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072430222646376,
+      "pid": "12644",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072440702342299,
+      "pid": "12644",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072451143606149,
+      "pid": "12644",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072461518390436,
+      "pid": "12644",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072471951306426,
+      "pid": "12644",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072482398722175,
+      "pid": "12644",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072492821978161,
+      "pid": "12644",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072503219546626,
+      "pid": "12644",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072513662638565,
+      "pid": "12644",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072524072239586,
+      "pid": "12644",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072534549889716,
+      "pid": "12644",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072544909827573,
+      "pid": "12644",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072555324061368,
+      "pid": "12644",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072565783989897,
+      "pid": "12644",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072576254296250,
+      "pid": "12644",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072586636980300,
+      "pid": "12644",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072597007227849,
+      "pid": "12644",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072607454294211,
+      "pid": "12644",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072617925895183,
+      "pid": "12644",
+      "deep": "IDLE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072628353448952,
+      "pid": "12644",
+      "deep": "ACTIVE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    },
+    {
+      "utc_ns": 1795072638753245338,
+      "pid": "12644",
+      "deep": "ACTIVE",
+      "procstate": 19,
+      "am_frozen": "false",
+      "cgroup_frozen": 0
+    }
+  ],
+  "nonce": "gx:3M3BXF",
+  "href": "/alice/cal/dda3a3e9-7211-48d0-be92-3de1541443ba.ics",
+  "puts": 2,
+  "server_copies": [
+    "dda3a3e9-7211-48d0-be92-3de1541443ba.ics"
+  ],
+  "first_put_after_fault_s": 27.702239026,
+  "dirty_after": "No result found.",
+  "first_put_after_doze_exit_s": -572.493553617,
+  "observed_until_s": 621.542420771,
+  "verdict": "EXACTLY_ONCE"
+}
