@@ -3,20 +3,20 @@
 
 \input{figures/fig1}
 
-Mobile GUI agents have moved from reading screens to acting on them. Systems such as
-AutoDroid~\cite{wen2024autodroid}, AppAgent~\cite{zhang2025appagent}, Mobile-Agent~\cite{wang2024mobileagent,ye2025mobileagentv3},
-UI-TARS~\cite{qin2025uitars} and AgentProg~\cite{tian2025agentprog} complete multi-step tasks in unmodified apps, and
-AndroidWorld~\cite{rawles2025androidworld} rewards them for changing app state. Many of these changes are \emph{effects}: a message sent,
-an event created, a transfer made. An effect should happen exactly once.
+An agent taps Send in K-9~Mail and the server's reply is lost. The server has accepted the mail, but K-9 keeps it in its Outbox with a permanent error
+(Figure~\ref{fig:teaser}a). An agent that trusts the screen sends it again, and the recipient gets two copies.
+We call such an effect, whose outcome the resumed agent cannot see, a \emph{ghost effect}.
 
-Phones are hostile to that requirement: the low-memory killer reclaims processes, Doze defers jobs, and links drop~\cite{android_lmkd,android_doze,sentosa2025cellreplay}.
-If an interruption lands after the agent taps Send but before it sees the confirmation (Figure~\ref{fig:teaser}a), the resumed agent cannot reliably tell whether
-the effect happened; we call such an effect a \emph{ghost effect}. AgentProg redoes the step~\cite{tian2025agentprog} and checkpoint-resume frameworks re-execute the
+Mobile GUI agents such as AutoDroid~\cite{wen2024autodroid}, AppAgent~\cite{zhang2025appagent}, Mobile-Agent~\cite{wang2024mobileagent,ye2025mobileagentv3},
+UI-TARS~\cite{qin2025uitars} and AgentProg~\cite{tian2025agentprog} complete multi-step tasks in unmodified apps, and
+AndroidWorld~\cite{rawles2025androidworld} rewards them for changing app state. Many of these changes are \emph{effects} (a message sent,
+an event created, a transfer made) that should happen exactly once. Phones are hostile to that: the low-memory killer reclaims processes, Doze defers jobs, and links
+drop~\cite{android_lmkd,android_doze,sentosa2025cellreplay}. AgentProg redoes the step~\cite{tian2025agentprog} and checkpoint-resume frameworks re-execute the
 interrupted node~\cite{khan2026resume,langgraph_durable}, so a committed ghost effect is duplicated while the agent reports success.
 
 Existing fixes for tool agents do not transfer to GUI effects.
-Idempotency keys cut duplicates from 28\% to 4\%, frontier models duplicate in 56 to 74\% of episodes when a read-back cannot reveal the outcome, and no
-verification-only policy is exactly-once under late commits without a bound on in-flight time~\cite{li2026exactlyonce,sah2026undobench,liu2026retrybench}. A GUI effect
+LIMBO~\cite{li2026exactlyonce} finds that idempotency keys cut duplicates from 28\% to 4\% and that frontier models duplicate in 56 to 74\% of episodes when a
+read-back cannot reveal the outcome. It also proves that no verification-only policy is exactly-once under late commits without a bound on in-flight time. A GUI effect
 differs twice. The agent has no key: the app may attach its own request id, but a redo through the GUI creates a new request. And the only read-back is perceptual: a reader's
 errors repeat when it re-reads a screen, and a \emph{look-alike} (last month's identical transfer) makes a screen consistent with both outcomes.
 

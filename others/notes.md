@@ -441,7 +441,7 @@ Total macros: 1294. Do not edit generated values by hand.
 | `\RealDumpLo` | 2 | `macros_real.tex` | sections/07-real.tex |
 | `\RealEarlyWrong` | 3 | `macros_real.tex` | (unused) |
 | `\RealElemAckedN` | 6 | `macros_real.tex` | sections/07-real.tex |
-| `\RealElemN` | 101 | `macros_real.tex` | sections/07-real.tex |
+| `\RealElemN` | 101 | `macros_real.tex` | sections/07-real.tex, sections/08-discussion.tex |
 | `\RealElemNofaultN` | 12 | `macros_real.tex` | sections/07-real.tex |
 | `\RealElemOnce` | 101 | `macros_real.tex` | (unused) |
 | `\RealElemRL` | 83 | `macros_real.tex` | figures/fig1.tex, sections/01-introduction.tex, sections/07-real.tex |
@@ -922,7 +922,7 @@ Total macros: 1294. Do not edit generated values by hand.
 | `\RsimPoolSrcPv` | 0.00 | `macros.tex` | (unused) |
 | `\RsimPoolSrcPvHi` | 0.04 | `macros.tex` | (unused) |
 | `\RsimPoolSrcSecs` | 69 | `macros.tex` | (unused) |
-| `\RsimTail` | 2.9 | `macros.tex` | sections/05-design.tex, sections/07-real.tex, sections/07-realsim.tex |
+| `\RsimTail` | 2.9 | `macros.tex` | sections/05-design.tex, sections/07-real.tex, sections/07-realsim.tex, sections/08-discussion.tex |
 | `\RsimTailCalJointAsk` | 100.0 | `macros.tex` | (unused) |
 | `\RsimTailCalJointDup` | 4.63 | `macros.tex` | (unused) |
 | `\RsimTailCalJointErr` | 6.72 | `macros.tex` | (unused) |
