@@ -105,17 +105,18 @@ Get-FileHash .\ghost-effect-c13-freeze-<commit>.zip -Algorithm SHA256
 ### Author and contact handoff
 
 These values are for the HotCRP record only; keep the manuscript and artifact
-double-blind. The order and the A/B details must be confirmed by the team
-before YC-F4.
+double-blind. Names, emails and affiliations are entered in HotCRP and never
+committed here (YC-09: this file must pass `team/scrub_check.sh`). The order and
+every author's details must be confirmed by the team before YC-F4.
 
 | Order | Full name | Email | Affiliation | Status |
 |---|---|---|---|---|
 | 1 | `PENDING A` | `PENDING A` | `PENDING A` | Team confirmation required |
 | 2 | `PENDING B` | `PENDING B` | `PENDING B` | Team confirmation required |
-| 3 | Lê Nguyễn Bá Nguyên | `lenguyenbanguyen20192020@gmail.com` | `PENDING C` | C; affiliation and order confirmation required |
+| 3 | `PENDING C` | `PENDING C` | `PENDING C` | Team confirmation required |
 
 - ACM corresponding author: `PENDING team confirmation`
-- HotCRP contact account currently connected: Lê Nguyễn Bá Nguyên
+- HotCRP contact account: the account that registered submission #3 (see PR #75)
 - Do not guess missing A/B names, emails, affiliations, author order, or the
   corresponding author from Git commit metadata.
 
