@@ -58,7 +58,8 @@ def clear(arm_id, log):
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--run', type=Path, required=True)
-    p.add_argument('--stale', type=float, default=150)
+    p.add_argument('--stale', type=float, default=95)
+    p.add_argument('--poll', type=float, default=2)
     a = p.parse_args()
     journal, done = a.run / 'proxy.jsonl', set()
     with open(a.run / 'arm_watchdog.log', 'a', encoding='utf-8') as log:
@@ -82,7 +83,7 @@ def main():
                     except Exception as exc:
                         log.write(time.strftime('%H:%M:%S') + ' error %s for %s\n' % (exc, arm_id))
                         log.flush()
-            time.sleep(10)
+            time.sleep(a.poll)
 
 
 if __name__ == '__main__':
