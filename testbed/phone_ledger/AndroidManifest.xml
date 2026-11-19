@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Phone ledger benchmark (b-log 19/11, TN3): the ledger of artifact/scripts/ledger.py on Android's own SQLite.
+     No UI, no permissions; driven only by `am instrument`. -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="org.ghosteffect.ledgerbench">
+    <application android:label="ledgerbench" android:hasCode="true" android:allowBackup="false" />
+    <instrumentation android:name=".Bench" android:targetPackage="org.ghosteffect.ledgerbench" />
+</manifest>

@@ -178,13 +178,38 @@ def trial(args, shell, device, journal):
         receipt['fault_receipt'] = dict(observed_class='none')
     receipt['fault_utc_ns'] = time.time_ns()
     control('release', dict(arm_id=arm, fault_receipt=receipt['fault_receipt']))
+    if args.until_put:
+        receipt['standby_at_fault'] = shell('am get-standby-bucket ' + DAVX5)
     if args.fault in ('doze', 'kill9-doze', 'stop-app-doze'):
         try:
             time.sleep(args.doze_seconds)
         finally:
             doze_exit(shell)
             receipt['doze_exit_utc_ns'] = time.time_ns()
-    time.sleep(args.window)
+
+    def puts_after_fault():
+        events = [json.loads(line) for line in journal.read_text(encoding='utf-8').splitlines()]
+        return [e['utc_ns'] for e in events if e['event'] == 'REQUEST' and e.get('request_id') == href
+                and e['utc_ns'] > receipt['fault_utc_ns']]
+
+    if args.until_put:   # TN2 (b-log 19/11): observe up to --window, stop 20 s after the retry PUT arrives
+        end = time.monotonic() + args.window
+        while time.monotonic() < end and not puts_after_fault():
+            time.sleep(5)
+        if puts_after_fault():
+            time.sleep(20)
+        receipt['standby_at_window_end'] = shell('am get-standby-bucket ' + DAVX5)
+        receipt['jobs_at_window_end'] = shell('dumpsys jobscheduler ' + DAVX5)[:6000]
+        if args.nudge_open and not puts_after_fault():   # no retry yet: the user opens DAVx5 once
+            receipt['nudge_utc_ns'] = time.time_ns()
+            shell('monkey -p %s -c android.intent.category.LAUNCHER 1' % DAVX5)
+            nudge_end = time.monotonic() + 90
+            while time.monotonic() < nudge_end and not puts_after_fault():
+                time.sleep(5)
+            time.sleep(20 if puts_after_fault() else 0)
+            shell('input keyevent KEYCODE_HOME')
+    else:
+        time.sleep(args.window)
     sampler.done.set()
     receipt['proc_samples'] = sampler.samples
     events = [json.loads(line) for line in journal.read_text(encoding='utf-8').splitlines()]
@@ -195,6 +220,11 @@ def trial(args, shell, device, journal):
                    dirty_after=dirty_events(shell))
     if 'doze_exit_utc_ns' in receipt and after:
         receipt['first_put_after_doze_exit_s'] = (after[0] - receipt['doze_exit_utc_ns']) / 1e9
+    if 'nudge_utc_ns' in receipt:
+        receipt['first_put_after_nudge_s'] = (after[0] - receipt['nudge_utc_ns']) / 1e9 \
+            if after and after[0] > receipt['nudge_utc_ns'] else None
+    if args.until_put:
+        receipt['observed_until_s'] = (time.time_ns() - receipt['fault_utc_ns']) / 1e9
     receipt['verdict'] = 'EXACTLY_ONCE' if len(receipt['server_copies']) == 1 else \
         'DUPLICATE' if len(receipt['server_copies']) > 1 else 'LOST'
     return receipt
@@ -229,6 +259,10 @@ def main():
     parser.add_argument('--doze-seconds', type=float, default=600)
     parser.add_argument('--window', type=float, default=180, help='seconds after the fault (or Doze exit) before grading')
     parser.add_argument('--barrier-timeout', type=float, default=90)
+    parser.add_argument('--until-put', action='store_true',
+                        help='TN2: --window is a maximum; stop 20 s after the retry PUT; record standby bucket and jobs')
+    parser.add_argument('--nudge-open', action='store_true',
+                        help='TN2: with --until-put, if no retry by the end of the window, open DAVx5 once for 90 s')
     parser.add_argument('--output', type=Path, required=True)
     args = parser.parse_args()
     phone = not args.serial.startswith('emulator-')
@@ -244,6 +278,8 @@ def main():
     if not phone and shell('whoami') != 'root':   # kill -9 of another app and the tmpfs for lmk need root on the AVD
         subprocess.run(adb + ['root'], capture_output=True, timeout=60)
         subprocess.run(adb + ['wait-for-device'], capture_output=True, timeout=120)
+        # adb root drops every adb reverse (b-log 18/11); DAVx5 on the AVD reaches the proxy at 127.0.0.1:5233.
+        subprocess.run(adb + ['reverse', 'tcp:%d' % PROXY_PORT, 'tcp:%d' % PROXY_PORT], capture_output=True, timeout=30)
     if not port_open(RADICALE_PORT):   # one Radicale (and store) serves the DAVx5 setup and every trial
         start_radicale(ROOT / 'runtime' / 'radicale.log')
     make_calendar()

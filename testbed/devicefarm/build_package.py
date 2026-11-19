@@ -31,6 +31,12 @@ def build(out, wheels=None):
         for path in sorted((ROOT / 'testbed/devicefarm').glob('*')):   # LF on the Linux host whatever git checked out
             z.writestr('testbed/devicefarm/' + path.name, path.read_bytes().replace(b'\r\n', b'\n'))
         z.write(ROOT / 'artifact/scripts/sim_nonce.py', 'artifact/scripts/sim_nonce.py')
+        # TN3 (b-log 19/11): the phone ledger benchmark, built by testbed/phone_ledger/build.sh; its hash is logged.
+        apk = ROOT / 'testbed/phone_ledger/build/ledgerbench.apk'
+        if apk.exists():
+            z.write(ROOT / 'testbed/phone_ledger/harness.py', 'testbed/phone_ledger/harness.py')
+            z.write(apk, 'testbed/phone_ledger/ledgerbench.apk')
+            print('ledgerbench.apk sha256', hashlib.sha256(apk.read_bytes()).hexdigest())
         for name in ASSETS:
             path = ROOT / 'runtime/assets' / name
             if hashlib.sha256(path.read_bytes()).hexdigest() != lock[name]:
