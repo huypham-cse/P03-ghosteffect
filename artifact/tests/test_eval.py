@@ -13,9 +13,11 @@ from unittest.mock import patch
 import random
 
 ROOT = Path(__file__).resolve().parents[2]
-spec = importlib.util.spec_from_file_location('readability', ROOT / 'team/readability_count.py')
-readability = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(readability)
+TEAM_TOOLS = (ROOT / 'team/readability_count.py').exists()   # team/ is not shipped in the anonymous bundle
+if TEAM_TOOLS:
+    spec = importlib.util.spec_from_file_location('readability', ROOT / 'team/readability_count.py')
+    readability = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(readability)
 sys.path.insert(0, str(ROOT / 'artifact/scripts'))
 import planner_sim as planner
 SHELL = shutil.which('sh')
@@ -283,6 +285,7 @@ class SeedReportingTests(unittest.TestCase):
                 self.assertEqual(counts[policy][metric], sum(part[1][policy][metric] for part in split))
 
 
+@unittest.skipUnless(TEAM_TOOLS, 'team tooling is not shipped in the anonymous bundle')
 class ReadabilityTests(unittest.TestCase):
     def count(self, source):
         with tempfile.TemporaryDirectory() as temp:
@@ -335,7 +338,10 @@ This sentence is ordinary prose.''')
 
 
 @unittest.skipUnless(SHELL, 'POSIX shell or Git Bash required')
+@unittest.skipUnless((ROOT / 'team/scrub_check.sh').exists(), 'team tooling is not shipped in the anonymous bundle')
 class ScrubTests(unittest.TestCase):
+    # Team-specific identity strings are tested in team/test_scrub_identity.py, which make_bundle.sh leaves out, so
+    # that this shipped file names no team member or account.
     def run_scrub(self, path):
         env = dict(os.environ, PYTHON=sys.executable)
         return subprocess.run([SHELL, str(ROOT / 'team/scrub_check.sh'), str(path)],
@@ -356,8 +362,7 @@ class ScrubTests(unittest.TestCase):
 
     def test_flags_identity_paths_and_keys_without_echoing_secret(self):
         cases = ['/' + 'Users/abc/private', 'C:' + chr(92) + 'Users' + chr(92) + 'abc',
-                 'D:' + chr(92) + 'work', 'Bá ' + 'Nguyên', 'Gia ' + 'Huy', 'Trung ' + 'Nguyên',
-                 'nguyennguyen938' + '-debug', 'author' + '@' + 'private.example',
+                 'D:' + chr(92) + 'work', 'author' + '@' + 'private.example',
                  'sk-' + 'Z' * 24, 'hf_' + 'X' * 24]
         with tempfile.TemporaryDirectory() as temp:
             path = Path(temp) / 'fixture.txt'
