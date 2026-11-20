@@ -1,0 +1,59 @@
+{
+  "experiment": "TN1: held-out validation of the GUI-only planner (recovery.py) on Etar + DAVx5 + Radicale, AVD",
+  "store": {
+    "path": "testbed/tn1/tn1_store.json",
+    "content_sha256": "ae07c66e9f74b25dfbee7cf038161b54a1663ad68a5c5fff4d7e00b54f320afa",
+    "mode": "product",
+    "alpha": 0.1,
+    "beta": 0.1,
+    "K_total": 9,
+    "delta": 0.0011111111111111111,
+    "abs_bound_per_class": {
+      "none": {
+        "2": 0.04985989402517471
+      },
+      "app-kill": {
+        "2": 0.04985989402517471
+      },
+      "force-stop": {
+        "2": 0.04985989402517471
+      }
+    }
+  },
+  "calibration": {
+    "effects": 489,
+    "invalid_replaced": 86,
+    "reads": {
+      "X=0 [0, 0]": 90,
+      "X=1 [1, 1]": 399
+    }
+  },
+  "test": {
+    "trials": 240,
+    "invalid_replaced": 5,
+    "cells": {
+      "app-kill X=0 RETRY": 40,
+      "app-kill X=1 ASK": 40,
+      "force-stop X=0 RETRY": 40,
+      "force-stop X=1 ASK": 40,
+      "none X=0 RETRY": 40,
+      "none X=1 ASK": 40
+    },
+    "committed": 120,
+    "retried_committed": 0,
+    "retried_committed_cp_upper_one_sided_95": 0.0247,
+    "absent": 120,
+    "declared_committed_when_absent": 0,
+    "certified_absence_retries": 120,
+    "asks": 120,
+    "redo_exactly_once": 117,
+    "redo_not_uploaded_in_window": 3,
+    "redo_not_uploaded_names": [
+      "t0132",
+      "t0133",
+      "t0135"
+    ],
+    "redo_not_uploaded_all_in_outage": true,
+    "duplicates": 0
+  }
+}
