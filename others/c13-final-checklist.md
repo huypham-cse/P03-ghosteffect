@@ -1,20 +1,28 @@
 # C-13 final freeze and submission checklist
 
-This file is the handoff sheet for the final `main` freeze. It must be filled
-from one clean freeze commit after PR #81 is merged. The current values marked
-`pre-freeze` are preparation evidence only and must be replaced or reconfirmed
-at freeze time.
+This file is the handoff sheet for the final `main` freeze. PR #81 is merged.
+The 20 November run below is tied to the clean freeze-candidate commit that
+adds reproducible line-ending rules; the lead must merge that candidate and
+confirm the resulting `main` commit before its bundle is published.
 
 ## Freeze record (YC-F1)
 
-- Freeze commit: `PENDING`
-- Manifest: `artifact/runs/<date>/MANIFEST.json`
+- Freeze-candidate source commit: `29c29905599d0701a9669cfd89952c940c274097`
+  (`PENDING` lead merge/final `main` confirmation)
+- Manifest: `artifact/runs/2026-11-20/MANIFEST.json`
 - Command: `python3 artifact/run_all.py --output-dir <fresh-output> --jobs 4`
-- Exit code: `PENDING`
-- Completed jobs / failed jobs / errors: `PENDING`
-- CSV comparison: `PENDING`; document `ledger_bench.csv` separately if it is
-  the only host-dependent output.
-- Macro and `others/notes.md` spot checks: `PENDING`
+- Exit code: `0`
+- Completed jobs / failed jobs / errors: `27 / 0 / 0`; manifest status `PASS`,
+  clean source tree `true`.
+- CSV comparison: 108 committed and 108 reproduced; no missing or extra file;
+  107 SHA-256 hashes match. Only `ledger_bench.csv` differs, as documented in
+  the artifact README, because it is host-dependent.
+- Macro and `others/notes.md` checks: 31 generated files were compared. Only
+  `macros_real.tex` differs through the four host-dependent `\Ledger*` values;
+  every non-ledger row of regenerated `others/notes.md` is identical.
+- Reproducibility precondition: `.gitattributes` keeps POSIX source files LF
+  and preserves the CSV bytes emitted by Python. A fresh clone then passes 68
+  artifact tests and 119 testbed tests (3 Android-environment skips).
 - After this commit, only the anonymous artifact link may be added to §8.
 
 Preparation evidence from commit `15ccc64`:
@@ -32,14 +40,22 @@ Preparation evidence from commit `15ccc64`:
   `team/make_bundle.sh`; do not expose the full team repository, its history,
   or this checklist with author/contact data.
 - 4open snapshot URL: `PENDING lead confirmation`
-- Final ZIP name: `ghost-effect-c13-freeze-<commit>.zip`
-- ZIP SHA-256: `PENDING`
+- Candidate ZIP name: `ghost-effect-c13-freeze-29c2990.zip` (must be recreated
+  if the lead-confirmed `main` commit differs)
+- Candidate ZIP SHA-256:
+  `049d9ede19ab205b5c51445eab7e8c49eb7960790eed9af34538b8443c664503`
+- Candidate bundle manifest: source `29c29905599d0701a9669cfd89952c940c274097`,
+  583 tracked files.
 - Anonymous download URL: `PENDING`
 - Incognito or signed-out download check: `PENDING`
-- Extracted-directory scrub: `PENDING`
-- Extracted pipeline exit code and manifest: `PENDING`
-- Downloaded CSV hash comparison: `PENDING`
-- Allowed host-dependent differences: `PENDING`
+- Candidate extracted-directory scrub: `PASS`
+- Candidate extracted pipeline exit code and manifest: `0`; `PASS`, 27/27
+  jobs, 0 failed, 0 errors.
+- Candidate extracted CSV comparison: 108/108 present; 107 hashes match;
+  only `ledger_bench.csv` differs.
+- Downloaded-from-anonymous-link rerun: `PENDING` publication and signed-out
+  download.
+- Allowed host-dependent differences: `artifact/results/ledger_bench.csv`.
 
 ### Drive staging upload (pre-freeze; historical test only)
 
@@ -84,12 +100,16 @@ Get-FileHash .\ghost-effect-c13-freeze-<commit>.zip -Algorithm SHA256
 
 ## Final PDF gate (YC-F3)
 
-- `sh manuscript/build.sh` exit code: `PENDING`
-- PDF pages: `PENDING` (Conclusion must end by page 12; References must start by page 13)
-- `pdftotext` count of `??`: `PENDING`
-- `pdfinfo` author field: `PENDING` (must be empty or anonymous)
-- Overfull boxes above 10 pt: `PENDING`
-- YC-01–YC-12 rerun on this same commit: `PENDING`
+- Candidate `sh manuscript/build.sh` exit code: `0`
+- Candidate PDF pages: 23; Conclusion is on and ends on page 12; References
+  starts on page 13.
+- Candidate `pdftotext` count of `??`: `0`
+- Candidate `pdfinfo` author field: absent; no Acknowledgments heading.
+- Candidate overfull maximum: 1.53427 pt; boxes above 10 pt: `0`
+- Candidate readability: `PASS` (`\para` 14/15, `\emph` 28/30, no long
+  sentence or semicolon violation).
+- YC-01–YC-12 core rerun on this same commit: build, tests, scrub and
+  readability `PASS`; repeat after adding the final anonymous link.
 
 ## HotCRP submission (YC-F4)
 
