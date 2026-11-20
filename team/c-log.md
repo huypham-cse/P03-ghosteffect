@@ -582,3 +582,56 @@ The same pipeline was rerun from clean source commit `bffa2f1e` after the
 abstract number fix and acceptance update. Its manifest is archived at
 `artifact/runs/2026-11-19/MANIFEST.json`; the 21/11 freeze still requires one
 last rerun after all three roles are accepted.
+
+## 19/11/2026: C-13 post-acceptance documentation and bundle verification
+
+On branch `c/post-acceptance-docs`, commit `afc8353` updates the acceptance
+checklist and review matrix after PR #75 was merged and Part C was accepted.
+Commit `15ccc64` fixes `artifact/run_all.py` so an extracted anonymous bundle
+(`source_tree_clean=None` because it has no `.git`) is reproducible; a real
+dirty checkout (`False`) is still rejected. Regression tests pass 37/37.
+
+The rebuilt bundle `tmp/c13-post-freeze-15ccc64.zip` scrubbed successfully.
+Running the complete pipeline from its extracted directory passed 27/27 jobs
+and produced 56 CSV outputs; 55 hashes match the source and only
+`artifact/results/ledger_bench.csv` differs because it is host-dependent.
+The bundle SHA-256 is
+`5a6d9c8c26c808cccf55a2d7ad42c27bd63f6fb87f226640aa6e3e16fdecf927`.
+The PDF build from the same branch exits 0, has 23 pages, Conclusion on page
+12, References on page 13, zero `??`, and largest overfull box 1.53427pt.
+The final freeze still needs to be rerun from the post-merge `main` commit and
+the resulting artifact must be uploaded to an anonymous link.
+
+## 20/11/2026: C-13 freeze candidate, bundle and final-gate rerun
+
+After PR #81 was merged, C created clean candidate commit
+`29c29905599d0701a9669cfd89952c940c274097`. It pins POSIX source files to LF,
+preserves CSV bytes, and promotes six planner CSV files from LF to the CRLF
+records emitted by Python's CSV writer; the parsed cells are unchanged. A
+fresh Linux clone is clean and passes 68/68 artifact tests plus 119 testbed
+tests with 3 Android-environment skips.
+
+The clean pipeline run passed 27/27 jobs with 0 failures and 0 errors. Its
+manifest is `artifact/runs/2026-11-20/MANIFEST.json`. All 108 CSV files were
+present: 107 SHA-256 hashes matched, and only host-dependent
+`ledger_bench.csv` differed. Of 31 generated manuscript files, only
+`macros_real.tex` changed through the four `\Ledger*` measurements; every
+non-ledger row in regenerated `others/notes.md` matched.
+
+`make_bundle.sh` produced candidate
+`ghost-effect-c13-freeze-29c2990.zip` with SHA-256
+`049d9ede19ab205b5c51445eab7e8c49eb7960790eed9af34538b8443c664503`.
+The archive contains 583 tracked files, excludes the internal paths, and
+passes scrub. Its extracted copy ran the complete pipeline: 27/27 PASS and
+again 107/108 CSV hashes matched, with only `ledger_bench.csv` differing.
+
+The candidate PDF build exits 0 and has 23 pages. Conclusion ends on page 12,
+References starts on page 13, `??` count is 0, Author metadata is absent, no
+Acknowledgments heading is present, and the largest overfull box is 1.53427
+pt. Whole-paper readability passes at 14/15 `\para`, 28/30 `\emph`, and zero
+long-sentence or semicolon violations.
+
+This remains a candidate until the lead merges the freeze PR and confirms the
+resulting `main` commit and artifact host. After that confirmation C must
+recreate the ZIP for the accepted commit, publish it, download it while signed
+out, rerun it, add the anonymous link to Section 8, and repeat the PDF gate.

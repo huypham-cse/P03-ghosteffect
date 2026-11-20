@@ -1,0 +1,11 @@
+# Keep executable/source text usable in POSIX checkouts on every host.
+*.sh text eol=lf
+*.py text eol=lf
+*.tex text eol=lf
+*.bib text eol=lf
+*.md text eol=lf
+*.json text eol=lf
+
+# Python's csv module emits RFC-style CRLF records. Preserve CSV bytes so a
+# clean Linux rerun can be compared byte-for-byte with committed results.
+*.csv -text
