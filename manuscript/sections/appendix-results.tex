@@ -44,7 +44,7 @@ read-back~\cite{mohammadi2026atomix}, verify-before-retry~\cite{mansoor2026verif
 SPRT of our earlier design. The \emph{same-evidence rules} have \sys's ledger, hop~1 with the same fallible Monitor, the same families read once per view, a fixed 10\,s wait and
 asking. They treat an acknowledged entry or a nonce match as done, retry only if every available family reads absent, and otherwise ask. A lenient variant acts on the first
 unanimous family unless another contradicts it, and a rule family sweeps the wait (5, 10, 30, 60\,s) and the quorum (all families, all but the VLM, any two). The
-Theorem~\ref{thm:twohop}-only baseline classifies offline whether each app has idempotent retries and never retries: for such an app an acknowledged hop-1 entry means done, and everything else is asked.
+Theorem~\ref{thm:twohop}-only baseline classifies offline whether each app has idempotent retries and never retries: for such an app an acknowledged hop-1 entry means done, and everything else is asked. Element has no hop-1 family, so its entry is the timeline row: the first verified read that shows the row means done.
 The metrics are dup and loss from any cause (\% of workflows, including wrong user answers), asks (\% of workflows), $P_{\mathrm{v}}$, its loss-side analogue $L_{\mathrm{v}}$, and blocking recovery seconds.
 Here $P_{\mathrm{v}}$ is the fraction of committed effects the planner itself retried, which is the guaranteed quantity~\eqref{eq:guarantee}.
 
@@ -57,9 +57,9 @@ trusting a nominal ``92\% accurate'' claim violates the budget for \CalNomViol\%
 
 \subsection{Correlated reads and persistent misses}
 \label{sec:eval-robust}
-With errors correlated within a view, an SPRT that re-reads one view reaches \CorrNaiveOne\% duplicates at $\rho{=}1$, while reading each view once keeps it at most
-\CorrViewWithinMax\% (Table~\ref{tab:corr}). Across views, a view-level SPRT that assumes independence fails (\CorrViewCrossTwo\% at $\rho{=}0.2$); the certified
-family verdict stays at or below \CorrCertMaxHi\%, asking once all views being wrong exceeds the budget.
+With errors correlated within a view, an SPRT that re-reads one view reaches \CorrNaiveOne\% duplicates at $\rho{=}1$, while reading each view once keeps its CP upper bound at most
+\CorrViewWithinMax\% over all $\rho$ (Table~\ref{tab:corr} shows point estimates). Across views, a view-level SPRT that assumes independence fails (\CorrViewCrossTwo\% at $\rho{=}0.2$); the certified
+family verdict keeps its CP upper bound at or below \CorrCertMaxHi\%, asking once all views being wrong exceeds the budget.
 
 
 \subsection{Comparison with existing recovery}

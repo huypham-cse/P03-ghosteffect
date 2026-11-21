@@ -9,14 +9,14 @@ The table therefore tests certification decisions and their asking cost, not rea
 should be read with the label budgets of \S\ref{sec:design-probes} and Table~\ref{tab:cert-budget}.
 
 On Element every certified mode stays within budget (CP upper \RsimElemJointPvHi\%): the certified wait reaches the measured maximum. The product mode asks in \RsimElemProdAsk\% of workflows. Joint certification, which needs no cross-family
-independence, asks in \RsimElemJointAsk\% with \RsimBaseLabelN{} labels per class and outcome and in \RsimFiveJointAsk\% with \RsimFiveLabelN{} labels per class and outcome plus \CertLagBootN{} lag entries per class. Keying by class matters little here: with a net-heavy lab mix the pooled wait still reaches the maximum. Simpler mechanisms also hold: Theorem~\ref{thm:twohop} alone (\RsimElemGtwoAsk\%
+independence, asks in \RsimElemJointAsk\% with \RsimBaseLabelN{} labels per class and outcome and in \RsimFiveJointAsk\% with \RsimFiveLabelN{} labels per class and outcome plus \CertLagBootN{} lag entries per class. Simpler mechanisms also hold: Theorem~\ref{thm:twohop} alone (\RsimElemGtwoAsk\%
 asks) and rules with a 10 or 30\,s wait (\RsimElemRulesAsk\% and \RsimElemRulesThirtyAsk\%), whereas trusting the app's status right after relaunch retries
 \RsimElemAppPv\% (the lag-blind reads). Two departures break the budget. Passive labels, whose lag logs come from uninterrupted sends, give product \RsimPassProdPv\% and joint
 \RsimPassJointPv\%. A tail of \RsimTail\% beyond 14\,s that the logs miss gives product \RsimTailProdPv\% at \RsimBaseLabelN{} labels (joint holds only because it asks \RsimTailJointAsk\%). If the logs contain that tail, every mode asks on every
 interrupted Element send. On K-9 no family can certify, so every mode, like Theorem~\ref{thm:twohop}, asks on every interrupted send. Trusting K-9's status retries
 \RsimKnineAppPv\% of committed mail (and loses \RsimKnineAppLoss\% of workflows), and unvetted fixed-wait rules retry \RsimKnineRulesPv\% in this simulation under the assumed K-9 queued-mail lag law. With a Sent folder, fault-injected labels
 show committed mail that never becomes visible, so no wait certifies and \sys asks. Unvetted fixed-wait rules retry \RsimKsentRulesPv\% under the same assumed K-9 lag law, and passive labels
-lead joint certification to retry \RsimKsentPassJointPv\% (\RsimKsentPassFiveProdPv\% for the product mode with \RsimFiveLabelN{} labels). On real apps the decisive pieces are Outbox evidence classification, fault-injected labels, and asking when the GUI cannot reveal the outcome; calibration adds a guarantee that follows
+lead joint certification to retry \RsimKsentPassJointPv\%. On real apps the decisive pieces are Outbox evidence classification, fault-injected labels, and asking when the GUI cannot reveal the outcome; calibration adds a guarantee that follows
 the labels. In the LLM-agent experiment on the emulator (\S\ref{sec:eval-agent}), the same-evidence rule cascade decided to retry in \AgentRulesRetryN{} of \AgentRulesValidN{} valid Sent-folder
 K-9 episodes, as this simulation warns.
 

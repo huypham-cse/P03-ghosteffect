@@ -8,7 +8,8 @@ The hidden outcome is $X=\mathbf 1\{t_{\mathrm{vis}}<\infty\}$: $X{=}1$ means \e
 An effect cannot become visible while its app is dead or the network is down, so the lag is measured from an anchor $r_e$ that depends on the
 effect's observable fault class $c$. For agent death $r_e=t_0$. For app death $r_e$ is the time the controller confirms its intent to relaunch the app. For connectivity loss
 $r_e$ is the time the connection is restored. For a combined fault $r_e$ is the later of the last two. The lag of class $c$ is $T_c=\max(0,\,t_{\mathrm{vis}}-r_e)$ and its tail is
-$G_c(w)=\PP(T_c>w\mid X{=}1,\text{class }c)$, with $G_c(w)\to0$ as $w\to\infty$ by definition of $X$. An effect waits until the deadline $r_e+w_c$.
+$G_c(w)=\PP(T_c>w\mid X{=}1,\text{class }c)$, with $G_c(w)\to0$ as $w\to\infty$ by definition of $X$. Calibration labels effects by the server instead, so an applied effect that no probe ever shows (K-9 with a Sent
+folder, \S\ref{sec:eval-realsim}) enters the lag table as never visible. No wait then certifies, and the planner asks. An effect waits until the deadline $r_e+w_c$.
 If the class is unknown, the planner uses the latest deadline over the classes. If an anchor it needs was not observed, it asks.
 Waiting from $t_0$ instead waits too little after an outage. In measured-parameter simulation on Element with a 15\,s outage, product certification then retries
 \CertClockTzeroDownFifteenProdPv\% of committed effects, against \CertClockDownFifteenProdPv\% when it waits from $r_e$ (Table~\ref{tab:cert-clock} in the appendix).
@@ -59,5 +60,5 @@ needs one of these three events, so a union bound gives
 \end{equation}
 A deployer who cares about end-to-end errors should read~\eqref{eq:composed}, not only the rate $P_{\mathrm v}$ at which the planner retries a committed effect by itself.
 A mode that asks more meets~\eqref{eq:guarantee} more easily but pays $q_1\epsilon_1$. Our simulator assumes that no app retransmits without dedup, so $r_1{=}r_0{=}0$.
-In measured-parameter simulation on Element, the duplicate bound is then \CertBoundElemProdDup\% for product and \CertBoundElemJointDup\% for joint (users wrong on \CertBoundElemProdEpsOne\% and \CertBoundElemJointEpsOne\% of those asks), and the loss bound is
+In measured-parameter simulation on Element, the duplicate bound is then \CertBoundElemProdDup\% for product and \CertBoundElemJointDup\% for joint (users erred on \CertBoundElemProdEpsOne\% and \CertBoundElemJointEpsOne\% of those asks: 5\%, or 10\% with a look-alike), and the loss bound is
 \CertBoundElemProdLoss\% and \CertBoundElemJointLoss\%. Joint asks about \CertBoundElemJointQone\% of committed effects there (Table~\ref{tab:cert-bound} also gives the default world).

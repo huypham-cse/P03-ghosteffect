@@ -34,17 +34,17 @@ reader (\S\ref{sec:eval-real}). After a commit whose reply was lost, K-9~Mail ne
 optional Sent folder never shows it. A scripted agent that redoes the step duplicated \RealKRecDup/\RealKRecN{} K-9 sends (distinct Message-IDs) and \RealCalRecDup/\RealCalRecN{}
 CalDAV events: these are measured ghost-effect duplicates. Element (Matrix) and DAVx5 (CalDAV) resolved the same fault exactly once by themselves (\RealElemRL/\RealElemRL{}
 and \RealCalN/\RealCalN). Their own retry is therefore safe, on the same device and within the server's dedup horizon (24\,h for Synapse); an agent's redo is not.
-Element's evidence families were never wrong together once the message was visible (0/\RealCoObs), and its post-restart visibility lag depends on the fault class
-(median from \RealLagNetMed{} to \RealLagFsMed\,s, none censored). Run on Etar and DAVx5 at $\alpha{=}\beta{=}\RealPlanAlphaPct\%$, the planner itself certified and retried all
+Element's timeline row and room-list digest were never wrong together once the message was visible (0/\RealCoObs), and its post-restart visibility lag depends on the fault class
+(median from \RealLagNetMed{} to \RealLagFsMed\,s, first visibility seen in every trial). Run on Etar and DAVx5 at $\alpha{=}\beta{=}\RealPlanAlphaPct\%$, the planner itself certified and retried all
 \RealPlanRetryAbsent{} held-out absent events and asked about all \RealPlanCommittedN{} committed ones, whose acknowledgement no screen shows.
 
 We recommend product certification when independence across families has a structural basis and joint certification otherwise, using fault-injected labels keyed by fault class. With the measured parameters, joint certification retries no committed Element send (Clopper-Pearson upper bound
 \RsimFiveJointPvHi\%) while asking in \RsimFiveJointAsk\% of workflows with \RsimFiveLabelN{} labels and \CertLagBootN{} lag entries per class, and it asks on every interrupted K-9 send.
 Vetted rules, which keep only the families never wrong on the labels and wait for the longest logged lag, also ask on every simulated K-9 send when given the same calibration records and lag tables (Table~\ref{tab:matched}). On Element simpler mechanisms also hold in this simulation: Theorem~\ref{thm:twohop} alone never retries and asks in \RsimElemGtwoAsk\% of workflows.
 Passive labels break every certified mode on Element, and an unlogged lag tail breaks the product mode. In a model-based simulation of \SimN interrupted workflows, joint certification retries \SimJointPv\% of committed effects and asks in
-\SimJointAsk\% of workflows with 2{,}000 labels (\NcalFJointAsk\% with 5{,}000). In the same simulation the product mode, which assumes independence across families, asks in \SimGhostAsk\%, as
-often as a rule cascade that retries \SimRulesRatio$\times$ more, and tuned rules match it when retrying about 0.1\% of committed effects, without a guarantee (Appendix~\ref{app:extra}). In the LLM-agent experiment on the emulator,
-M3A resent and duplicated \AgentDupN{} of \AgentValidN{} valid K-9 episodes after the lost reply; \sys asked in all \AgentGuardAskN{} valid guarded episodes and left \AgentGuardDupN{} duplicate,
+\SimJointAsk\% of workflows with 2{,}000 labels (\NcalFJointAsk\% with 5{,}000, Table~\ref{tab:pop}). In the same simulation the product mode, which assumes independence across families, asks in \SimGhostAsk\%, about
+as often as a rule cascade that retries \SimRulesPv\% of committed effects against its \SimGhostPv\%. Tuned rules match it when retrying about 0.1\% of committed effects, without a guarantee (Appendix~\ref{app:extra}). In the LLM-agent experiment on the emulator,
+AndroidWorld's M3A agent resent and duplicated \AgentDupN{} of \AgentValidN{} valid K-9 episodes after the lost reply; \sys asked in all \AgentGuardAskN{} valid guarded episodes and left \AgentGuardDupN{} duplicate,
 caused by the simulated user's wrong answer. The study covers two agents, one model and one app. Physical-phone evidence is reported in the Discussion, while broader agent and VLM coverage remains future work.
 
 \para{Contributions.}

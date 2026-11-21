@@ -16,7 +16,7 @@ Element's send-state indicator appears in the same dump as the row in \RealElemN
 \multicolumn{6}{@{}l}{(a) Hop-2 behaviour after a lost reply} \\
 App & $n$ & App re-send & Once & Shows & GUI redo \\
 \midrule
-Element & \RealElemRL & txnId \RealElemSameTxn, /sync \RealElemSyncOnly & \RealElemRL & \emph{Sent} & new txnId \\
+Element & \RealElemRL & txnId \RealElemAckedFirst+\RealElemFaultResend, /sync \RealElemSyncOnly & \RealElemRL & \emph{Sent} & new txnId \\
 Etar+DAVx5 & \RealCalN & URL $\to$ 412 & \RealCalOnce & saved & \RealCalRecDup/\RealCalRecN{} dup \\
 K-9 & \RealKRdNosent & none (error) & \RealKRdNosent & Outbox & dup \\
 K-9 + Sent & \RealKRdSent & none (error) & \RealKRdSent & Outbox only & dup \\
@@ -44,7 +44,6 @@ sticky + force-stop & \RealLagSFsN & \RealLagSFsMin & \RealLagSFsMed & \RealLagS
 App & Family, read & wrong/obs. & $\bot$ \\
 \midrule
 Element & row = indicator, first read & \RealFirstWrong/\RealFirstObs$^{\ddagger}$ & \RealFirstBot \\
- & row = indicator, first non-$\bot$ read, any time & \RealEarlyWrong/\RealElemN$^{\ddagger}$ & 0 \\
  & row = indicator, late & 0/\RealLateObs & \RealLateBot \\
  & room-list digest, late & 0/\RealLateObs & \RealLateBot \\
  & any two families wrong together, late & 0/\RealCoObs{} (CI 0 to \RealCoHi\%) & \RealCoBot \\

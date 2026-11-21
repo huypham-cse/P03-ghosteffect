@@ -8,7 +8,7 @@ and \LedgerPninetyfive\,ms at p95; a record takes \LedgerBytes\,bytes.
 A host write-ordering test SIGKILLs, at random times, a child that loops over plan, issue, tap and settle. Over \LedgerTrials kills and \LedgerTaps taps, every tapped effect
 was \textsf{ISSUED} or later (\LedgerViol violations). SIGKILL keeps the page cache, so durability is tested on the emulator (\S\ref{sec:eval-real}). The same ledger in a small
 Android app took \LedgerPhoneSamMedMs\,ms at the median (p95 \LedgerPhoneSamNinetyFiveMs\,ms, \LedgerPhoneSamBytes\,bytes) on a rented Galaxy A36 with \texttt{synchronous=FULL} read back.
-Random kills of its writer, \LedgerPhoneSamKillN{} on the A36 and \LedgerPhonePixKillN{} on a Pixel~9, left \LedgerPhoneSamViol{} and \LedgerPhonePixViol{} violations over \LedgerPhoneSamTapN{} and \LedgerPhonePixTapN{} taps.
+Random kills of its writer, \LedgerPhoneSamKillN{} on the A36 and \LedgerPhonePixKillN{} on a Pixel~9, left \LedgerPhoneViol{} violations in all over \LedgerPhoneSamTapN{} and \LedgerPhonePixTapN{} taps.
 
 \para{Emulator testbed.} Android~13 (API~33, arm64) emulators run F-Droid builds of the apps against self-hosted servers on the host. A TCP fault proxy in front of
 each server forwards a matching request (Matrix \texttt{PUT \dots/send/\dots/<txnId>}, SMTP end of \texttt{DATA}, CalDAV \texttt{PUT}) so the server commits. It then drops the reply
@@ -19,7 +19,7 @@ recipient sees, so it runs only on test accounts that opted in. The driver then 
 the room title and the timeline are verified, and ``absent'' only on a verified screen scrolled to the bottom with the previous message visible. Ground truth comes from the
 server only. A scripted \emph{GUI redo} recomposes and re-sends the same content, as an agent that trusts the screen would.
 
-\para{Agent harness.} The M3A runs of \S\ref{sec:eval-agent} drive the unmodified agent against the same K-9 setup on an x86-64 emulator. The harness extends AndroidWorld~\cite{rawles2025androidworld}: \sys wraps the action step, appends \textsf{ISSUED} and types the nonce before a
+\para{Agent harness.} The M3A runs of \S\ref{sec:eval-agent} drive the unmodified agent against the same K-9 server setup, on an x86-64 emulator. The harness extends AndroidWorld~\cite{rawles2025androidworld}: \sys wraps the action step, appends \textsf{ISSUED} and types the nonce before a
 classified commit action. App databases are read only by the grader and by the same-evidence rules, which read K-9's folders exactly. Beyond force-stop we killed the agent alone (\S\ref{sec:eval-agent}).
 On the emulator we also let \texttt{lmkd} reap the app under real memory pressure and held the device in forced deep Doze (\S\ref{sec:discussion}). Plain \texttt{am kill} spares perceptible
 processes~\cite{android_adb}. It spared Element, whose sync component keeps it perceptible, so background-then-kill ghost effects may be rarer for apps with idempotent retries. Doze needs the screen off and the device still~\cite{android_doze}, so it matters only when the agent died and the phone slept. App Standby buckets and Data

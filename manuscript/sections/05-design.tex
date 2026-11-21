@@ -21,8 +21,7 @@ In the write-ahead ledger, each effect has a record \{\textit{id}, workflow, ste
 \textsf{PLANNED} $\to$ \textsf{ISSUED} $\to$ \{\textsf{COMMITTED}, \textsf{ABSENT}, \textsf{PENDING}, \textsf{ASKED}\}, with \textsf{ABSENT} $\to$ \textsf{ISSUED} on retry
 (attempt$+1$, same nonce) and \textsf{COMMITTED} $\to$ \textsf{COMPENSATING} $\to$ \textsf{COMPENSATED} when a duplicate is detected. The invariant is write-ahead:
 \textsf{ISSUED} is committed in SQLite (WAL mode, \texttt{synchronous=FULL}) before the commit tap is injected. On restart, every \textsf{ISSUED} record is a ghost-effect
-candidate and is resolved before the agent continues. This is the prepare, dispatch and settle discipline of Agent libOS~\cite{zhang2026agentlibos}, except that settlement is a
-statistical decision.
+candidate and is resolved before the agent continues.
 
 \input{figures/fig-arch}
 
@@ -142,8 +141,7 @@ A failed entry, or one pending longer than a stuck limit (120\,s) or close to th
 unconditional lag table, which is what the proof of Eq.~\eqref{eq:lagsplit} needs. Two entries mean a duplicate, which is compensated or asked about.
 
 The wait is the price of the lag share (Theorem~\ref{thm:main}(a,b)). If the certified wait exceeds $W_{\max}$ (120\,s), or recovery was delayed while the device
-dozed and no lag table exists for that state, the planner asks instead of waiting. Local-only apps have no hop~2, so their lag share is returned to the test share. A ``committed''
-reading needs no wait (A1), so a variant could read before waiting and declare early, at the cost of splitting $\beta_{\mathrm{test}}$ between the two reads of each view.
+dozed and no lag table exists for that state, the planner asks instead of waiting. Local-only apps have no hop~2, so their lag share is returned to the test share.
 
 When the planner asks, the prompt names the effect, shows the pre-tap screenshot and the digest, and offers ``done'', ``not done'' and ``not sure''. An app that wins
 the foreground can redirect a retry~\cite{qian2026rebinding}, so \textsc{VerifyForeground} checks package, activity and window before every retry, compensation or prompt.
