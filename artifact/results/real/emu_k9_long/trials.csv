@@ -1,0 +1,5 @@
+trial,verdict,config,kill,observe_s,server_copies,smtp_data_after_fault,k9_outbox_state,all_checks
+l01,REPRODUCED,nosent,force-stop,2100.0,1,0,error|1|Unable to send message,True
+l02,REPRODUCED,sent,background,2100.0,1,0,error|1|Unable to send message,True
+l03,REPRODUCED,nosent,background,2100.0,1,0,error|1|Unable to send message,True
+l04,REPRODUCED,sent,force-stop,2100.0,1,0,error|1|Unable to send message,True
