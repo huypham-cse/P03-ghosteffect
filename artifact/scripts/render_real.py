@@ -291,7 +291,7 @@ Element's send-state indicator appears in the same dump as the row in \RealElemN
 \multicolumn{6}{@{}l}{(a) Hop-2 behaviour after a lost reply} \\
 App & $n$ & App re-send & Once & Shows & GUI redo \\
 \midrule
-Element & \RealElemRL & txnId \RealElemSameTxn, /sync \RealElemSyncOnly & \RealElemRL & \emph{Sent} & new txnId \\
+Element & \RealElemRL & txnId \RealElemAckedFirst+\RealElemFaultResend, /sync \RealElemSyncOnly & \RealElemRL & \emph{Sent} & new txnId \\
 Etar+DAVx5 & \RealCalN & URL $\to$ 412 & \RealCalOnce & saved & \RealCalRecDup/\RealCalRecN{} dup \\
 K-9 & \RealKRdNosent & none (error) & \RealKRdNosent & Outbox & dup \\
 K-9 + Sent & \RealKRdSent & none (error) & \RealKRdSent & Outbox only & dup \\
@@ -427,6 +427,9 @@ $^{\S}$Force-stop clears the app's notifications. The shade was cleared between 
         M(f'LedgerPhone{_p}KillN', len(_kl))
         M(f'LedgerPhone{_p}TapN', f"{sum(int(r['taps_checked']) for r in _kl):,}".replace(',', '{,}'))
         M(f'LedgerPhone{_p}Viol', sum(int(r['invariant_violations']) for r in _kl))
+
+    M('LedgerPhoneViol', sum(int(r['invariant_violations']) for f in ('a36', 'pixel9')
+                             for r in _rr('kills.csv', os.path.join(REAL, 'phone_ledger', f))))
 
     # TN1 (b-log 19-20/11): the GUI-only planner (recovery.py) held out on Etar + DAVx5 + Radicale (AVD), product mode.
     _tn1 = json.load(open(os.path.join(REAL, 'tn1_caldav', 'SUMMARY.json'), encoding='utf-8'))

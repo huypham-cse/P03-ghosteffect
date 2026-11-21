@@ -40,8 +40,8 @@
 \vspace{-2pt}
 \caption{A ghost effect and how \sys resolves it, grounded in our emulator measurements (\S\ref{sec:eval-real}). Steps marked $^{\textsf{m}}$ were observed in every
 trial: K-9 \RealKRd/\RealKRd, redo \RealKRecDup/\RealKRecN, Element \RealElemRL/\RealElemRL. (a) The SMTP server accepts the mail but the reply is lost. K-9 records a permanent
-failure, never re-sends, and keeps the mail in its Outbox. Redoing the step (a scripted agent, not an LLM) sends a second mail with a new Message-ID, which SMTP accepts.
-(b) \sys records the send before the tap and tags it with a nonce. K-9's nonce is the subject, which the recipient sees, so it is used only on accounts that opted in. K-9 has no idempotent retry and its entry failed, so hop~1 says nothing about the server, and the Sent folder is written
+failure, never re-sends, and keeps the mail in its Outbox. A scripted redo (not an LLM) sends a second mail with a new Message-ID.
+(b) \sys records the send before the tap and tags it with a nonce (K-9's subject, on opted-in test accounts). K-9 has no idempotent retry and its entry failed, so hop~1 says nothing about the server, and the Sent folder is written
 by the same client. With no family that can certify, \sys asks instead of resending. For an app with idempotent retries, such as Element, the end-to-end row certifies ``committed'' after a short
 certified wait. Icons: Twemoji (CC-BY 4.0).}
 \label{fig:teaser}
