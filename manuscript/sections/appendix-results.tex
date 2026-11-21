@@ -36,7 +36,7 @@ kill, blackout, both) and interruption points follow \S\ref{sec:impl}. The \emph
 field, plus 0.6\% per view). Hop-1 views err at 1 to 5\% each plus 0.5\% persistently, and the Monitor misreads 1\% of terminal states. Digest views miss 3\% each plus 2\% persistently.
 VLM views err at $\epsilon_0{\sim}U[0.06,0.26]$ and $\epsilon_1{\sim}U[0.04,0.20]$, with within-view correlation 0.6 and cross-view correlation 0.1 (single-screen error is a free
 parameter~\cite{pan2024autonomous}). The user answers wrongly on 5\% of asks (10\% with a look-alike) and takes 60\,s. Calibration uses 2{,}000 whole effects per app and outcome, each read by every family, and lag tables have 20{,}000 times. We use $\delta=\min(\alpha,\beta)/(10K n_{\mathrm{cls}})$
-with $K{=}11$ (product), 8 (source families) or 5 (joint). Here $n_{\mathrm{cls}}$ counts calibrated fault classes (one when pooled). All policies see the same \SimN interrupted workflows (5 seeds $\times$ 2{,}400); we report Clopper--Pearson intervals and exact
+with $K{=}11$ (product), 8 (source families) or 5 (joint). Here $n_{\mathrm{cls}}$ counts calibrated fault classes (one when pooled). All policies see the same \SimN interrupted workflows (5 seeds $\times$ 2{,}400); we report Clopper-Pearson intervals and exact
 McNemar tests against the product planner with Holm correction.
 
 \para{Baselines.} We compare against Redo~\cite{tian2025agentprog}, checkpoint-resume~\cite{langgraph_durable,khan2026resume}, Atomix-style adapters with one
@@ -104,7 +104,7 @@ still duplicates \StressNodedupDup\% of workflows by itself when its server does
 passive labels bring the product mode to \PopIwPProd\% (CP upper \PopIwPProdHi\%) and joint to \PopIwPJoint\% (Table~\ref{tab:pop}). Fault-injected labels bring them to \PopIwFProd\% and \PopIwFJoint\%, while the
 rules stay at \PopIwFRules\%: certification uses what the labels show. Under a 5\% common-mode stale history (violating A2) the product mode retries \PopCmCProd\%, source
 families \PopCmCSrc\% and joint \PopCmCJoint\%. Their cost is labels: at 2{,}000 effects source and joint ask \NcalESrcAsk\% and \NcalEJointAsk\% against \NcalEProdAsk\%,
-at 5{,}000 \NcalFSrcAsk\% and \NcalFJointAsk\% (Table~\ref{tab:nsize}). Under version drift ($\kappa{=}10$) the product mode reaches \DriftTenPv\% (CP upper \DriftTenPvHi\%), and a
+at 5{,}000 \NcalFSrcAsk\% and \NcalFJointAsk\% (Table~\ref{tab:pop}). Under version drift ($\kappa{=}10$) the product mode reaches \DriftTenPv\% (CP upper \DriftTenPvHi\%), and a
 200-effect shift test keeps it at most \DriftTenTestPvHi\%.
 
 \subsection{Mechanisms}

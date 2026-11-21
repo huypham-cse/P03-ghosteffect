@@ -157,6 +157,22 @@ def label_median(results):
     return v
 
 
+def label_costs(results):
+    """Seconds per label for (committed, absent, all). Prefer TN1's scripted fault-injected label trials on a real app
+    (real/tn1_caldav/label_cost.csv, medians per outcome); fall back to B's LLM-agent episode total, which also
+    contains the agent's compose time and a 300 s observation window."""
+    path = Path(results) / 'real' / 'tn1_caldav' / 'label_cost.csv'
+    if not path.exists():
+        v = label_median(results)
+        return v, v, v
+    rows = read_csv(path.parent, path.name)
+    med = lambda c: num(cert_col(one(rows, 'label_cost.csv', component=c), 'median_s', 'label_cost.csv'))
+    out = med('committed'), med('absent'), med('total')
+    if not all(v > 0 for v in out):
+        raise InputError('tn1 label_cost.csv: median_s must be positive')
+    return out
+
+
 # ------------------------------------------------------------------ tables
 DAGGER = '$^\\dagger$'
 
@@ -254,9 +270,12 @@ def render(results):
     M['CertDeltaJoint'] = cert_sci(delta(K_JOINT))
 
     # A-08: B's measured label time
-    med = label_median(results)
+    med1, med0, med = label_costs(results)
     M['CertLabelMedS'] = f'{med:.0f}'
-    M['CertDeviceHoursFive'] = count(round(labels5 * N_CLASSES * OUTCOMES * med / 3600))
+    M['CertLabelMedOneS'] = f'{med1:.0f}'
+    M['CertLabelMedZeroS'] = f'{med0:.0f}'
+    assert OUTCOMES == 2
+    M['CertDeviceHoursFive'] = count(round(labels5 * N_CLASSES * (med1 + med0) / 3600))
 
     files = {'macros_guarantee.tex': HEADER + ''.join(
         f'\\newcommand{{\\{k}}}{{{v}\\xspace}}\n' for k, v in sorted(M.items()))}
@@ -286,7 +305,7 @@ def render(results):
         'tab:cert-budget',
         '\\emph{Measured-parameter simulation}, Element: label budget. '
         "Rows give labels per class and outcome / lag entries per class. ``Tied'' rows draw as many lag entries "
-        f"as labels. ``Tail'': a {tail_pct}\\% share of committed effects (the one-sided 95\\% upper bound from the "
+        f"as labels. ``Tail'': a {tail_pct}\\% share of committed effects (the one-sided 95\\% upper bound from zero "
         'censored emulator trials) becomes visible only after the logged lags, and the calibration labels do not '
         'see it. ' + PV_NOTE,
         POL_HEAD % 'labels / lag entries', body)

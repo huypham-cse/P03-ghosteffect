@@ -127,6 +127,16 @@ App, condition & $n$ & Re-sent & Once & Later & Unsent \\
     M('RealElemStickySync', sum(int(r['mech_reconciled_via_sync']) for r in _st2))
     M('RealElemSameTxn', int(_al['mech_retry_acked_before_fault']) + int(_al['mech_resend_after_relaunch']))
     M('RealElemSyncOnly', _al['mech_reconciled_via_sync'])
+    # All lost-reply trials, by which came first (includes the 3 trials of the earlier sticky variant, v1).
+    _ack1, _res1, _syn1 = (int(_al[k]) for k in ('mech_retry_acked_before_fault', 'mech_resend_after_relaunch',
+                                                 'mech_reconciled_via_sync'))
+    assert _ack1 + _res1 + _syn1 == int(_al['n'])
+    M('RealElemAckedFirst', _ack1)
+    M('RealElemFaultFirst', _res1 + _syn1)
+    M('RealElemFaultResend', _res1)
+    M('RealElemFaultSync', _syn1)
+    _v1 = [_eo[c] for c in ('bg_kill9_sticky_v1/respdrop', 'force_stop_sticky_v1/respdrop')]
+    M('RealElemStickyVoneN', sum(int(r['n']) for r in _v1))
     M('RealElemNofaultN', _eo['none/nofault']['n'])
     M('RealElemAckedN', _eo['bg_kill9/acked']['n'])
     _present = sum(int(r['present']) for r in _pv)
@@ -181,6 +191,10 @@ App, condition & $n$ & Re-sent & Once & Later & Unsent \\
     M('RealCoWrong', 0)
     M('RealCoN', _ec[0]['n'])
     M('RealCoBot', _ec[0]['both_bot'])
+    # Co-failure over the trials where both late reads were observed (n minus both no-observation); the CSV's CI is over these.
+    assert len({(r['n'], r['both_bot'], r['ci95_both_wrong']) for r in _ec}) == 1
+    M('RealCoObs', int(_ec[0]['n']) - int(_ec[0]['both_bot']))
+    M('RealCoHi', _pct(float(_ec[0]['ci95_both_wrong'].strip('()').split(',')[1])))
     _fs_first_bot = sum(int(r['first_read_bot']) for r in _pv if r['cell'].startswith('force_stop'))
     _fs_n = sum(int(r['trials']) for r in _pv if r['cell'].startswith('force_stop'))
     M('RealFsFirstBot', _fs_first_bot)
@@ -254,6 +268,9 @@ App, condition & $n$ & Re-sent & Once & Later & Unsent \\
     M('RealGuiDup', len(_rec) + sum(1 for r in _cd if r['recompose_server_copies'] == '2'))
     M('RealGuiN', len(_krd) + sum(1 for r in _cd if r['recompose_server_copies'] != ''))
     M('RealTwoN', _nEl + len(_kn) + len(_ks) + len(_cd) + len(_tt))
+    M('RealKnineNosentN', len(_kn))
+    M('RealKnineSentN', len(_ks))
+    M('RealCalTrialN', len(_cd))
 
     _lagrow = lambda lab, nm: (f"{lab} & \\RealLag{nm}N & \\RealLag{nm}Min & \\RealLag{nm}Med & \\RealLag{nm}Max \\\\")
     W('tab_real.tex', r'''\begin{table*}[t]
@@ -262,6 +279,7 @@ App, condition & $n$ & Re-sent & Once & Later & Unsent \\
 lost (TCP reset after the server committed), under no fault, background + \texttt{kill -9}, force-stop or a 20\,s network cut. App re-send: how the app resolved it; GUI redo:
 a scripted agent recomposes and re-sends the same content. (b)~Element's recovery-to-visible lag: minimum, median and maximum over the $n$ trials of each class (s; upper end of a one-dump $\approx$2\,s interval; first visibility was observed
 in all recorded trials, with trial-specific follow-up windows). This is not a uniform late-duplicate follow-up. Sticky: every reply dropped until the fault.
+Not shown: \RealElemStickyVoneN{} trials of an earlier sticky variant and \RealElemAckedN{} acknowledged-then-killed trials (lags in the artifact).
 (c)~Family errors against the server, wrong/observed, with no-observation ($\bot$, wrong screen) separated;
 Element's send-state indicator appears in the same dump as the row in \RealElemN/\RealElemN{} trials, so the two are one reading.}
 \label{tab:real}
@@ -298,10 +316,10 @@ Fault & $n$ & min & median & max \\
 App & Family, read & wrong/obs. & $\bot$ \\
 \midrule
 Element & row = indicator, first read & \RealFirstWrong/\RealFirstObs$^{\ddagger}$ & \RealFirstBot \\
- & row = indicator, first non-$\bot$ read & \RealEarlyWrong/\RealElemN$^{\ddagger}$ & 0 \\
+ & row = indicator, first non-$\bot$ read, any time & \RealEarlyWrong/\RealElemN$^{\ddagger}$ & 0 \\
  & row = indicator, late & 0/\RealLateObs & \RealLateBot \\
  & room-list digest, late & 0/\RealLateObs & \RealLateBot \\
- & any two families wrong together, late & 0/\RealCoN{} (CI 0--\RealLateHi\%) & \RealCoBot \\
+ & any two families wrong together, late & 0/\RealCoObs{} (CI 0 to \RealCoHi\%) & \RealCoBot \\
 K-9 & Outbox lists it (``unsent''), lost reply & \RealKOutWrong/\RealKRd & 0 \\
  & failure notification, lost reply & \RealKNotifWrong/\RealKRd$^{\S}$ & 0 \\
  & Sent folder lacks it, lost reply & \RealKSentWrong/\RealKSentN & 0 \\
@@ -309,7 +327,7 @@ K-9 & Outbox lists it (``unsent''), lost reply & \RealKOutWrong/\RealKRd & 0 \\
  & any family, acknowledged send & 0/\RealKAckedN & 0 \\
 \bottomrule
 \end{tabular}\\[2pt]
-{\scriptsize $^{\ddagger}$All lag-blind: verified screen, scrolled to the bottom, message not yet in the restored timeline (visible at \RealBlindLagLo--\RealBlindLagHi\,s).
+{\scriptsize $^{\ddagger}$All lag-blind: verified screen, scrolled to the bottom, message not yet in the restored timeline (visible at \RealBlindLagLo{} to \RealBlindLagHi\,s).
 $^{\S}$Force-stop clears the app's notifications. The shade was cleared between trials.}
 \end{minipage}
 \end{table*}
@@ -384,6 +402,50 @@ $^{\S}$Force-stop clears the app's notifications. The shade was cleared between 
     _t0 = datetime.datetime.fromtimestamp(_d1['fault_utc_ns'] / 1e9, datetime.timezone.utc)
     _t1 = datetime.datetime.combine(_t0.date(), datetime.time.fromisoformat(_gave_up), datetime.timezone.utc)
     M('RealRentSamDozeQuietS', f'{(_t1 - _t0).total_seconds():,.0f}'.replace(',', '{,}'))
+    # TN2 (b-log 20/11): a later A36 session, same rig, stop-app + forced deep Doze only; reported apart from R1d.
+    _tn2 = [r for r in _rr('trials.csv', os.path.join(REAL, 'device_caldav_a36_tn2')) if r['phase'] == 'scheduled']
+    assert _tn2 and all(r['fault'] == 'stop-app-doze' and r['verdict'] == 'EXACTLY_ONCE' and r['doze_state'] == 'IDLE'
+                        and float(r['first_put_after_doze_exit_s']) < 0 for r in _tn2)
+    M('RealRentSamTwoN', len(_tn2))
+    M('RealRentSamTwoDozeMedS', f"{statistics.median(float(r['first_put_after_fault_s']) for r in _tn2):.1f}")
+
+    # TN3 (b-log 19/11): the write-ahead ledger in a small app on the two rented phones (SQLite WAL, synchronous=FULL),
+    # two runs of appends each, and random kills of the writer. Kind of number: physical-phone measurement.
+    # Latency only where PRAGMA synchronous read back FULL (2). The Pixel read back NORMAL (1) although FULL was
+    # requested; Android may run that read on another pooled WAL connection, so its timing is not reported as FULL.
+    # Kill results do not depend on the sync mode (a process kill keeps the page cache), so both phones count there.
+    for _folder, _p in (('a36', 'Sam'), ('pixel9', 'Pix')):
+        _dir = os.path.join(REAL, 'phone_ledger', _folder)
+        _lat = [r for r in _rr('latency.csv', _dir) if r['sync_requested'] == 'FULL']   # drop the NORMAL context run
+        assert len(_lat) == 2 and all(r['journal_mode'] == 'wal' for r in _lat)
+        _kl = _rr('kills.csv', _dir)
+        assert all(r['alive_after_kill'] == 'False' for r in _kl)
+        if all(r['synchronous'] == '2' for r in _lat):
+            M(f'LedgerPhone{_p}MedMs', f"{max(float(r['issue_p50_ms']) for r in _lat):.2f}")
+            M(f'LedgerPhone{_p}NinetyFiveMs', f"{max(float(r['issue_p95_ms']) for r in _lat):.2f}")
+            M(f'LedgerPhone{_p}Bytes', max(int(r['bytes_per_effect']) for r in _lat))
+        M(f'LedgerPhone{_p}KillN', len(_kl))
+        M(f'LedgerPhone{_p}TapN', f"{sum(int(r['taps_checked']) for r in _kl):,}".replace(',', '{,}'))
+        M(f'LedgerPhone{_p}Viol', sum(int(r['invariant_violations']) for r in _kl))
+
+    # TN1 (b-log 19-20/11): the GUI-only planner (recovery.py) held out on Etar + DAVx5 + Radicale (AVD), product mode.
+    _tn1 = json.load(open(os.path.join(REAL, 'tn1_caldav', 'SUMMARY.json'), encoding='utf-8'))
+    _c, _t, _s = _tn1['calibration'], _tn1['test'], _tn1['store']
+    assert sum(_c['reads'].values()) == _c['effects'] and set(_c['reads']) == {'X=0 [0, 0]', 'X=1 [1, 1]'}
+    assert _t['declared_committed_when_absent'] == 0 and _t['asks'] == _t['committed'] - _t['retried_committed']
+    M('RealPlanCalN', _c['effects'])
+    M('RealPlanCalOneN', _c['reads']['X=1 [1, 1]'])
+    M('RealPlanCalZeroN', _c['reads']['X=0 [0, 0]'])
+    M('RealPlanAlphaPct', f"{100 * _s['alpha']:.0f}")
+    M('RealPlanClassN', len(_s['abs_bound_per_class']))
+    M('RealPlanTestN', _t['trials'])
+    M('RealPlanCommittedN', _t['committed'])
+    M('RealPlanRetryCommitted', _t['retried_committed'])
+    M('RealPlanRetryHi', f"{100 * _t['retried_committed_cp_upper_one_sided_95']:.1f}")
+    M('RealPlanAbsentN', _t['absent'])
+    M('RealPlanRetryAbsent', _t['certified_absence_retries'])
+    M('RealPlanAskN', _t['asks'])
+    M('RealPlanDupN', _t['duplicates'])
 
     # ------------------------------------------------------------------ prose hooks
     M('RealDataLimitation', r'Emulator measurements (\S\ref{sec:eval-real}) cover three apps on an emulator, with $n$ small outside Element; the agent study (\S\ref{sec:eval-agent}) runs one model on the emulator. Physical phones ran only K-9 and DAVx5, without an agent; the two rented phones have no root, so \texttt{am stop-app} stands in for \texttt{kill -9} and \texttt{lmkd} was not tested on them.')

@@ -1,0 +1,4 @@
+trial,phase,fault,verdict,server_copies,puts,first_put_after_fault_s,first_put_after_doze_exit_s,doze_state,lmkd_filled_mb,lmkd_line,dirty_after,nonce,href,error_type,reason,proc_samples,frozen_seen,procstates
+dev-c00,dev,none,EXACTLY_ONCE,1,2,0.026765188,,,,,No result found.,gx:9C1HHF,/alice/cal/ce034169-3400-42c1-8a8f-0732ca2a1d26.ics,,,3,False,19 8
+e01,scheduled,stop-app-doze,EXACTLY_ONCE,1,2,27.702239026,-572.493553617,IDLE,,,No result found.,gx:3M3BXF,/alice/cal/dda3a3e9-7211-48d0-be92-3de1541443ba.ics,,,60,False,19
+e02,scheduled,stop-app-doze,EXACTLY_ONCE,1,2,27.626173633,-572.577460631,IDLE,,,No result found.,gx:GPB0K6,/alice/cal/59db7fb6-c117-462f-87af-d25553db3917.ics,,,60,False,19

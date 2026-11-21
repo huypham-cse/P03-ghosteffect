@@ -10,7 +10,9 @@
 \newcommand{\AgentDupLo}{74.2\xspace}
 \newcommand{\AgentDupN}{17\xspace}
 \newcommand{\AgentDupPct}{94.4\xspace}
+\newcommand{\AgentEmuHost}{x86-64 laptop running the Android emulator (API 33)\xspace}
 \newcommand{\AgentFramework}{M3A\xspace}
+\newcommand{\AgentGpuHost}{one NVIDIA L40S (48 GB) cloud VM\xspace}
 \newcommand{\AgentGuardAskN}{19\xspace}
 \newcommand{\AgentGuardDupHi}{24.6\xspace}
 \newcommand{\AgentGuardDupLo}{0.9\xspace}
@@ -64,6 +66,7 @@
 \newcommand{\AgentRulesFisherP}{$<$0.001\xspace}
 \newcommand{\AgentRulesInvalidN}{5\xspace}
 \newcommand{\AgentRulesNoCandN}{0\xspace}
+\newcommand{\AgentRulesResentN}{14\xspace}
 \newcommand{\AgentRulesRetryN}{15\xspace}
 \newcommand{\AgentRulesScheduledN}{20\xspace}
 \newcommand{\AgentRulesValidN}{15\xspace}
@@ -105,6 +108,15 @@
 \newcommand{\LedgerFullPfifty}{--\xspace}
 \newcommand{\LedgerFullPninetyfive}{--\xspace}
 \newcommand{\LedgerPfifty}{0.98\xspace}
+\newcommand{\LedgerPhonePixKillN}{100\xspace}
+\newcommand{\LedgerPhonePixTapN}{27{,}646\xspace}
+\newcommand{\LedgerPhonePixViol}{0\xspace}
+\newcommand{\LedgerPhoneSamBytes}{225\xspace}
+\newcommand{\LedgerPhoneSamKillN}{100\xspace}
+\newcommand{\LedgerPhoneSamMedMs}{0.26\xspace}
+\newcommand{\LedgerPhoneSamNinetyFiveMs}{0.40\xspace}
+\newcommand{\LedgerPhoneSamTapN}{42{,}662\xspace}
+\newcommand{\LedgerPhoneSamViol}{0\xspace}
 \newcommand{\LedgerPninetyfive}{1.99\xspace}
 \newcommand{\LedgerTaps}{4{,}874\xspace}
 \newcommand{\LedgerTrials}{300\xspace}
@@ -133,15 +145,22 @@
 \newcommand{\RealCalOnce}{8\xspace}
 \newcommand{\RealCalRecDup}{3\xspace}
 \newcommand{\RealCalRecN}{3\xspace}
+\newcommand{\RealCalTrialN}{9\xspace}
 \newcommand{\RealCensored}{0\xspace}
 \newcommand{\RealCoBot}{2\xspace}
+\newcommand{\RealCoHi}{3.7\xspace}
 \newcommand{\RealCoN}{101\xspace}
+\newcommand{\RealCoObs}{99\xspace}
 \newcommand{\RealCoWrong}{0\xspace}
 \newcommand{\RealDataLimitation}{Emulator measurements (\S\ref{sec:eval-real}) cover three apps on an emulator, with $n$ small outside Element; the agent study (\S\ref{sec:eval-agent}) runs one model on the emulator. Physical phones ran only K-9 and DAVx5, without an agent; the two rented phones have no root, so \texttt{am stop-app} stands in for \texttt{kill -9} and \texttt{lmkd} was not tested on them.\xspace}
 \newcommand{\RealDumpHi}{2.5\xspace}
 \newcommand{\RealDumpLo}{2\xspace}
 \newcommand{\RealEarlyWrong}{3\xspace}
+\newcommand{\RealElemAckedFirst}{62\xspace}
 \newcommand{\RealElemAckedN}{6\xspace}
+\newcommand{\RealElemFaultFirst}{21\xspace}
+\newcommand{\RealElemFaultResend}{3\xspace}
+\newcommand{\RealElemFaultSync}{18\xspace}
 \newcommand{\RealElemN}{101\xspace}
 \newcommand{\RealElemNofaultN}{12\xspace}
 \newcommand{\RealElemOnce}{101\xspace}
@@ -153,6 +172,7 @@
 \newcommand{\RealElemSticky}{20\xspace}
 \newcommand{\RealElemStickyResend}{2\xspace}
 \newcommand{\RealElemStickySync}{18\xspace}
+\newcommand{\RealElemStickyVoneN}{3\xspace}
 \newcommand{\RealElemSyncOnly}{18\xspace}
 \newcommand{\RealEmuCalDozeMedS}{50.9\xspace}
 \newcommand{\RealEmuCalDozeN}{3\xspace}
@@ -195,6 +215,8 @@
 \newcommand{\RealKSentN}{8\xspace}
 \newcommand{\RealKSentWrong}{8\xspace}
 \newcommand{\RealKSyncTapped}{20\xspace}
+\newcommand{\RealKnineNosentN}{15\xspace}
+\newcommand{\RealKnineSentN}{18\xspace}
 \newcommand{\RealLagAckedMax}{3.9\xspace}
 \newcommand{\RealLagAckedMed}{3.6\xspace}
 \newcommand{\RealLagAckedMin}{3.2\xspace}
@@ -274,6 +296,19 @@
 \newcommand{\RealPhoneObserveS}{120\xspace}
 \newcommand{\RealPilotN}{3\xspace}
 \newcommand{\RealPilotStaleDigest}{1\xspace}
+\newcommand{\RealPlanAbsentN}{120\xspace}
+\newcommand{\RealPlanAlphaPct}{10\xspace}
+\newcommand{\RealPlanAskN}{120\xspace}
+\newcommand{\RealPlanCalN}{489\xspace}
+\newcommand{\RealPlanCalOneN}{399\xspace}
+\newcommand{\RealPlanCalZeroN}{90\xspace}
+\newcommand{\RealPlanClassN}{3\xspace}
+\newcommand{\RealPlanCommittedN}{120\xspace}
+\newcommand{\RealPlanDupN}{0\xspace}
+\newcommand{\RealPlanRetryAbsent}{120\xspace}
+\newcommand{\RealPlanRetryCommitted}{0\xspace}
+\newcommand{\RealPlanRetryHi}{2.5\xspace}
+\newcommand{\RealPlanTestN}{240\xspace}
 \newcommand{\RealPresent}{yes\xspace}
 \newcommand{\RealRentAndroid}{15\xspace}
 \newcommand{\RealRentPixDozeMedS}{27.4\xspace}
@@ -289,6 +324,8 @@
 \newcommand{\RealRentSamOnceN}{7\xspace}
 \newcommand{\RealRentSamStopMedS}{30.0\xspace}
 \newcommand{\RealRentSamStopN}{3\xspace}
+\newcommand{\RealRentSamTwoDozeMedS}{27.7\xspace}
+\newcommand{\RealRentSamTwoN}{2\xspace}
 \newcommand{\RealRentSamValidN}{7\xspace}
 \newcommand{\RealTimeoutClean}{3\xspace}
 \newcommand{\RealTimeoutN}{6\xspace}

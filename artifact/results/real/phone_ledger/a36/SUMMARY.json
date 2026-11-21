@@ -1,0 +1,28 @@
+{
+  "install": "Success",
+  "utc_start": "2026-11-19T07:01:23Z",
+  "device": "samsung SM-A366U1",
+  "android_release": "15",
+  "sdk_int": "35",
+  "build_display": "AP3A.240905.015.A2.A366U1UEU1AYBB",
+  "sqlite_version": "3.44.3",
+  "full_issue_p50_ms": [
+    "0.261",
+    "0.255"
+  ],
+  "full_issue_p95_ms": [
+    "0.395",
+    "0.358"
+  ],
+  "full_bytes_per_effect": [
+    "225",
+    "225"
+  ],
+  "kill_trials": 100,
+  "taps_checked": 42662,
+  "invariant_violations": 0,
+  "ghost_candidates": 34,
+  "writer_alive_after_kill": 0,
+  "seed": 7,
+  "utc_end": "2026-11-19T07:03:56Z"
+}

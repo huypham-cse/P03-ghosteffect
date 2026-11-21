@@ -53,7 +53,8 @@ The controller injects the fault classes of \S\ref{sec:impl} at the commit point
 and logs the lag $T_c$ from the anchor $r_e$ to visibility. Bounds and lag tables are keyed by the observable fault class (Lemma~\ref{lem:calib}(ii)), so the lab's fault mix need not
 match deployment's. An effect whose class the controller cannot tell uses the per-class maximum. Passive labels (confirmed sends, abandoned forms) are cheaper but miss cached history after a
 kill, optimistic entries and restart lags (\S\ref{sec:eval-pop},~\S\ref{sec:eval-real}). A label costs one fault-injected trial on a test device: reset, compose, fault,
-relaunch, one read of every view, and grading. In our LLM-agent experiment on the emulator the median trial took \CertLabelMedS\,s. At that rate, \CertLabelsFive labels per class and outcome
+relaunch, one read of every view, and grading. Our scripted label trials on Etar and DAVx5 (\S\ref{sec:eval-real}) took a median of \CertLabelMedOneS\,s for a committed
+effect and \CertLabelMedZeroS\,s for an absent one. At that rate, \CertLabelsFive labels per class and outcome
 for \CertClassesN classes take about \CertDeviceHoursFive device-hours.
 
 \para{How many labels.} Validity holds at any sample size. Small samples only widen the bounds, so the planner asks more often, not retries more often (\S\ref{sec:eval-pop}).
@@ -65,15 +66,10 @@ Each simulation draws \CertLabelsBase or \CertLabelsFive labels per fault class 
 and a holdout that tests it, \CertPilotFive and \CertHoldoutFive labels at the larger size. The lag tables hold \CertLagBootN entries per class, drawn by bootstrap from the measured lags,
 unless a row ties them to the label count.
 
-The lag table is the costly part. In these simulations, joint certification with \CertLabelsFive labels and \CertLagBootN lag entries asks on \RsimFiveJointAsk\% of workflows.
-When the lag table also holds only \CertLabelsFive entries per class, the simulated joint mode asks on \CertTiedFiveJointAsk\% and the product mode on \CertTiedFiveProdAsk\%.
-With \CertLabelsBase tied entries no wait certifies, and both simulated modes ask on every workflow (\CertTiedTwoJointAsk\%). Larger tied budgets are in Table~\ref{tab:cert-lagapp}.
-
-A lag tail that no label sees breaks the budget. In the tail rows, \RsimTail\% of committed effects become visible only after every logged lag. The simulated product mode then
-retries \CertTailFiveProdPv\% of committed effects at \CertLabelsFive labels (CP \CertTailFiveProdPvHi\%, \CertTailFiveProdOver). Joint certification keeps the budget only while it still
-asks often enough. At \CertLabelsBase labels it asks on \RsimTailJointAsk\% of simulated workflows and retries \RsimTailJointPv\% of committed effects. At \CertLabelsFive labels and \CertLagBootN lag entries it asks on
-\CertTailFiveJointAsk\% and retries \CertTailFiveJointPv\% (CP \CertTailFiveJointPvHi\%), which is \CertTailFiveJointOver. A tied lag table does not help: both simulated modes stay
-over budget (Table~\ref{tab:cert-budget}).
+The lag table is the costly part (Table~\ref{tab:cert-budget}). With as many lag entries as labels, the simulated joint mode asks on \CertTiedFiveJointAsk\% at \CertLabelsFive labels
+instead of \RsimFiveJointAsk\%, and at \CertLabelsBase no wait certifies (larger budgets: Table~\ref{tab:cert-lagapp}). A lag tail that no label sees breaks the budget. When
+\RsimTail\% of committed effects become visible only after every logged lag, product retries \CertTailFiveProdPv\% at \CertLabelsFive labels (CP \CertTailFiveProdPvHi\%). Joint keeps the
+budget only at \CertLabelsBase labels, by asking on \RsimTailJointAsk\% of workflows, and tying the lag table to the labels does not help.
 
 \input{generated/tab_cert_budget}
 
@@ -152,5 +148,5 @@ reading needs no wait (A1), so a variant could read before waiting and declare e
 When the planner asks, the prompt names the effect, shows the pre-tap screenshot and the digest, and offers ``done'', ``not done'' and ``not sure''. An app that wins
 the foreground can redirect a retry~\cite{qian2026rebinding}, so \textsc{VerifyForeground} checks package, activity and window before every retry, compensation or prompt.
 
-A workflow's budget is split across effects by~\eqref{eq:kkt} with each step's strongest family as its probe; a duplicate of a reversible effect detected
+A workflow's budget is split across effects by Eq.~\eqref{eq:kkt} in Appendix~\ref{app:proofs} with each step's strongest family as its probe; a duplicate of a reversible effect detected
 later (two nonce matches, or two hop-1 entries) triggers the compensating effect as a new ledger record.

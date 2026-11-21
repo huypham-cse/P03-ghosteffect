@@ -39,7 +39,7 @@ M('RsimFitLateObs', _late_obs)
 if len({(r['n'], r['both_wrong']) for r in _co}) != 1:
     raise ValueError('inconsistent late cofailure counts')
 M('RsimFitCoWrong', _co[0]['both_wrong'])
-M('RsimFitCoN', _co[0]['n'])
+M('RsimFitCoN', int(_co[0]['n']) - int(_co[0]['both_bot']))   # trials where both late reads were observed
 _lab = {'redo': 'redo', 'app-state': 'trust app status', 'rules': 'rules, 10\\,s wait', 'rules-w30-all': 'rules, 30\\,s wait',
         'always-ask': 'always ask', 'g2-only': 'Thm.~\\ref{thm:twohop} only', 'ghost': 'product', 'ghost-src': 'source families',
         'ghost-joint': 'joint'}

@@ -4,6 +4,7 @@
 lost (TCP reset after the server committed), under no fault, background + \texttt{kill -9}, force-stop or a 20\,s network cut. App re-send: how the app resolved it; GUI redo:
 a scripted agent recomposes and re-sends the same content. (b)~Element's recovery-to-visible lag: minimum, median and maximum over the $n$ trials of each class (s; upper end of a one-dump $\approx$2\,s interval; first visibility was observed
 in all recorded trials, with trial-specific follow-up windows). This is not a uniform late-duplicate follow-up. Sticky: every reply dropped until the fault.
+Not shown: \RealElemStickyVoneN{} trials of an earlier sticky variant and \RealElemAckedN{} acknowledged-then-killed trials (lags in the artifact).
 (c)~Family errors against the server, wrong/observed, with no-observation ($\bot$, wrong screen) separated;
 Element's send-state indicator appears in the same dump as the row in \RealElemN/\RealElemN{} trials, so the two are one reading.}
 \label{tab:real}
@@ -43,10 +44,10 @@ sticky + force-stop & \RealLagSFsN & \RealLagSFsMin & \RealLagSFsMed & \RealLagS
 App & Family, read & wrong/obs. & $\bot$ \\
 \midrule
 Element & row = indicator, first read & \RealFirstWrong/\RealFirstObs$^{\ddagger}$ & \RealFirstBot \\
- & row = indicator, first non-$\bot$ read & \RealEarlyWrong/\RealElemN$^{\ddagger}$ & 0 \\
+ & row = indicator, first non-$\bot$ read, any time & \RealEarlyWrong/\RealElemN$^{\ddagger}$ & 0 \\
  & row = indicator, late & 0/\RealLateObs & \RealLateBot \\
  & room-list digest, late & 0/\RealLateObs & \RealLateBot \\
- & any two families wrong together, late & 0/\RealCoN{} (CI 0--\RealLateHi\%) & \RealCoBot \\
+ & any two families wrong together, late & 0/\RealCoObs{} (CI 0 to \RealCoHi\%) & \RealCoBot \\
 K-9 & Outbox lists it (``unsent''), lost reply & \RealKOutWrong/\RealKRd & 0 \\
  & failure notification, lost reply & \RealKNotifWrong/\RealKRd$^{\S}$ & 0 \\
  & Sent folder lacks it, lost reply & \RealKSentWrong/\RealKSentN & 0 \\
@@ -54,7 +55,7 @@ K-9 & Outbox lists it (``unsent''), lost reply & \RealKOutWrong/\RealKRd & 0 \\
  & any family, acknowledged send & 0/\RealKAckedN & 0 \\
 \bottomrule
 \end{tabular}\\[2pt]
-{\scriptsize $^{\ddagger}$All lag-blind: verified screen, scrolled to the bottom, message not yet in the restored timeline (visible at \RealBlindLagLo--\RealBlindLagHi\,s).
+{\scriptsize $^{\ddagger}$All lag-blind: verified screen, scrolled to the bottom, message not yet in the restored timeline (visible at \RealBlindLagLo{} to \RealBlindLagHi\,s).
 $^{\S}$Force-stop clears the app's notifications. The shade was cleared between trials.}
 \end{minipage}
 \end{table*}

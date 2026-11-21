@@ -6,8 +6,9 @@ the planner, the Bayes rule, and the KKT allocator are written in Python using o
 in WAL mode with \texttt{synchronous=FULL}, owned by a controller process. On a Linux host (a 4-vCPU cloud VM, ext4 on network-attached block storage), an \textsf{ISSUED} append takes \LedgerPfifty\,ms at the median
 and \LedgerPninetyfive\,ms at p95; a record takes \LedgerBytes\,bytes.
 A host write-ordering test SIGKILLs, at random times, a child that loops over plan, issue, tap and settle. Over \LedgerTrials kills and \LedgerTaps taps, every tapped effect
-was \textsf{ISSUED} or later (\LedgerViol violations). SIGKILL keeps the page cache, so durability is tested on the emulator (\S\ref{sec:eval-real}). Host timings are not phone
-timings.
+was \textsf{ISSUED} or later (\LedgerViol violations). SIGKILL keeps the page cache, so durability is tested on the emulator (\S\ref{sec:eval-real}). The same ledger in a small
+Android app took \LedgerPhoneSamMedMs\,ms at the median (p95 \LedgerPhoneSamNinetyFiveMs\,ms, \LedgerPhoneSamBytes\,bytes) on a rented Galaxy A36 with \texttt{synchronous=FULL} read back.
+Random kills of its writer, \LedgerPhoneSamKillN{} on the A36 and \LedgerPhonePixKillN{} on a Pixel~9, left \LedgerPhoneSamViol{} and \LedgerPhonePixViol{} violations over \LedgerPhoneSamTapN{} and \LedgerPhonePixTapN{} taps.
 
 \para{Emulator testbed.} Android~13 (API~33, arm64) emulators run F-Droid builds of the apps against self-hosted servers on the host. A TCP fault proxy in front of
 each server forwards a matching request (Matrix \texttt{PUT \dots/send/\dots/<txnId>}, SMTP end of \texttt{DATA}, CalDAV \texttt{PUT}) so the server commits. It then drops the reply

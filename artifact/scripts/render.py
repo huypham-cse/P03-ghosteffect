@@ -179,7 +179,7 @@ for r in sp:
 W('tab_sprt.tex', r'''\begin{table}[!htbp]
 \centering
 \caption{Implementation sanity check of Theorem~\ref{thm:main}(a,c) for an i.i.d.\ binary probe ($\epsilon_0{=}\epsilon_1{=}\epsilon$, $\beta{=}\alpha$), all 24 cells.
-Exact DTMC values; ``MC hi'': one-sided 95\% Clopper--Pearson upper bound on $P(\mathrm{dup}\mid X{=}1)$ from 40{,}000 committed-world episodes;
+Exact DTMC values; ``MC hi'': one-sided 95\% Clopper-Pearson upper bound on $P(\mathrm{dup}\mid X{=}1)$ from 40{,}000 committed-world episodes;
 $\bar N$: mean reads at $\pi{=}\tfrac12$, exact and MC; LB/UB: bounds~\eqref{eq:lb}/\eqref{eq:ub} averaged over the two outcomes.
 At $\alpha{=}10^{-4}$, 40{,}000 episodes cannot confirm the budget by MC (zero events give an upper bound of $9.2{\times}10^{-5}$); the exact column does.}
 \label{tab:sprt}
@@ -242,7 +242,7 @@ W('tab_calib.tex', r'''\begin{table}[!htbp]
 \centering
 \caption{Calibration of an i.i.d.\ binary probe (Lemma~\ref{lem:calib}(i)): share of probe types (\%) whose exact $P(\mathrm{dup}\mid X{=}1)$ or
 $P(\mathrm{loss}\mid X{=}0)$ exceeds $\alpha{=}\beta{=}0.01$, and mean reads, over 200 probe types $\times$ 5 seeds, $\epsilon_0{\in}[0.06,0.26]$,
-$\epsilon_1{\in}[0.04,0.20]$. CP: one-sided Clopper--Pearson upper bounds at confidence $1{-}\delta$.}
+$\epsilon_1{\in}[0.04,0.20]$. CP: one-sided Clopper-Pearson upper bounds at confidence $1{-}\delta$.}
 \label{tab:calib}
 \footnotesize
 \setlength{\tabcolsep}{3.5pt}
@@ -488,7 +488,7 @@ for _case, _spec in _seed_cases.items():
         _sd = math.sqrt(sum((x - _mean) ** 2 for x in _ask) / (len(_ask) - 1))
         _label = {'ghost': 'product', 'ghost-joint': 'joint', 'g2-only': 'theorem-only',
                   'rules-vetted': 'vetted rules'}.get(_policy, _policy)
-        _seed_lines.append(f"{_case} & {_label} & {_mean:.2f} $\\pm$ {_sd:.2f} & {min(_ask):.2f}--{max(_ask):.2f} \\\\")
+        _seed_lines.append(f"{_case} & {_label} & {_mean:.2f} $\\pm$ {_sd:.2f} & {min(_ask):.2f} to {max(_ask):.2f} \\\\")
 # prose (appendix-results.tex): one reporting seed drives the Element vetted-rule SD; the others cluster low
 _ev = sorted(float(_seed_index[('element', 'rules-vetted', _s)]['ask']) for _s in _seed_values)
 if not _ev[-1] > 3 * _ev[-2]:
@@ -496,7 +496,7 @@ if not _ev[-1] > 3 * _ev[-2]:
 W('tab_seed_variance.tex', r'''\begin{table*}[t]
 \centering
 \caption{Across-seed asking-rate variability for the fixed Table~\ref{tab:planner} (model-based simulation) and Table~\ref{tab:realsim} (measured-parameter simulation) reporting cases.
-Each row reports the same \SimSeedCount{} original seeds; workflow, calibration, and lag budgets are recorded in the accompanying metadata.
+Each row reports the same \SimSeedCount{} original seeds. Element rows use 2{,}000 labels per class and outcome and 20{,}000 lag entries per class, so its vetted-rule row is not the matched-input case of Table~\ref{tab:matched}.
 Values are percentages: arithmetic mean $\pm$ sample standard deviation and range; standard deviation is not a confidence interval.}
 \label{tab:seedvariance}
 \small
@@ -540,7 +540,7 @@ _planner_full = (r"""\begin{table}[t]
 world (persistent nonce misses, within-view VLM correlation 0.6, cross-view 0.1, fallible Monitor, user wrong on 5\% of asks, 10\% with a look-alike), 2{,}000
 calibration effects per app and outcome. dup/loss: \% of workflows with a duplicate/loss from any cause, including wrong user answers; ask: \% of workflows in which the planner asked;
 $P_{\mathrm{v}}$: \% of committed effects retried by the planner's own decision (the guaranteed quantity, budget 1\%); s: blocking recovery
-seconds per workflow (60\,s per ask). All 95\% Clopper--Pearson half-widths $\le$""" + MACROS['SimHalfWidth'] + r""" points.}
+seconds per workflow (60\,s per ask). All 95\% Clopper-Pearson half-widths $\le$""" + MACROS['SimHalfWidth'] + r""" points.}
 \label{tab:planner}
 \footnotesize
 \setlength{\tabcolsep}{2.2pt}
@@ -755,8 +755,8 @@ for r in ss:
     lines.append(f"{alpha_tex(r['alpha'])} & {float(r['p']) * 100:.1f}\\% & {nn(r['prod_n'])} & {nn(r['prod_n0'])} & {nn(r['joint_n'])} & {nn(r['joint_n_q'])} & {nn(r['joint_n_k'])} & {nn(r['lag_n'])}" + r' \\')
 W('tab_nsize.tex', r"""\begin{table}[t]
 \centering
-\caption{Calibration sizes that make certification possible (exact one-sided Clopper--Pearson, $\delta{=}\min(\alpha,\beta)/(10K)$, $\alpha{=}\beta$), per stratum. Keying by the four
-observable fault classes multiplies every entry by \NsizeKeyLo--\NsizeKeyHi{} (each class needs its own labels and is certified at $\delta/4$, that is $n_{\mathrm{cls}}{=}4$ in \S\ref{sec:theory-cal}). Product (A2): effects so that two families, each with true wrong-verdict rate $p$, multiply to
+\caption{Calibration sizes that make certification possible (exact one-sided Clopper-Pearson, $\delta{=}\min(\alpha,\beta)/(10K)$, $\alpha{=}\beta$), per stratum. Keying by the four
+observable fault classes multiplies every entry by \NsizeKeyLo{} to \NsizeKeyHi{} (each class needs its own labels and is certified at $\delta/4$, that is $n_{\mathrm{cls}}{=}4$ in \S\ref{sec:theory-cal}). Product (A2): effects so that two families, each with true wrong-verdict rate $p$, multiply to
 $\alpha_{\mathrm{test}}{=}\alpha/2$; \emph{med.}: observed at the expected count $\lceil pn\rceil$ (about half of such sets fail), \emph{0}: zero wrong verdicts (minimum for any $p$).
 Joint: whole effects for a jointly calibrated region to certify $\alpha_{\mathrm{test}}$ with zero events (\emph{0}), at a true region rate $\alpha_{\mathrm{test}}/4$ (\emph{med.}), and with zero events for one
 step of a 3-effect workflow. Lag: logged times for one wait at $0.2\alpha$ with zero exceedances.}

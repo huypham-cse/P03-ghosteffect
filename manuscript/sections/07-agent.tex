@@ -4,9 +4,9 @@
 \subsection{An LLM agent in the K-9 trap}
 \label{sec:eval-agent}
 In an LLM-agent experiment on the emulator, \AgentFramework{} from AndroidWorld~\cite{rawles2025androidworld} drove \AgentModel{}
-(\AgentServing, greedy decoding) on \AgentHost{} into the K-9 trap of \S\ref{sec:eval-real}.
+(\AgentServing, greedy decoding), served on \AgentGpuHost, into the K-9 trap of \S\ref{sec:eval-real}, with an \AgentEmuHost.
 After the server committed its mail, our proxy dropped the reply. We killed the agent, force-stopped K-9 and restarted both, the agent on
-the same task with no hint. The server's copies \AgentHEvalS\,s after the relaunch decide the outcome, under a prior freeze.
+the same task with no hint. The server's copies \AgentHEvalS\,s after the relaunch decide the outcome. Task, fault, model and scoring were frozen before the run.
 
 \AgentValidN{} of \AgentScheduledN{} scheduled episodes were valid (in \AgentInvalidN{} the original never reached the server). The agent resent in \AgentResentN{} of \AgentValidN{} valid episodes (\AgentResentPct\%, Wilson 95\% interval
 from \AgentResentLo{} to \AgentResentHi\%), and each resend left a duplicate (\AgentDupN{}). Of the rest, \AgentDoneNoResendN{} declared
@@ -15,14 +15,14 @@ The suite's text-only T3A resent in \AgentTextResentN{} of its \AgentTextValidN{
 but only \AgentTextDupN{} count as duplicates: it often omitted the tagged subject. Killing only M3A, with K-9 running, left
 a duplicate in \AgentKillDupN{} of \AgentKillValidN.
 
-Under a second freeze (same task, fault, model), \sys at the action boundary issued the send in its ledger before the tap and asked
+In a second frozen run (same task, fault, model), \sys at the action boundary issued the send in its ledger before the tap and asked
 after the relaunch, since no K-9 family certifies. A simulated user answered from the server, wrong on a pre-drawn 5\% of asks. Duplicates
 fell to \AgentGuardDupN{} of \AgentGuardValidN{} valid episodes (\AgentGuardDupPct\%, 95\% CI from \AgentGuardDupLo{} to
 \AgentGuardDupHi\%, Fisher $p$ \AgentGuardFisherP{} against the native agent). \sys asked in all \AgentGuardAskN{} episodes,
-and the remaining duplicate followed a wrong user answer (\AgentGuardUserErrN). Same-evidence rules (Appendix~\ref{app:extra}) on the same ledger, reading K-9's Outbox and Sent list exactly, retried in
-\AgentRulesRetryN{} of \AgentRulesValidN{} valid Sent-folder episodes and left a duplicate in \AgentRulesDupN{} (Fisher $p$
-\AgentRulesFisherP{} against \sys's \AgentGuardSentDupN{} of \AgentGuardSentValidN). On K-9 this tests the ledger and asking, not calibration.
+and the remaining duplicate followed a wrong user answer (\AgentGuardUserErrN). Same-evidence rules (Appendix~\ref{app:extra}) on the same ledger, reading K-9's Outbox and Sent list exactly, decided to retry in
+\AgentRulesRetryN{} of \AgentRulesValidN{} valid Sent-folder episodes. K-9 sent the mail again in \AgentRulesResentN{} of them, leaving \AgentRulesDupN{} duplicates (Fisher $p$
+\AgentRulesFisherP{} against \sys's \AgentGuardSentDupN{} duplicates in its \AgentGuardSentValidN{} Sent-folder episodes). On K-9 this tests the ledger and asking, not calibration.
 Our client only renames the model's \texttt{type} action, which M3A rejects, to \texttt{input\_text} (in
 \AgentAliasEpisodesN{} of \AgentScheduledN{} baseline episodes, \AgentAliasCallsN{} of \AgentModelCallsN{} calls); T3A needs none.
 Table~\ref{tab:agent-arms} in the appendix lists all five arms.
-Limits: two agents and faults, one model and app, emulator only, small $n$, this rename, a simulated user, sequential arms.
+Limits: two agents, two fault recipes, one model, one app, emulator only, small $n$, this rename, a simulated user, sequential arms.

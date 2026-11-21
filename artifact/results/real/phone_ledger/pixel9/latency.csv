@@ -1,0 +1,4 @@
+android_release,build_display,bytes_per_effect,code,device,issue_max_ms,issue_p50_ms,issue_p95_ms,journal_mode,n,rep,sdk_int,sqlite_version,sync_requested,synchronous
+15,BP1A.250505.005,209,0,Google Pixel 9,12.033,0.323,0.727,wal,2000,1,35,3.44.3,FULL,1
+15,BP1A.250505.005,209,0,Google Pixel 9,1.990,0.476,0.754,wal,2000,2,35,3.44.3,FULL,1
+15,BP1A.250505.005,209,0,Google Pixel 9,3.832,0.089,0.291,wal,2000,1,35,3.44.3,NORMAL,1
