@@ -273,3 +273,33 @@ Tổng 105 macro (24 + 12 + 16 + 18 + 7 + 24 + 2 + 2). Phần A không dùng mac
 **Cho C:** (1) thêm `algorithmic` vào danh sách môi trường bỏ qua trong `team/readability_count.py` (regex ở hàm `prose`), để YC-12 của A đạt trên công cụ; (2) hợp đồng macro bổ sung ở trên.
 
 **Trạng thái:** A-01 đến A-10 xong. #24, #25 đã sửa theo review và nằm trên `main`. PR `[A] Nghiệm thu` mở từ `a/acceptance`. Chặn duy nhất còn lại: YC-12 chờ C sửa công cụ cho Alg. 1.
+
+## 21/11/2026
+
+**Đã làm (sẵn sàng cho cổng cuối, C-13):** kiểm lại `main` ở `6d07ec1` (sau #83; freeze candidate trong `others/c13-final-checklist.md` vẫn ghi `29c2990`, nên ZIP phải tạo lại từ commit đã chốt).
+- Bản clone WSL sạch của `main`: test artifact 68 OK (1 skip), test testbed 119 OK (3 skip).
+- `make_bundle.sh` ra `ghost-effect-final-6d07ec1.zip`, SHA-256 `4c408e04b4ac62ad54cf7fd50f83593fbc2b2064fa7552af10f730ed841dd416`; scrub qua trên gói đã giải nén; test trong gói 68 OK (10 skip, công cụ `team/` không đi kèm).
+- `run_all.py` chạy từ gói: thoát 0. So 108 CSV: 106 trùng byte; `ledger_bench.csv` khác (phụ thuộc host, đã ghi trong README); `lag_wait.csv` khác ở chữ số cuối của hai số thực (ví dụ `...392` so với `...391`). Nguyên nhân: Python 3.14.4 trên máy này, freeze dùng 3.12.3; macro làm tròn nên bài không đổi. Báo C: README nên nêu rõ phiên bản Python cho phép so byte, hoặc liệt kê `lag_wait.csv` là khác ở mức làm tròn.
+- PDF build trên Windows (MiKTeX): thoát 0, 23 trang, 0 `??`, overfull lớn nhất 1,53 pt, kết luận trang 12, scrub `manuscript/` qua.
+- Nhánh `a/final-wording`: §4.1 đổi "We claim none of these inequalities" (dễ hiểu thành "không khẳng định các bất đẳng thức đúng") thành "None of these inequalities is new". Build lại: kết luận vẫn trang 12, 0 `??`; scrub và độ dễ đọc `04-theory.tex` qua. Chưa mở PR: freeze chỉ cho phép thêm commit link artifact, cần trưởng nhóm quyết.
+- Đọc lại §3, §4, §5, App. A (chứng minh Thm 4.1): không thấy lỗi khác.
+
+**Cho C (file của C, không sửa):** §1 dòng 40 dùng "A2" trước khi §3 định nghĩa; đề nghị viết "when independence across families has a structural basis" như abstract.
+
+**Trạng thái:** phần A xong. Còn lại của cả nhóm (C-13, trưởng nhóm): chốt commit freeze, tạo lại ZIP, đăng link ẩn danh, chèn link vào §8, chạy lại cổng PDF, nộp HotCRP kèm thông tin tác giả.
+
+## 21/11/2026 (chiều): đọc và sửa câu chữ lần cuối trước khi nộp
+
+Theo yêu cầu của A, sửa trên toàn bài (kể cả file của B và C), chỉ đổi chữ, không đổi số, macro hay dữ liệu:
+- Lỗi cấu trúc: phần mô phỏng với tham số đo (Table 4, Table 5) không có tiêu đề nên nằm lẫn trong §7.2; thêm `\subsection{Measured-parameter simulation}` (§7.3), đưa đoạn mô tả lên trước đoạn giới hạn và viết gọn đoạn giới hạn (giữ đủ các ý của YC-C5). Đoạn mở §7 nêu bốn mục theo đúng thứ tự.
+- Lỗi thực tế ở §6: chỉ Doze cần tắt màn hình; App Standby và Data Saver hạn chế app chạy nền cả khi màn hình bật.
+- Abstract: "decides ghost effects" thành "resolves ghost effects", câu cuối rõ hơn; 199 từ (≤ 200), vẫn 4 con số.
+- Câu chữ: §1 "differs twice"; §2 T3A nêu số bản trùng có tag; §4 bỏ câu mở đầu và lần nhắc RFC 1047 thứ hai; §5.3 bỏ ngoặc thừa; §6 bỏ câu PRISM/Storm chưa chạy; §7.1 hai câu khó đọc; §7.2 câu về bản trùng còn lại; §7.4 "favoring"; §8, §9 (câu nối dài, "our foundations"), §10.
+- Kiểm: build thoát 0, 23 trang, 0 `??`, không overfull; kết luận và References đều ở trang 12; độ dễ đọc toàn bài `para 14/15, emph 28/30`, 0 câu dài, 0 đoạn chấm phẩy; không thêm "escalate", "G2" hay số gõ tay; scrub qua; YC-C9 grep kết luận ra 0.
+
+## 21/11/2026 (chiều, tiếp): Figure 5 chồng chữ
+
+- Figure 5 (phụ lục B.6, `fig_pareto`): nhãn α trên đường product bị cắt ở mép trái và đè lên các đường cong; ở hình dưới, "key" đè "Atomix-durable" và "key+ask" chạm điểm "nonce+ask". Sửa trong `artifact/scripts/render.py` (chỉ phần trình bày): bỏ nhãn α khỏi hình, chú thích liệt kê các mức α lấy từ CSV theo thứ tự điểm; hình dưới cao 4,8 cm, "key" đặt sang phải như các nhãn khác, "key+ask" đặt ở góc trống dưới trái có đường nối.
+- YC-10: trục và chú thích Figure 5, chú thích Table 24 và các bảng `tab_corr`, `tab_pop`, `tab_sens` đổi "escalations/escalated" thành "asks"; `generated/` không còn "escalat".
+- Không đổi CSV hay macro. So với manifest freeze 20/11, năm file sinh ra này khác do đổi trình bày (`fig_pareto`, `tab_corr`, `tab_planner_extended`, `tab_pop`, `tab_sens`).
+- Kiểm: build thoát 0, 23 trang, 0 `??`, không overfull; kết luận và References ở trang 12; đã xem ảnh Figure 5 ở 300 dpi. Test artifact: 1 fail cũ chỉ trên Windows (`test_failed_publication_restores_the_original_directory`), còn lại OK.

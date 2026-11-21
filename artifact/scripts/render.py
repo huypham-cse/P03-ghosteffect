@@ -285,7 +285,7 @@ W('tab_corr.tex', r'''\begin{table}[!htbp]
 $P(\mathrm{dup}\mid X{=}1)$ in \%. \emph{Within-view}: re-reads of a view share one error with probability $\rho$.
 \emph{Cross-view}: views share a latent error rate with intraclass correlation $\rho$. naive: SPRT re-reading one view; re-read: our earlier design
 (re-reads of rotated views, AR(1) shrinkage); view: one read per view, SPRT over views (assumes independent views); certified: family verdict with calibrated bound (Prop.~\ref{prop:family}),
-escalations (\%) in parentheses; bound: Lemma~\ref{lem:floor}, worst case of all 3 views wrong.}
+asks (\%) in parentheses; bound: Lemma~\ref{lem:floor}, worst case of all 3 views wrong.}
 \label{tab:corr}
 \footnotesize
 \setlength{\tabcolsep}{2pt}
@@ -538,7 +538,7 @@ _planner_full = (r"""\begin{table}[t]
 \centering
 \caption{Model-based simulation: \SimN{} paired interrupted workflows, $\alpha{=}\beta{=}1\%$ per workflow, default
 world (persistent nonce misses, within-view VLM correlation 0.6, cross-view 0.1, fallible Monitor, user wrong on 5\% of asks, 10\% with a look-alike), 2{,}000
-calibration effects per app and outcome. dup/loss: \% of workflows with a duplicate/loss from any cause, including wrong user answers; ask: \% of workflows escalated;
+calibration effects per app and outcome. dup/loss: \% of workflows with a duplicate/loss from any cause, including wrong user answers; ask: \% of workflows in which the planner asked;
 $P_{\mathrm{v}}$: \% of committed effects retried by the planner's own decision (the guaranteed quantity, budget 1\%); s: blocking recovery
 seconds per workflow (60\,s per ask). All 95\% Clopper--Pearson half-widths $\le$""" + MACROS['SimHalfWidth'] + r""" points.}
 \label{tab:planner}
@@ -703,7 +703,7 @@ for n_ in ncs:
 W('tab_pop.tex', r"""\begin{table}[t]
 \centering
 \caption{Calibration population, common mode and calibration size (model-based simulation, \SimN{} paired workflows per row). Cells: $P_{\mathrm{v}}$ (\%, budget 1\%) /
-escalations (\%). Interrupted world: 2\% stale history after a restart, 3\% optimistic ``sending'' entries for tapped-but-uncommitted effects, 20\% heavy-tailed lags.
+asks (\%). Interrupted world: 2\% stale history after a restart, 3\% optimistic ``sending'' entries for tapped-but-uncommitted effects, 20\% heavy-tailed lags.
 Passive labels come from uninterrupted effects; fault-injected labels from the interrupted population. Rules: $P_{\mathrm{v}}$ of the same-evidence rule baseline.}
 \label{tab:pop}
 \footnotesize
@@ -837,27 +837,33 @@ for pol, mk, lab, anc in (('rules', 'x', 'rules', 'west'), ('rules-lenient', '+'
     if float(r['cdup']) <= 2.0:
         pa.append(f"\\addplot[only marks,mark={mk},mark size=2.2pt,black,forget plot] coordinates {{({float(r['cdup']):.3f},{float(r['ask']):.2f})}};"
                   f"\\node[font=\\scriptsize,anchor={anc},inner sep=2pt] at (axis cs:{float(r['cdup']):.3f},{float(r['ask']):.2f}) {{{lab}}};")
-gl = ' '.join(f"\\node[font=\\tiny,anchor=south east,inner sep=1pt,blue!60!black] at (axis cs:{float(r['cdup']):.3f},{float(r['ask']):.2f}) {{{float(r['alpha']):g}}};"
-              for r in SW['ghost'])
+# The product points sit on top of the other curves near P_v=0, so their alpha values go in the caption, not on the plot.
+alphas = [f"{float(r['alpha']):g}" for r in SW['ghost']]
+gl = ''
 mark = {'redo': 'x', 'atomix': 'triangle', 'atomix-durable': 'triangle*', 'verify': 'diamond', 'key': 'square',
         'key-ask': 'square*', 'nonce-ask': 'pentagon*', 'maj3-ask': 'diamond*', 'always-ask': 'otimes*', 'ghost-v1': 'o'}
 short_n = {'redo': 'redo', 'atomix': 'Atomix', 'atomix-durable': 'Atomix-durable', 'verify': 'verify', 'key': 'key',
            'key-ask': 'key+ask', 'nonce-ask': 'nonce+ask', 'maj3-ask': '3 views+ask', 'always-ask': 'always ask', 'ghost-v1': 're-read SPRT',
            'rules': 'rules', 'rules-lenient': 'lenient'}
-anch = {'key': 'south west', 'always-ask': 'south east', 'maj3-ask': 'south', 'nonce-ask': 'south west', 'key-ask': 'north west',
+anch = {'key': 'west', 'always-ask': 'south east', 'maj3-ask': 'south', 'nonce-ask': 'south west', 'key-ask': 'north west',
         'ghost-v1': 'north west', 'rules': 'north', 'rules-lenient': 'north west'}
 pb = []
 for p, mk in mark.items():
     r = P[p]
     y = float(r['dup']) + float(r['loss'])
-    pb.append(f"\\addplot[only marks,mark={mk},mark size=1.8pt,gray!40!black] coordinates {{({float(r['ask']):.2f},{y:.3f})}};"
-              f"\\node[font=\\scriptsize,anchor={anch.get(p, 'west')},inner sep=1.5pt] at (axis cs:{float(r['ask']):.2f},{y:.3f}) {{{short_n[p]}}};")
+    pb.append(f"\\addplot[only marks,mark={mk},mark size=1.8pt,gray!40!black] coordinates {{({float(r['ask']):.2f},{y:.3f})}};")
+    if p == 'key-ask':
+        # No free space next to this point (key above, nonce+ask to the right): label it in the empty lower-left corner with a leader line.
+        pb[-1] += (f"\\node[font=\\scriptsize,anchor=west,inner sep=1.5pt] (keyask) at (axis cs:-4,1.4) {{{short_n[p]}}};"
+                   f"\\draw[gray!60,thin] (keyask.north) -- (axis cs:{float(r['ask']):.2f},{y:.3f});")
+    else:
+        pb[-1] += f"\\node[font=\\scriptsize,anchor={anch.get(p, 'west')},inner sep=1.5pt] at (axis cs:{float(r['ask']):.2f},{y:.3f}) {{{short_n[p]}}};"
 gpts = ' '.join(f"({float(r['ask']):.2f},{float(r['dup']) + float(r['loss']):.3f})" for r in SW['ghost'])
 xmax = max(1.6, max(float(r['cdup']) for pol, *_ in curves for r in SW[pol]) * 1.1)
 W('fig_pareto.tex', r"""\begin{figure}[t]
 \centering
 \begin{tikzpicture}
-\begin{axis}[width=\linewidth,height=4.0cm,xlabel={$P_{\mathrm{v}}$ (\% of committed effects retried by the planner)},ylabel={escalations (\%)},
+\begin{axis}[width=\linewidth,height=4.0cm,xlabel={$P_{\mathrm{v}}$ (\% of committed effects retried by the planner)},ylabel={asks (\%)},
   xmin=-0.05,xmax=""" + f"{xmax:.2f}" + r""",ymin=0,ymax=100,
   legend style={at={(0.5,1.03)},anchor=south,font=\scriptsize,draw=none,fill=none},legend columns=5,legend cell align=left,
   tick label style={font=\footnotesize},label style={font=\footnotesize},ymajorgrids,grid style={dashed,gray!30}]
@@ -866,15 +872,15 @@ W('fig_pareto.tex', r"""\begin{figure}[t]
 \end{axis}
 \end{tikzpicture}\\[-1pt]
 \begin{tikzpicture}
-\begin{axis}[width=\linewidth,height=3.7cm,xlabel={escalations (\% of interrupted workflows)},ylabel={dup + loss (\%)},
+\begin{axis}[width=\linewidth,height=4.8cm,xlabel={asks (\% of interrupted workflows)},ylabel={dup + loss (\%)},
   ymode=log,xmin=-6,xmax=106,ymin=0.8,ymax=120,log basis y=10,
   tick label style={font=\footnotesize},label style={font=\footnotesize},ymajorgrids,grid style={dashed,gray!30}]
 """ + '\n'.join(pb) + r"""
 \addplot[color=blue!70!black,mark=*,thick,mark size=1.6pt] coordinates {""" + gpts + r"""};
 \end{axis}
 \end{tikzpicture}
-\caption{Top: escalations against the guaranteed quantity $P_{\mathrm{v}}$ as $\alpha{=}\beta$ sweeps from $0.1$ to $10^{-3}$ (labels on the product curve), against
-the same-evidence rule family (wait 5/10/30/60\,s $\times$ quorum all / all but VLM / any two; gray $\times$), which has no guarantee; neither does a planner run at nominal $\alpha{=}0.1$. Bottom: total errors (including wrong user answers) against escalations; gray: baselines at their single operating point, blue: product sweep. Model-based simulation, default world.}
+\caption{Top: asking rate against the guaranteed quantity $P_{\mathrm{v}}$ as $\alpha{=}\beta$ sweeps over """ + ', '.join(alphas) + r""" (product points from bottom right to top left), against
+the same-evidence rule family (wait 5/10/30/60\,s $\times$ quorum all / all but VLM / any two; gray $\times$), which has no guarantee. Neither does a planner run at nominal $\alpha{=}0.1$. Bottom: total errors (including wrong user answers) against the asking rate; gray: baselines at their single operating point, blue: product sweep. Model-based simulation, default world.}
 \label{fig:pareto}
 \end{figure}
 """)
@@ -917,7 +923,7 @@ for v in vars_:
 W('tab_sens.tex', r"""\begin{table}[!htbp]
 \centering
 \caption{Sensitivity to the simulator's free app-profile parameters (4{,}800 paired workflows per row). Cells: dup+loss (\% of workflows) /
-escalations (\%); last column: GhostEffect's $P_{\mathrm{v}}$ (\%, budget 1\%) with its 95\% CP upper bound.}
+asks (\%); last column: GhostEffect's $P_{\mathrm{v}}$ (\%, budget 1\%) with its 95\% CP upper bound.}
 \label{tab:sens}
 \footnotesize
 \setlength{\tabcolsep}{2.2pt}

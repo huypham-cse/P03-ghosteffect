@@ -15,7 +15,7 @@ user who delegated the task. We have not run a user study of the prompt (it need
 (5)~A missed commit point is invisible to \sys, and an app that commits half a batch needs app-specific probes.
 (6)~The agent evidence covers emulator runs on one app with two agents and one model configuration. The physical-phone measurements below have no agent; results for agents on phones, other models, and VLM evidence remain future work.
 
-On Android, payment apps resist exactly this agent. \texttt{FLAG\_SECURE} blocks screenshots, and since Android~14, \texttt{accessibility\-Data\-Sensitive} views are hidden from services that do
+Payment apps on Android resist exactly this kind of agent. \texttt{FLAG\_SECURE} blocks screenshots, and since Android~14, \texttt{accessibility\-Data\-Sensitive} views are hidden from services that do
 not declare \texttt{isAccessibilityTool}~\cite{android_a11ysensitive}, which Google Play reserves for assistive tools~\cite{googleplay_a11ypolicy}. Banking apps may also detect
 accessibility services and gate the commit behind BiometricPrompt. Hence our measurements use open-source apps with self-hosted servers, and payments need MockBank, a test app we
 plan to build. Element, Simple SMS and Thunderbird offer only counterparty-visible nonce fields (Table~\ref{tab:apps}), and our Element runs opted in. On a physical Android~\RealPhoneAndroid{} phone, K-9 did not resend after a kill in \RealPhoneNoResendN{} of \RealPhoneN{} valid trials, and a GUI redo duplicated the mail in \RealPhoneDupN{} of them.
@@ -31,4 +31,4 @@ a benign agent and apps and an untrusted co-installed app that may race for the 
 rebinding window~\cite{qian2026rebinding}, and only outgoing items of the verified account count as nonce matches. The model applies to desktop and web agents~\cite{xie2024osworld,zhou2024webarena}; the two-hop reduction is where phones differ.
 
 Every table, figure and inline number is generated from the artifact's CSVs by a standard-library Python generator. The artifact includes the seeded simulator, calibration, ledger benchmark, and the
-emulator measurements with per-trial CSVs and logs, plus the rig (AVD configuration, APK hashes, fault proxy, driver, reader). An anonymized copy will be provided to reviewers.
+emulator measurements with per-trial CSVs and logs, plus the rig (AVD configuration, APK hashes, fault proxy, driver, reader). An anonymized copy is available at \url{https://anonymous.4open.science/r/ghosteffect-artifact}.

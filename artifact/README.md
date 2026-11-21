@@ -78,6 +78,3 @@ The isolated 25-job run passed, including all declared REAL4 tags. Ledger latenc
 Other CSV values can differ between hosts only in floating-point tails (about 1e-10); for example, `ghost-src`
 reproduces the same 47.00833% ask rate on Windows and Linux.
 
-After extracting a bundle, run `sh team/scrub_check.sh <extracted-directory>`.
-The scrub checker scans the extracted directory; it does not inspect a ZIP
-container as a binary stream.

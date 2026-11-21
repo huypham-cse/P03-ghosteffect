@@ -145,3 +145,39 @@ every author's details must be confirmed by the team before YC-F4.
 The freeze commit, manifest, ZIP checksum and final PDF comparison must all
 refer to the same `main` commit. Do not reuse the pre-freeze ZIP after a code,
 data, generated output or manuscript change.
+
+## 21/11/2026: final freeze, anonymous artifact and link
+
+- Freeze commit: `dd4b633` on `main` (#84 and #85 merged). Between the
+  20/11 freeze run (`29c2990`, Python 3.12.3, 27/27 PASS, 107/108 CSV hashes
+  match, only `ledger_bench.csv` differs) and `dd4b633`, `artifact/` and
+  `testbed/` changed only in `artifact/README.md` and
+  `artifact/tests/test_eval.py`; no script, CSV or raw data changed, so the
+  20/11 manifest stands for this commit.
+- Clean-clone check of the same artifact code on 21/11 (Python 3.14.4,
+  WSL): 68 artifact tests and 119 testbed tests OK; bundle pipeline 27/27,
+  106/108 CSV byte-identical; `ledger_bench.csv` is host-dependent and
+  `lag_wait.csv` differs only in the last digit of two floats (Python 3.14
+  versus 3.12), as the bundle README allows.
+- Bundle: `ghost-effect-freeze-dd4b633.zip`, 585 files, SHA-256
+  `c22277b90868f8e5b98b3cd88144482211380ce9287427fe24be5b71133bde6d`;
+  extracted-directory scrub PASS.
+- Anonymous artifact: <https://anonymous.4open.science/r/ghosteffect-artifact>.
+  Signed-out file listing and ZIP download work (HTTP 200); the downloaded
+  copy is byte-identical to the freeze bundle (585 files, `diff -r` empty)
+  and passes scrub, so the bundle pipeline result above applies to it.
+- Section 8 now gives the link. PDF gate after the link: build exit 0,
+  23 pages, Conclusion on page 12, References start on page 13, `??` 0,
+  no Author metadata, no Acknowledgments heading, largest overfull box
+  1.53 pt, scrub of the tracked manuscript sources PASS.
+- HotCRP upload of the final PDF and author details: done by the team
+  member who holds the HotCRP account (YC-F4 evidence pending).
+
+## 21/11/2026 (afternoon): language polish after the freeze
+
+At the team's request the manuscript text was polished once more before
+upload (no number, macro, script or data change; details in
+`team/a-log.md`). The artifact code and data are unchanged from `dd4b633`;
+only `manuscript/` in the anonymous bundle is refreshed. PDF gate: build
+exit 0, 23 pages, Conclusion and References on page 12, `??` 0, no overfull
+box, abstract 199 words.
