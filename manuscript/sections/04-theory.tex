@@ -15,7 +15,7 @@ and in (c) it meets $(\alpha,\beta)$ with $\alpha{+}\beta{<}1$ and finite $\E_x[
 (c)~$\E_0[N]\ge d(1{-}\beta\,\|\,\alpha)/D_0$. (d)~$\PP(\dup){+}\PP(\loss)\ge\bar\pi\big(1{-}\sqrt{D_0\E_0[N]/2}\big)$.
 \end{theorem}
 
-We claim none of these inequalities, and Appendix~\ref{app:proofs} states them in full. Part~(a) is Wald's bound~\cite{wald1945sprt} plus a union bound on
+None of these inequalities is new, and Appendix~\ref{app:proofs} states them in full. Part~(a) is Wald's bound~\cite{wald1945sprt} plus a union bound on
 the lag, and (b) is the noisy-read, finite-wait form of Li's waiting argument~\cite{li2026exactlyonce}. Part~(c) says a verification-only policy needs about $\log(1/\alpha)/D_0$ reads
 (Lemma~1 of~\cite{kaufmann2016complexity}, see also~\cite{tartakovsky2014sequential}). Part~(d) says a policy that never asks errs at least at the Bayes floor, by Le Cam's
 two-point method~\cite{tsybakov2009nonparametric}.
