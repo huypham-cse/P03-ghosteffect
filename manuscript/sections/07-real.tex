@@ -20,7 +20,7 @@ after a 70\,s timeout, and stayed exactly once (\RealTimeoutOnce/\RealTimeoutN).
 or a restart. It did not deduplicate one from another device, nor one after we aged the row past 24\,h by shifting its timestamp. So its retries are idempotent within $H_{\mathrm{dedup}}{=}24$\,h on one device. DAVx5 re-sent to the same URL with \texttt{If-None-Match}, Radicale answered 412, and every event existed
 once (\RealCalOnce/\RealCalN, \RealCalKill{} after \texttt{kill -9} or force-stop): idempotent by a client-chosen name. K-9 has no idempotent retry by design: once the final ``.'' is written, a failure is recorded as permanent and later send passes skip the
 message, which stays in the Outbox (campaign~1's ``gone after sync'' came from a field never recorded). Campaign~2 recorded a tap on ``Sync account'' in
-\RealKSyncTapped/\RealKRd{} lost-reply trials but on ``Send messages'' only in \RealKSendmsgsTapped. An audit without a Sent folder therefore logged every tap and waited
+\RealKSyncTapped/\RealKRd{} lost-reply trials but on ``Send messages'' only in \RealKSendmsgsTapped. A follow-up audit without a Sent folder therefore logged every tap and waited
 \RealAuditWindow\,s after one action, too short for K-9's 15-min poll. Of its \RealAuditAttemptsN{} attempts, \RealAuditN{} were valid, and the rest failed before their action. New DATA followed ``Sync account'' in \RealAuditSyncData/\RealAuditSyncN{} trials, ``Send messages'' in
 \RealAuditSendmsgsData/\RealAuditSendmsgsN{} and no action in \RealAuditNoneData/\RealAuditNoneN. Recomposing sent a second copy with a new Message-ID in
 \RealAuditRecomposeDup/\RealAuditRecomposeN. A Sent folder does not help: K-9 appends there only after a successful
@@ -29,7 +29,7 @@ was run on (\RealKRecDup/\RealKRecN, distinct Message-IDs, so no receiver dedup 
 Figure~\ref{fig:teaser}a, measured with a scripted rather than an LLM agent.
 
 \para{Evidence families and lag.} Element's first read was $\bot$ in \RealFirstBot/\RealElemN{} trials, mostly because a force-stop relaunch lands off the room (\RealFsFirstBot/\RealFsN); first observed reads
-were wrong in \RealFirstWrong/\RealFirstObs, all lag-blind. Late reads were never wrong, never two families together (0/\RealCoN, CI from 0 to \RealLateHi\%). Campaign~1's five ``co-failures'' rendered
+were wrong in \RealFirstWrong/\RealFirstObs, all lag-blind. Late reads were never wrong, so no two families were wrong together (0/\RealCoN, CI from 0 to \RealLateHi\%). Campaign~1's five ``co-failures'' rendered
 no contradicting state (\RealOneCoContra/\RealOneCoN), the digest showed the nonce in \RealOneCoDigest/\RealOneCoN, and screen identity was not logged, so we re-score them as
 no-observation: they are not evidence against A2, which now rests on the model and VP-CONTROL~\cite{zheng2026vpcontrol}. Stale screens do occur. In \RealPilotStaleDigest{} of \RealPilotN{} pilot trials (not among the
 \RealElemN), the room-list digest on a verified screen showed an older message while the server held the copy. In campaign~1, AndroidWorld's accessibility forwarder

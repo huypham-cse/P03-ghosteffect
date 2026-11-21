@@ -287,3 +287,12 @@ Tổng 105 macro (24 + 12 + 16 + 18 + 7 + 24 + 2 + 2). Phần A không dùng mac
 **Cho C (file của C, không sửa):** §1 dòng 40 dùng "A2" trước khi §3 định nghĩa; đề nghị viết "when independence across families has a structural basis" như abstract.
 
 **Trạng thái:** phần A xong. Còn lại của cả nhóm (C-13, trưởng nhóm): chốt commit freeze, tạo lại ZIP, đăng link ẩn danh, chèn link vào §8, chạy lại cổng PDF, nộp HotCRP kèm thông tin tác giả.
+
+## 21/11/2026 (chiều): đọc và sửa câu chữ lần cuối trước khi nộp
+
+Theo yêu cầu của A, sửa trên toàn bài (kể cả file của B và C), chỉ đổi chữ, không đổi số, macro hay dữ liệu:
+- Lỗi cấu trúc: phần mô phỏng với tham số đo (Table 4, Table 5) không có tiêu đề nên nằm lẫn trong §7.2; thêm `\subsection{Measured-parameter simulation}` (§7.3), đưa đoạn mô tả lên trước đoạn giới hạn và viết gọn đoạn giới hạn (giữ đủ các ý của YC-C5). Đoạn mở §7 nêu bốn mục theo đúng thứ tự.
+- Lỗi thực tế ở §6: chỉ Doze cần tắt màn hình; App Standby và Data Saver hạn chế app chạy nền cả khi màn hình bật.
+- Abstract: "decides ghost effects" thành "resolves ghost effects", câu cuối rõ hơn; 199 từ (≤ 200), vẫn 4 con số.
+- Câu chữ: §1 "differs twice"; §2 T3A nêu số bản trùng có tag; §4 bỏ câu mở đầu và lần nhắc RFC 1047 thứ hai; §5.3 bỏ ngoặc thừa; §6 bỏ câu PRISM/Storm chưa chạy; §7.1 hai câu khó đọc; §7.2 câu về bản trùng còn lại; §7.4 "favoring"; §8, §9 (câu nối dài, "our foundations"), §10.
+- Kiểm: build thoát 0, 23 trang, 0 `??`, không overfull; kết luận và References đều ở trang 12; độ dễ đọc toàn bài `para 14/15, emph 28/30`, 0 câu dài, 0 đoạn chấm phẩy; không thêm "escalate", "G2" hay số gõ tay; scrub qua; YC-C9 grep kết luận ra 0.

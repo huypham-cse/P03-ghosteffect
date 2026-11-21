@@ -172,3 +172,12 @@ data, generated output or manuscript change.
   1.53 pt, scrub of the tracked manuscript sources PASS.
 - HotCRP upload of the final PDF and author details: done by the team
   member who holds the HotCRP account (YC-F4 evidence pending).
+
+## 21/11/2026 (afternoon): language polish after the freeze
+
+At the team's request the manuscript text was polished once more before
+upload (no number, macro, script or data change; details in
+`team/a-log.md`). The artifact code and data are unchanged from `dd4b633`;
+only `manuscript/` in the anonymous bundle is refreshed. PDF gate: build
+exit 0, 23 pages, Conclusion and References on page 12, `??` 0, no overfull
+box, abstract 199 words.

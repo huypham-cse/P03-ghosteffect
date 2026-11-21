@@ -1,9 +1,8 @@
 \section{Evaluation}
 \label{sec:eval}
-We first report emulator measurements and measured-parameter simulations, then compare recovery decisions in model-based simulations.
-Additional guarantees, correlated-read experiments and baseline details appear in Appendix~\ref{app:extra}.
+We report emulator measurements (\S\ref{sec:eval-real}), an LLM-agent experiment (\S\ref{sec:eval-agent}) and measured-parameter simulations (\S\ref{sec:eval-realsim}), then compare recovery
+decisions in model-based simulations (\S\ref{sec:setup}). Additional guarantees, correlated-read experiments and baseline details appear in Appendix~\ref{app:extra}.
 Every number is exact computation, simulation, host measurement, emulator-app measurement or LLM-agent experiment, generated from the artifact's CSVs.
-The agent study uses an emulator; physical-phone evidence is reported in the Discussion, while VLM evidence remains outside its scope.
 
 \input{generated/real_section}
 \input{sections/07-agent}
@@ -26,7 +25,7 @@ Always ask makes no planner-initiated retry, but wrong user answers cause \SimAs
 The theorem-only policy asks \SimGtwoAsk\% because it cannot clear effects outside apps with idempotent retries.
 Product certification retries \SimGhostPv\% of committed effects (CP upper \SimGhostPvHi\%) and asks \SimGhostAsk\% of workflows.
 Joint certification retries \SimJointPv\% and asks \SimJointAsk\%.
-The default world satisfies A2 by construction, favouring product certification.
+The default world satisfies A2 by construction, favoring product certification.
 
 Same-evidence rules ask \SimRulesAsk\% but retry \SimRulesPv\% of committed effects (CP upper \SimRulesPvHi\%).
 Tuned rules can outperform certification in asking cost; the full comparison and adverse results remain in Appendix~\ref{app:extra}.

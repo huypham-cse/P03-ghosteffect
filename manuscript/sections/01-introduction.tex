@@ -17,7 +17,7 @@ interrupted node~\cite{khan2026resume,langgraph_durable}, so a committed ghost e
 Existing fixes for tool agents do not transfer to GUI effects.
 LIMBO~\cite{li2026exactlyonce} finds that idempotency keys cut duplicates from 28\% to 4\% and that frontier models duplicate in 56 to 74\% of episodes when a
 read-back cannot reveal the outcome. It also proves that no verification-only policy is exactly-once under late commits without a bound on in-flight time. A GUI effect
-differs twice. The agent has no key: the app may attach its own request id, but a redo through the GUI creates a new request. And the only read-back is perceptual: a reader's
+differs in two ways. The agent has no key: the app may attach its own request id, but a redo through the GUI creates a new request. And the only read-back is perceptual: a reader's
 errors repeat when it re-reads a screen, and a \emph{look-alike} (last month's identical transfer) makes a screen consistent with both outcomes.
 
 Our approach expresses exactly-once as a \emph{budget}: the probability $\alpha$ of retrying a committed effect and $\beta$ of abandoning an absent one, conditional on the hidden outcome.

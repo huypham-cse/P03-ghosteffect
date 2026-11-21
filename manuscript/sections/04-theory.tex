@@ -1,8 +1,6 @@
 \section{Theory}
 \label{sec:theory}
 
-We state the classical results, then the reductions the agent setting needs.
-
 \subsection{The price of a budget, and two floors}
 \label{sec:theory-main}
 Theorem~\ref{thm:main} takes conditionally i.i.d.\ views with lag tail $G$, and $d$ is the binary relative entropy. In (b) and (c) the policy is
@@ -108,6 +106,6 @@ observable on the device within seconds, so for an app with idempotent retries t
 entries created after $t_0$ and hands a pending entry over to the end-to-end path before its age approaches $H_{\mathrm{dedup}}$ (\S\ref{sec:design-planner}). ``Retrying is safe'' thus means the app's own retry, on the same device, within $H_{\mathrm{dedup}}$.
 An agent that redoes the step through the GUI creates a new entry with a new id ($n_1{=}2$), which no server merges, and a re-login creates a new device. A failed entry is
 ambiguous end to end, because the server may have applied it before the app gave up, so it goes to the end-to-end path. K-9~Mail enters this state by design after every lost
-SMTP reply, the client-side face of the 1988 SMTP duplicate problem~\cite{rfc1047}. Force-stop cancels scheduled work and violates H3, so a force-stopped app is treated as
+SMTP reply (\S\ref{sec:measure-teaser}). Force-stop cancels scheduled work and violates H3, so a force-stopped app is treated as
 an app without idempotent retries until its entries reach a terminal state. Appendix~\ref{app:proofs} discusses dedup scopes per protocol. Per-step guarantees compose across a workflow by a union bound
 (Proposition~\ref{prop:saga}).
