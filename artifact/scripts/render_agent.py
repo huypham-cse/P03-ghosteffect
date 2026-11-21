@@ -249,6 +249,7 @@ def render_rules(guarded_valid, json):
             ('AgentRulesDupN', dup), ('AgentRulesDupPct', pct), ('AgentRulesDupLo', lo), ('AgentRulesDupHi', hi),
             ('AgentRulesRetryN', sum(restart(r).get('decision') == 'RETRY' for r in valid)),
             ('AgentRulesResentN', sum(r['outcome'] in ('RESENT_DUPLICATE', 'RESENT_BUT_NO_DUP') for r in valid)),
+            ('AgentRulesTaskFailN', sum(r['outcome'] == 'TASK_FAILURE' for r in valid)),   # retried, agent timed out
             ('AgentRulesAskN', sum(restart(r).get('decision') == 'ASK' for r in valid)),
             ('AgentRulesNoCandN', sum(restart(r).get('decision') == 'NO_CANDIDATE' for r in valid)),
             ('AgentGuardSentValidN', len(sent)), ('AgentGuardSentDupN', sent_dup),

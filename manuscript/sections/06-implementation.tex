@@ -19,7 +19,7 @@ recipient sees, so it runs only on test accounts that opted in. The driver then 
 the room title and the timeline are verified, and ``absent'' only on a verified screen scrolled to the bottom with the previous message visible. Ground truth comes from the
 server only. A scripted \emph{GUI redo} recomposes and re-sends the same content, as an agent that trusts the screen would.
 
-\para{Agent harness.} The M3A runs of \S\ref{sec:eval-agent} drive the unmodified agent against the same K-9 setup on an x86-64 emulator. The harness extends AndroidWorld~\cite{rawles2025androidworld}: \sys wraps the action step, appends \textsf{ISSUED} and types the nonce before a
+\para{Agent harness.} The M3A runs of \S\ref{sec:eval-agent} drive the unmodified agent against the same K-9 server setup, on an x86-64 emulator. The harness extends AndroidWorld~\cite{rawles2025androidworld}: \sys wraps the action step, appends \textsf{ISSUED} and types the nonce before a
 classified commit action. App databases are read only by the grader and by the same-evidence rules, which read K-9's folders exactly. Beyond force-stop we killed the agent alone (\S\ref{sec:eval-agent}).
 On the emulator we also let \texttt{lmkd} reap the app under real memory pressure and held the device in forced deep Doze (\S\ref{sec:discussion}). Plain \texttt{am kill} spares perceptible
 processes~\cite{android_adb}. It spared Element, whose sync component keeps it perceptible, so background-then-kill ghost effects may be rarer for apps with idempotent retries. Doze needs the screen off and the device still~\cite{android_doze}, so it matters only when the agent died and the phone slept. App Standby buckets and Data
