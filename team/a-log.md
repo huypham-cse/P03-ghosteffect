@@ -273,3 +273,17 @@ Tổng 105 macro (24 + 12 + 16 + 18 + 7 + 24 + 2 + 2). Phần A không dùng mac
 **Cho C:** (1) thêm `algorithmic` vào danh sách môi trường bỏ qua trong `team/readability_count.py` (regex ở hàm `prose`), để YC-12 của A đạt trên công cụ; (2) hợp đồng macro bổ sung ở trên.
 
 **Trạng thái:** A-01 đến A-10 xong. #24, #25 đã sửa theo review và nằm trên `main`. PR `[A] Nghiệm thu` mở từ `a/acceptance`. Chặn duy nhất còn lại: YC-12 chờ C sửa công cụ cho Alg. 1.
+
+## 21/11/2026
+
+**Đã làm (sẵn sàng cho cổng cuối, C-13):** kiểm lại `main` ở `6d07ec1` (sau #83; freeze candidate trong `others/c13-final-checklist.md` vẫn ghi `29c2990`, nên ZIP phải tạo lại từ commit đã chốt).
+- Bản clone WSL sạch của `main`: test artifact 68 OK (1 skip), test testbed 119 OK (3 skip).
+- `make_bundle.sh` ra `ghost-effect-final-6d07ec1.zip`, SHA-256 `4c408e04b4ac62ad54cf7fd50f83593fbc2b2064fa7552af10f730ed841dd416`; scrub qua trên gói đã giải nén; test trong gói 68 OK (10 skip, công cụ `team/` không đi kèm).
+- `run_all.py` chạy từ gói: thoát 0. So 108 CSV: 106 trùng byte; `ledger_bench.csv` khác (phụ thuộc host, đã ghi trong README); `lag_wait.csv` khác ở chữ số cuối của hai số thực (ví dụ `...392` so với `...391`). Nguyên nhân: Python 3.14.4 trên máy này, freeze dùng 3.12.3; macro làm tròn nên bài không đổi. Báo C: README nên nêu rõ phiên bản Python cho phép so byte, hoặc liệt kê `lag_wait.csv` là khác ở mức làm tròn.
+- PDF build trên Windows (MiKTeX): thoát 0, 23 trang, 0 `??`, overfull lớn nhất 1,53 pt, kết luận trang 12, scrub `manuscript/` qua.
+- Nhánh `a/final-wording`: §4.1 đổi "We claim none of these inequalities" (dễ hiểu thành "không khẳng định các bất đẳng thức đúng") thành "None of these inequalities is new". Build lại: kết luận vẫn trang 12, 0 `??`; scrub và độ dễ đọc `04-theory.tex` qua. Chưa mở PR: freeze chỉ cho phép thêm commit link artifact, cần trưởng nhóm quyết.
+- Đọc lại §3, §4, §5, App. A (chứng minh Thm 4.1): không thấy lỗi khác.
+
+**Cho C (file của C, không sửa):** §1 dòng 40 dùng "A2" trước khi §3 định nghĩa; đề nghị viết "when independence across families has a structural basis" như abstract.
+
+**Trạng thái:** phần A xong. Còn lại của cả nhóm (C-13, trưởng nhóm): chốt commit freeze, tạo lại ZIP, đăng link ẩn danh, chèn link vào §8, chạy lại cổng PDF, nộp HotCRP kèm thông tin tác giả.
