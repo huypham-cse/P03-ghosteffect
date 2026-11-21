@@ -25,6 +25,19 @@ echo "$(date -u +%H:%M:%S) TN3 ledger start" >> "$LOG/batch.log"
 timeout 1200 python3 testbed/phone_ledger/harness.py --adb "$ADB" --serial "$GX_PHYSICAL_SERIAL" \
     --apk testbed/phone_ledger/ledgerbench.apk --out "$LOG/ledger" --kills 100 --seed 7 > "$LOG/ledger.log" 2>&1
 echo "$(date -u +%H:%M:%S) TN3 ledger exit $?" >> "$LOG/batch.log"
+if [ "$MODE" = "ledger+dump" ]; then
+    # TN3b (b-log 21/11): wall time of one accessibility read as our reader takes it (adb shell uiautomator dump),
+    # 20 times on the home screen; nothing is read from any app.
+    S input keyevent KEYCODE_HOME > /dev/null
+    echo "i,ms,exit" > "$LOG/dump_times.csv"
+    for i in $(seq 1 20); do
+        t0=$(date +%s%N); timeout 60 "$ADB" -s "$GX_PHYSICAL_SERIAL" shell uiautomator dump /sdcard/gx_dump.xml > /dev/null 2>&1; rc=$?
+        t1=$(date +%s%N); echo "$i,$(( (t1 - t0) / 1000000 )),$rc" >> "$LOG/dump_times.csv"
+    done
+    S rm -f /sdcard/gx_dump.xml
+    echo "$(date -u +%H:%M:%S) CAMPAIGN DONE" >> "$LOG/batch.log"
+    exit 0
+fi
 [ "$MODE" = "ledger+doze" ] || { echo "$(date -u +%H:%M:%S) CAMPAIGN DONE" >> "$LOG/batch.log"; exit 0; }
 
 for apk in at.bitfire.davdroid_405210002.apk ws.xsoh.etar_57.apk; do

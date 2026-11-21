@@ -1,0 +1,55 @@
+{
+ "schema": "ghosteffect-calibration-v1",
+ "mode": "product",
+ "evidence_kind": "interrupted_measurement",
+ "alpha": 0.1,
+ "beta": 0.1,
+ "strata": [
+  {
+   "id": "element-synapse-avd",
+   "domain": {
+    "app_package": "im.vector.app",
+    "app_version": "element-classic-1.6.62(40106624)",
+    "backend_revision": "synapse-1.164.2;faultproxy",
+    "reader_revision": "2c8f41d2c4bd548505fcd68bb75b0d2d48ae0e0421d4dbd9b58b31b009e0b026",
+    "verifier_revision": "none",
+    "locale": "en-US",
+    "abi": "x86_64",
+    "load_profile": "avd-api33-x86_64-whpx-host",
+    "policy_revision": "aa113ce9846040cd7010bfcb208e30a5c93cda5c900c1dea03d8bfb5b0854cdd",
+    "origin_kind": "recovery"
+   },
+   "families": {
+    "nonce": [
+     "timeline",
+     "roomlist"
+    ]
+   },
+   "classes": [
+    "none",
+    "app-kill",
+    "force-stop"
+   ],
+   "capabilities": {
+    "local": false,
+    "G2": false,
+    "hop1_qualified": false,
+    "family_independence_qualified": true,
+    "nonce_analytic_qualified": false,
+    "source_independence_qualified": false,
+    "hop1_lag_independent": false,
+    "backend_visibility_domain_qualified": true
+   },
+   "quota": {
+    "pilot0": 0,
+    "pilot1": 0,
+    "calibration0": 170,
+    "calibration1": 190,
+    "lag1": 0
+   },
+   "lag_splits": [
+    "calibration"
+   ]
+  }
+ ]
+}

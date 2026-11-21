@@ -67,9 +67,18 @@ public class Bench extends Instrumentation {
     }
 
     private SQLiteDatabase open(File db, String sync) {
-        SQLiteDatabase d = SQLiteDatabase.openOrCreateDatabase(db, null);
-        d.enableWriteAheadLogging();
-        query1(d, "PRAGMA synchronous=" + sync);
+        SQLiteDatabase d;
+        if (Build.VERSION.SDK_INT >= 30) {
+            // TN3b (b-log 21/11): set the mode through OpenParams so that every pooled WAL connection, including the
+            // primary one that writes, uses it. A bare PRAGMA may land on one connection only.
+            d = SQLiteDatabase.openDatabase(db, new SQLiteDatabase.OpenParams.Builder()
+                    .addOpenFlags(SQLiteDatabase.CREATE_IF_NECESSARY | SQLiteDatabase.ENABLE_WRITE_AHEAD_LOGGING)
+                    .setSynchronousMode(sync).build());
+        } else {
+            d = SQLiteDatabase.openOrCreateDatabase(db, null);
+            d.enableWriteAheadLogging();
+            query1(d, "PRAGMA synchronous=" + sync);
+        }
         d.execSQL("CREATE TABLE IF NOT EXISTS effects(id TEXT PRIMARY KEY, workflow TEXT, step INTEGER, app TEXT, "
                 + "descr TEXT, nonce TEXT, attempt INTEGER, state TEXT, digest TEXT, t_issued REAL, t_updated REAL)");
         d.execSQL("CREATE INDEX IF NOT EXISTS effects_state ON effects(state)");
@@ -161,7 +170,14 @@ public class Bench extends Instrumentation {
             ms[i] = (SystemClock.elapsedRealtimeNanos() - t) / 1e6;
         }
         out.putString("journal_mode", query1(d, "PRAGMA journal_mode"));
-        out.putString("synchronous", query1(d, "PRAGMA synchronous"));
+        out.putString("synchronous", query1(d, "PRAGMA synchronous"));   // any pooled connection
+        d.beginTransactionNonExclusive();   // inside a transaction the session holds the primary (writing) connection
+        try {
+            out.putString("synchronous_writer", query1(d, "PRAGMA synchronous"));
+        } finally {
+            d.endTransaction();
+        }
+        out.putString("open_path", Build.VERSION.SDK_INT >= 30 ? "OpenParams" : "pragma");
         out.putString("sqlite_version", query1(d, "SELECT sqlite_version()"));
         query1(d, "PRAGMA wal_checkpoint(TRUNCATE)");
         d.close();
