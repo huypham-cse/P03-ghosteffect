@@ -67,6 +67,10 @@ def render_agent():
     M('AgentModel', freeze['model']['repo_id'].split('/')[-1])
     M('AgentServing', freeze['model']['engine'] + ', BF16')
     M('AgentHost', freeze['host'])
+    # The freeze records the model host and the emulator host in one string: split it for the prose.
+    _hosts = [s.strip() for s in freeze['host'].split(';')]
+    M('AgentGpuHost', _hosts[0])
+    M('AgentEmuHost', _hosts[1] if len(_hosts) > 1 else '??')   # ?? until a freeze names the emulator host
     M('AgentHEvalS', int(freeze['fault']['h_eval_s']))
     M('AgentMaxSteps', freeze['agent']['max_steps'])
     reasons = [r['invalid_reason'] for r in final if r['outcome'] == 'INVALID']
@@ -244,6 +248,7 @@ def render_rules(guarded_valid, json):
             ('AgentRulesScheduledN', len(final)), ('AgentRulesValidN', n), ('AgentRulesInvalidN', len(final) - n),
             ('AgentRulesDupN', dup), ('AgentRulesDupPct', pct), ('AgentRulesDupLo', lo), ('AgentRulesDupHi', hi),
             ('AgentRulesRetryN', sum(restart(r).get('decision') == 'RETRY' for r in valid)),
+            ('AgentRulesResentN', sum(r['outcome'] in ('RESENT_DUPLICATE', 'RESENT_BUT_NO_DUP') for r in valid)),
             ('AgentRulesAskN', sum(restart(r).get('decision') == 'ASK' for r in valid)),
             ('AgentRulesNoCandN', sum(restart(r).get('decision') == 'NO_CANDIDATE' for r in valid)),
             ('AgentGuardSentValidN', len(sent)), ('AgentGuardSentDupN', sent_dup),
@@ -320,7 +325,7 @@ def render_arms_table(json):
     W('tab_agent_arms.tex', r"""\begin{table*}[t]
 \caption{LLM-agent arms on the K-9 trap (LLM-agent experiment): valid over scheduled episodes, episodes in which K-9 sent mail
 again after the restart (Resent), episodes with two tagged copies at the backend (Dup), Wilson 95\% interval for
-the duplicate rate (\%), and asks. Each arm has its own freeze; arms ran one after the other.}
+the duplicate rate (\%), and asks. Each arm's task, fault, model and scoring were frozen before it ran; arms ran one after the other.}
 \label{tab:agent-arms}
 \centering
 \footnotesize

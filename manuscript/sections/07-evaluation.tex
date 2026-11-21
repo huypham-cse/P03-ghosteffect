@@ -2,7 +2,7 @@
 \label{sec:eval}
 We report emulator measurements (\S\ref{sec:eval-real}), an LLM-agent experiment (\S\ref{sec:eval-agent}) and measured-parameter simulations (\S\ref{sec:eval-realsim}), then compare recovery
 decisions in model-based simulations (\S\ref{sec:setup}). Additional guarantees, correlated-read experiments and baseline details appear in Appendix~\ref{app:extra}.
-Every number is exact computation, simulation, host measurement, emulator-app measurement or LLM-agent experiment, generated from the artifact's CSVs.
+Every number is exact computation, simulation, host, emulator or phone measurement, or LLM-agent experiment, generated from the artifact's CSVs.
 
 \input{generated/real_section}
 \input{sections/07-agent}
@@ -13,9 +13,7 @@ Every number is exact computation, simulation, host measurement, emulator-app me
 The default model contains eight app profiles, persistent reader errors, correlated VLM errors and a fallible Monitor.
 Calibration uses whole effects; each policy sees the same \SimN{} interrupted workflows (Table~\ref{tab:planner}).
 The user can answer incorrectly, so total duplicate/loss rates include user errors as well as planner decisions.
-The guaranteed quantity $P_{\mathrm v}$ instead counts committed effects retried by the planner itself.
-We use $\delta=\min(\alpha,\beta)/(10K n_{\mathrm{cls}})$, matching the calibration accounting in Section~\ref{sec:theory}.
-Here $K$ counts tested bounds per class, and $n_{\mathrm{cls}}$ counts calibrated fault classes (one when pooled).
+The guaranteed quantity $P_{\mathrm v}$ instead counts committed effects retried by the planner itself. The confidence $\delta$ follows \S\ref{sec:theory-cal}.
 Appendix~\ref{app:extra} records the complete model, budgets, confidence intervals and paired tests.
 
 \input{generated/tab_planner}
@@ -29,19 +27,11 @@ The default world satisfies A2 by construction, favoring product certification.
 
 Same-evidence rules ask \SimRulesAsk\% but retry \SimRulesPv\% of committed effects (CP upper \SimRulesPvHi\%).
 Tuned rules can outperform certification in asking cost; the full comparison and adverse results remain in Appendix~\ref{app:extra}.
-In the default model, vetted rules receive the same passive calibration records and lag tables as joint certification.
-They ask \SimModelVettedAsk\% and retry \SimModelVettedPv\% of committed effects (CP upper \SimModelVettedPvHi\%).
-Zero observed retries do not give vetted rules a certificate.
-The fitted-law comparison with fault-injected labels remains separate in Table~\ref{tab:matched}.
+Vetted rules given joint's passive records and lag tables ask \SimModelVettedAsk\% and retry \SimModelVettedPv\%, without a certificate (fault-injected inputs: Table~\ref{tab:matched}).
 
 In the stress and calibration-population tests, the product mode exceeds its CP budget in \StressNover{} stress rows, and rules exceed their observed retry budget in \StressRulesOver{} rows (Table~\ref{tab:stress}).
 An unlogged lag tail gives product $P_{\mathrm v}=\StressLag\%$; logging that tail raises its asking rate to \StressLagCalAsk\%.
 Under common-mode stale history that violates A2, product retries \PopCmCProd\% and joint \PopCmCJoint\% of committed effects.
 Fault-injected labels and larger label budgets therefore address different risks (Table~\ref{tab:pop}).
 
-Among the mechanisms, removing the nonce, hop-1 probe or digest raises product's asking rate to \SimNoNonceAsk\%, \SimNoHopAsk\% or \SimNoDigestAsk\%, respectively.
-Using nominal independent-read bounds retries \SimNoCalPv\% of committed effects; declaring when uncertified loses \SimNoAskLv\% of absent effects.
-The complete ablation rows remain in Appendix~\ref{app:extra}.
-
-\phantomsection\label{sec:device-plan}
-Broader device coverage, additional agents and additional models remain future work.
+Removing the nonce, hop-1 probe or digest raises product's asking rate to \SimNoNonceAsk\%, \SimNoHopAsk\% or \SimNoDigestAsk\% (ablations: Appendix~\ref{app:extra}).

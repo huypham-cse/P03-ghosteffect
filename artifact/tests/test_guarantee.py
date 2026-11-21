@@ -147,7 +147,7 @@ class RenderGuaranteeTests(unittest.TestCase):
     def test_values_follow_the_csvs(self):
         files = rg.render(RESULTS)
         macros = dict(re.findall(r'\\newcommand\{\\(\w+)\}\{(.*)\\xspace\}', files['macros_guarantee.tex']))
-        self.assertEqual(105, len(macros))
+        self.assertEqual(107, len(macros))   # +CertLabelMedOneS, CertLabelMedZeroS (TN1 label cost)
         row = next(r for r in rg.read_csv(RESULTS, 'planner_real4_t0down5.csv') if r['policy'] == 'ghost')
         self.assertEqual(rg.cert_f2(row['cdup']), macros['CertClockTzeroDownFiveProdPv'])
         self.assertEqual(rg.cert_f2(row['cdup_hi']), macros['CertClockTzeroDownFiveProdPvHi'])
@@ -175,6 +175,19 @@ class RenderGuaranteeTests(unittest.TestCase):
         # 5,000 labels x 4 classes x 2 outcomes x 120 s = 1,333.3 h
         self.assertIn(r'\newcommand{\CertDeviceHoursFive}{1{,}333\xspace}', text)
         self.assertNotIn('??', text)
+
+    def test_tn1_label_cost_takes_precedence(self):
+        with tempfile.TemporaryDirectory() as t:
+            results = Path(t)
+            _copy_inputs(results)
+            (results / 'real/tn1_caldav').mkdir(parents=True, exist_ok=True)
+            (results / 'real/tn1_caldav/label_cost.csv').write_text(
+                'component,n,min_s,median_s,max_s\ncommitted,5,10,60,90\nabsent,5,10,30,40\ntotal,10,10,45,90\n',
+                encoding='utf-8')
+            text = rg.render(results)['macros_guarantee.tex']
+        # 5,000 labels x 4 classes x (60 + 30) s = 500 h
+        self.assertIn(r'\newcommand{\CertDeviceHoursFive}{500\xspace}', text)
+        self.assertIn(r'\newcommand{\CertLabelMedOneS}{60\xspace}', text)
 
     def test_zero_denominators_print_na(self):
         nobody = dict(n1='0', ask1='0', user_e1='nan', n0='0', ask0='0', user_e0='nan')

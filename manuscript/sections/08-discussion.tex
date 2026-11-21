@@ -2,28 +2,28 @@
 \label{sec:discussion}
 
 \para{Limitations.}
-(1)~The evidence for our decision results comes from simulation, model-based or with measured parameters. The generative model departs from the planner's assumptions on purpose,
+(1)~Most evidence for our decision results comes from simulation, model-based or with measured parameters. The one held-out test on a real app (\S\ref{sec:eval-real}) certifies only absence. The generative model departs from the planner's assumptions on purpose,
 but it is ours. \RealDataLimitation{} Labels in the measured runs are simulated draws from laws estimated from at most \RealElemN{} trials, so a tail beyond what we saw (up to \RsimTail\% on
 Element) cannot be excluded, and it would either break the budget or make \sys ask.
 (2)~Product certification assumes A2, independence across families. A stale history violates it in the model (\S\ref{sec:eval-pop}). On Element no two families were wrong
-together in \RealCoN{} emulator trials, which bounds co-failure only at a few percent. Joint certification removes the assumption but needs about $\ln(1/\delta)/\alpha_{\mathrm{test}}$ labels
+together in \RealCoObs{} observed emulator trials, which bounds co-failure only at a few percent. Joint certification removes the assumption but needs about $\ln(1/\delta)/\alpha_{\mathrm{test}}$ labels
 per stratum and fault class, which only pooling provides.
 (3)~Bounds hold only for a calibration population of labels from interrupted effects: passive labels, an unlogged lag tail or an undetected delayed recovery in Doze break the
 budget (Tables~\ref{tab:realsim},~\ref{tab:stress}). Drift within a version is not detected.
 (4)~Joint certification asks in two thirds of interrupted workflows at 2{,}000 labels in the model and on every interrupted K-9 send, and each ask interrupts a
 user who delegated the task. We have not run a user study of the prompt (it needs IRB approval).
 (5)~A missed commit point is invisible to \sys, and an app that commits half a batch needs app-specific probes.
-(6)~The agent evidence covers emulator runs on one app with two agents and one model configuration. The physical-phone measurements below have no agent; results for agents on phones, other models, and VLM evidence remain future work.
+(6)~\phantomsection\label{sec:device-plan}The agent evidence covers emulator runs on one app with two agents and one model configuration. The physical-phone measurements below have no agent; results for agents on phones, other models, and VLM evidence remain future work.
 
-Payment apps on Android resist exactly this kind of agent. \texttt{FLAG\_SECURE} blocks screenshots, and since Android~14, \texttt{accessibility\-Data\-Sensitive} views are hidden from services that do
-not declare \texttt{isAccessibilityTool}~\cite{android_a11ysensitive}, which Google Play reserves for assistive tools~\cite{googleplay_a11ypolicy}. Banking apps may also detect
+Payment apps on Android resist exactly this kind of agent. \texttt{FLAG\_SECURE} blocks screenshots. Since Android~14, services that do not declare
+\texttt{isAccessibilityTool} cannot see views marked \texttt{accessibility\-Data\-Sensitive}~\cite{android_a11ysensitive}, and Google Play reserves that flag for assistive tools~\cite{googleplay_a11ypolicy}. Banking apps may also detect
 accessibility services and gate the commit behind BiometricPrompt. Hence our measurements use open-source apps with self-hosted servers, and payments need MockBank, a test app we
 plan to build. Element, Simple SMS and Thunderbird offer only counterparty-visible nonce fields (Table~\ref{tab:apps}), and our Element runs opted in. On a physical Android~\RealPhoneAndroid{} phone, K-9 did not resend after a kill in \RealPhoneNoResendN{} of \RealPhoneN{} valid trials, and a GUI redo duplicated the mail in \RealPhoneDupN{} of them.
 On the emulator, a GUI redo after an lmkd kill duplicated K-9 mail in \RealEmuKDupN{} of \RealEmuKN{} trials. DAVx5 kept exactly one copy in every valid trial: \RealEmuCalOnceN/\RealEmuCalValidN{} on the emulator,
 \RealRentSamOnceN/\RealRentSamValidN{} on a rented Galaxy A36 and \RealRentPixOnceN/\RealRentPixValidN{} on a rented Pixel 9. Forced Doze did not delay its resend on the emulator (median
-\RealEmuCalDozeMedS\,s from fault to PUT, \RealEmuCalKillMedS\,s after \texttt{kill -9}) or on the Pixel (\RealRentPixDozeMedS\,s, still idle). The A36 (One UI) did not resend within
-\RealRentSamDozeQuietS\,s in its one valid Doze trial. Lag tails on physical phones can thus exceed those we measured (Table~\ref{tab:lag} prices them). A withheld reply took another code path in Element (sync echo, 70\,s
-timeout) and stayed exactly once in \RealTimeoutClean{} clean trials; end-to-end encrypted rooms, Element's default for direct messages, are untested.
+\RealEmuCalDozeMedS\,s from fault to PUT, \RealEmuCalKillMedS\,s after \texttt{kill -9}) or on the Pixel (\RealRentPixDozeMedS\,s, still idle). On the A36 (One UI) it did not resend within
+\RealRentSamDozeQuietS\,s in the first valid Doze trial, but resent after \RealRentSamTwoDozeMedS\,s, still in deep idle, in \RealRentSamTwoN{} of \RealRentSamTwoN{} trials of a later session. Lag tails on physical phones can thus exceed those we measured (Table~\ref{tab:lag} prices them). A withheld reply took another code path in Element (sync echo, 70\,s
+timeout) and stayed exactly once (\RealTimeoutOnce/\RealTimeoutN); end-to-end encrypted rooms, Element's default for direct messages, are untested.
 
 \para{Ethics and threat model.}
 A nonce writes agent text into user content, so \sys uses user-only fields by default, requires opt-in for counterparty-visible ones, and never uses invisible characters. We assume

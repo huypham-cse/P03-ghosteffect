@@ -197,7 +197,7 @@ class AgentData(unittest.TestCase):
                      M=lambda k, v: macros.__setitem__(k, str(v)), W=lambda k, v: files.__setitem__(k, v))
         exec((ROOT / 'artifact/scripts/render_agent.py').read_text(encoding='utf-8'), scope)
         scope['render_agent']()
-        self.assertEqual(len(macros), 47)
+        self.assertEqual(len(macros), 49)   # 47 + AgentGpuHost, AgentEmuHost (host split for the prose)
         self.assertEqual((macros['AgentValidN'], macros['AgentDupN'], macros['AgentDupPct']), ('20', '10', '50.0'))
         self.assertEqual((macros['AgentModelCallsN'], macros['AgentAliasCallsN'], macros['AgentAliasEpisodesN']),
                          ('200', '10', '10'))
