@@ -54,7 +54,7 @@ and logs the lag $T_c$ from the anchor $r_e$ to visibility. Bounds and lag table
 match deployment's. An effect whose class the controller cannot tell uses the per-class maximum. Passive labels (confirmed sends, abandoned forms) are cheaper but miss cached history after a
 kill, optimistic entries and restart lags (\S\ref{sec:eval-pop},~\S\ref{sec:eval-real}). A label costs one fault-injected trial on a test device: reset, compose, fault,
 relaunch, one read of every view, and grading. In our LLM-agent experiment on the emulator the median trial took \CertLabelMedS\,s. At that rate, \CertLabelsFive labels per class and outcome
-for \CertClassesN classes take about \CertDeviceHoursFive device-hours (computed from the measured median).
+for \CertClassesN classes take about \CertDeviceHoursFive device-hours.
 
 \para{How many labels.} Validity holds at any sample size. Small samples only widen the bounds, so the planner asks more often, not retries more often (\S\ref{sec:eval-pop}).
 Table~\ref{tab:nsize} in the appendix gives the exact sizes that make certification possible. Product certification needs a few hundred effects per stratum at $\alpha{=}1\%$,

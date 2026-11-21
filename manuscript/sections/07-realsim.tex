@@ -1,16 +1,14 @@
+\subsection{Measured-parameter simulation}
+\label{sec:eval-realsim}
 \input{generated/tab_realsim}
 
+Table~\ref{tab:realsim} reruns every mode on profiles built from the emulator measurements (\texttt{params.csv} records each value's source), with per-class lags
+and $\bot$ as no observation. Calibration and test records are simulated draws from the same fitted law. The measurements found \RsimFitLateWrong/\RsimFitLateObs{} wrong
+late reads in each Element family and \RsimFitCoWrong/\RsimFitCoN{} pairwise late co-failures, but these zero counts do not make readers error-free on new screens.
+The table therefore tests certification decisions and their asking cost, not reader errors. Its simulated labels are not additional emulator trials, so its asking rates
+should be read with the label budgets of \S\ref{sec:design-probes} and Table~\ref{tab:cert-budget}.
 
-In the fitted-law experiment of Table~\ref{tab:realsim}, calibration and test records are simulated draws from the same fitted distribution.
-The underlying emulator measurements found \RsimFitLateWrong/\RsimFitLateObs{} wrong late reads in each Element family and
-\RsimFitCoWrong/\RsimFitCoN{} pairwise late cofailures.
-These zero counts do not establish error-free readers on new screens.
-The table instead tests certification decisions and their asking cost under the fitted law.
-The label and lag budgets differ: additional simulated labels do not constitute additional emulator trials.
-The budget analysis in Section~\ref{sec:design-probes} and Table~\ref{tab:cert-budget} must be read alongside the asking rates, tail cases and tied-budget comparison.
-
-The measured-parameter simulation in Table~\ref{tab:realsim} reruns every mode on profiles built from these measurements (\texttt{params.csv} records each value's source), with per-class lags
-and $\bot$ as no observation. On Element every certified mode stays within budget (CP upper \RsimElemJointPvHi\%): the certified wait reaches the measured maximum. The product mode asks in \RsimElemProdAsk\% of workflows. Joint certification, which needs no cross-family
+On Element every certified mode stays within budget (CP upper \RsimElemJointPvHi\%): the certified wait reaches the measured maximum. The product mode asks in \RsimElemProdAsk\% of workflows. Joint certification, which needs no cross-family
 independence, asks in \RsimElemJointAsk\% with \RsimBaseLabelN{} labels per class and outcome and in \RsimFiveJointAsk\% with \RsimFiveLabelN{} labels per class and outcome plus \CertLagBootN{} lag entries per class. Keying by class matters little here: with a net-heavy lab mix the pooled wait still reaches the maximum. Simpler mechanisms also hold: Theorem~\ref{thm:twohop} alone (\RsimElemGtwoAsk\%
 asks) and rules with a 10 or 30\,s wait (\RsimElemRulesAsk\% and \RsimElemRulesThirtyAsk\%), whereas trusting the app's status right after relaunch retries
 \RsimElemAppPv\% (the lag-blind reads). Two departures break the budget. Passive labels, whose lag logs come from uninterrupted sends, give product \RsimPassProdPv\% and joint
