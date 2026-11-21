@@ -27,7 +27,7 @@ The default world satisfies A2 by construction, favoring product certification.
 
 Same-evidence rules ask \SimRulesAsk\% but retry \SimRulesPv\% of committed effects (CP upper \SimRulesPvHi\%).
 Tuned rules can outperform certification in asking cost; the full comparison and adverse results remain in Appendix~\ref{app:extra}.
-Vetted rules given joint's passive records and lag tables ask \SimModelVettedAsk\% and retry \SimModelVettedPv\%, without a certificate (fault-injected inputs: Table~\ref{tab:matched}).
+Vetted rules given joint's passive records and lag tables ask \SimModelVettedAsk\% and retry \SimModelVettedPv\%, without a certificate. Table~\ref{tab:matched} repeats this with fault-injected inputs.
 
 In the stress and calibration-population tests, the product mode exceeds its CP budget in \StressNover{} stress rows, and rules exceed their observed retry budget in \StressRulesOver{} rows (Table~\ref{tab:stress}).
 An unlogged lag tail gives product $P_{\mathrm v}=\StressLag\%$; logging that tail raises its asking rate to \StressLagCalAsk\%.

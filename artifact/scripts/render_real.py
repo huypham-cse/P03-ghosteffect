@@ -316,7 +316,7 @@ Fault & $n$ & min & median & max \\
 App & Family, read & wrong/obs. & $\bot$ \\
 \midrule
 Element & row = indicator, first read & \RealFirstWrong/\RealFirstObs$^{\ddagger}$ & \RealFirstBot \\
- & row = indicator, first non-$\bot$ read & \RealEarlyWrong/\RealElemN$^{\ddagger}$ & 0 \\
+ & row = indicator, first non-$\bot$ read, any time & \RealEarlyWrong/\RealElemN$^{\ddagger}$ & 0 \\
  & row = indicator, late & 0/\RealLateObs & \RealLateBot \\
  & room-list digest, late & 0/\RealLateObs & \RealLateBot \\
  & any two families wrong together, late & 0/\RealCoObs{} (CI 0 to \RealCoHi\%) & \RealCoBot \\
