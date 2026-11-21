@@ -35,7 +35,8 @@ def main():
              '| Trial | Config | Kill | Observed (s) | Server copies | New DATA after fault | Outbox | Checks |',
              '|---|---|---|---|---|---|---|---|']
     lines += ['| %(trial)s | %(config)s | %(kill)s | %(observe_s)s | %(server_copies)s | %(smtp_data_after_fault)s | '
-              '%(k9_outbox_state)s | %(all_checks)s |' % r for r in rows]
+              '%(outbox_md)s | %(all_checks)s |' % dict(r, outbox_md=str(r['k9_outbox_state']).replace('|', ' / '))
+              for r in rows]   # the state string uses '|', which would split a Markdown cell
     lines += ['', '%d of %d trials reproduced; across them %d new DATA after the fault over %s s each (more than two of '
               "K-9's 15-minute polls)." % (len(valid), len(rows), sum(r['smtp_data_after_fault'] or 0 for r in valid),
                                           valid[0]['observe_s'] if valid else '?')]
