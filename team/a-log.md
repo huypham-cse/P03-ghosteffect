@@ -296,3 +296,10 @@ Theo yêu cầu của A, sửa trên toàn bài (kể cả file của B và C), 
 - Abstract: "decides ghost effects" thành "resolves ghost effects", câu cuối rõ hơn; 199 từ (≤ 200), vẫn 4 con số.
 - Câu chữ: §1 "differs twice"; §2 T3A nêu số bản trùng có tag; §4 bỏ câu mở đầu và lần nhắc RFC 1047 thứ hai; §5.3 bỏ ngoặc thừa; §6 bỏ câu PRISM/Storm chưa chạy; §7.1 hai câu khó đọc; §7.2 câu về bản trùng còn lại; §7.4 "favoring"; §8, §9 (câu nối dài, "our foundations"), §10.
 - Kiểm: build thoát 0, 23 trang, 0 `??`, không overfull; kết luận và References đều ở trang 12; độ dễ đọc toàn bài `para 14/15, emph 28/30`, 0 câu dài, 0 đoạn chấm phẩy; không thêm "escalate", "G2" hay số gõ tay; scrub qua; YC-C9 grep kết luận ra 0.
+
+## 21/11/2026 (chiều, tiếp): Figure 5 chồng chữ
+
+- Figure 5 (phụ lục B.6, `fig_pareto`): nhãn α trên đường product bị cắt ở mép trái và đè lên các đường cong; ở hình dưới, "key" đè "Atomix-durable" và "key+ask" chạm điểm "nonce+ask". Sửa trong `artifact/scripts/render.py` (chỉ phần trình bày): bỏ nhãn α khỏi hình, chú thích liệt kê các mức α lấy từ CSV theo thứ tự điểm; hình dưới cao 4,8 cm, "key" đặt sang phải như các nhãn khác, "key+ask" đặt ở góc trống dưới trái có đường nối.
+- YC-10: trục và chú thích Figure 5, chú thích Table 24 và các bảng `tab_corr`, `tab_pop`, `tab_sens` đổi "escalations/escalated" thành "asks"; `generated/` không còn "escalat".
+- Không đổi CSV hay macro. So với manifest freeze 20/11, năm file sinh ra này khác do đổi trình bày (`fig_pareto`, `tab_corr`, `tab_planner_extended`, `tab_pop`, `tab_sens`).
+- Kiểm: build thoát 0, 23 trang, 0 `??`, không overfull; kết luận và References ở trang 12; đã xem ảnh Figure 5 ở 300 dpi. Test artifact: 1 fail cũ chỉ trên Windows (`test_failed_publication_restores_the_original_directory`), còn lại OK.
