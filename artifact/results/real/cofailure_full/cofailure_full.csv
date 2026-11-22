@@ -5,5 +5,7 @@ pilot (not in the 101),"row, digest",3,3,0,1,0,0,70.76,the one-wrong trial is a 
 "campaign 1, as re-scored","indicator, copy count",37,32,0,0,5,0,10.89,five co-failures re-scored as no-observation
 "campaign 1, as first scored","indicator, copy count",37,37,5,0,0,0,28.77,screen identity was not logged
 "campaign 1, stale-forwarder runs",,unknown,,,,,,,discarded; raw data not in the artifact
+"TN4 calibration, committed","row, room list",570,570,0,164,0,0,,stale room list counts as one wrong; the row is right by construction (read after the poll saw it)
+"TN4 calibration, absent","row, room list",510,510,0,0,0,0,0.72,wrong = a view shows a message that never reached the server
 "pooled, campaign 1 re-scored",mixed,,134,0,,,,2.72,sum of the rows with reads
 "pooled, campaign 1 as first scored",mixed,,139,5,,,,8.19,sum of the rows with reads
