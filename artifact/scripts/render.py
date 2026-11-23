@@ -644,6 +644,7 @@ parentheses); $L_{\mathrm{v}}$: \% of absent effects the planner declared done; 
 \label{tab:stress}
 \footnotesize
 \setlength{\tabcolsep}{2pt}
+\resizebox{\columnwidth}{!}{%
 \begin{tabular}{@{}l cc ccc@{}}
 \toprule
  & Re-read & Rules & \multicolumn{3}{c}{\alg (product)} \\
@@ -652,7 +653,7 @@ Generative model & $P_{\mathrm{v}}$ & $P_{\mathrm{v}}$ & $P_{\mathrm{v}}$ (hi) &
 \midrule
 """ + '\n'.join(lines) + r"""
 \bottomrule
-\end{tabular}
+\end{tabular}}
 \end{table}
 """)
 sv = lambda s_, p, k, fmt=f2: fmt(ST[(s_, p)][k])
@@ -708,13 +709,14 @@ Passive labels come from uninterrupted effects; fault-injected labels from the i
 \label{tab:pop}
 \footnotesize
 \setlength{\tabcolsep}{2pt}
+\resizebox{\columnwidth}{!}{%
 \begin{tabular}{@{}l ccc c@{}}
 \toprule
  & product & source & joint & rules \\
 \midrule
 """ + '\n'.join(lines) + r"""
 \bottomrule
-\end{tabular}
+\end{tabular}}
 \end{table}
 """)
 M('PopRulesOver', str(sum(1 for s_, _ in pop[1:] if float(ST[(s_, 'rules')]['cdup']) > 1.0)))
@@ -927,13 +929,14 @@ asks (\%); last column: GhostEffect's $P_{\mathrm{v}}$ (\%, budget 1\%) with its
 \label{tab:sens}
 \footnotesize
 \setlength{\tabcolsep}{2.2pt}
+\resizebox{\columnwidth}{!}{%
 \begin{tabular}{@{}l cccc c@{}}
 \toprule
 Variant & key & nonce+ask & always ask & GhostEffect & $P_{\mathrm{v}}$ (hi) \\
 \midrule
 """ + '\n'.join(lines) + r"""
 \bottomrule
-\end{tabular}
+\end{tabular}}
 \end{table}
 """)
 M('SensPvMax', f2(max(float(SE[(v, 'ghost')]['cdup']) for v in vars_)))

@@ -7,6 +7,7 @@ GUI: GUI effects. $^c$ concurrent with this work.}
 \label{tab:position}
 \footnotesize
 \setlength{\tabcolsep}{1.7pt}
+\resizebox{\columnwidth}{!}{%
 \begin{tabular}{@{}l ccccc l@{}}
 \toprule
 Work & Key & Read & Ask & Crash & GUI & Guarantee / output \\
@@ -25,5 +26,5 @@ TaskVM~\cite{yang2026taskvm} & no & N & yes & -- & yes & task-state contract \\
 AgentProg~\cite{tian2025agentprog} & no & -- & no & no & yes & redo \\
 \textbf{\sys} & \textbf{no} & \textbf{N} & \textbf{yes} & \textbf{yes} & \textbf{yes} & $(\alpha,\beta)$; sim.\ + emulator \\
 \bottomrule
-\end{tabular}
+\end{tabular}}
 \end{table}

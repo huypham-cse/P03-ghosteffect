@@ -1,35 +1,9 @@
 \section{Evaluation}
 \label{sec:eval}
 We report emulator measurements (\S\ref{sec:eval-real}), an LLM-agent experiment (\S\ref{sec:eval-agent}) and measured-parameter simulations (\S\ref{sec:eval-realsim}), then compare recovery
-decisions in model-based simulations (\S\ref{sec:setup}). Additional guarantees, correlated-read experiments and baseline details appear in Appendix~\ref{app:extra}.
+decisions in model-based simulations (Appendix~\ref{sec:setup}). Additional guarantees, correlated-read experiments and baseline details appear in Appendix~\ref{app:extra}.
 Every number is exact computation, simulation, host, emulator or phone measurement, or LLM-agent experiment, generated from the artifact's CSVs.
 
 \input{generated/real_section}
 \input{sections/07-agent}
 \input{sections/07-realsim}
-
-\subsection{Model-based recovery comparison}
-\label{sec:setup}
-The default model contains eight app profiles, persistent reader errors, correlated VLM errors and a fallible Monitor.
-Calibration uses whole effects; each policy sees the same \SimN{} interrupted workflows (Table~\ref{tab:planner}).
-Duplicate/loss rates include wrong user answers, while $P_{\mathrm v}$ counts committed effects the planner itself retried. The confidence $\delta$ follows \S\ref{sec:theory-cal}.
-
-\input{generated/tab_planner}
-
-Redo duplicates \SimRedoDup\% of simulated workflows.
-Always ask makes no planner-initiated retry, but wrong user answers cause \SimAskAllDup\% duplicates and \SimAskAllLoss\% losses.
-The theorem-only policy asks \SimGtwoAsk\% because it cannot clear effects outside apps with idempotent retries.
-Product certification retries \SimGhostPv\% of committed effects (CP upper \SimGhostPvHi\%) and asks \SimGhostAsk\% of workflows.
-Joint certification retries \SimJointPv\% and asks \SimJointAsk\%.
-The default world satisfies A2 by construction, favoring product certification.
-
-Same-evidence rules ask \SimRulesAsk\% but retry \SimRulesPv\% of committed effects (CP upper \SimRulesPvHi\%).
-Tuned rules can outperform certification in asking cost; the full comparison and adverse results remain in Appendix~\ref{app:extra}.
-Vetted rules given joint's passive records and lag tables ask \SimModelVettedAsk\% and retry \SimModelVettedPv\%, without a certificate. Table~\ref{tab:matched} repeats this with fault-injected inputs.
-
-In the stress and calibration-population tests, the product mode exceeds its CP budget in \StressNover{} stress rows, and rules exceed their observed retry budget in \StressRulesOver{} rows (Table~\ref{tab:stress}).
-An unlogged lag tail gives product $P_{\mathrm v}=\StressLag\%$; logging that tail raises its asking rate to \StressLagCalAsk\%.
-Under common-mode stale history that violates A2, product retries \PopCmCProd\% and joint \PopCmCJoint\% of committed effects.
-Fault-injected labels and larger label budgets therefore address different risks (Table~\ref{tab:pop}).
-
-Removing the nonce, hop-1 probe or digest raises product's asking rate to \SimNoNonceAsk\%, \SimNoHopAsk\% or \SimNoDigestAsk\% (ablations: Appendix~\ref{app:extra}).

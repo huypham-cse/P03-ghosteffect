@@ -10,22 +10,21 @@ together (0/\RealCoObs{} in campaign~2 as two families, 0/\RealElPlanCoOne{} com
 per stratum and fault class, which only pooling provides.
 (3)~Bounds hold only for a calibration population of labels from interrupted effects: passive labels, an unlogged lag tail or an undetected delayed recovery in Doze break the
 budget (Tables~\ref{tab:realsim},~\ref{tab:stress}). Drift within a version is not detected.
-(4)~Joint certification asks in two thirds of interrupted workflows at 2{,}000 labels in the model and on every interrupted K-9 send, and each ask interrupts a
-user who delegated the task. We have not run a user study of the prompt (it needs IRB approval).
+(4)~Joint certification asks in two thirds of model workflows at 2{,}000 labels and on every interrupted K-9 send, and we have not run a user study of the prompt.
 (5)~A missed commit point is invisible to \sys, and an app that commits half a batch needs app-specific probes.
-(6)~\phantomsection\label{sec:device-plan}The agent evidence covers emulator runs on one app with two agents and one model configuration. The physical-phone measurements below have no agent; results for agents on phones, other models, and VLM evidence remain future work.
+(6)~\phantomsection\label{sec:device-plan}The agent evidence is one app, two agents and one model on the emulator; agents on phones, other models and VLM evidence remain future work.
 
 Payment apps resist such agents: \texttt{FLAG\_SECURE} blocks screenshots, since Android~14 only declared assistive services see views marked \texttt{accessibility\-Data\-Sensitive}~\cite{android_a11ysensitive,googleplay_a11ypolicy},
 and banking apps may detect accessibility services or gate the commit behind BiometricPrompt. Hence our measurements use open-source apps with self-hosted servers. Element, Simple SMS and Thunderbird offer only counterparty-visible nonce fields (Table~\ref{tab:apps}), and our Element runs opted in. On our own (not rented) Android~\RealPhoneAndroid{} phone, K-9 did not resend after background-then-kill by \texttt{am kill} (\RealPhoneBgN) or force-stop (\RealPhoneForceN) in \RealPhoneNoResendN{} of \RealPhoneN{} valid trials, and a GUI redo duplicated the mail in \RealPhoneDupN{} of them.
-On the emulator, a GUI redo after an lmkd kill duplicated K-9 mail in \RealEmuKDupN{} of \RealEmuKN{} trials. DAVx5 kept exactly one copy in every valid trial: \RealEmuCalOnceN/\RealEmuCalValidN{} in later emulator runs with lmkd and Doze,
-\RealRentSamOnceN/\RealRentSamValidN{} on a rented Galaxy A36 and \RealRentPixOnceN/\RealRentPixValidN{} on a rented Pixel 9. Forced Doze did not delay its resend on the emulator (median
-\RealEmuCalDozeMedS\,s from fault to PUT, \RealEmuCalKillMedS\,s after \texttt{kill -9}) or on the Pixel (\RealRentPixDozeMedS\,s, still idle). On the A36 (One UI) one trial saw no resend within
-\RealRentSamDozeQuietS\,s and \RealRentSamTwoN{} of \RealRentSamTwoN{} later ones resent in deep idle, so lag tails on phones can exceed ours (Table~\ref{tab:lag} prices them). End-to-end encrypted rooms, Element's default for direct messages, are untested.
+On the emulator, a GUI redo after an lmkd kill duplicated K-9 mail in \RealEmuKDupN{} of \RealEmuKN{} trials. DAVx5 kept exactly one copy in every valid trial (\RealEmuCalOnceN/\RealEmuCalValidN{} on the emulator with lmkd and Doze,
+\RealRentSamOnceN/\RealRentSamValidN{} on a rented Galaxy A36, \RealRentPixOnceN/\RealRentPixValidN{} on a rented Pixel 9). Forced Doze did not delay its resend on the emulator (median
+\RealEmuCalDozeMedS\,s, against \RealEmuCalKillMedS\,s after \texttt{kill -9}) or the Pixel. On the A36 one trial saw no resend within
+\RealRentSamDozeQuietS\,s (\RealRentSamTwoN{} of \RealRentSamTwoN{} later ones resent in deep idle), so phone lag tails can exceed ours (Table~\ref{tab:lag}). End-to-end encrypted rooms, Element's default for direct messages, are untested.
 
 \para{Ethics and threat model.}
 A nonce writes agent text into user content, so \sys uses user-only fields by default, requires opt-in for counterparty-visible ones, and never uses invisible characters. We assume
 a benign agent and apps and an untrusted co-installed app that may race for the foreground or render look-alikes. Foreground re-verification narrows, but does not close, the
-rebinding window~\cite{qian2026rebinding}, and only outgoing items of the verified account count as nonce matches. The model applies to desktop and web agents~\cite{xie2024osworld,zhou2024webarena}; the two-hop reduction is where phones differ.
+rebinding window~\cite{qian2026rebinding}, and only outgoing items of the verified account count as nonce matches.
 
-Every table, figure and inline number is generated from the artifact's CSVs by a standard-library Python generator. The artifact includes the seeded simulator, calibration, ledger benchmark, and the
-emulator measurements with per-trial CSVs and logs, plus the rig (AVD configuration, APK hashes, fault proxy, driver, reader). An anonymized copy is available at \url{https://anonymous.4open.science/r/ghosteffect-artifact}.
+Every table, figure and inline number is generated from the artifact's CSVs. The artifact holds the seeded simulator, calibration, ledger benchmark, per-trial emulator CSVs and logs,
+and the rig (AVD configuration, APK hashes, fault proxy, driver, reader): \url{https://anonymous.4open.science/r/ghosteffect-artifact}.

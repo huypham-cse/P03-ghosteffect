@@ -10,7 +10,7 @@ and in (c) it meets $(\alpha,\beta)$ with $\alpha{+}\beta{<}1$ and finite $\E_x[
 \begin{theorem}
 \label{thm:main}
 (a)~If $G(w){<}\alpha$, waiting until $r_e{+}w$ and then an SPRT meet $(\alpha,\beta)$. (b)~$\PP(\text{retry}\mid X{=}1)\ge(1{-}\beta)G(w)$.
-(c)~$\E_0[N]\ge d(1{-}\beta\,\|\,\alpha)/D_0$. (d)~$\PP(\dup){+}\PP(\loss)\ge\bar\pi\big(1{-}\sqrt{D_0\E_0[N]/2}\big)$.
+(c)~$\E_0[N]\ge d(1{-}\beta\,\|\,\alpha)/D_0$.\newline (d)~$\PP(\dup)+\PP(\loss)\ge\bar\pi\big(1{-}\sqrt{D_0\E_0[N]/2}\big)$.
 \end{theorem}
 
 None of these inequalities is new, and Appendix~\ref{app:proofs} states them in full. Part~(a) is Wald's bound~\cite{wald1945sprt} plus a union bound on
@@ -24,8 +24,7 @@ If $0<\epsilon_1<1$, or if $G(t)>0$ for every $t$, every verification-only polic
 for unbounded stopping times too. For $\alpha,\beta>0$ with $\alpha+\beta<1$, $(\alpha,\beta)$ is reachable by verification if and only if $D_0>0$.
 \end{corollary}
 
-Exactly-once by verification is a limit, not a point, so \sys exposes $(\alpha,\beta)$ as a knob. By~(b), asking or a lag-free family such as the app's
-Outbox is the only escape from the lag floor. Otherwise the lag share is paid in waiting time (Table~\ref{tab:lag}), and the planner asks when the certified wait exceeds a cap. By~(d), on a look-alike screen ($D_0\to0$) the error approaches the prior floor for any number of reads.
+Exactly-once by verification is a limit, so \sys exposes $(\alpha,\beta)$ as a knob. By~(b), only asking or a lag-free family such as the Outbox escapes the lag floor; otherwise the lag share is paid in waiting (Table~\ref{tab:lag}), capped by asking. By~(d), a look-alike screen ($D_0\to0$) leaves the prior floor for any number of reads.
 
 \subsection{Correlated reads: certify views, not reads}
 \label{sec:theory-corr}

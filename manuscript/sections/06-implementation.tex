@@ -12,14 +12,13 @@ Random kills of its writer, \LedgerPhoneSamKillN{} per phone over two sessions, 
 \para{Emulator testbed.} Android~13 (API~33, arm64) emulators run F-Droid builds of the apps against self-hosted servers on the host. A TCP fault proxy in front of
 each server forwards a matching request (Matrix \texttt{PUT \dots/send/\dots/<txnId>}, SMTP end of \texttt{DATA}, CalDAV \texttt{PUT}) so the server commits. It then drops the reply
 and resets the connection. In one cell it instead withholds the reply until the client times out, and in the ``sticky'' cells it keeps dropping the app's immediate retries until
-the fault. It logs every request with its id. A scripted driver (uiautomator and adb, no LLM) sends a nonce-tagged message. For K-9 the nonce is the subject, which the
+the fault. A scripted driver (uiautomator and adb, no LLM) sends a nonce-tagged message. For K-9 the nonce is the subject, which the
 recipient sees, so it runs only on test accounts that opted in. The driver then applies a fault: background + \texttt{kill -9}, \emph{force-stop}, or a
 20\,s \emph{network cut}. It relaunches the app and polls until 20\,s after the message is seen, or for up to 300\,s. Its reader returns $\bot$ unless the foreground package,
 the room title and the timeline are verified, and ``absent'' only on a verified screen scrolled to the bottom with the previous message visible. Ground truth comes from the
 server only. A scripted \emph{GUI redo} recomposes and re-sends the same content, as an agent that trusts the screen would.
 
 \para{Agent harness.} The M3A runs of \S\ref{sec:eval-agent} drive the unmodified agent against the same K-9 server setup, on an x86-64 emulator. The harness extends AndroidWorld~\cite{rawles2025androidworld}: \sys wraps the action step, appends \textsf{ISSUED} and types the nonce before a
-classified commit action. App databases are read only by the grader and by the same-evidence rules, which read K-9's folders exactly. Beyond force-stop we killed the agent alone (\S\ref{sec:eval-agent}).
+classified commit action. App databases are read only by the grader and by the same-evidence rules, which read K-9's folders exactly.
 On the emulator we also let \texttt{lmkd} reap K-9, DAVx5 and Element under real memory pressure and held the device in forced deep Doze (\S\ref{sec:eval-real}, \S\ref{sec:discussion}). Plain \texttt{am kill} spares perceptible
-processes~\cite{android_adb}, such as Element with its sync component; \texttt{lmkd} does not. Doze needs the screen off and the device still~\cite{android_doze}, so it matters only when the agent died and the phone slept. App Standby buckets and Data
-Saver~\cite{android_standby} restrict background apps even while the screen is on. Physical phones differ in LMK thresholds and OEM battery managers (\S\ref{sec:discussion}).
+processes~\cite{android_adb}, such as Element with its sync component; \texttt{lmkd} does not. Doze needs the screen off and the device still~\cite{android_doze}, so it matters only when the agent died and the phone slept.

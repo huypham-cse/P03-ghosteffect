@@ -1,8 +1,7 @@
 \subsection{Measured-parameter simulation}
 \label{sec:eval-realsim}
-\input{generated/tab_realsim}
 
-Table~\ref{tab:realsim} reruns every mode on profiles built from the emulator measurements (\texttt{params.csv} records each value's source), with per-class lags
+Table~\ref{tab:realsim} in the appendix reruns every mode on profiles built from the emulator measurements (\texttt{params.csv} records each value's source), with per-class lags
 and $\bot$ as no observation. Calibration and test records are simulated draws from the same fitted law. The measurements found \RsimFitLateWrong/\RsimFitLateObs{} wrong
 late reads in each Element family and \RsimFitCoWrong/\RsimFitCoN{} pairwise late co-failures, but these zero counts do not make readers error-free on new screens.
 The table therefore tests certification decisions and their asking cost, not reader errors, and its simulated labels are not emulator trials (label budgets: Table~\ref{tab:cert-budget}).
@@ -17,8 +16,7 @@ interrupted Element send. On K-9 no family can certify, so every mode, like Theo
 lead joint certification to retry \RsimKsentPassJointPv\%. On real apps the decisive pieces are Outbox evidence classification, fault-injected labels, and asking when the GUI cannot reveal the outcome; calibration adds a guarantee that follows
 the labels.
 
-\input{generated/tab_matched}
 
-Table~\ref{tab:matched} gives joint certification and \emph{vetted rules}, which keep only the families never wrong on the labels and wait for the longest logged lag, the same calibration records and lag tables in each seed. On Element vetted rules ask far less (\RsimMatchElemTwoVettedAsk\% against
-\RsimMatchElemTwoJointAsk\% with \RsimMatchElemTwoLabelN{} labels and lag entries, \RsimMatchElemFiveVettedAsk\% against \RsimMatchElemFiveJointAsk\% with \RsimMatchElemFiveLabelN), neither retries a committed effect in this
-fitted-law simulation, and only joint computes a certificate. On both K-9 profiles both ask on every interrupted send. The fixed-wait rules above are therefore not the strongest baseline when calibration data are available.
+\emph{Vetted rules} keep only the families never wrong on the labels and wait for the longest logged lag. Given the same records, they ask far less than joint certification on Element (\RsimMatchElemTwoVettedAsk\% against
+\RsimMatchElemTwoJointAsk\% with \RsimMatchElemTwoLabelN{} labels, Table~\ref{tab:matched} in the appendix). Neither retries a committed effect in this fitted-law simulation, only joint computes a certificate, and both ask on every interrupted K-9 send.
+A model-based simulation of \SimN{} workflows over eight app profiles (Appendix~\ref{sec:setup}) gives the same ordering: product certification retries \SimGhostPv\% of committed effects and asks \SimGhostAsk\%, joint retries \SimJointPv\% and asks \SimJointAsk\%, and same-evidence rules ask \SimRulesAsk\% but retry \SimRulesPv\%.
