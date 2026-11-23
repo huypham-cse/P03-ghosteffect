@@ -278,7 +278,7 @@ App, condition & $n$ & Re-sent & Once & Later & Unsent \\
 \caption{Emulator measurements, campaign 2 (Android~13 emulators, self-hosted servers, scripted driver; ground truth = server copies). (a)~After a commit whose reply was
 lost (TCP reset after the server committed), under no fault, background + \texttt{kill -9}, force-stop or a 20\,s network cut. App re-send: how the app resolved it; GUI redo:
 a scripted agent recomposes and re-sends the same content. (b)~Element's recovery-to-visible lag: minimum, median and maximum over the $n$ trials of each class (s; upper end of a one-dump $\approx$2\,s interval; first visibility was observed
-in all recorded trials, with trial-specific follow-up windows). This is not a uniform late-duplicate follow-up. Sticky: every reply dropped until the fault.
+in all recorded trials, with trial-specific follow-up windows). This is not a uniform late-duplicate follow-up. Sticky: every reply dropped until the fault; in the later \texttt{lmkd} run, memory pressure made \texttt{lmkd} reap Element.
 Not shown: \RealElemStickyVoneN{} trials of an earlier sticky variant and \RealElemAckedN{} acknowledged-then-killed trials (lags in the artifact).
 (c)~Family errors against the server, wrong/observed, with no-observation ($\bot$, wrong screen) separated;
 Element's send-state indicator appears in the same dump as the row in \RealElemN/\RealElemN{} trials, so the two are one reading.}
@@ -305,7 +305,8 @@ Fault & $n$ & min & median & max \\
 \midrule
 ''' + '\n'.join([_lagrow('none (reader floor; from \\emph{Send})', 'Nofault'), _lagrow('background + \\texttt{kill -9}', 'Kill'),
                      _lagrow('force-stop (relaunch lands off the room)', 'Fs'), _lagrow('network cut, app in foreground', 'Net'),
-                     _lagrow('sticky + \\texttt{kill -9}', 'SKill'), _lagrow('sticky + force-stop', 'SFs')]) + r'''
+                     _lagrow('sticky + \\texttt{kill -9}', 'SKill'), _lagrow('sticky + force-stop', 'SFs'),
+                     _lagrow('sticky + \\texttt{lmkd} (later run)', 'Lmk')]) + r'''
 \bottomrule
 \end{tabular}
 \end{minipage}\hfill
@@ -413,22 +414,32 @@ $^{\S}$Force-stop clears the app's notifications. The shade was cleared between 
     # Latency only where PRAGMA synchronous read back FULL (2). The Pixel read back NORMAL (1) although FULL was
     # requested; Android may run that read on another pooled WAL connection, so its timing is not reported as FULL.
     # Kill results do not depend on the sync mode (a process kill keeps the page cache), so both phones count there.
+    # TN3b (b-log 21/11) reran it with SQLiteDatabase.OpenParams, which sets the mode on every pooled connection and
+    # reads PRAGMA synchronous back on the writer: latency comes from TN3b only, where both phones read FULL back on
+    # both connections. Kills from both sessions are pooled (a process kill keeps the page cache).
+    _sessions = ('phone_ledger', 'phone_ledger_v2')
     for _folder, _p in (('a36', 'Sam'), ('pixel9', 'Pix')):
-        _dir = os.path.join(REAL, 'phone_ledger', _folder)
-        _lat = [r for r in _rr('latency.csv', _dir) if r['sync_requested'] == 'FULL']   # drop the NORMAL context run
-        assert len(_lat) == 2 and all(r['journal_mode'] == 'wal' for r in _lat)
-        _kl = _rr('kills.csv', _dir)
+        _v2 = os.path.join(REAL, 'phone_ledger_v2', _folder)
+        _lat = [r for r in _rr('latency.csv', _v2) if r['sync_requested'] == 'FULL']   # drop the NORMAL context run
+        assert len(_lat) == 2 and all(r['journal_mode'] == 'wal' and r['synchronous'] == '2'
+                                      and r['synchronous_writer'] == '2' for r in _lat)
+        M(f'LedgerPhone{_p}MedMs', f"{max(float(r['issue_p50_ms']) for r in _lat):.2f}")
+        M(f'LedgerPhone{_p}NinetyFiveMs', f"{max(float(r['issue_p95_ms']) for r in _lat):.2f}")
+        M(f'LedgerPhone{_p}Bytes', max(int(r['bytes_per_effect']) for r in _lat))
+        _kl = [r for s in _sessions for r in _rr('kills.csv', os.path.join(REAL, s, _folder))]
         assert all(r['alive_after_kill'] == 'False' for r in _kl)
-        if all(r['synchronous'] == '2' for r in _lat):
-            M(f'LedgerPhone{_p}MedMs', f"{max(float(r['issue_p50_ms']) for r in _lat):.2f}")
-            M(f'LedgerPhone{_p}NinetyFiveMs', f"{max(float(r['issue_p95_ms']) for r in _lat):.2f}")
-            M(f'LedgerPhone{_p}Bytes', max(int(r['bytes_per_effect']) for r in _lat))
         M(f'LedgerPhone{_p}KillN', len(_kl))
         M(f'LedgerPhone{_p}TapN', f"{sum(int(r['taps_checked']) for r in _kl):,}".replace(',', '{,}'))
         M(f'LedgerPhone{_p}Viol', sum(int(r['invariant_violations']) for r in _kl))
+        # accessibility read cost on the phone: adb `uiautomator dump` of the home screen, 20 timed runs
+        M(f'RealPhoneDump{_p}S', f"{statistics.median(int(r['ms']) for r in _rr('dump_times.csv', _v2)) / 1000:.1f}")
 
-    M('LedgerPhoneViol', sum(int(r['invariant_violations']) for f in ('a36', 'pixel9')
-                             for r in _rr('kills.csv', os.path.join(REAL, 'phone_ledger', f))))
+    _lp = lambda f, k: max(float(r[k]) for r in _rr('latency.csv', os.path.join(REAL, 'phone_ledger_v2', f))
+                           if r['sync_requested'] == 'FULL')
+    assert _lp('pixel9', 'issue_p95_ms') >= _lp('a36', 'issue_p95_ms') and _lp('a36', 'bytes_per_effect') >= _lp('pixel9', 'bytes_per_effect')
+    assert len({len([r for s in _sessions for r in _rr('kills.csv', os.path.join(REAL, s, f))]) for f in ('a36', 'pixel9')}) == 1
+    M('LedgerPhoneViol', sum(int(r['invariant_violations']) for s in _sessions for f in ('a36', 'pixel9')
+                             for r in _rr('kills.csv', os.path.join(REAL, s, f))))
 
     # TN1 (b-log 19-20/11): the GUI-only planner (recovery.py) held out on Etar + DAVx5 + Radicale (AVD), product mode.
     _tn1 = json.load(open(os.path.join(REAL, 'tn1_caldav', 'SUMMARY.json'), encoding='utf-8'))
@@ -448,6 +459,78 @@ $^{\S}$Force-stop clears the app's notifications. The shade was cleared between 
     M('RealPlanRetryAbsent', _t['certified_absence_retries'])
     M('RealPlanAskN', _t['asks'])
     M('RealPlanDupN', _t['duplicates'])
+
+    # TN4 (b-log 22-23/11): the same planner held out on Element + Synapse (AVD), product mode, one nonce family with
+    # two views (timeline row, room-list line); both sides certifiable. Kind of number: emulator measurement.
+    import re
+    _t4 = os.path.join(REAL, 'tn4_element')
+    _c4, _x4 = _rr('calibration.csv', _t4), _rr('test.csv', _t4)
+    _spec4 = json.load(open(os.path.join(HERE, '..', '..', 'testbed', 'tn4', 'tn4_spec.json'), encoding='utf-8'))
+    _com4, _abs4 = [r for r in _x4 if r['x'] == '1'], [r for r in _x4 if r['x'] == '0']
+    _bad4 = lambda r: r['view_timeline'] == str(1 - int(r['x'])) and r['view_roomlist'] == str(1 - int(r['x']))
+    _read4 = lambda g: [r for r in g if '' not in (r['view_timeline'], r['view_roomlist'])]
+    assert all(r['server_copies'] == '1' for r in _x4) and not any(r['decision'] == 'RETRY' for r in _com4)
+    assert all(r['decision'] == 'RETRY' for r in _abs4) and not any(_bad4(r) for r in _x4)
+    assert _spec4['alpha'] == _spec4['beta'] == _s['alpha']   # the prose states one alpha for both planner runs
+    M('RealElPlanCalN', f'{len(_c4):,}'.replace(',', '{,}'))
+    M('RealElPlanCalOneN', sum(r['x'] == '1' for r in _c4))
+    M('RealElPlanCalZeroN', sum(r['x'] == '0' for r in _c4))
+    M('RealElPlanClassN', len({r['fault_class'] for r in _c4}))
+    for _cls, _nm in (('none', 'None'), ('app-kill', 'Kill'), ('force-stop', 'Fs')):
+        (_w,) = {r['certified_wait_s'] for r in _x4 if r['fault_class'] == _cls}
+        M(f'RealElPlanWait{_nm}', f1(_w))
+    M('RealElPlanTestN', len(_x4))
+    M('RealElPlanInvalidN', re.search(r'## Test: \d+ valid trials, (\d+) INVALID',
+                                      open(os.path.join(_t4, 'SUMMARY.md'), encoding='utf-8').read()).group(1))
+    M('RealElPlanCommittedN', len(_com4))
+    M('RealElPlanRetryCommitted', 0)
+    M('RealElPlanRetryHi', f"{100 * (1 - 0.05 ** (1 / len(_com4))):.1f}")
+    M('RealElPlanDeclared', sum(r['decision'] == 'COMMITTED' for r in _com4))
+    assert sum(r['decision'] == 'ASK' for r in _x4) == 1   # the prose says it asked about one, a bot timeline read
+    assert [r['view_timeline'] for r in _x4 if r['decision'] == 'ASK'] == ['']
+    M('RealElPlanAskN', sum(r['decision'] == 'ASK' for r in _x4))
+    M('RealElPlanAbsentN', len(_abs4))
+    M('RealElPlanRetryAbsent', sum(r['decision'] == 'RETRY' for r in _abs4))
+    M('RealElPlanDupN', sum(int(r['server_copies']) >= 2 for r in _x4))
+    M('RealElPlanCoOne', len(_read4(_com4)))
+    M('RealElPlanCoZero', len(_read4(_abs4)))
+    _st4 = [r for r in _com4 if r['fault_class'] == 'none']
+    M('RealElPlanStale', sum(r['view_roomlist'] == '0' for r in _st4))
+    M('RealElPlanStaleN', len(_st4))
+
+    # ELMK (b-log 23/11): Element reaped by lmkd under real memory pressure after a lost reply (sticky proxy, AVD).
+    _ek = _rr('trials.csv', os.path.join(REAL, 'emu_element_lmk'))
+    assert _ek and all(r['reaped'] == 'True' for r in _ek) and len({r['oom_score_adj'] for r in _ek}) == 1
+    _eklag = [float(r['relaunch_to_sent_s']) for r in _ek]
+    M('RealElmkN', len(_ek))
+    M('RealElmkReaped', sum(r['reaped'] == 'True' for r in _ek))
+    M('RealElmkOnce', sum(r['server_copies_final'] == '1' for r in _ek))
+    M('RealElmkResent', sum(r['resends_after_fault'] not in ('', '0') for r in _ek))
+    M('RealElmkAdj', _ek[0]['oom_score_adj'])
+    M('RealElmkMbLo', f"{min(int(r['filled_mb']) for r in _ek):,}".replace(',', '{,}'))
+    M('RealElmkMbHi', f"{max(int(r['filled_mb']) for r in _ek):,}".replace(',', '{,}'))
+    M('RealLagLmkN', len(_eklag))
+    M('RealLagLmkMin', f1(min(_eklag)))
+    M('RealLagLmkMed', f1(statistics.median(_eklag)))
+    M('RealLagLmkMax', f1(max(_eklag)))
+
+    # K9L (b-log 21/11): K-9 watched for 2,100 s after a lost reply (more than two of its 15-min polls).
+    _kl9 = _rr('trials.csv', os.path.join(REAL, 'emu_k9_long'))
+    assert _kl9 and all(r['verdict'] == 'REPRODUCED' and r['all_checks'] == 'True' for r in _kl9)
+    M('RealKlongN', len(_kl9))
+    M('RealKlongObsS', f"{min(float(r['observe_s']) for r in _kl9):,.0f}".replace(',', '{,}'))
+    assert all(r['smtp_data_after_fault'] == '0' for r in _kl9)   # the prose says no new DATA
+    M('RealKlongData', sum(int(r['smtp_data_after_fault']) for r in _kl9))
+    M('RealKlongOnce', sum(r['server_copies'] == '1' for r in _kl9))
+    M('RealKlongError', sum(r['k9_outbox_state'].startswith('error') for r in _kl9))
+
+    # FREQ (b-log 21/11): the commit window is measured; interruption rates are an assumed grid (an estimate).
+    _gw = [r for r in _rr('estimate.csv', os.path.join(REAL, 'ghost_window')) if r['window'] == 'K-9, tap to server commit']
+    (_gw1,) = [r for r in _gw if float(r['interruptions_per_hour']) == 1.0]
+    (_gwrow,) = [r for r in _rr('windows.csv', os.path.join(REAL, 'ghost_window')) if r['window'] == _gw1['window']]
+    M('RealWinKnineMedS', f"{float(_gw1['median_window_s']):.1f}")
+    M('RealWinKnineN', _gwrow['n'])
+    M('RealWinKninePerK', f"{float(_gw1['ghost_per_1000_commits']):.1f}")
 
     # ------------------------------------------------------------------ prose hooks
     M('RealDataLimitation', r'Emulator measurements (\S\ref{sec:eval-real}) cover three apps on an emulator, with $n$ small outside Element; the agent study (\S\ref{sec:eval-agent}) runs one model on the emulator. Physical phones ran only K-9 and DAVx5, without an agent; the two rented phones have no root, so \texttt{am stop-app} stands in for \texttt{kill -9} and \texttt{lmkd} was not tested on them.')

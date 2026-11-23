@@ -35,17 +35,18 @@ optional Sent folder never shows it. A scripted agent that redoes the step dupli
 CalDAV events: these are measured ghost-effect duplicates. Element (Matrix) and DAVx5 (CalDAV) resolved the same fault exactly once by themselves (\RealElemRL/\RealElemRL{}
 and \RealCalN/\RealCalN). Their own retry is therefore safe, on the same device and within the server's dedup horizon (24\,h for Synapse); an agent's redo is not.
 Element's timeline row and room-list digest were never wrong together once the message was visible (0/\RealCoObs), and its post-restart visibility lag depends on the fault class
-(median from \RealLagNetMed{} to \RealLagFsMed\,s, first visibility seen in every trial). Run on Etar and DAVx5 at $\alpha{=}\beta{=}\RealPlanAlphaPct\%$, the planner itself certified and retried all
-\RealPlanRetryAbsent{} held-out absent events and asked about all \RealPlanCommittedN{} committed ones, whose acknowledgement no screen shows.
+(median from \RealLagNetMed{} to \RealLagFsMed\,s, first visibility seen in every trial).
+Held out at $\alpha{=}\beta{=}\RealPlanAlphaPct\%$, the planner itself retried none of \RealElPlanCommittedN{} committed Element messages (CP upper bound \RealElPlanRetryHi\%) and all
+\RealElPlanRetryAbsent{} absent ones. On Etar and DAVx5, whose acknowledgement no screen shows, it certified only absence.
 
 We recommend product certification when independence across families has a structural basis and joint certification otherwise, using fault-injected labels keyed by fault class. With the measured parameters, joint certification retries no committed Element send (Clopper-Pearson upper bound
 \RsimFiveJointPvHi\%) while asking in \RsimFiveJointAsk\% of workflows with \RsimFiveLabelN{} labels and \CertLagBootN{} lag entries per class, and it asks on every interrupted K-9 send.
 Vetted rules, which keep only the families never wrong on the labels and wait for the longest logged lag, also ask on every simulated K-9 send when given the same calibration records and lag tables (Table~\ref{tab:matched}). On Element simpler mechanisms also hold in this simulation: Theorem~\ref{thm:twohop} alone never retries and asks in \RsimElemGtwoAsk\% of workflows.
 Passive labels break every certified mode on Element, and an unlogged lag tail breaks the product mode. In a model-based simulation of \SimN interrupted workflows, joint certification retries \SimJointPv\% of committed effects and asks in
 \SimJointAsk\% of workflows with 2{,}000 labels (\NcalFJointAsk\% with 5{,}000, Table~\ref{tab:pop}). In the same simulation the product mode, which assumes independence across families, asks in \SimGhostAsk\%, about
-as often as a rule cascade that retries \SimRulesPv\% of committed effects against its \SimGhostPv\%. Tuned rules match it when retrying about 0.1\% of committed effects, without a guarantee (Appendix~\ref{app:extra}). In the LLM-agent experiment on the emulator,
+as often as a rule cascade that retries \SimRulesPv\% of committed effects against its \SimGhostPv\%. In the LLM-agent experiment on the emulator,
 AndroidWorld's M3A agent resent and duplicated \AgentDupN{} of \AgentValidN{} valid K-9 episodes after the lost reply; \sys asked in all \AgentGuardAskN{} valid guarded episodes and left \AgentGuardDupN{} duplicate,
-caused by the simulated user's wrong answer. The study covers two agents, one model and one app. Physical-phone evidence is reported in the Discussion, while broader agent and VLM coverage remains future work.
+caused by the simulated user's wrong answer. This study covers two agents, one model and one app.
 
 \para{Contributions.}
 \begin{itemize}[leftmargin=*,topsep=2pt,itemsep=1pt]
@@ -56,7 +57,6 @@ caused by the simulated user's wrong answer. The study covers two agents, one mo
 \item \sys's ledger, fault-injected calibration pipeline and planner, and a model-based evaluation against a same-evidence rule cascade, with stress, calibration-population and
   sample-size studies (\S\ref{sec:design} to \S\ref{sec:eval}).
 \item Emulator measurements of three apps with a screen-validating reader: per-app classification of idempotent retries and dedup horizon, a permanent misleading failed state, measured GUI-redo
-  duplicates, fault-class-conditioned visibility lags, family errors with no-observation separated, and a held-out test of the planner on Etar and DAVx5. A measured-parameter simulation reruns every planner mode against a
-  Theorem~\ref{thm:twohop}-only baseline (\S\ref{sec:eval-real}).
+  duplicates, fault-class-conditioned visibility lags and family errors with no-observation separated. Held-out tests run the planner on Element and on Etar and DAVx5 (\S\ref{sec:eval-real}).
 \item An LLM-agent experiment on the emulator in which M3A duplicates committed K-9 mail after a lost reply, and \sys at the action boundary asks instead (\S\ref{sec:eval-agent}).
 \end{itemize}

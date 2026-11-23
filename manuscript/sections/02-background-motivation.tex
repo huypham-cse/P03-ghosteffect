@@ -10,9 +10,7 @@ confirmation. We call the action sequence that ends at a commit point an \emph{e
 
 Research agents (M3A, T3A, UI-TARS, Mobile-Agent) are host processes that drive a phone over adb~\cite{rawles2025androidworld}. On-device agents are apps with an
 accessibility service~\cite{wen2024autodroid}. Interruptions are of four kinds. (1)~Agent death: a host agent crashes, or the low-memory killer reaps an on-device
-agent~\cite{android_lmkd}. (2)~App death: the low-memory killer reaps the foreground app last~\cite{android_lmkd}, so the realistic case is \emph{background-then-kill}. Even that may be
-rare for an app that a sync service keeps perceptible: \texttt{am kill} spared Element in every trial (\S\ref{sec:eval-real}), so for such apps agent death is the likelier
-interruption. Background-then-kill keeps scheduled
+agent~\cite{android_lmkd}. (2)~App death: the low-memory killer reaps the foreground app last~\cite{android_lmkd}, so the realistic case is \emph{background-then-kill}. A sync service keeps Element perceptible, so \texttt{am kill} spared it in every trial, but real memory pressure made \texttt{lmkd} reap it in \RealElmkReaped{} of \RealElmkN{} (\S\ref{sec:eval-real}). Background-then-kill keeps scheduled
 WorkManager jobs; a crash or force-stop cancels alarms and jobs~\cite{android_workmanager}, and unpreserved state is lost~\cite{farooq2020livedroid}. (3)~Deferral:
 App Standby, background restrictions and Doze batch network access and defer jobs~\cite{android_doze,android_standby}. (4)~Connectivity loss~\cite{sentosa2025cellreplay}:
 an app may send a request and lose the acknowledgement. Each can leave the effect absent, committed, or still in flight.
@@ -41,4 +39,4 @@ update prompts and reports degraded task success~\cite{chen2025dgara}; for tool 
 and UndoBench 53.33\% for naive retry~\cite{sah2026undobench}. Our emulator measurements (\S\ref{sec:eval-real}) show the trap and its outcome: after a lost reply K-9~Mail showed every
 accepted mail as unsent, and a scripted redo of the step (recompose, send) duplicated \RealGuiDup/\RealGuiN{} mail and calendar effects. An LLM agent takes that step: \AgentFramework{} on \AgentModel{} resent the mail in \AgentResentN{} of \AgentValidN{} valid
 episodes, each time leaving a duplicate at the server (LLM-agent experiment, \S\ref{sec:eval-agent}). T3A, a second AndroidWorld agent, resent in
-\AgentTextResentN{} of \AgentTextValidN{} (\AgentTextDupN{} tagged duplicates). How often other agents and apps do so remains future work (\S\ref{sec:device-plan}).
+\AgentTextResentN{} of \AgentTextValidN{} (\AgentTextDupN{} tagged duplicates). The window an interruption must hit is short: K-9 took \RealWinKnineMedS\,s from tap to commit at the median over \RealWinKnineN{} sends, so one interruption per hour, an assumed rate, gives about \RealWinKninePerK{} ghosts per 1{,}000 sends. K-9 also turns every lost reply after the commit into a ghost. How often agents redo ghosts remains future work (\S\ref{sec:device-plan}).

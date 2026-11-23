@@ -34,7 +34,7 @@
 % G2 branch (Element + Synapse)
 \node[draw=orange!70!black, fill=orange!8, rounded corners=3pt, align=left, text width=6.2cm, inner sep=2.5pt,
       anchor=north west] (g2) at ($(b4.south west)+(0,-0.2)$)
-      {\ico[0.42cm]{check}\hspace{3pt}\parbox[c]{5.6cm}{Idempotent retries (Element + Synapse): the app re-sends the same transaction id or reconciles via \texttt{/sync}, one copy (same device, ${<}24$\,h).\meas{} \sys never retries through the GUI: after a certified wait the row reads ``Sent'' $\Rightarrow$ committed, otherwise it asks.}};
+      {\ico[0.42cm]{check}\hspace{3pt}\parbox[c]{5.6cm}{Idempotent retries (Element + Synapse): the app re-sends the same transaction id or reconciles via \texttt{/sync}, one copy (same device, ${<}24$\,h).\meas{} \sys does not redo it: after the certified wait the row reads ``Sent'' $\Rightarrow$ committed.}};
 \draw[arr, orange!70!black] (b3.south) |- (g2.west);
 \end{tikzpicture}
 \vspace{-2pt}
