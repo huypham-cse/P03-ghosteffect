@@ -197,9 +197,7 @@ def table(label, caption, head, body, cols='@{}l cc cc@{}'):
 POL_HEAD = (' & \\multicolumn{2}{c}{product} & \\multicolumn{2}{c}{joint} \\\\\n'
             '\\cmidrule(lr){2-3}\\cmidrule(lr){4-5}\n'
             '%s & $P_{\\mathrm v}$ (CP) & ask & $P_{\\mathrm v}$ (CP) & ask \\\\')
-PV_NOTE = ('$P_{\\mathrm v}$: \\% of committed effects the planner retried by itself, with the upper end of its '
-           'two-sided 95\\% Clopper-Pearson interval (CP). Ask: \\% of workflows. Budget $\\alpha=' + f'{ALPHA_PCT:g}'
-           + '\\%$. $^\\dagger$: CP bound over budget.')
+PV_NOTE = ''  # notation defined once in the Label budgets appendix (app:labels)
 
 
 def budget_label(r, nlag, extra=''):
@@ -283,11 +281,10 @@ def render(results):
     lagn = lambda r: count(int(num(r['nlag'])))
     files['tab_cert_clock.tex'] = HEADER + table(
         'tab:cert-clock',
-        '\\emph{Measured-parameter simulation}, Element, '
-        f"{count(int(num(R4['down5']['Prod']['n'])))} interrupted workflows per row, "
-        f"{count(int(num(R4['down5']['Prod']['ncal'])))} labels per class and outcome. "
-        'The app or network is down for 5 or 15\\,s before the anchor $r_e$. '
-        'Rows wait from the anchor $r_e$ of \\S\\ref{sec:model} or from $t_0$ for every class. '
+        '\\emph{Measured-parameter simulation}, Element ('
+        f"{count(int(num(R4['down5']['Prod']['n'])))} workflows per row, "
+        f"{count(int(num(R4['down5']['Prod']['ncal'])))} labels per class and outcome): the app or network is down "
+        'for 5 or 15\\,s before $r_e$, and rows wait from $r_e$ or from $t_0$. '
         + PV_NOTE,
         POL_HEAD % 'wait from, downtime',
         [clock_row(tag, R4[tag]) for tag, _ in CLOCK_ROWS])
@@ -303,29 +300,25 @@ def render(results):
     tail_pct = cert_f1(100 * num(R4['tail5']['Prod']['lag_tail']))
     files['tab_cert_budget.tex'] = HEADER + table(
         'tab:cert-budget',
-        '\\emph{Measured-parameter simulation}, Element: label budget. '
-        "Rows give labels per class and outcome / lag entries per class. ``Tied'' rows draw as many lag entries "
-        f"as labels. ``Tail'': a {tail_pct}\\% share of committed effects (the one-sided 95\\% upper bound from zero "
-        'censored emulator trials) becomes visible only after the logged lags, and the calibration labels do not '
-        'see it. ' + PV_NOTE,
+        '\\emph{Measured-parameter simulation}, Element: label budget (labels per class and outcome / lag entries per '
+        "class; ``tied'': as many lag entries as labels; "
+        f"``tail'': {tail_pct}\\% of committed effects visible only after every logged lag). " + PV_NOTE,
         POL_HEAD % 'labels / lag entries', body)
 
     files['tab_cert_lagapp.tex'] = HEADER + table(
         'tab:cert-lagapp',
-        '\\emph{Measured-parameter simulation}, Element: larger label budgets. '
-        "Rows give labels per class and outcome / lag entries per class. ``Tied'' rows draw as many lag entries as "
-        "labels. ``Bootstrap'': lag entries resampled from the measured lags. " + PV_NOTE,
+        '\\emph{Measured-parameter simulation}, Element: larger label budgets (labels / lag entries per class; '
+        "``tied'': as many lag entries as labels; ``bootstrap'': resampled from the measured lags). " + PV_NOTE,
         POL_HEAD % 'labels / lag entries',
         [budget_label(R4[tag]['Prod'], lagn(R4[tag]['Prod']), ', bootstrap' if tag.startswith('boot') else '')
          + ' & ' + f"{pv_cell(R4[tag]['Prod'])} & {pv_cell(R4[tag]['Joint'])}" + ' \\\\' for tag, _ in APP_ROWS])
 
     files['tab_cert_bound.tex'] = HEADER + table(
         'tab:cert-bound',
-        'Composed error bounds. $P(\\mathrm{dup}\\mid X{=}1)\\le\\min(1,\\alpha+q_1\\epsilon_1+r_1)$ and '
-        '$P(\\mathrm{loss}\\mid X{=}0)\\le\\min(1,\\beta+q_0\\epsilon_0+r_0)$, with $r_1=r_0=0$ assumed by the simulator. '
-        '$q_x$: \\% of effects with outcome $x$ the planner asks about; $\\epsilon_x$: \\% of those answers the simulated '
-        'user gets wrong. Element: \\emph{measured-parameter simulation}, the rows of Table~\\ref{tab:realsim} with \\RsimBaseLabelN{} labels per class and outcome; default: \\emph{model-based simulation}. '
-        f'Budgets $\\alpha=\\beta={ALPHA_PCT:g}\\%$. N/A: no effect in the denominator.',
+        'Composed error bounds~\\eqref{eq:composed} with $r_1{=}r_0{=}0$. $q_x$: \\% of effects with outcome $x$ the '
+        'planner asks about; $\\epsilon_x$: \\% of those answers wrong. Element: \\emph{measured-parameter simulation} '
+        '(Table~\\ref{tab:realsim}, \\RsimBaseLabelN{} labels per class and outcome); default: \\emph{model-based simulation}. '
+        f'$\\alpha=\\beta={ALPHA_PCT:g}\\%$; N/A: empty denominator.',
         ' & $q_1$ & $\\epsilon_1$ & dup bound & $q_0$ & $\\epsilon_0$ & loss bound \\\\',
         [f"{'Element' if w == 'Elem' else 'default'}, {'product' if pn == 'Prod' else 'joint'} & "
          + ' & '.join(cert_f2(v) for v in bounds[(w, pn)]) + ' \\\\'

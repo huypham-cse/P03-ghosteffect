@@ -78,10 +78,7 @@ def render_real_measurements():
 
     W('tab_realcone.tex', r'''\begin{table}[!htbp]
 \centering
-\caption{Campaign 1 (superseded for lags and family errors by Table~\ref{tab:real}): hop-2 behaviour of Element~1.6.62 and K-9~Mail~24.0, pooled over no kill,
-background + kill and force-stop; 45\,s window. Re-sent: the client sent the request again (Element: always with the same txnId). Once: one server copy at the end of the
-window; Later: after the run (K-9: after ``Sync account''). Unsent: shown as unsent at the end. No duplicate. This reader had no screen check; its five late-read
-``co-failures'' are re-scored as no-observation (\S\ref{sec:eval-real}).}
+\caption{Campaign 1 (superseded by Table~\ref{tab:real} for lags and family errors): hop-2 behaviour of Element~1.6.62 and K-9~Mail~24.0 over no kill, background + kill and force-stop, 45\,s window. Re-sent: request sent again (Element: same txnId); Once: one server copy; Later: after the run; Unsent: shown as unsent. No duplicate. Its reader had no screen check (\S\ref{sec:eval-real}).}
 \label{tab:realcone}
 \footnotesize
 \setlength{\tabcolsep}{2.4pt}
@@ -275,13 +272,7 @@ App, condition & $n$ & Re-sent & Once & Later & Unsent \\
     _lagrow = lambda lab, nm: (f"{lab} & \\RealLag{nm}N & \\RealLag{nm}Min & \\RealLag{nm}Med & \\RealLag{nm}Max \\\\")
     W('tab_real.tex', r'''\begin{table*}[t]
 \centering
-\caption{Emulator measurements, campaign 2 (Android~13 emulators, self-hosted servers, scripted driver; ground truth = server copies). (a)~After a commit whose reply was
-lost (TCP reset after the server committed), under no fault, background + \texttt{kill -9}, force-stop or a 20\,s network cut. App re-send: how the app resolved it; GUI redo:
-a scripted agent recomposes and re-sends the same content. (b)~Element's recovery-to-visible lag: minimum, median and maximum over the $n$ trials of each class (s; upper end of a one-dump $\approx$2\,s interval; first visibility was observed
-in all recorded trials, with trial-specific follow-up windows). This is not a uniform late-duplicate follow-up. Sticky: every reply dropped until the fault; in the later \texttt{lmkd} run, memory pressure made \texttt{lmkd} reap Element.
-Not shown: \RealElemStickyVoneN{} trials of an earlier sticky variant and \RealElemAckedN{} acknowledged-then-killed trials (lags in the artifact).
-(c)~Family errors against the server, wrong/observed, with no-observation ($\bot$, wrong screen) separated;
-Element's send-state indicator appears in the same dump as the row in \RealElemN/\RealElemN{} trials, so the two are one reading.}
+\caption{Emulator measurements, campaign 2 (truth: server copies). (a)~Hop-2 behaviour after a lost reply (TCP reset after the server committed); GUI redo: a scripted agent re-sends the same content. (b)~Element's relaunch-to-visible lag per class (s; min, median, max; upper end of a ${\approx}2$\,s dump). Sticky: replies dropped until the fault; \texttt{lmkd}: a later run. Not shown: \RealElemStickyVoneN{} early sticky and \RealElemAckedN{} acknowledged-then-killed trials. (c)~Family errors, wrong/observed; no observation ($\bot$) apart.}
 \label{tab:real}
 \footnotesize
 \setlength{\tabcolsep}{2.2pt}

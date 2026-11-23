@@ -1,13 +1,14 @@
 % Figure 1: concrete scenario grounded in the emulator measurements (K-9 Mail + GreenMail, Element + Synapse; Sec. 7.7).
-% Icons: Twemoji (CC-BY 4.0), copied into figures/icons/; the envelope is drawn in TikZ. All text is \footnotesize (= 7pt in sigconf).
+% Icons: Twemoji (CC-BY 4.0), copied into figures/icons/; the envelope is drawn in TikZ. Box text is \scriptsize
+% (7pt in the 10pt sigconf class, the size the layout was drawn for); row headers are \footnotesize.
 \begin{figure*}[t]
 \centering
 \begin{tikzpicture}[
-  font=\footnotesize,
+  font=\scriptsize,
   step/.style={draw=#1!60!black, fill=#1!6, rounded corners=3pt, minimum width=2.66cm, minimum height=1.78cm,
                text width=2.52cm, align=center, inner sep=1.5pt},
   arr/.style={-{Stealth[length=2.2mm]}, thick, gray!70!black},
-  hdr/.style={font=\small\bfseries, anchor=west}
+  hdr/.style={font=\footnotesize\bfseries, anchor=west}
 ]
 % Helpers are defined inside the picture (local to it): icon, drawn envelope, measured mark.
 \newcommand{\ico}[2][0.5cm]{\includegraphics[height=#1]{figures/icons/#2.pdf}}
@@ -38,11 +39,6 @@
 \draw[arr, orange!70!black] (b3.south) |- (g2.west);
 \end{tikzpicture}
 \vspace{-2pt}
-\caption{A ghost effect and how \sys resolves it, grounded in our emulator measurements (\S\ref{sec:eval-real}). Steps marked $^{\textsf{m}}$ were observed in every
-trial: K-9 \RealKRd/\RealKRd, redo \RealKRecDup/\RealKRecN, Element \RealElemRL/\RealElemRL. (a) The SMTP server accepts the mail but the reply is lost. K-9 records a permanent
-failure, never re-sends, and keeps the mail in its Outbox. A scripted redo (not an LLM) sends a second mail with a new Message-ID.
-(b) \sys records the send before the tap and tags it with a nonce (K-9's subject, on opted-in test accounts). K-9 has no idempotent retry and its entry failed, so hop~1 says nothing about the server, and the Sent folder is written
-by the same client. With no family that can certify, \sys asks instead of resending. For an app with idempotent retries, such as Element, the end-to-end row certifies ``committed'' after a short
-certified wait. Icons: Twemoji (CC-BY 4.0).}
+\caption{A ghost effect and how \sys resolves it ($^{\textsf{m}}$: seen in every emulator trial, K-9 \RealKRd/\RealKRd, redo \RealKRecDup/\RealKRecN, Element \RealElemRL/\RealElemRL; \S\ref{sec:eval-real}). (a)~The server accepts the mail and the reply is lost. K-9 never re-sends, and a scripted redo sends a second copy. (b)~\sys logs the send before the tap and tags it with a nonce. No K-9 family can certify, so it asks. Element's own retry keeps one copy, and its row certifies ``committed'' after the certified wait. Icons: Twemoji (CC-BY 4.0).}
 \label{fig:teaser}
 \end{figure*}

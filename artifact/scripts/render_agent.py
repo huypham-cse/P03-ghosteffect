@@ -324,9 +324,7 @@ def render_arms_table(json):
     if not rows:
         return
     W('tab_agent_arms.tex', r"""\begin{table*}[t]
-\caption{LLM-agent arms on the K-9 trap (LLM-agent experiment): valid over scheduled episodes, episodes in which K-9 sent mail
-again after the restart (Resent), episodes with two tagged copies at the backend (Dup), Wilson 95\% interval for
-the duplicate rate (\%), and asks. Each arm's task, fault, model and scoring were frozen before it ran; arms ran one after the other.}
+\caption{LLM-agent arms on the K-9 trap: valid over scheduled episodes, episodes where K-9 re-sent after the restart (Resent), episodes with two tagged copies (Dup), Wilson 95\% interval of the duplicate rate (\%), and asks. Each arm was frozen before it ran, and arms ran in sequence.}
 \label{tab:agent-arms}
 \centering
 \footnotesize
