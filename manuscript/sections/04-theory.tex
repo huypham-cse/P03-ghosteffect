@@ -14,7 +14,7 @@ and in (c) it meets $(\alpha,\beta)$ with $\alpha{+}\beta{<}1$ and finite $\E_x[
 \end{theorem}
 
 None of these inequalities is new, and Appendix~\ref{app:proofs} states them in full. Part~(a) is Wald's bound~\cite{wald1945sprt} plus a union bound on
-the lag, and (b) is the noisy-read, finite-wait form of Li's waiting argument~\cite{li2026exactlyonce}. Part~(c) says a verification-only policy needs about $\log(1/\alpha)/D_0$ reads
+the lag, and (b) is the noisy-read, finite-wait form of Li's waiting argument~\cite{li2026exactlyonce}: the certified wait is the bound on in-flight time that verification needs. Part~(c) says a verification-only policy needs about $\log(1/\alpha)/D_0$ reads
 (Lemma~1 of~\cite{kaufmann2016complexity}, see also~\cite{tartakovsky2014sequential}). Part~(d) says a policy that never asks errs at least at the Bayes floor, by Le Cam's
 two-point method~\cite{tsybakov2009nonparametric}.
 
@@ -104,7 +104,7 @@ an Element entry before it is sent, and Element has no hop-1 family (\S\ref{sec:
 ($\Leftarrow$) is at-least-once delivery plus idempotent application~\cite{helland2012idempotence,birrell1984rpc,wang2021kafka}. What the agent gains is that hop~1 is
 observable on the device within seconds, so for an app with idempotent retries the late-commit regime of Theorem~\ref{thm:main}(b) becomes a local check. The planner therefore counts hop-1
 entries created after $t_0$ and hands a pending entry over to the end-to-end path before its age approaches $H_{\mathrm{dedup}}$ (\S\ref{sec:design-planner}). ``Retrying is safe'' thus means the app's own retry, on the same device, within $H_{\mathrm{dedup}}$.
-An agent that redoes the step through the GUI creates a new entry with a new id ($n_1{=}2$), which no server merges, and a re-login creates a new device. A failed entry is
+An agent that redoes the step through the GUI creates a new entry with a new id ($n_1{=}2$), which no server merges, and a re-login or a second client of the account is another device. A failed entry is
 ambiguous end to end, because the server may have applied it before the app gave up, so it goes to the end-to-end path. K-9~Mail enters this state by design after every lost
 SMTP reply (\S\ref{sec:measure-teaser}). Force-stop cancels scheduled work and violates H3, so a force-stopped app is treated as
 an app without idempotent retries until its entries reach a terminal state. This only removes the hop-1 shortcut. Element and DAVx5 still resolved force-stops, outside the theorem (Appendix~\ref{app:proofs}, with dedup scopes per protocol). Per-step guarantees compose across a workflow by a union bound
