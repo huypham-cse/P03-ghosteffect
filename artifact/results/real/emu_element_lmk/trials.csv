@@ -1,0 +1,11 @@
+trial,reaped,filled_mb,oom_score_adj,copies_at_relaunch,relaunch_to_sent_s,server_copies_final,retry_replies_dropped,resends_after_fault
+k01,True,1344,50,1,11.4,1,0,1
+k02,True,1280,50,1,10.5,1,0,1
+k03,True,1408,50,1,13.63,1,0,1
+k04,True,1472,50,1,13.33,1,0,1
+k05,True,1408,50,1,10.4,1,0,1
+k06,True,1408,50,1,14.91,1,0,1
+k07,True,1408,50,1,13.69,1,0,1
+k08,True,1344,50,1,13.39,1,0,1
+k09,True,1344,50,1,11.17,1,0,1
+k10,True,1344,50,1,13.7,1,0,1
