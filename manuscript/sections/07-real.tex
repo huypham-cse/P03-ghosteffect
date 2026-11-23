@@ -25,8 +25,8 @@ Figure~\ref{fig:teaser}a, measured with a scripted rather than an LLM agent.
 
 \para{Evidence families and lag.} Element's first read was $\bot$ in \RealFirstBot/\RealElemN{} trials, mostly because a force-stop relaunch lands off the room (\RealFsFirstBot/\RealFsN); first observed reads
 were wrong in \RealFirstWrong/\RealFirstObs, all lag-blind. Late reads were never wrong, so the two measured families, the timeline row and the room-list digest, were never wrong together (0 of the \RealCoObs{} trials with both read, CI from 0 to \RealCoHi\%). Campaign~1's five ``co-failures'' rendered
-no contradicting state (\RealOneCoContra/\RealOneCoN), the digest showed the nonce in \RealOneCoDigest/\RealOneCoN, and screen identity was not logged, so we re-score them as
-no-observation. They are not evidence against A2, which now rests on the model and on the common-mode study of~\cite{zheng2026vpcontrol}. Stale screens do occur. In \RealPilotStaleDigest{} of \RealPilotN{} pilot trials (not among the
+no contradicting state (\RealOneCoContra/\RealOneCoN) and logged no screen identity, so we re-score them as
+no-observation. Stale screens do occur. In \RealPilotStaleDigest{} of \RealPilotN{} pilot trials (not among the
 \RealElemN), the room-list digest on a verified screen showed an older message while the server held the copy. In the held-out Element run below, the room list was stale in \RealElPlanStale{} of \RealElPlanStaleN{} committed no-fault trials, yet at the certified deadline the timeline row and the room-list line were never wrong together (0/\RealElPlanCoOne{} committed, 0/\RealElPlanCoZero{} absent). Lag depends on the fault class
 (Table~\ref{tab:real}b): a network cut adds nothing over the \RealLagNofaultMed\,s reader floor, \texttt{kill -9} gives a median of \RealLagKillMed\,s (at most \RealLagKillMax\,s), and force-stop \RealLagFsMed\,s,
 mostly navigation. No recorded trial was censored (\RealCensored/\RealElemN), but follow-up windows differed by trial, so the \RsimTail\% bound from zero of \RealElemN{} is only a reference
@@ -36,7 +36,7 @@ emulator's qemu process (the guest loses its page cache), the WAL ledger lost no
 from \RealLedgerOffLostMin{} to \RealLedgerOffLostMax{} rows in \RealLedgerOffViol/\RealLedgerOffN{} trials, and \texttt{NORMAL} lost none only because each test transaction ran in its own process.
 
 \para{The planner on real apps.} We also ran the \alg planner itself, in product mode at $\alpha{=}\beta{=}\RealPlanAlphaPct\%$, on held-out effects whose schedule was fixed before each test.
-On Element it reads only the timeline and the room list for the nonce (one family, two views) after its class's certified wait from the relaunch. Calibration on \RealElPlanCalN{} scripted
+On Element it reads only the timeline and the room list for the nonce (one family, two views, so this certificate needs no A2) after its class's certified wait from the relaunch. Calibration on \RealElPlanCalN{} scripted
 fault-injected labels (\RealElPlanCalOneN{} committed, \RealElPlanCalZeroN{} absent, \RealElPlanClassN{} fault classes) certified both sides in every class, with waits of \RealElPlanWaitNone,
 \RealElPlanWaitKill{} and \RealElPlanWaitFs\,s. On \RealElPlanTestN{} held-out messages (\RealElPlanInvalidN{} rig failures rerun) it retried
 \RealElPlanRetryCommitted{} of \RealElPlanCommittedN{} committed ones (one-sided 95\% CP upper bound \RealElPlanRetryHi\%), declared \RealElPlanDeclared{} done and asked about one whose timeline read was $\bot$,

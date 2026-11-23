@@ -40,8 +40,8 @@ with $K{=}11$ (product), 8 (source families) or 5 (joint). Here $n_{\mathrm{cls}
 McNemar tests against the product planner with Holm correction.
 
 \para{Baselines.} We compare against Redo~\cite{tian2025agentprog}, checkpoint-resume~\cite{langgraph_durable,khan2026resume}, Atomix-style adapters with one
-read-back~\cite{mohammadi2026atomix}, verify-before-retry~\cite{mansoor2026verified}, ledger + key~\cite{li2026exactlyonce}, four baselines that may ask, and the re-read
-SPRT of our earlier design. The \emph{same-evidence rules} have \sys's ledger, hop~1 with the same fallible Monitor, the same families read once per view, a fixed 10\,s wait and
+read-back~\cite{mohammadi2026atomix}, verify-before-retry~\cite{mansoor2026verified}, ledger + key~\cite{li2026exactlyonce}, four baselines that may ask, and a re-read
+SPRT that rotates views with AR(1) shrinkage. The \emph{same-evidence rules} have \sys's ledger, hop~1 with the same fallible Monitor, the same families read once per view, a fixed 10\,s wait and
 asking. They treat an acknowledged entry or a nonce match as done, retry only if every available family reads absent, and otherwise ask. A lenient variant acts on the first
 unanimous family unless another contradicts it, and a rule family sweeps the wait (5, 10, 30, 60\,s) and the quorum (all families, all but the VLM, any two). The
 Theorem~\ref{thm:twohop}-only baseline classifies offline whether each app has idempotent retries and never retries: for such an app an acknowledged hop-1 entry means done, and everything else is asked. Element has no hop-1 family, so its entry is the timeline row: the first verified read that shows the row means done.

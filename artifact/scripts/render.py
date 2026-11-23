@@ -283,8 +283,8 @@ W('tab_corr.tex', r'''\begin{table}[!htbp]
 \centering
 \caption{Correlated reads (model-based simulation; VLM family with 3 views, $\epsilon{=}0.10$, $\alpha{=}1\%$, 30{,}000 committed effects per cell):
 $P(\mathrm{dup}\mid X{=}1)$ in \%. \emph{Within-view}: re-reads of a view share one error with probability $\rho$.
-\emph{Cross-view}: views share a latent error rate with intraclass correlation $\rho$. naive: SPRT re-reading one view; re-read: our earlier design
-(re-reads of rotated views, AR(1) shrinkage); view: one read per view, SPRT over views (assumes independent views); certified: family verdict with calibrated bound (Prop.~\ref{prop:family}),
+\emph{Cross-view}: views share a latent error rate with intraclass correlation $\rho$. naive: SPRT re-reading one view; re-read: SPRT over
+re-reads of rotated views with AR(1) shrinkage; view: one read per view, SPRT over views (assumes independent views); certified: family verdict with calibrated bound (Prop.~\ref{prop:family}),
 asks (\%) in parentheses; bound: Lemma~\ref{lem:floor}, worst case of all 3 views wrong.}
 \label{tab:corr}
 \footnotesize
@@ -516,7 +516,7 @@ names = {'redo': 'Redo (AgentProg-style)', 'ckpt': 'Checkpoint-resume', 'atomix'
          'atomix-durable': 'Atomix-style, durable log', 'verify': 'Verify-before-retry', 'key': 'Ledger + key',
          'key-ask': 'Ledger + key + ask (look-alike)', 'always-ask': 'Ledger + always ask', 'nonce-ask': 'Ledger + nonce + ask',
          'maj3-ask': 'Ledger + 3 VLM views + ask', 'rules': 'Same evidence, rules (all agree)',
-         'rules-lenient': 'Same evidence, rules (lenient)', 'rules-vetted': 'Vetted rules (matched inputs)', 'ghost-v1': 'Re-read SPRT (earlier design)',
+         'rules-lenient': 'Same evidence, rules (lenient)', 'rules-vetted': 'Vetted rules (matched inputs)', 'ghost-v1': 'Re-read SPRT (rotated views)',
          'ghost': r'\textbf{GhostEffect} (product, A2)', 'ghost-src': r'\textbf{GhostEffect} (source families)',
          'ghost-joint': r'\textbf{GhostEffect} (joint, no A2)',
          'ghost-nononce': '\\quad $-$ nonce', 'ghost-nohop1': '\\quad $-$ hop-1 probe',

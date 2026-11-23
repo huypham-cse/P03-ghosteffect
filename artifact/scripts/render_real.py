@@ -513,6 +513,14 @@ $^{\S}$Force-stop clears the app's notifications. The shade was cleared between 
     M('RealLagLmkMin', f1(min(_eklag)))
     M('RealLagLmkMed', f1(statistics.median(_eklag)))
     M('RealLagLmkMax', f1(max(_eklag)))
+    # the intro quotes the range of class medians in Table 3b: network cut lowest, the lmkd row highest
+    _meds = {k: float(MACROS[f'RealLag{k}Med']) for k in ('Nofault', 'Kill', 'Fs', 'Net', 'SKill', 'SFs', 'Lmk')}
+    assert min(_meds, key=_meds.get) == 'Net' and max(_meds, key=_meds.get) == 'Lmk', _meds
+    # measured lags behind the bootstrapped lag tables of the measured-parameter simulation (params.csv)
+    _lagsrc = [len(r[1].split('|')) for r in csv.reader(open(os.path.join(REAL, 'params.csv'), encoding='utf-8'))
+               if r and r[0].startswith('elem_lag_')]
+    M('RsimLagSrcLo', min(_lagsrc))
+    M('RsimLagSrcHi', max(_lagsrc))
 
     # K9L (b-log 21/11): K-9 watched for 2,100 s after a lost reply (more than two of its 15-min polls).
     _kl9 = _rr('trials.csv', os.path.join(REAL, 'emu_k9_long'))

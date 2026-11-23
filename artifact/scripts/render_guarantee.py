@@ -324,7 +324,7 @@ def render(results):
         'Composed error bounds. $P(\\mathrm{dup}\\mid X{=}1)\\le\\min(1,\\alpha+q_1\\epsilon_1+r_1)$ and '
         '$P(\\mathrm{loss}\\mid X{=}0)\\le\\min(1,\\beta+q_0\\epsilon_0+r_0)$, with $r_1=r_0=0$ assumed by the simulator. '
         '$q_x$: \\% of effects with outcome $x$ the planner asks about; $\\epsilon_x$: \\% of those answers the simulated '
-        'user gets wrong. Element: \\emph{measured-parameter simulation}; default: \\emph{model-based simulation}. '
+        'user gets wrong. Element: \\emph{measured-parameter simulation}, the rows of Table~\\ref{tab:realsim} with \\RsimBaseLabelN{} labels per class and outcome; default: \\emph{model-based simulation}. '
         f'Budgets $\\alpha=\\beta={ALPHA_PCT:g}\\%$. N/A: no effect in the denominator.',
         ' & $q_1$ & $\\epsilon_1$ & dup bound & $q_0$ & $\\epsilon_0$ & loss bound \\\\',
         [f"{'Element' if w == 'Elem' else 'default'}, {'product' if pn == 'Prod' else 'joint'} & "

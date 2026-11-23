@@ -62,8 +62,7 @@ because per-family bounds multiply. Joint certification and each wait need about
 
 Four different counts make up the label budget of our measured-parameter simulations (Table~\ref{tab:cert-budget}). The Element profile rests on \CertElemTrialsN emulator trials.
 Each simulation draws \CertLabelsBase or \CertLabelsFive labels per fault class and outcome from that profile. Joint certification splits each set into a pilot that fixes the score
-and a holdout that tests it, \CertPilotFive and \CertHoldoutFive labels at the larger size. The lag tables hold \CertLagBootN entries per class, drawn by bootstrap from the measured lags,
-unless a row ties them to the label count.
+and a holdout that tests it, \CertPilotFive and \CertHoldoutFive labels at the larger size. Unless a row ties them to the label count, the lag tables hold \CertLagBootN entries per class, drawn by bootstrap from the \RsimLagSrcLo{} to \RsimLagSrcHi{} measured lags of each class, so none exceeds the largest measured lag.
 
 The lag table is the costly part (Table~\ref{tab:cert-budget}). With as many lag entries as labels, the simulated joint mode asks on \CertTiedFiveJointAsk\% at \CertLabelsFive labels
 instead of \RsimFiveJointAsk\%, and at \CertLabelsBase no wait certifies (larger budgets: Table~\ref{tab:cert-lagapp}). A lag tail that no label sees breaks the budget. When
@@ -72,8 +71,8 @@ budget only at \CertLabelsBase labels, by asking on \RsimTailJointAsk\% of workf
 
 \input{generated/tab_cert_budget}
 
-A single user produces nowhere near these counts per app version, so the store is pooled. Lag tables are pooled per app and backend across versions, because lag
-is a property of the network path and the app's sync, not its UI. Verdict bounds are pooled per app across versions and devices, with a shift test on a small sample of the new version.
+A single user produces nowhere near these counts per app version, so the store is pooled. Lag tables are pooled per app and backend across versions: lag
+comes mostly from the network path and the app's sync, but the reader's navigation (most of the force-stop lag) depends on the UI and needs a fresh sample. Verdict bounds are pooled per app across versions and devices, with a shift test on a small sample of the new version.
 When the test detects an increase, the planner falls back to that sample's own bounds, which means more asks, not fewer guarantees. The shift test is per family and level.
 Pooling joint regions across versions needs a region-level test, which we have not built. The nonce's false-match bound is analytic. Pooling across devices assumes the devices
 are exchangeable within a stratum (app version, locale, VLM), and per-device drift is not detected yet.

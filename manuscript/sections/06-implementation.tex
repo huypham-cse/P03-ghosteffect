@@ -1,8 +1,7 @@
 \section{Implementation}
 \label{sec:impl}
 
-The ledger, the family-verdict calibration (Clopper-Pearson), the certification tables of Proposition~\ref{prop:family}, the certified-wait lookup,
-the planner, the Bayes rule, and the KKT allocator are written in Python using only the standard library, together with the simulator of \S\ref{sec:eval}. The ledger is SQLite
+The ledger, calibration, certification tables, certified-wait lookup, planner, KKT allocator and the simulator of \S\ref{sec:eval} are written in standard-library Python. The ledger is SQLite
 in WAL mode with \texttt{synchronous=FULL}, owned by a controller process. On a Linux host (a 4-vCPU cloud VM, ext4 on network-attached block storage), an \textsf{ISSUED} append takes \LedgerPfifty\,ms at the median
 and \LedgerPninetyfive\,ms at p95; a record takes \LedgerBytes\,bytes.
 A host write-ordering test SIGKILLs, at random times, a child that loops over plan, issue, tap and settle. Over \LedgerTrials kills and \LedgerTaps taps, every tapped effect

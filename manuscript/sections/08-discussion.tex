@@ -2,11 +2,11 @@
 \label{sec:discussion}
 
 \para{Limitations.}
-(1)~Most evidence for our decision results comes from simulation, model-based or with measured parameters. Held-out tests of the planner ran on two emulated apps (\S\ref{sec:eval-real}), and only on Element did it certify committed effects. The generative model departs from the planner's assumptions on purpose,
+(1)~Most evidence for our decision results comes from simulation, model-based or with measured parameters. Held-out tests ran on two emulated apps (\S\ref{sec:eval-real}), neither through hop~1, and certified committed effects only on Element, at $\alpha{=}\beta{=}\RealPlanAlphaPct\%$ (\RealElPlanRetryCommitted/\RealElPlanCommittedN{} bounds that rate at \RealElPlanRetryHi\%, not 1\%). The generative model departs from the planner's assumptions on purpose,
 but it is ours. \RealDataLimitation{} Labels in the measured runs are simulated draws from laws estimated from at most \RealElemN{} trials, so a tail beyond what we saw (up to \RsimTail\% on
 Element) cannot be excluded, and it would either break the budget or make \sys ask.
 (2)~Product certification assumes A2, independence across families. A stale history violates it in the model (\S\ref{sec:eval-pop}). On Element the timeline row and the room list were never wrong
-together (0/\RealCoObs{} in campaign~2, 0/\RealElPlanCoOne{} committed at the planner's deadline), which bounds co-failure only at a few percent. Joint certification removes the assumption but needs about $\ln(1/\delta)/\alpha_{\mathrm{test}}$ labels
+together (0/\RealCoObs{} in campaign~2 as two families, 0/\RealElPlanCoOne{} committed at the planner's deadline as one), which bounds co-failure only at a few percent. Joint certification removes the assumption but needs about $\ln(1/\delta)/\alpha_{\mathrm{test}}$ labels
 per stratum and fault class, which only pooling provides.
 (3)~Bounds hold only for a calibration population of labels from interrupted effects: passive labels, an unlogged lag tail or an undetected delayed recovery in Doze break the
 budget (Tables~\ref{tab:realsim},~\ref{tab:stress}). Drift within a version is not detected.
@@ -16,7 +16,7 @@ user who delegated the task. We have not run a user study of the prompt (it need
 (6)~\phantomsection\label{sec:device-plan}The agent evidence covers emulator runs on one app with two agents and one model configuration. The physical-phone measurements below have no agent; results for agents on phones, other models, and VLM evidence remain future work.
 
 Payment apps resist such agents: \texttt{FLAG\_SECURE} blocks screenshots, since Android~14 only declared assistive services see views marked \texttt{accessibility\-Data\-Sensitive}~\cite{android_a11ysensitive,googleplay_a11ypolicy},
-and banking apps may detect accessibility services or gate the commit behind BiometricPrompt. Hence our measurements use open-source apps with self-hosted servers. Element, Simple SMS and Thunderbird offer only counterparty-visible nonce fields (Table~\ref{tab:apps}), and our Element runs opted in. On a physical Android~\RealPhoneAndroid{} phone, K-9 did not resend after background-then-kill (\RealPhoneBgN) or force-stop (\RealPhoneForceN) in \RealPhoneNoResendN{} of \RealPhoneN{} valid trials, and a GUI redo duplicated the mail in \RealPhoneDupN{} of them.
+and banking apps may detect accessibility services or gate the commit behind BiometricPrompt. Hence our measurements use open-source apps with self-hosted servers. Element, Simple SMS and Thunderbird offer only counterparty-visible nonce fields (Table~\ref{tab:apps}), and our Element runs opted in. On our own (not rented) Android~\RealPhoneAndroid{} phone, K-9 did not resend after background-then-kill by \texttt{am kill} (\RealPhoneBgN) or force-stop (\RealPhoneForceN) in \RealPhoneNoResendN{} of \RealPhoneN{} valid trials, and a GUI redo duplicated the mail in \RealPhoneDupN{} of them.
 On the emulator, a GUI redo after an lmkd kill duplicated K-9 mail in \RealEmuKDupN{} of \RealEmuKN{} trials. DAVx5 kept exactly one copy in every valid trial: \RealEmuCalOnceN/\RealEmuCalValidN{} in later emulator runs with lmkd and Doze,
 \RealRentSamOnceN/\RealRentSamValidN{} on a rented Galaxy A36 and \RealRentPixOnceN/\RealRentPixValidN{} on a rented Pixel 9. Forced Doze did not delay its resend on the emulator (median
 \RealEmuCalDozeMedS\,s from fault to PUT, \RealEmuCalKillMedS\,s after \texttt{kill -9}) or on the Pixel (\RealRentPixDozeMedS\,s, still idle). On the A36 (One UI) one trial saw no resend within
