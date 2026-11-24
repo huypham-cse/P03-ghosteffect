@@ -96,6 +96,44 @@ def run(args):
     print(json.dumps(record, indent=2))
 
 
+def schedule_batch(args):
+    """Upload the app and package once, schedule one run per --job name:spec:timeout, and return without waiting: the
+    runs go on in Device Farm with the laptop off, bounded by their job timeouts. `fetch` collects them later."""
+    args.out.mkdir(parents=True, exist_ok=True)
+    before = minutes()
+    app = upload(ROOT / 'runtime/assets/com.fsck.k9_39046.apk', 'ANDROID_APP')
+    package = upload(args.package, 'APPIUM_PYTHON_TEST_PACKAGE')
+    selection = json.dumps(dict(filters=[dict(attribute='ARN', operator='IN', values=[args.device_arn])], maxDevices=1))
+    runs = []
+    for job in args.job:
+        name, spec_path, timeout = job.split(':')
+        spec = upload(ROOT / spec_path, 'APPIUM_PYTHON_TEST_SPEC')
+        r = aws('schedule-run', '--project-arn', PROJECT, '--app-arn', app, '--name', name,
+                '--device-selection-configuration', selection,
+                '--test', json.dumps(dict(type='APPIUM_PYTHON', testPackageArn=package, testSpecArn=spec)),
+                '--execution-configuration', json.dumps(dict(jobTimeoutMinutes=int(timeout))))['run']
+        runs.append(dict(name=name, spec=spec_path, timeout_min=int(timeout), run_arn=r['arn'], status=r['status']))
+        print('scheduled', name, r['status'], flush=True)
+    record = dict(profile=PROFILE, project=PROJECT, device_arn=args.device_arn, trial_remaining_before=before['remaining'],
+                  utc=time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()), runs=runs)
+    (args.out / 'scheduled.json').write_text(json.dumps(record, indent=2))
+
+
+def fetch(args):
+    """For each run in --out/scheduled.json: status, and for a finished run its artifacts and device minutes."""
+    record = json.loads((args.out / 'scheduled.json').read_text())
+    for r in record['runs']:
+        state = aws('get-run', '--arn', r['run_arn'])['run']
+        r.update(status=state['status'], result=state.get('result'), device_minutes=state.get('deviceMinutes'))
+        if state['status'] == 'COMPLETED' and not (args.out / r['name'] / 'fetched.json').exists():
+            download(r['run_arn'], args.out / r['name'])
+            (args.out / r['name'] / 'fetched.json').write_text(json.dumps(r, indent=2))
+        print(r['name'], r['status'], r.get('result'), r.get('device_minutes'), flush=True)
+    record['trial_remaining_now'] = minutes()['remaining']
+    (args.out / 'scheduled.json').write_text(json.dumps(record, indent=2))
+    print('trial minutes remaining', record['trial_remaining_now'])
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest='cmd', required=True)
@@ -106,12 +144,23 @@ if __name__ == '__main__':
     r.add_argument('--name', required=True)
     r.add_argument('--timeout', type=int, required=True)
     r.add_argument('--out', type=Path, required=True)
+    b = sub.add_parser('schedule')
+    b.add_argument('--package', type=Path, required=True)
+    b.add_argument('--device-arn', required=True)
+    b.add_argument('--job', action='append', required=True, help='name:spec path (repo-relative):timeout minutes')
+    b.add_argument('--out', type=Path, required=True)
+    f = sub.add_parser('fetch')
+    f.add_argument('--out', type=Path, required=True)
     s = sub.add_parser('stop')
     s.add_argument('--run-arn', required=True)
     sub.add_parser('minutes')
     args = parser.parse_args()
     if args.cmd == 'run':
         run(args)
+    elif args.cmd == 'schedule':
+        schedule_batch(args)
+    elif args.cmd == 'fetch':
+        fetch(args)
     elif args.cmd == 'stop':
         print(aws('stop-run', '--arn', args.run_arn)['run']['status'])
     else:
