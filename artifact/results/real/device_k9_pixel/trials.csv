@@ -1,0 +1,6 @@
+trial,verdict,server_copies_after_fault,smtp_data_after_fault,kept_in_outbox,no_resend_after_relaunch,action,server_copies_after_redo,distinct_message_ids_after_redo
+k01,REPRODUCED,1,0,True,True,recompose,2,2
+k02,REPRODUCED,1,0,True,True,recompose,2,2
+k03,REPRODUCED,1,0,True,True,recompose,2,2
+k04,REPRODUCED,1,0,True,True,recompose,2,2
+k05,REPRODUCED,1,0,True,True,recompose,2,2
