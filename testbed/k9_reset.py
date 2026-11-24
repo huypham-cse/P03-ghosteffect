@@ -183,7 +183,12 @@ def reset_phone(adb_path, serial, config, output, adb_server_port='5038', java='
     run('reverse', f'tcp:{REVERSE_PORTS[0]}', f'tcp:{SMTP_PORT}')
     run('reverse', f'tcp:{IMAP_PORT}', f'tcp:{IMAP_PORT}')
     launcher = shell(f'cmd package resolve-activity --brief -c android.intent.category.LAUNCHER {PACKAGE}').splitlines()[-1]
-    shell('am start -W -n ' + launcher)
+    started = shell('am start -W -n ' + launcher)
+    if 'Error' in started:
+        # Android 17 (Pixel 9 Pro XL, 24/11) resolves the launcher to an activity alias that `am start -n` reports as
+        # missing; the launcher intent itself still works. Android 13 and 15 never reach this branch.
+        shell(f'monkey -p {PACKAGE} -c android.intent.category.LAUNCHER 1')
+        time.sleep(3)
     steps = run_steps(shell, phone_setup_steps(config == 'sent'))
     run('reverse', f'tcp:{REVERSE_PORTS[0]}', f'tcp:{REVERSE_PORTS[0]}')
     focus = next((l.strip() for l in shell('dumpsys window').splitlines() if 'mCurrentFocus' in l), '')

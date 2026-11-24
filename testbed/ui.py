@@ -192,7 +192,13 @@ class ADB:
     def launch(self, component):
         if not re.fullmatch(r'[A-Za-z0-9_.]+/[A-Za-z0-9_.$]+', component):
             raise ValueError('explicit package/activity component required')
-        self.shell('am', 'start', '-W', '-n', component)
+        try:
+            self.shell('am', 'start', '-W', '-n', component)
+        except subprocess.CalledProcessError:
+            # Android 17 (Pixel 9 Pro XL, b-log 24/11) refuses `am start -n` for K-9's activities ("does not exist");
+            # the package's launcher intent opens the same app. Android 13 and 15 never reach this branch.
+            self.shell('monkey', '-p', component.split('/')[0], '-c', 'android.intent.category.LAUNCHER', '1')
+            time.sleep(2)
         return dict(recovery_origin_mono_ns=time.monotonic_ns(), foreground=self.foreground())
 
 

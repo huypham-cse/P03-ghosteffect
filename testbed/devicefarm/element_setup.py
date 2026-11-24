@@ -81,7 +81,21 @@ def setup(shell, user, password, url='http://127.0.0.1:18008'):
     shell('pm grant %s android.permission.POST_NOTIFICATIONS' % ELEMENT)
     launch(shell)
     tap(shell, 'loginSplashAlreadyHaveAccount')          # SIGN IN
-    tap(shell, 'editServerButton')                       # EDIT next to matrix.org
+    # The AVD shows "Welcome back!" with EDIT next to matrix.org; the Pixel 9 Pro XL (Android 17, 24/11 R4) went
+    # straight to "Select your server". Either screen may come first.
+    path = None
+    deadline = time.monotonic() + 60
+    while path is None and time.monotonic() < deadline:
+        root = screen(shell)
+        if find(root, 'editServerButton'):
+            path = 'edit'
+            tap(shell, 'editServerButton')
+        elif find(root, 'chooseServerSubmit'):
+            path = 'direct'
+        else:
+            time.sleep(1.5)
+    if path is None:
+        raise RuntimeError('Element setup: neither the EDIT button nor the server screen appeared')
     tap(shell, 'Clear text')
     tap(shell, cls='android.widget.EditText')
     shell('input text ' + url)
@@ -105,7 +119,7 @@ def setup(shell, user, password, url='http://127.0.0.1:18008'):
         listed = room_listed(shell, 90)
     if not listed:
         raise RuntimeError('Element setup: room %r not listed after sign-in' % ROOM)
-    return dict(room_listed=True, restarted=restarted, utc_ns=time.time_ns())
+    return dict(room_listed=True, restarted=restarted, server_path=path, utc_ns=time.time_ns())
 
 
 if __name__ == '__main__':   # python3 element_setup.py <adb> <serial> <accounts.json>

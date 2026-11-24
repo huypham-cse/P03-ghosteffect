@@ -13,7 +13,7 @@ ADB="$(command -v adb)"
 SERIAL="$DEVICEFARM_DEVICE_UDID"
 S() { timeout 60 "$ADB" -s "$SERIAL" shell "$@" 2>&1 | tr -d '\r'; }
 note() { echo "$(date -u +%H:%M:%S) $*" >> "$LOG/batch.log"; }
-case "$MODE" in dev) SCHEDULE=tn4x_dev.json;; A) SCHEDULE=tn4x_A.json;; B) SCHEDULE=tn4x_B.json;;
+case "$MODE" in dev|diag) SCHEDULE=tn4x_dev.json;; A) SCHEDULE=tn4x_A.json;; B) SCHEDULE=tn4x_B.json;;
     *) note "unknown mode $MODE"; exit 0;; esac
 
 {
@@ -41,11 +41,31 @@ if ! timeout 900 python3 testbed/devicefarm/element_setup.py "$ADB" "$SERIAL" "$
         > "$LOG/element_setup.json" 2> "$LOG/element_setup.err"; then
     note "ABORT: Element setup failed (no screen dump kept: it may show the test password)"; exit 0
 fi
-"$ADB" -s "$SERIAL" reverse --remove tcp:18008
-note "setup done"
-GX_ELEMENT_ACCOUNTS="$ACCOUNTS" timeout 7800 python3 testbed/element_planner.py collect \
+note "setup done $(cat "$LOG/element_setup.json")"
+if [ "$MODE" = diag ]; then
+    timeout 900 python3 testbed/devicefarm/diag_a17.py --adb "$ADB" --serial "$SERIAL" --out "$LOG/diag" \
+        > "$LOG/diag.log" 2>&1
+    note "diag exit $? $(tail -1 "$LOG/diag.log")"
+fi
+# No `reverse --remove` here (24/11 diag1: it left Element offline, red "Connectivity to the server has been lost");
+# collect re-points the same phone port at its proxy. In diag mode the same collect runs with every screen read
+# recorded (diag_collect.py imports element_planner unchanged).
+COLLECT="testbed/element_planner.py collect"
+[ "$MODE" = diag ] && COLLECT="testbed/devicefarm/diag_collect.py"
+GX_ELEMENT_ACCOUNTS="$ACCOUNTS" timeout 7800 python3 $COLLECT \
     --schedule "testbed/devicefarm/$SCHEDULE" --store testbed/tn4/tn4_store.json --adb "$ADB" --serial "$SERIAL" \
     --out "$LOG/tn4x-$MODE" > "$LOG/collect.log" 2>&1
 note "collect exit $?"
+if [ "$MODE" = diag ]; then
+    # One K-9 trial of the R1 rig with the Android 17 launch fallback, then the `adb root` check (last: it may break
+    # the adb session).
+    GX_PHYSICAL_SERIAL="$SERIAL" timeout 900 python3 testbed/k9_fault_case.py --config sent --adb "$ADB" \
+        --adb-server-port 5037 --serial "$SERIAL" --java java --observe 60 --action recompose --action-window 30 \
+        --output "$LOG/k-diag" > "$LOG/k-diag.log" 2>&1
+    note "k9 $(python3 -c "import json; print(json.load(open('$LOG/k-diag/RESULT.json')).get('verdict'))" 2>&1)"
+    timeout 600 python3 testbed/devicefarm/diag_a17.py --adb "$ADB" --serial "$SERIAL" --out "$LOG/diag" --part root \
+        > "$LOG/diag_root.log" 2>&1
+    note "diag root exit $? $(tail -1 "$LOG/diag_root.log")"
+fi
 "$ADB" -s "$SERIAL" reverse --remove-all
 note "CAMPAIGN DONE"
