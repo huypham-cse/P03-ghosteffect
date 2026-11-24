@@ -481,7 +481,7 @@ class BuildScriptTests(unittest.TestCase):
         if not self.bash:
             self.skipTest('POSIX shell/Git Bash unavailable')
 
-    def fixture(self, latex_status=0, bib_status=0, undefined=False):
+    def fixture(self, latex_status=0, bib_status=0, undefined=False, figlist=False):
         temp = tempfile.TemporaryDirectory()
         work = Path(temp.name)
         manuscript, scripts, tools = work / 'manuscript', work / 'artifact' / 'scripts', work / 'tools'
@@ -494,6 +494,8 @@ class BuildScriptTests(unittest.TestCase):
             script = '#!/bin/sh\necho '+name+' >> "$CALL_LOG"\n'
             if name == 'pdflatex':
                 script += "printf 'fixture PDF' > main.pdf\nprintf '%s\\n' '" + log + "' > main.log\n"
+                if figlist:
+                    script += "printf 'figures/ext/f-0\\n' > main.figlist\n"
             script += 'exit %s\n' % status
             path = tools / name
             path.write_text(script, encoding='utf-8', newline='\n')
@@ -532,6 +534,11 @@ class BuildScriptTests(unittest.TestCase):
         result, calls = self.run_fixture()
         self.assertEqual(0, result.returncode, result.stdout + result.stderr)
         self.assertEqual(['pdflatex','bibtex','pdflatex','pdflatex'], calls)
+
+    def test_listed_figures_get_one_job_each_before_the_last_pass(self):
+        result, calls = self.run_fixture(figlist=True)
+        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+        self.assertEqual(['pdflatex','bibtex','pdflatex','pdflatex','pdflatex'], calls)
 
 
 if __name__ == '__main__':
