@@ -1,0 +1,5 @@
+trial,verdict,config,kill,observe_s,server_copies,smtp_data_after_fault,kept_in_outbox,all_checks
+l01,REPRODUCED,nosent,force-stop,2100.0,1,0,True,True
+l02,REPRODUCED,sent,background,2100.0,1,0,True,True
+l03,REPRODUCED,nosent,background,2100.0,1,0,True,True
+l04,REPRODUCED,sent,force-stop,2100.0,1,0,True,True

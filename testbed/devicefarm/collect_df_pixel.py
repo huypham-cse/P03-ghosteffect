@@ -93,14 +93,77 @@ def tn4(logs, command):
     return s
 
 
+def k9_long(logs, command):
+    rows = []
+    for log in logs:
+        for d in sorted(log.glob('l0*/RESULT.json')):
+            r = json.loads(d.read_text())
+            rows.append(dict(trial=d.parent.name, verdict=r['verdict'], config=r['config'], kill=r['kill'],
+                             observe_s=r.get('observe_s'), server_copies=r['server']['copies'],
+                             smtp_data_after_fault=r.get('smtp_data_after_fault'),
+                             kept_in_outbox=r['checks'].get('k9_kept_in_outbox'), all_checks=all(r['checks'].values())))
+    rows.sort(key=lambda r: r['trial'])
+    out = OUT / 'device_k9_long_pixel'
+    write_csv(out / 'trials.csv', rows)
+    meta(out / 'trials.csv', command, dict(rig='k9_fault_case.py --observe 2100, no redo; the emulator K9L cases'))
+    (out / 'device.txt').write_text((logs[0] / 'device.txt').read_text())
+    rep = sum(r['verdict'] == 'REPRODUCED' for r in rows)
+    (out / 'SUMMARY.md').write_text(
+        '# K-9 long observation on a rented Pixel 9 Pro XL (Android 17)\n\n'
+        f'{rep}/{len(rows)} REPRODUCED over the emulator K9L cases (nosent/sent x force-stop/background): after the lost '
+        f'SMTP reply and 2,100 s of observation after the relaunch, one server copy and no new SMTP DATA in '
+        f'{sum(r["server_copies"] == 1 and r["smtp_data_after_fault"] == 0 for r in rows)}/{len(rows)}; the mail stayed in '
+        "K-9's Outbox.\n")
+    return rep, len(rows)
+
+
+def doze(log, command):
+    rows = []
+    for d in sorted(log.glob('doze/d0*/RESULT.json')):
+        r = json.loads(d.read_text())
+        c = r['clock']
+        rows.append(dict(trial=r['name'], dev=r['name'] == 'd00', doze_s=r['hold_s'], doze_states='|'.join(r['doze_states']),
+                         element_alive_in_doze=r['element_alive_in_doze'],
+                         resends_s_from_doze_entry='|'.join(str(x) for x in r['resends_s_from_enter']),
+                         resends_during_doze=r['resends_during_doze'], copies_at_doze_exit=r['copies_at_exit'],
+                         exit_to_sent_s=round(r['exit_to_sent_s'], 2) if r['exit_to_sent_s'] is not None else '',
+                         server_copies_final=len(r['server_copies_final']),
+                         commit_to_doze_entry_s=round((c['doze_enter_utc_ns'] - c['barrier_utc_ns']) / 1e9, 2)))
+    out = OUT / 'device_element_doze_pixel'
+    write_csv(out / 'trials.csv', rows)
+    meta(out / 'trials.csv', command, dict(rig='testbed/devicefarm/element_doze.py (sticky proxy as ELMK; doze_enter/doze_exit of the DAVx5 rig)'))
+    (out / 'device.txt').write_text((log / 'device.txt').read_text())
+    main = [r for r in rows if not r['dev']]
+    (out / 'SUMMARY.md').write_text(
+        '# Element under Doze after a lost reply, rented Pixel 9 Pro XL (Android 17)\n\n'
+        f'{len(main)} trials with 600 s of forced deep idle (d00, 120 s, is the dev trial). In each, Element was alive in '
+        'the background, the held reply was dropped at the Doze entry, and Element sent the same txnId again within '
+        f'{max(float(x) for r in main for x in r["resends_s_from_doze_entry"].split("|")):.2f} s (an immediate HTTP retry '
+        'of the dropped request); Synapse deduplicated it. One server copy in '
+        f'{sum(r["server_copies_final"] == 1 for r in main)}/{len(main)}; the row read "Sent" '
+        f'{min(r["exit_to_sent_s"] for r in main)} to {max(r["exit_to_sent_s"] for r in main)} s after the Doze exit. '
+        'Not tested: a retry scheduled later that falls inside Doze.\n')
+    return len(main)
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    p.add_argument('--k9', type=Path, required=True)
-    p.add_argument('--tn4', type=Path, nargs=2, required=True)
+    p.add_argument('--k9', type=Path)
+    p.add_argument('--tn4', type=Path, nargs=2)
+    p.add_argument('--k9-long', type=Path, nargs='+')
+    p.add_argument('--doze', type=Path)
     a = p.parse_args()
-    command = 'python testbed/devicefarm/collect_df_pixel.py --k9 <r1> --tn4 <r3> <r4>'
-    print('K-9:', k9(a.k9, command))
-    print('TN4 transfer:', json.dumps(tn4(a.tn4, command)))
+    command = 'python testbed/devicefarm/collect_df_pixel.py ' + ' '.join(
+        flag for flag, v in (('--k9 <r1>', a.k9), ('--tn4 <r3> <r4>', a.tn4), ('--k9-long <k9l-1> <k9l-2>', a.k9_long),
+                             ('--doze <doze>', a.doze)) if v)
+    if a.k9:
+        print('K-9:', k9(a.k9, command))
+    if a.tn4:
+        print('TN4 transfer:', json.dumps(tn4(a.tn4, command)))
+    if a.k9_long:
+        print('K-9 long:', k9_long(a.k9_long, command))
+    if a.doze:
+        print('Element Doze trials:', doze(a.doze, command))
 
 
 if __name__ == '__main__':
