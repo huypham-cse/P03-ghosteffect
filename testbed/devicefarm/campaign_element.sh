@@ -14,7 +14,7 @@ SERIAL="$DEVICEFARM_DEVICE_UDID"
 S() { timeout 60 "$ADB" -s "$SERIAL" shell "$@" 2>&1 | tr -d '\r'; }
 note() { echo "$(date -u +%H:%M:%S) $*" >> "$LOG/batch.log"; }
 case "$MODE" in dev|diag) SCHEDULE=tn4x_dev.json;; A) SCHEDULE=tn4x_A.json;; B) SCHEDULE=tn4x_B.json;;
-    *) note "unknown mode $MODE"; exit 0;; esac
+    doze) SCHEDULE=none;; *) note "unknown mode $MODE"; exit 0;; esac
 
 {
     for p in ro.product.manufacturer ro.product.model ro.build.version.release ro.build.version.sdk \
@@ -51,6 +51,15 @@ fi
 # collect re-points the same phone port at its proxy.
 # Every mode records each screen read (diag_collect.py: element_planner imported unchanged, only `tree` is wrapped
 # to save dumps); the planner's reads and decisions are the same (b-log 24/11, after run2 R3/R4).
+if [ "$MODE" = doze ]; then
+    # Element under Doze (b-log 25/11): d00 dev (120 s Doze, not counted), d01 to d03 with 600 s Doze each.
+    GX_ELEMENT_ACCOUNTS="$ACCOUNTS" timeout 4800 python3 testbed/devicefarm/element_doze.py --adb "$ADB" \
+        --serial "$SERIAL" --out "$LOG/doze" > "$LOG/doze.log" 2>&1
+    note "doze exit $?"
+    "$ADB" -s "$SERIAL" reverse --remove-all
+    note "CAMPAIGN DONE"
+    exit 0
+fi
 COLLECT="testbed/devicefarm/diag_collect.py"
 GX_ELEMENT_ACCOUNTS="$ACCOUNTS" timeout 7800 python3 $COLLECT \
     --schedule "testbed/devicefarm/$SCHEDULE" --store testbed/tn4/tn4_store.json --adb "$ADB" --serial "$SERIAL" \
