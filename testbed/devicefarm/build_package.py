@@ -10,11 +10,18 @@ wheels found in --wheels (Radicale for the CalDAV runs). Nothing from runtime/ b
 import argparse
 import hashlib
 import json
+import os
 from pathlib import Path
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[2]
-ASSETS = ('com.fsck.k9_39046.apk', 'at.bitfire.davdroid_405210002.apk', 'ws.xsoh.etar_57.apk', 'greenmail.jar')
+ASSETS = ('com.fsck.k9_39046.apk', 'at.bitfire.davdroid_405210002.apk', 'ws.xsoh.etar_57.apk', 'greenmail.jar',
+          'im.vector.app_40106622.apk')   # Element 1.6.62 arm64 for the 24/11 runs
+# Assets kept outside runtime/ (drive C is nearly full): GX_EXTRA_ASSETS names a second folder; every file is still
+# hash-checked against testbed/assets.lock.json.
+ASSET_DIRS = [ROOT / 'runtime/assets'] + ([Path(os.environ['GX_EXTRA_ASSETS'])] if 'GX_EXTRA_ASSETS' in os.environ else [])
+# The TN4 transfer check (b-log 24/11) runs element_planner.py with the emulator store and its numeric dependencies.
+EXTRA = ('testbed/tn4/tn4_store.json', 'artifact/scripts/planner_sim.py', 'artifact/scripts/ge_core.py')
 
 
 def build(out, wheels=None):
@@ -31,6 +38,8 @@ def build(out, wheels=None):
         for path in sorted((ROOT / 'testbed/devicefarm').glob('*')):   # LF on the Linux host whatever git checked out
             z.writestr('testbed/devicefarm/' + path.name, path.read_bytes().replace(b'\r\n', b'\n'))
         z.write(ROOT / 'artifact/scripts/sim_nonce.py', 'artifact/scripts/sim_nonce.py')
+        for rel in EXTRA:
+            z.write(ROOT / rel, rel)
         # TN3 (b-log 19/11): the phone ledger benchmark, built by testbed/phone_ledger/build.sh; its hash is logged.
         apk = ROOT / 'testbed/phone_ledger/build/ledgerbench.apk'
         if apk.exists():
@@ -38,7 +47,7 @@ def build(out, wheels=None):
             z.write(apk, 'testbed/phone_ledger/ledgerbench.apk')
             print('ledgerbench.apk sha256', hashlib.sha256(apk.read_bytes()).hexdigest())
         for name in ASSETS:
-            path = ROOT / 'runtime/assets' / name
+            path = next((d / name for d in ASSET_DIRS if (d / name).exists()), ROOT / 'runtime/assets' / name)
             if hashlib.sha256(path.read_bytes()).hexdigest() != lock[name]:
                 raise SystemExit(name + ' does not match assets.lock.json')
             z.write(path, 'runtime/assets/' + name)

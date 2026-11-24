@@ -1,0 +1,23 @@
+{
+ "split": "transfer",
+ "seed": 20261124,
+ "classes": [
+  "none",
+  "force-stop"
+ ],
+ "max_replacements": 1,
+ "trials": [
+  {
+   "name": "dev0",
+   "split": "transfer-dev",
+   "x": 1,
+   "fault_class": "none"
+  },
+  {
+   "name": "dev1",
+   "split": "transfer-dev",
+   "x": 0,
+   "fault_class": "force-stop"
+  }
+ ]
+}

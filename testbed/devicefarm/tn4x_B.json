@@ -1,0 +1,191 @@
+{
+ "split": "transfer",
+ "seed": 20261124,
+ "classes": [
+  "none",
+  "force-stop"
+ ],
+ "max_replacements": 6,
+ "trials": [
+  {
+   "x": 0,
+   "fault_class": "force-stop",
+   "name": "xb000",
+   "split": "transfer"
+  },
+  {
+   "x": 0,
+   "fault_class": "none",
+   "name": "xb001",
+   "split": "transfer"
+  },
+  {
+   "x": 1,
+   "fault_class": "none",
+   "name": "xb002",
+   "split": "transfer"
+  },
+  {
+   "x": 0,
+   "fault_class": "none",
+   "name": "xb003",
+   "split": "transfer"
+  },
+  {
+   "x": 1,
+   "fault_class": "none",
+   "name": "xb004",
+   "split": "transfer"
+  },
+  {
+   "x": 1,
+   "fault_class": "none",
+   "name": "xb005",
+   "split": "transfer"
+  },
+  {
+   "x": 1,
+   "fault_class": "force-stop",
+   "name": "xb006",
+   "split": "transfer"
+  },
+  {
+   "x": 1,
+   "fault_class": "none",
+   "name": "xb007",
+   "split": "transfer"
+  },
+  {
+   "x": 1,
+   "fault_class": "none",
+   "name": "xb008",
+   "split": "transfer"
+  },
+  {
+   "x": 1,
+   "fault_class": "force-stop",
+   "name": "xb009",
+   "split": "transfer"
+  },
+  {
+   "x": 1,
+   "fault_class": "force-stop",
+   "name": "xb010",
+   "split": "transfer"
+  },
+  {
+   "x": 0,
+   "fault_class": "force-stop",
+   "name": "xb011",
+   "split": "transfer"
+  },
+  {
+   "x": 0,
+   "fault_class": "none",
+   "name": "xb012",
+   "split": "transfer"
+  },
+  {
+   "x": 0,
+   "fault_class": "none",
+   "name": "xb013",
+   "split": "transfer"
+  },
+  {
+   "x": 1,
+   "fault_class": "force-stop",
+   "name": "xb014",
+   "split": "transfer"
+  },
+  {
+   "x": 0,
+   "fault_class": "force-stop",
+   "name": "xb015",
+   "split": "transfer"
+  },
+  {
+   "x": 0,
+   "fault_class": "force-stop",
+   "name": "xb016",
+   "split": "transfer"
+  },
+  {
+   "x": 0,
+   "fault_class": "force-stop",
+   "name": "xb017",
+   "split": "transfer"
+  },
+  {
+   "x": 0,
+   "fault_class": "none",
+   "name": "xb018",
+   "split": "transfer"
+  },
+  {
+   "x": 0,
+   "fault_class": "none",
+   "name": "xb019",
+   "split": "transfer"
+  },
+  {
+   "x": 1,
+   "fault_class": "force-stop",
+   "name": "xb020",
+   "split": "transfer"
+  },
+  {
+   "x": 0,
+   "fault_class": "none",
+   "name": "xb021",
+   "split": "transfer"
+  },
+  {
+   "x": 1,
+   "fault_class": "none",
+   "name": "xb022",
+   "split": "transfer"
+  },
+  {
+   "x": 1,
+   "fault_class": "force-stop",
+   "name": "xb023",
+   "split": "transfer"
+  },
+  {
+   "x": 0,
+   "fault_class": "force-stop",
+   "name": "xb024",
+   "split": "transfer"
+  },
+  {
+   "x": 1,
+   "fault_class": "force-stop",
+   "name": "xb025",
+   "split": "transfer"
+  },
+  {
+   "x": 0,
+   "fault_class": "force-stop",
+   "name": "xb026",
+   "split": "transfer"
+  },
+  {
+   "x": 1,
+   "fault_class": "none",
+   "name": "xb027",
+   "split": "transfer"
+  },
+  {
+   "x": 0,
+   "fault_class": "none",
+   "name": "xb028",
+   "split": "transfer"
+  },
+  {
+   "x": 1,
+   "fault_class": "force-stop",
+   "name": "xb029",
+   "split": "transfer"
+  }
+ ]
+}
