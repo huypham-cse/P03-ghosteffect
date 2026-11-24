@@ -48,10 +48,10 @@ if [ "$MODE" = diag ]; then
     note "diag exit $? $(tail -1 "$LOG/diag.log")"
 fi
 # No `reverse --remove` here (24/11 diag1: it left Element offline, red "Connectivity to the server has been lost");
-# collect re-points the same phone port at its proxy. In diag mode the same collect runs with every screen read
-# recorded (diag_collect.py imports element_planner unchanged).
-COLLECT="testbed/element_planner.py collect"
-[ "$MODE" = diag ] && COLLECT="testbed/devicefarm/diag_collect.py"
+# collect re-points the same phone port at its proxy.
+# Every mode records each screen read (diag_collect.py: element_planner imported unchanged, only `tree` is wrapped
+# to save dumps); the planner's reads and decisions are the same (b-log 24/11, after run2 R3/R4).
+COLLECT="testbed/devicefarm/diag_collect.py"
 GX_ELEMENT_ACCOUNTS="$ACCOUNTS" timeout 7800 python3 $COLLECT \
     --schedule "testbed/devicefarm/$SCHEDULE" --store testbed/tn4/tn4_store.json --adb "$ADB" --serial "$SERIAL" \
     --out "$LOG/tn4x-$MODE" > "$LOG/collect.log" 2>&1
