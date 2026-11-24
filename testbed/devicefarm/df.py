@@ -7,16 +7,23 @@
 `run` uploads the K-9 APK as the app, the package and the spec, schedules one run on one device with a job timeout,
 waits for it to finish (stopping it if it outlives the timeout plus a margin), downloads every FILE artifact into
 --out, and appends the device minutes and the account's remaining trial minutes to --out/minutes.json.
+
+The AWS profile and project come from DF_PROFILE and DF_PROJECT (defaults: the 18-19/11 runs). Runs from 24/11 use
+DF_PROFILE=devicefarm-credit-run and the P03-ghosteffect project ARN; that profile's login is
+`aws login --profile devicefarm-credit --region ap-southeast-2`.
 """
 import argparse
 import json
+import os
 from pathlib import Path
 import subprocess
 import time
 import urllib.request
 
-AWS = ['aws', 'devicefarm', '--profile', 'devicefarm', '--region', 'us-west-2', '--output', 'json']
-PROJECT = 'arn:aws:devicefarm:us-west-2:478825889366:project:83e7e695-4f56-4afc-bca4-cb04dea963ec'
+PROFILE = os.environ.get('DF_PROFILE', 'devicefarm')
+AWS = ['aws', 'devicefarm', '--profile', PROFILE, '--region', 'us-west-2', '--output', 'json']
+PROJECT = os.environ.get('DF_PROJECT',
+                         'arn:aws:devicefarm:us-west-2:478825889366:project:83e7e695-4f56-4afc-bca4-cb04dea963ec')
 ROOT = Path(__file__).resolve().parents[2]
 
 
@@ -24,7 +31,7 @@ def aws(*args):
     result = subprocess.run(AWS + list(args), capture_output=True, text=True)
     if result.returncode:
         if 'expired' in result.stderr.lower() or 'login' in result.stderr.lower():
-            raise SystemExit('AWS login expired: run  aws login --profile devicefarm --region us-west-2')
+            raise SystemExit(f'AWS login expired for profile {PROFILE}: run aws login (see the docstring)')
         raise SystemExit(result.stderr.strip())
     return json.loads(result.stdout) if result.stdout.strip() else {}
 
