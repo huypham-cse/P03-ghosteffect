@@ -37,7 +37,7 @@ and \RealCalN/\RealCalN). Their own retry is therefore safe, on the same device 
 Element's timeline row and room-list digest were never wrong together once the message was visible (0/\RealCoObs), and its post-restart visibility lag depends on the fault class
 (median from \RealLagNetMed{} to \RealLagLmkMed\,s, first visibility seen in every trial).
 Held out at $\alpha{=}\beta{=}\RealPlanAlphaPct\%$, the planner itself retried none of \RealElPlanCommittedN{} committed Element messages (CP upper bound \RealElPlanRetryHi\%) and all
-\RealElPlanRetryAbsent{} absent ones. On Etar and DAVx5, whose acknowledgement no screen shows, it certified only absence.
+\RealElPlanRetryAbsent{} absent ones, and with that calibration on a rented Pixel it retried none of \PixTCom{} committed messages. On Etar and DAVx5, whose acknowledgement no screen shows, it certified only absence.
 
 We recommend product certification when independence across families has a structural basis and joint certification otherwise, using fault-injected labels keyed by fault class. With the measured parameters, joint certification retries no committed Element send (CP upper bound
 \RsimFiveJointPvHi\%) and asks in \RsimFiveJointAsk\% of workflows with \RsimFiveLabelN{} labels and \CertLagBootN{} lag entries per class, and on every interrupted K-9 send.
@@ -52,7 +52,7 @@ after the simulated user's wrong answer. This study covers two agents, one model
 \item View-level certification calibrated on whole effects, in a product form (independence across families) and a joint form (none), with exact finite-sample bounds (\S\ref{sec:theory-corr}, \S\ref{sec:theory-cal}).
 \item The content-carried nonce and the two-hop decomposition with a dedup horizon (\S\ref{sec:twohop}).
 \item \sys's ledger, fault-injected calibration and planner, compared with a same-evidence rule cascade in simulation (\S\ref{sec:design} to \S\ref{sec:eval}).
-\item Emulator measurements of three apps: idempotent retries and dedup horizon per app, a permanent misleading failed state, GUI-redo duplicates, per-class visibility lags, family errors,
+\item Emulator and phone measurements of three apps: idempotent retries and dedup horizon per app, a permanent misleading failed state, GUI-redo duplicates, per-class visibility lags, family errors,
   and held-out tests of the planner on Element and on Etar and DAVx5 (\S\ref{sec:eval-real}).
 \item An LLM-agent experiment in which M3A duplicates committed K-9 mail after a lost reply and \sys asks instead (\S\ref{sec:eval-agent}).
 \end{itemize}

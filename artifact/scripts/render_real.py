@@ -489,6 +489,48 @@ $^{\S}$Force-stop clears the app's notifications. The shade was cleared between 
     M('RealElPlanStale', sum(r['view_roomlist'] == '0' for r in _st4))
     M('RealElPlanStaleN', len(_st4))
 
+    # Rented Pixel 9 Pro XL, Android 17 (b-log 24-25/11). Kind of number: phone measurement.
+    _pd = {}
+    for _dir in ('device_k9_pixel', 'device_k9_long_pixel', 'tn4_transfer_pixel', 'device_element_doze_pixel'):
+        _props = dict(l.strip().split('=', 1) for l in open(os.path.join(REAL, _dir, 'device.txt'), encoding='utf-8')
+                      if '=' in l)
+        _pd[_dir] = (_props['ro.product.model'], _props['ro.build.version.release'])
+    assert set(_pd.values()) == {('Pixel 9 Pro XL', '17')}   # the prose names this one phone for all four runs
+    M('PixAndroid', list(_pd.values())[0][1])
+    _pk = _rr('trials.csv', os.path.join(REAL, 'device_k9_pixel'))
+    assert _pk and all(r['verdict'] == 'REPRODUCED' and r['smtp_data_after_fault'] == '0' for r in _pk)
+    M('PixKN', len(_pk))
+    M('PixKRep', sum(r['verdict'] == 'REPRODUCED' for r in _pk))
+    M('PixKDup', sum(r['server_copies_after_redo'] == '2' and r['distinct_message_ids_after_redo'] == '2' for r in _pk))
+    _pl = _rr('trials.csv', os.path.join(REAL, 'device_k9_long_pixel'))
+    assert _pl and all(r['verdict'] == 'REPRODUCED' and r['server_copies'] == '1' and r['smtp_data_after_fault'] == '0'
+                       and float(r['observe_s']) == 2100 for r in _pl)
+    M('PixKlongN', len(_pl))
+    M('PixKlongRep', sum(r['verdict'] == 'REPRODUCED' for r in _pl))
+    _px = _rr('trials.csv', os.path.join(REAL, 'tn4_transfer_pixel'))
+    _pcom, _pabs = [r for r in _px if r['x'] == '1'], [r for r in _px if r['x'] == '0']
+    assert {r['fault_class'] for r in _px} == {'none', 'force-stop'}   # the prose says kill -9 needs root
+    assert not any(r['decision'] == 'RETRY' for r in _pcom) and not any(r['decision'] == 'COMMITTED' for r in _pabs)
+    assert all(r['server_copies'] == '1' for r in _pcom) and not any(int(r['server_copies']) >= 2 for r in _px)
+    M('PixTN', len(_px))
+    M('PixTCom', len(_pcom))
+    M('PixTRetryCom', 0)
+    M('PixTHi', f"{100 * (1 - 0.05 ** (1 / len(_pcom))):.1f}")
+    M('PixTAbs', len(_pabs))
+    M('PixTRetryAbs', sum(r['decision'] == 'RETRY' for r in _pabs))
+    M('PixTAsk', sum(r['decision'] == 'ASK' for r in _px))
+    M('PixTDup', 0)
+    _pz = [r for r in _rr('trials.csv', os.path.join(REAL, 'device_element_doze_pixel')) if r['dev'] == 'False']
+    assert _pz and all(r['server_copies_final'] == '1' and r['doze_states'] == 'IDLE' and r['element_alive_in_doze'] == 'True'
+                       for r in _pz)
+    (_pdoze,) = {r['doze_s'] for r in _pz}
+    _pretry = max(float(x) for r in _pz for x in r['resends_s_from_doze_entry'].split('|'))
+    assert _pretry < 1   # the prose says the retry came at the Doze entry
+    M('PixDozeN', len(_pz))
+    M('PixDozeOnce', sum(r['server_copies_final'] == '1' for r in _pz))
+    M('PixDozeS', _pdoze)
+    M('PixDozeRetryS', f'{_pretry:.2f}')
+
     # ELMK (b-log 23/11): Element reaped by lmkd under real memory pressure after a lost reply (sticky proxy, AVD).
     _ek = _rr('trials.csv', os.path.join(REAL, 'emu_element_lmk'))
     assert _ek and all(r['reaped'] == 'True' for r in _ek) and len({r['oom_score_adj'] for r in _ek}) == 1

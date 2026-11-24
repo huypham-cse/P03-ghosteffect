@@ -1,6 +1,6 @@
 % Emulator measurements (input through generated/real_section.tex only when artifact/results/real/SUMMARY.md exists).
 % Every number is a macro written by artifact/scripts/render_real.py from artifact/results/real/ (campaign2/ for the body).
-\subsection{Emulator measurements}
+\subsection{Emulator and phone measurements}
 \label{sec:eval-real}
 Campaign~2 on the testbed of \S\ref{sec:impl} ran \RealElemN{} Element~1.6.62~\cite{element_android} trials against Synapse~1.164.2~\cite{synapse}
 (\RealElemNofaultN{} without fault, \RealElemRL{} with a lost reply, \RealElemAckedN{} acknowledged then killed), plus \RealTimeoutN{} with a withheld reply. It also ran K-9~Mail~24.0~\cite{k9mail}
@@ -17,7 +17,8 @@ or, without re-sending, reconciled its local echo with the event \texttt{/sync} 
 once (\RealCalOnce/\RealCalN, \RealCalKill{} after \texttt{kill -9} or force-stop): idempotent by a client-chosen name. K-9 has no idempotent retry by design: once the final ``.'' is written, a failure is recorded as permanent and later send passes skip the
 message, which stays in the Outbox. A follow-up audit logged every tap (\RealAuditN{} valid of \RealAuditAttemptsN{} attempts, \RealAuditWindow\,s each, shorter than K-9's 15-min poll). It saw no new DATA after
 ``Sync account'', ``Send messages'' or no action (\RealAuditSyncData/\RealAuditSyncN, \RealAuditSendmsgsData/\RealAuditSendmsgsN, \RealAuditNoneData/\RealAuditNoneN),
-while recomposing sent a second copy with a new Message-ID in \RealAuditRecomposeDup/\RealAuditRecomposeN. In \RealKlongN{} longer runs of \RealKlongObsS\,s, more than two polls, K-9 sent no new DATA and kept the mail failed in its Outbox (\RealKlongError/\RealKlongN). A Sent folder does not help: K-9 appends there only after a successful
+while recomposing sent a second copy with a new Message-ID in \RealAuditRecomposeDup/\RealAuditRecomposeN. In \RealKlongN{} longer runs of \RealKlongObsS\,s, more than two polls, K-9 sent no new DATA and kept the mail failed in its Outbox (\RealKlongError/\RealKlongN). On a rented Pixel~9 Pro XL (Android~\PixAndroid), the same rig reproduced the trap in \PixKRep/\PixKN{} trials,
+and the redo left two copies with two Message-IDs in \PixKDup/\PixKN. Its long runs sent no new DATA either (\PixKlongRep/\PixKlongN). A Sent folder does not help: K-9 appends there only after a successful
 send (from \RealKAppendLo{} to \RealKAppendHi\,s after ``Send''), so a committed mail whose reply was lost never appears (\RealKSentWrong/\RealKSentN). A scripted GUI redo duplicated every K-9 send it
 was run on (\RealKRecDup/\RealKRecN, distinct Message-IDs, so no receiver dedup applies) and \RealCalRecDup/\RealCalRecN{} CalDAV events: the ghost-effect duplicate of
 Figure~\ref{fig:teaser}a, measured with a scripted rather than an LLM agent.
@@ -39,6 +40,7 @@ On Element it reads only the timeline and the room list for the nonce (one famil
 fault-injected labels (\RealElPlanCalOneN{} committed, \RealElPlanCalZeroN{} absent, \RealElPlanClassN{} fault classes) certified both sides in every class, with waits of \RealElPlanWaitNone,
 \RealElPlanWaitKill{} and \RealElPlanWaitFs\,s. On \RealElPlanTestN{} held-out messages (\RealElPlanInvalidN{} rig failures rerun) it retried
 \RealElPlanRetryCommitted{} of \RealElPlanCommittedN{} committed ones (one-sided 95\% CP upper bound \RealElPlanRetryHi\%), declared \RealElPlanDeclared{} done and asked about one whose timeline read was $\bot$,
-retried all \RealElPlanRetryAbsent{} absent ones on a certificate, and left \RealElPlanDupN{} duplicates. On Etar, DAVx5 and Radicale it reads only Etar's search and agenda views (hop~1). No screen shows DAVx5's acknowledgement, so \RealPlanCalN{} labels (\RealPlanCalOneN{} committed, \RealPlanCalZeroN{} absent) certified only absence,
+retried all \RealElPlanRetryAbsent{} absent ones on a certificate, and left \RealElPlanDupN{} duplicates. We then applied this emulator calibration unchanged on the Pixel, with fault classes none and force-stop (\texttt{kill -9} needs root).
+It retried \PixTRetryCom{} of \PixTCom{} committed messages (\PixTHi\%) and \PixTRetryAbs{} of \PixTAbs{} absent ones, asked about \PixTAsk, and left \PixTDup{} duplicates. On Etar, DAVx5 and Radicale it reads only Etar's search and agenda views (hop~1). No screen shows DAVx5's acknowledgement, so \RealPlanCalN{} labels (\RealPlanCalOneN{} committed, \RealPlanCalZeroN{} absent) certified only absence,
 and on \RealPlanTestN{} held-out events it retried \RealPlanRetryCommitted{} of \RealPlanCommittedN{} committed ones (\RealPlanRetryHi\%) and all \RealPlanRetryAbsent{} absent ones, asked about the committed ones and left
 \RealPlanDupN{} duplicates.

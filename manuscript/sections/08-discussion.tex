@@ -19,7 +19,8 @@ and banking apps may detect accessibility services or gate the commit behind Bio
 On the emulator, a GUI redo after an lmkd kill duplicated K-9 mail in \RealEmuKDupN{} of \RealEmuKN{} trials. DAVx5 kept exactly one copy in every valid trial (\RealEmuCalOnceN/\RealEmuCalValidN{} on the emulator with lmkd and Doze,
 \RealRentSamOnceN/\RealRentSamValidN{} on a rented Galaxy A36, \RealRentPixOnceN/\RealRentPixValidN{} on a rented Pixel 9). Forced Doze did not delay its resend on the emulator (median
 \RealEmuCalDozeMedS\,s, against \RealEmuCalKillMedS\,s after \texttt{kill -9}) or the Pixel. On the A36 one trial saw no resend within
-\RealRentSamDozeQuietS\,s (\RealRentSamTwoN{} of \RealRentSamTwoN{} later ones resent in deep idle), so phone lag tails can exceed ours (Table~\ref{tab:lag}). End-to-end encrypted rooms, Element's default for direct messages, are untested.
+\RealRentSamDozeQuietS\,s (\RealRentSamTwoN{} of \RealRentSamTwoN{} later ones resent in deep idle), so phone lag tails can exceed ours (Table~\ref{tab:lag}). On the Pixel~9 Pro XL, Element kept one copy in \PixDozeOnce/\PixDozeN{} trials with \PixDozeS\,s of forced deep Doze.
+It retried the dropped request within \PixDozeRetryS\,s of the Doze entry, so a retry scheduled inside Doze remains untested. End-to-end encrypted rooms, Element's default for direct messages, are untested.
 
 \para{Ethics and threat model.}
 A nonce writes agent text into user content, so \sys uses user-only fields by default, requires opt-in for counterparty-visible ones, and never uses invisible characters. We assume
