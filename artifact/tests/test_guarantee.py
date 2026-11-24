@@ -147,7 +147,7 @@ class RenderGuaranteeTests(unittest.TestCase):
     def test_values_follow_the_csvs(self):
         files = rg.render(RESULTS)
         macros = dict(re.findall(r'\\newcommand\{\\(\w+)\}\{(.*)\\xspace\}', files['macros_guarantee.tex']))
-        self.assertEqual(107, len(macros))   # +CertLabelMedOneS, CertLabelMedZeroS (TN1 label cost)
+        self.assertEqual(108, len(macros))   # +CertLabelMedOneS, CertLabelMedZeroS (TN1 label cost), CertDeviceHoursLagFive
         row = next(r for r in rg.read_csv(RESULTS, 'planner_real4_t0down5.csv') if r['policy'] == 'ghost')
         self.assertEqual(rg.cert_f2(row['cdup']), macros['CertClockTzeroDownFiveProdPv'])
         self.assertEqual(rg.cert_f2(row['cdup_hi']), macros['CertClockTzeroDownFiveProdPvHi'])
@@ -188,6 +188,8 @@ class RenderGuaranteeTests(unittest.TestCase):
         # 5,000 labels x 4 classes x (60 + 30) s = 500 h
         self.assertIn(r'\newcommand{\CertDeviceHoursFive}{500\xspace}', text)
         self.assertIn(r'\newcommand{\CertLabelMedOneS}{60\xspace}', text)
+        # (20,000 - 5,000) lag entries x 4 classes x 60 s per committed trial = 1,000 h
+        self.assertIn(r'\newcommand{\CertDeviceHoursLagFive}{1{,}000\xspace}', text)
 
     def test_zero_denominators_print_na(self):
         nobody = dict(n1='0', ask1='0', user_e1='nan', n0='0', ask0='0', user_e0='nan')

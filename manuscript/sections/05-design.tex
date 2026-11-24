@@ -49,7 +49,7 @@ The controller injects the fault classes of \S\ref{sec:impl} at the commit point
 match deployment's. An effect whose class the controller cannot tell uses the per-class maximum. Passive labels (confirmed sends, abandoned forms) are cheaper but miss cached history after a
 kill, optimistic entries and restart lags (\S\ref{sec:eval-pop},~\S\ref{sec:eval-real}). A label costs one fault-injected trial on a test device. Our scripted label trials on Etar and DAVx5 (\S\ref{sec:eval-real}) took a median of \CertLabelMedOneS\,s for a committed
 effect and \CertLabelMedZeroS\,s for an absent one. At that rate, \CertLabelsFive labels per class and outcome
-for \CertClassesN classes take about \CertDeviceHoursFive device-hours.
+for \CertClassesN classes take about \CertDeviceHoursFive device-hours, and \CertLagBootN{} lag entries per class about \CertDeviceHoursLagFive{} more.
 
 \para{How many labels.} Validity holds at any sample size: small samples only widen the bounds, so the planner asks more often, not retries more often (Table~\ref{tab:nsize}).
 Product certification needs a few hundred effects per stratum at $\alpha{=}1\%$, because per-family bounds multiply. Joint certification and each wait need about $\ln(1/\delta)/\alpha_{\mathrm{test}}$ samples even with zero events, which is thousands at $\alpha{=}1\%$.

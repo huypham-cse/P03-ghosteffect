@@ -274,6 +274,9 @@ def render(results):
     M['CertLabelMedZeroS'] = f'{med0:.0f}'
     assert OUTCOMES == 2
     M['CertDeviceHoursFive'] = count(round(labels5 * N_CLASSES * (med1 + med0) / 3600))
+    # Lag entries beyond one per committed label each cost one more committed trial.
+    assert N_LAG > labels5
+    M['CertDeviceHoursLagFive'] = count(round((N_LAG - labels5) * N_CLASSES * med1 / 3600))
 
     files = {'macros_guarantee.tex': HEADER + ''.join(
         f'\\newcommand{{\\{k}}}{{{v}\\xspace}}\n' for k, v in sorted(M.items()))}

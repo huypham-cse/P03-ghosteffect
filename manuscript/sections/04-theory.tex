@@ -75,7 +75,7 @@ at least $1-Kn_{\mathrm{cls}}\delta$ all hold, where $n_{\mathrm{cls}}$ is the n
 Part~(i) is a monotone coupling and (ii) a union bound. Keying by class makes the lab's fault mix irrelevant at the price of labels per class. The unknown-class fallback
 uses all classes' bounds, so the union runs over $Kn_{\mathrm{cls}}$ bounds. \sys sets $\delta=\min(\alpha,\beta)/(10\,K\,n_{\mathrm{cls}})$, with $n_{\mathrm{cls}}$ the number of fault classes when bounds are keyed by class (4 in the simulations, 3 in the held-out runs) and $n_{\mathrm{cls}}{=}1$ when they are pooled.
 Here $K{=}11$ for product certification (five ``absent'' and four ``committed'' verdict levels, two waits; the nonce's false-match bound is analytic), $K{=}8$ for source
-families and $K{=}5$ for joint certification. Then $Kn_{\mathrm{cls}}\delta=\min(\alpha,\beta)/10\le\min(\alpha_{\mathrm{cal}},\beta_{\mathrm{cal}})$, and the guarantee pays the union bound on both sides.
+families (4 history regions, 2 hop-1 levels, 2 waits) and $K{=}5$ for joint certification (2 regions, $q_h$, 2 waits). Then $Kn_{\mathrm{cls}}\delta=\min(\alpha,\beta)/10\le\min(\alpha_{\mathrm{cal}},\beta_{\mathrm{cal}})$, and the guarantee pays the union bound on both sides.
 The population assumption is the one that bites: labels from uninterrupted effects miss cached history after a kill, optimistic ``sending'' entries and blackout lags.
 Lemma~\ref{lem:drift} in the appendix bounds drift that is independent across families. Common-mode drift is what joint certification is for (\S\ref{sec:eval-pop}).
 

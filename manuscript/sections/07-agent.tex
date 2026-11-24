@@ -18,7 +18,7 @@ a duplicate in \AgentKillDupN{} of \AgentKillValidN.
 In a second frozen run (same task, fault, model), \sys at the action boundary issued the send in its ledger before the tap and asked
 after the relaunch, since no K-9 family certifies. A simulated user answered from the server, wrong on a pre-drawn 5\% of asks. Duplicates
 fell to \AgentGuardDupN{} of \AgentGuardValidN{} valid episodes (\AgentGuardDupPct\%, 95\% CI from \AgentGuardDupLo{} to
-\AgentGuardDupHi\%, Fisher $p$ \AgentGuardFisherP{} against the native agent). \sys asked in all \AgentGuardAskN{} episodes,
+\AgentGuardDupHi\%, Fisher $p$ \AgentGuardFisherP{} against the native agent, run earlier, not randomized). \sys asked in all \AgentGuardAskN{} episodes,
 and the remaining duplicate followed a wrong user answer (\AgentGuardUserErrN). Same-evidence rules (Appendix~\ref{app:extra}) on the same ledger, reading K-9's Outbox and Sent list exactly, decided to retry in
 \AgentRulesRetryN{} of \AgentRulesValidN{} valid Sent-folder episodes. K-9 sent the mail again in \AgentRulesResentN{} of them (in \AgentRulesTaskFailN{} the agent timed out before resending), leaving \AgentRulesDupN{} duplicates (Fisher $p$
 \AgentRulesFisherP{} against \sys's \AgentGuardSentDupN{} duplicates in its \AgentGuardSentValidN{} Sent-folder episodes). On K-9 this tests the ledger and asking, not calibration.
