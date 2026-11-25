@@ -12,7 +12,7 @@ emulator over adb, so killing the agent cannot erase the ledger. In the on-devic
 in app-private storage. The low-memory killer can still reap it, but safety does not depend on it surviving: the write-ahead invariant below holds across its death, and it resolves
 outstanding records when it restarts. We have built the host topology's decision core and ledger, and the on-device service is design only.
 
-Agents with structured plans label commit points directly~\cite{tian2025agentprog}. Otherwise a conservative classifier matches the target's text, content
+Agents with structured plans~\cite{tian2025agentprog} could label commit points directly. Otherwise a conservative classifier matches the target's text, content
 description or resource id against a per-locale lexicon (send, pay, save, post, book, confirm, delete), or a VLM flags it~\cite{lee2025verisafe,sun2025ossentinel}. A false
 positive costs one ledger write, and a false negative falls back to the agent's native recovery.
 

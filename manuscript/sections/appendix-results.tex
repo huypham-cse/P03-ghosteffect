@@ -71,7 +71,7 @@ parameter~\cite{pan2024autonomous}). The user answers wrongly on 5\% of asks (10
 with $K{=}11$ (product), 8 (source families) or 5 (joint). Here $n_{\mathrm{cls}}$ counts calibrated fault classes (one when pooled). All policies see the same \SimN interrupted workflows (5 seeds $\times$ 2{,}400); we report Clopper-Pearson intervals and exact
 McNemar tests against the product planner with Holm correction.
 
-\para{Baselines.} We compare against Redo~\cite{tian2025agentprog}, checkpoint-resume~\cite{langgraph_durable,khan2026resume}, Atomix-style adapters with one
+\para{Baselines.} We compare against Redo (the agent repeats the step), checkpoint-resume~\cite{langgraph_durable,khan2026resume}, Atomix-style adapters with one
 read-back~\cite{mohammadi2026atomix}, verify-before-retry~\cite{mansoor2026verified}, ledger + key~\cite{li2026exactlyonce}, four baselines that may ask, and a re-read
 SPRT that rotates views with AR(1) shrinkage. The \emph{same-evidence rules} have \sys's ledger, hop~1 with the same fallible Monitor, the same families read once per view, a fixed 10\,s wait and
 asking. They treat an acknowledged entry or a nonce match as done, retry only if every available family reads absent, and otherwise ask. A lenient variant acts on the first

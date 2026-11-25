@@ -10,9 +10,9 @@ confirmation. We call the action sequence that ends at a commit point an \emph{e
 
 Research agents (M3A, T3A, UI-TARS, Mobile-Agent) are host processes that drive a phone over adb~\cite{rawles2025androidworld}. On-device agents are apps with an
 accessibility service~\cite{wen2024autodroid}. Interruptions are of four kinds. (1)~Agent death: a host agent crashes, or the low-memory killer reaps an on-device
-agent~\cite{android_lmkd}. (2)~App death: the low-memory killer reaps the foreground app last~\cite{android_lmkd}, so the realistic case is \emph{background-then-kill}. A sync service keeps Element perceptible, so \texttt{am kill} spared it in every trial, but real memory pressure made \texttt{lmkd} reap it in \RealElmkReaped{} of \RealElmkN{} (\S\ref{sec:eval-real}). Background-then-kill keeps scheduled
-WorkManager jobs; a crash or force-stop cancels alarms and jobs~\cite{android_workmanager}, and unpreserved state is lost~\cite{farooq2020livedroid}. (3)~Deferral:
-App Standby, background restrictions and Doze batch network access and defer jobs~\cite{android_doze,android_standby}. (4)~Connectivity loss~\cite{sentosa2025cellreplay}:
+agent~\cite{android_lmkd}. (2)~App death: the low-memory killer kills the least essential processes first~\cite{android_lmkd}, so the realistic case is \emph{background-then-kill}. A sync service keeps Element perceptible, so \texttt{am kill} spared it in every trial, but real memory pressure made \texttt{lmkd} reap it in \RealElmkReaped{} of \RealElmkN{} (\S\ref{sec:eval-real}). Background-then-kill keeps scheduled
+WorkManager jobs~\cite{android_workmanager}. Since Android~15 a force-stop cancels all of the app's pending intents~\cite{android15_behavior}, and unpreserved state is lost~\cite{farooq2020livedroid}. (3)~Deferral:
+App Standby, background restrictions and Doze batch network access and defer jobs~\cite{android_doze,android_standby}. (4)~Connectivity loss~\cite{rfc1047}:
 an app may send a request and lose the acknowledgement. Each can leave the effect absent, committed, or still in flight.
 
 \subsection{Why API-level recovery does not transfer}
@@ -26,8 +26,8 @@ The second gap is perceptual read-back. Tool-agent work reasons over exact, even
 VeriGUI trains an action-effect verifier for this setting~\cite{zhang2026verigui} without an error guarantee.
 
 The third gap is the death of the agent and late commits. Li injects faults at the service boundary~\cite{li2026exactlyonce}, but on a phone the agent itself may die. Atomix keeps progress
-in its runtime~\cite{mohammadi2026atomix}, and LangGraph is at-least-once across crashes~\cite{khan2026resume}. Agent libOS and Cordon stage effects behind durable intent
-(prepare, dispatch, settle)~\cite{zhang2026agentlibos,chen2026cordon}. Our ledger follows that discipline, but settlement must be decided from perception.
+in its runtime~\cite{mohammadi2026atomix}, and LangGraph is at-least-once across crashes~\cite{khan2026resume}. Agent libOS stages effects through prepare, dispatch and settle~\cite{zhang2026agentlibos}, and Cordon
+holds outward actions in an outbox until commit~\cite{chen2026cordon}. Our ledger follows that discipline, but settlement must be decided from perception.
 
 \subsection{How often do agents create ghost effects?}
 \label{sec:measure-teaser}
