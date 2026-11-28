@@ -1,10 +1,6 @@
 \begin{table}[!htbp]
 \centering
-\caption{Correlated reads (model-based simulation; VLM family with 3 views, $\epsilon{=}0.10$, $\alpha{=}1\%$, 30{,}000 committed effects per cell):
-$P(\mathrm{dup}\mid X{=}1)$ in \%. \emph{Within-view}: re-reads of a view share one error with probability $\rho$.
-\emph{Cross-view}: views share a latent error rate with intraclass correlation $\rho$. naive: SPRT re-reading one view; re-read: our earlier design
-(re-reads of rotated views, AR(1) shrinkage); view: one read per view, SPRT over views (assumes independent views); certified: family verdict with calibrated bound (Prop.~\ref{prop:family}),
-asks (\%) in parentheses; bound: Lemma~\ref{lem:floor}, worst case of all 3 views wrong.}
+\caption{Correlated reads (model-based simulation; VLM family of 3 views, $\epsilon{=}0.10$, $\alpha{=}1\%$, 30{,}000 committed effects per cell): $P(\mathrm{dup}\mid X{=}1)$ in \%. Within-view: re-reads share one error with probability $\rho$. Cross-view: views share a latent rate with correlation $\rho$. naive: SPRT on one view; re-read: SPRT over rotated re-reads; view: one read per view; certified: family bound (Prop.~\ref{prop:family}), asks in parentheses; bound: Lemma~\ref{lem:floor}.}
 \label{tab:corr}
 \footnotesize
 \setlength{\tabcolsep}{2pt}

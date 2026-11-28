@@ -1,0 +1,5 @@
+trial,dev,doze_s,doze_states,element_alive_in_doze,resends_s_from_doze_entry,resends_during_doze,copies_at_doze_exit,exit_to_sent_s,server_copies_final,commit_to_doze_entry_s
+d00,True,120,IDLE,True,0.02,1,1,2.35,1,4.55
+d01,False,600,IDLE,True,0.02,1,1,2.5,1,4.67
+d02,False,600,IDLE,True,0.01,1,1,2.46,1,4.62
+d03,False,600,IDLE,True,0.02,1,1,2.58,1,4.6

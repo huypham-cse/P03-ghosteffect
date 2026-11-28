@@ -1,12 +1,10 @@
 \subsection{Measured-parameter simulation}
 \label{sec:eval-realsim}
-\input{generated/tab_realsim}
 
-Table~\ref{tab:realsim} reruns every mode on profiles built from the emulator measurements (\texttt{params.csv} records each value's source), with per-class lags
+Table~\ref{tab:realsim} in the appendix reruns every mode on profiles built from the emulator measurements (\texttt{params.csv} records each value's source), with per-class lags
 and $\bot$ as no observation. Calibration and test records are simulated draws from the same fitted law. The measurements found \RsimFitLateWrong/\RsimFitLateObs{} wrong
 late reads in each Element family and \RsimFitCoWrong/\RsimFitCoN{} pairwise late co-failures, but these zero counts do not make readers error-free on new screens.
-The table therefore tests certification decisions and their asking cost, not reader errors. Its simulated labels are not additional emulator trials, so its asking rates
-should be read with the label budgets of \S\ref{sec:design-probes} and Table~\ref{tab:cert-budget}.
+The table therefore tests certification decisions and their asking cost, not reader errors, and its simulated labels are not emulator trials (label budgets: Table~\ref{tab:cert-budget}).
 
 On Element every certified mode stays within budget (CP upper \RsimElemJointPvHi\%): the certified wait reaches the measured maximum. The product mode asks in \RsimElemProdAsk\% of workflows. Joint certification, which needs no cross-family
 independence, asks in \RsimElemJointAsk\% with \RsimBaseLabelN{} labels per class and outcome and in \RsimFiveJointAsk\% with \RsimFiveLabelN{} labels per class and outcome plus \CertLagBootN{} lag entries per class. Simpler mechanisms also hold: Theorem~\ref{thm:twohop} alone (\RsimElemGtwoAsk\%
@@ -14,18 +12,11 @@ asks) and rules with a 10 or 30\,s wait (\RsimElemRulesAsk\% and \RsimElemRulesT
 \RsimElemAppPv\% (the lag-blind reads). Two departures break the budget. Passive labels, whose lag logs come from uninterrupted sends, give product \RsimPassProdPv\% and joint
 \RsimPassJointPv\%. A tail of \RsimTail\% beyond 14\,s that the logs miss gives product \RsimTailProdPv\% at \RsimBaseLabelN{} labels (joint holds only because it asks \RsimTailJointAsk\%). If the logs contain that tail, every mode asks on every
 interrupted Element send. On K-9 no family can certify, so every mode, like Theorem~\ref{thm:twohop}, asks on every interrupted send. Trusting K-9's status retries
-\RsimKnineAppPv\% of committed mail (and loses \RsimKnineAppLoss\% of workflows), and unvetted fixed-wait rules retry \RsimKnineRulesPv\% in this simulation under the assumed K-9 queued-mail lag law. With a Sent folder, fault-injected labels
-show committed mail that never becomes visible, so no wait certifies and \sys asks. Unvetted fixed-wait rules retry \RsimKsentRulesPv\% under the same assumed K-9 lag law, and passive labels
+\RsimKnineAppPv\% of committed mail (and loses \RsimKnineAppLoss\% of workflows), and unvetted fixed-wait rules retry \RsimKnineRulesPv\% in this simulation under the assumed K-9 queued-mail lag law. With a Sent folder, committed mail never becomes visible, so no wait certifies and \sys asks. Unvetted fixed-wait rules retry \RsimKsentRulesPv\% there, and passive labels
 lead joint certification to retry \RsimKsentPassJointPv\%. On real apps the decisive pieces are Outbox evidence classification, fault-injected labels, and asking when the GUI cannot reveal the outcome; calibration adds a guarantee that follows
-the labels. In the LLM-agent experiment on the emulator (\S\ref{sec:eval-agent}), the same-evidence rule cascade decided to retry in \AgentRulesRetryN{} of \AgentRulesValidN{} valid Sent-folder
-K-9 episodes, as this simulation warns.
+the labels.
 
-\input{generated/tab_matched}
 
-To compare vetted rules on identical inputs, Table~\ref{tab:matched} gives joint and vetted rules the same calibration records and lag tables in each seed.
-For Element with \RsimMatchElemTwoLabelN{} labels per outcome and fault class and \RsimMatchElemTwoLagN{} lag entries per class,
-joint asks \RsimMatchElemTwoJointAsk\% of simulated workflows; vetted rules ask \RsimMatchElemTwoVettedAsk\%.
-Neither policy retries a committed effect in this fitted-law simulation, although only joint computes a certificate.
-At \RsimMatchElemFiveLabelN{} labels and \RsimMatchElemFiveLagN{} lag entries, their asking rates are \RsimMatchElemFiveJointAsk\% and \RsimMatchElemFiveVettedAsk\%, respectively.
-On both K-9 profiles, both policies ask on every interrupted simulated send.
-The fixed-wait rules above are therefore not the strongest baseline when calibration data are available.
+\emph{Vetted rules} keep only the families never wrong on the labels and wait for the longest logged lag. Given the same records, they ask far less than joint certification on Element (\RsimMatchElemTwoVettedAsk\% against
+\RsimMatchElemTwoJointAsk\% with \RsimMatchElemTwoLabelN{} labels, Table~\ref{tab:matched} in the appendix). Neither retries a committed effect in this fitted-law simulation, only joint computes a certificate, and both ask on every interrupted K-9 send.
+A model-based simulation of \SimN{} workflows over eight app profiles (Appendix~\ref{sec:setup}) gives the same ordering: product certification retries \SimGhostPv\% of committed effects and asks \SimGhostAsk\%, joint retries \SimJointPv\% and asks \SimJointAsk\%, and same-evidence rules ask \SimRulesAsk\% but retry \SimRulesPv\%.

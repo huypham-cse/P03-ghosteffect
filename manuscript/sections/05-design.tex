@@ -3,27 +3,24 @@
 
 \sys is a recovery layer beneath an unmodified GUI agent. It intercepts the agent's actions, records effects before they commit, and after any interruption
 decides each ambiguous effect with the rules of \S\ref{sec:theory}. Its parts are an effect classifier, the ledger, the nonce writer, the probe families with their
-calibration store, and the \alg planner with its saga layer (Figure~\ref{fig:arch}).
+calibration store, and the \alg planner with its saga layer (Figure~\ref{fig:arch} in Appendix~\ref{app:extra}).
 
 \subsection{Where it runs, and the ledger}
 \label{sec:design-ledger}
 The ledger must outlive the agent. In the host topology (our testbed), the controller is a host process separate from the agent, which drives the
-emulator over adb. Killing the agent then cannot erase the ledger, by process separation alone. In the on-device topology, the controller is an Android foreground service
-in its own process, with the ledger in app-private storage. A foreground service has an elevated OOM priority but is not immune to the low-memory killer. Safety does not depend on
-it surviving, because the write-ahead invariant below holds across its death. The controller resolves outstanding records when it restarts (sticky service or next agent launch).
-We have built the host topology's decision core and ledger, and the on-device service is design only.
+emulator over adb, so killing the agent cannot erase the ledger. In the on-device topology, the controller is an Android foreground service in its own process, with the ledger
+in app-private storage. The low-memory killer can still reap it, but safety does not depend on it surviving: the write-ahead invariant below holds across its death, and it resolves
+outstanding records when it restarts. We have built the host topology's decision core and ledger, and the on-device service is design only.
 
-Agents with structured plans label commit points directly~\cite{tian2025agentprog}. Otherwise a conservative classifier matches the target's text, content
+Agents with structured plans~\cite{tian2025agentprog} could label commit points directly. Otherwise a conservative classifier matches the target's text, content
 description or resource id against a per-locale lexicon (send, pay, save, post, book, confirm, delete), or a VLM flags it~\cite{lee2025verisafe,sun2025ossentinel}. A false
 positive costs one ledger write, and a false negative falls back to the agent's native recovery.
 
 In the write-ahead ledger, each effect has a record \{\textit{id}, workflow, step, app package and version, description, nonce, history digest, attempt, state, $t_0$\}. States are
 \textsf{PLANNED} $\to$ \textsf{ISSUED} $\to$ \{\textsf{COMMITTED}, \textsf{ABSENT}, \textsf{PENDING}, \textsf{ASKED}\}, with \textsf{ABSENT} $\to$ \textsf{ISSUED} on retry
 (attempt$+1$, same nonce) and \textsf{COMMITTED} $\to$ \textsf{COMPENSATING} $\to$ \textsf{COMPENSATED} when a duplicate is detected. The invariant is write-ahead:
-\textsf{ISSUED} is committed in SQLite (WAL mode, \texttt{synchronous=FULL}) before the commit tap is injected. On restart, every \textsf{ISSUED} record is a ghost-effect
-candidate and is resolved before the agent continues.
+\textsf{ISSUED} is committed in SQLite (WAL, \texttt{synchronous=FULL}) before the commit tap, and on restart every \textsf{ISSUED} record is resolved before the agent continues.
 
-\input{figures/fig-arch}
 
 \subsection{Content-carried nonce}
 \label{sec:design-nonce}
@@ -48,32 +45,27 @@ evidence source, and a stale history after a restart can fool all three at once.
 
 \para{Calibration labels.} For each (app version, family, verdict level or region) the store holds one-sided Clopper-Pearson bounds (Lemma~\ref{lem:calib}(ii)) from calibration
 effects, not reads. Lemma~\ref{lem:calib} needs effects drawn from the interrupted population, so labels come from fault-injected runs on test accounts or a staging backend.
-The controller injects the fault classes of \S\ref{sec:impl} at the commit point and records the true outcome from the test backend. It runs every family once per view on recovery
-and logs the lag $T_c$ from the anchor $r_e$ to visibility. Bounds and lag tables are keyed by the observable fault class (Lemma~\ref{lem:calib}(ii)), so the lab's fault mix need not
+The controller injects the fault classes of \S\ref{sec:impl} at the commit point, records the true outcome from the test backend, runs every family once per view and logs the lag $T_c$ from $r_e$. Bounds and lag tables are keyed by the observable fault class (Lemma~\ref{lem:calib}(ii)), so the lab's fault mix need not
 match deployment's. An effect whose class the controller cannot tell uses the per-class maximum. Passive labels (confirmed sends, abandoned forms) are cheaper but miss cached history after a
-kill, optimistic entries and restart lags (\S\ref{sec:eval-pop},~\S\ref{sec:eval-real}). A label costs one fault-injected trial on a test device: reset, compose, fault,
-relaunch, one read of every view, and grading. Our scripted label trials on Etar and DAVx5 (\S\ref{sec:eval-real}) took a median of \CertLabelMedOneS\,s for a committed
+kill, optimistic entries and restart lags (\S\ref{sec:eval-pop},~\S\ref{sec:eval-real}). A label costs one fault-injected trial on a test device. Our scripted label trials on Etar and DAVx5 (\S\ref{sec:eval-real}) took a median of \CertLabelMedOneS\,s for a committed
 effect and \CertLabelMedZeroS\,s for an absent one. At that rate, \CertLabelsFive labels per class and outcome
-for \CertClassesN classes take about \CertDeviceHoursFive device-hours.
+for \CertClassesN classes take about \CertDeviceHoursFive device-hours, and \CertLagBootN{} lag entries per class about \CertDeviceHoursLagFive{} more.
 
-\para{How many labels.} Validity holds at any sample size. Small samples only widen the bounds, so the planner asks more often, not retries more often (\S\ref{sec:eval-pop}).
-Table~\ref{tab:nsize} in the appendix gives the exact sizes that make certification possible. Product certification needs a few hundred effects per stratum at $\alpha{=}1\%$,
-because per-family bounds multiply. Joint certification and each wait need about $\ln(1/\delta)/\alpha_{\mathrm{test}}$ samples even with zero events, which is thousands at $\alpha{=}1\%$.
+\para{How many labels.} Validity holds at any sample size: small samples only widen the bounds, so the planner asks more often, not retries more often (Table~\ref{tab:nsize}).
+Product certification needs a few hundred effects per stratum at $\alpha{=}1\%$, because per-family bounds multiply. Joint certification and each wait need about $\ln(1/\delta)/\alpha_{\mathrm{test}}$ samples even with zero events, which is thousands at $\alpha{=}1\%$.
 
 Four different counts make up the label budget of our measured-parameter simulations (Table~\ref{tab:cert-budget}). The Element profile rests on \CertElemTrialsN emulator trials.
 Each simulation draws \CertLabelsBase or \CertLabelsFive labels per fault class and outcome from that profile. Joint certification splits each set into a pilot that fixes the score
-and a holdout that tests it, \CertPilotFive and \CertHoldoutFive labels at the larger size. The lag tables hold \CertLagBootN entries per class, drawn by bootstrap from the measured lags,
-unless a row ties them to the label count.
+and a holdout that tests it, \CertPilotFive and \CertHoldoutFive labels at the larger size. Unless a row ties them to the label count, the lag tables hold \CertLagBootN entries per class, drawn by bootstrap from the \RsimLagSrcLo{} to \RsimLagSrcHi{} measured lags of each class, so none exceeds the largest measured lag.
 
 The lag table is the costly part (Table~\ref{tab:cert-budget}). With as many lag entries as labels, the simulated joint mode asks on \CertTiedFiveJointAsk\% at \CertLabelsFive labels
 instead of \RsimFiveJointAsk\%, and at \CertLabelsBase no wait certifies (larger budgets: Table~\ref{tab:cert-lagapp}). A lag tail that no label sees breaks the budget. When
 \RsimTail\% of committed effects become visible only after every logged lag, product retries \CertTailFiveProdPv\% at \CertLabelsFive labels (CP \CertTailFiveProdPvHi\%). Joint keeps the
 budget only at \CertLabelsBase labels, by asking on \RsimTailJointAsk\% of workflows, and tying the lag table to the labels does not help.
 
-\input{generated/tab_cert_budget}
 
-A single user produces nowhere near these counts per app version, so the store is pooled. Lag tables are pooled per app and backend across versions, because lag
-is a property of the network path and the app's sync, not its UI. Verdict bounds are pooled per app across versions and devices, with a shift test on a small sample of the new version.
+A single user produces nowhere near these counts per app version, so the store is pooled. Lag tables are pooled per app and backend across versions: lag
+comes mostly from the network path and the app's sync, but the reader's navigation (most of the force-stop lag) depends on the UI and needs a fresh sample. Verdict bounds are pooled per app across versions and devices, with a shift test on a small sample of the new version.
 When the test detects an increase, the planner falls back to that sample's own bounds, which means more asks, not fewer guarantees. The shift test is per family and level.
 Pooling joint regions across versions needs a region-level test, which we have not built. The nonce's false-match bound is analytic. Pooling across devices assumes the devices
 are exchangeable within a stratum (app version, locale, VLM), and per-device drift is not detected yet.
@@ -121,24 +113,16 @@ The thresholds come from enumerating stopping assignments (at most $4^4$ per app
 the smallest logged lag $T_c$ of the effect's fault class whose CP upper bound on the exceedance probability is at most its argument. If the class is unknown, the
 deadline $D$ is the latest over classes, and a missing anchor leads to an ask (\S\ref{sec:model}). A logged effect that never became visible counts as an exceedance at every wait. \textsc{Retry} reuses the nonce.
 
-Two runs show the algorithm at work. In the first, K-9 lost the SMTP reply to a send that the server applied. K-9 then keeps the mail in its Outbox in a permanent failed
-state, so hop~1 counts an entry after $t_0$ and reads the committed side (line~\ref{alg:hop1}). That entry is ambiguous, since K-9 shows the same failed entry when the server
-never applied the send. Line~\ref{alg:g2} therefore trusts the committed side only for apps with idempotent retries and local apps, and for K-9 it leaves $P{=}1$ and $d{=}\bot$. Without a Sent folder no other family
-can see the mail, so nothing reaches $\tau_a$ or $\tau_c$ and the planner asks (line~\ref{alg:ask}). With a Sent folder the certified wait for its lag exceeds $W_{\max}$, and the planner asks at line~\ref{alg:wcap}. In measured-parameter simulation
-both K-9 profiles ask on every interrupted send (\RsimKnineProdAsk\% and \RsimKsentProdAsk\%). The LLM-agent experiment of \S\ref{sec:eval-agent}
-runs this path end to end on the emulator: the ledger issues the send before the tap, and the planner asks when no family certifies.
-
-In the second run, an Element message is interrupted. Element has no hop-1 family, so the planner skips line~\ref{alg:hop1} and computes the certified wait of the effect's
-fault class (line~\ref{alg:cw}). It waits until $r_e+w$ (line~\ref{alg:wait}) and then reads nonce, digest and VLM once per view (line~\ref{alg:read}). If the timeline shows the
-message, their ``committed'' verdicts multiply until $P\le\tau_c$, and the planner marks the effect committed (line~\ref{alg:com}). If it does not, the ``absent'' verdicts
-lead to a retry with the same nonce once $P\le\tau_a$, and otherwise the planner asks. In measured-parameter simulation, product certification asks on \RsimElemProdAsk\% of Element workflows.
+Two runs show the algorithm at work. When K-9 loses the SMTP reply to an applied send, its Outbox keeps a failed entry after $t_0$ (line~\ref{alg:hop1}). K-9 shows the same
+entry when the server never applied the send, so line~\ref{alg:g2} trusts it only for apps with idempotent retries and local apps. No other family sees the mail, or a Sent
+folder's lag exceeds $W_{\max}$ (line~\ref{alg:wcap}), so the planner asks (line~\ref{alg:ask}), as in the LLM-agent experiment (\S\ref{sec:eval-agent}). An interrupted
+Element message has no hop-1 family. The planner waits until $r_e+w$ for its class (lines~\ref{alg:cw} and~\ref{alg:wait}) and reads the nonce views once (line~\ref{alg:read}).
+It then marks the effect committed (line~\ref{alg:com}) or retries it with the same nonce once a product crosses its threshold, and asks otherwise. \S\ref{sec:eval-real} runs this path held out.
 
 A hop-1 verdict starts the product on either side. The ``committed'' side of an app with idempotent retries, or of a local app, is therefore certified like any other declaration
 (its bound enters $B_{\mathrm{com}}$), and a hop-1 ``absent'' verdict relaxes its own wait $w_1$, with half of the lag share (Eq.~\eqref{eq:lagsplit}). For an app with idempotent retries and an outbox entry,
-\textsc{Monitor} marks the record \textsf{PENDING} and lets the agent continue, and the controller re-reads hop~1 in the background until a terminal state. Its reads are fallible, so an
-``acknowledged'' entry whose hop-1 bound alone does not certify is corroborated by the end-to-end families, read in the background once the entry is acknowledged (and visible).
-A failed entry, or one pending longer than a stuck limit (120\,s) or close to the server's dedup horizon $H_{\mathrm{dedup}}$ (Theorem~\ref{thm:twohop}), is handed over to the end-to-end path. The hand-over resets the product once and keeps the hop-1 reads in the audit log. On that path the wait is still measured from $r_e$, with $w_0$ certified from the
-unconditional lag table, which is what the proof of Eq.~\eqref{eq:lagsplit} needs. Two entries mean a duplicate, which is compensated or asked about.
+\textsc{Monitor} marks the record \textsf{PENDING}, lets the agent continue and re-reads hop~1 in the background, and an acknowledged entry that hop~1 alone does not certify is corroborated end to end.
+A failed entry, or one pending past a stuck limit (120\,s) or near $H_{\mathrm{dedup}}$, is handed over once to the end-to-end path, whose wait $w_0$ still runs from $r_e$ on the unconditional lag table, as Eq.~\eqref{eq:lagsplit} needs. Two entries mean a duplicate, which is compensated or asked about.
 
 The wait is the price of the lag share (Theorem~\ref{thm:main}(a,b)). If the certified wait exceeds $W_{\max}$ (120\,s), or recovery was delayed while the device
 dozed and no lag table exists for that state, the planner asks instead of waiting. Local-only apps have no hop~2, so their lag share is returned to the test share.

@@ -10,11 +10,11 @@ and in (c) it meets $(\alpha,\beta)$ with $\alpha{+}\beta{<}1$ and finite $\E_x[
 \begin{theorem}
 \label{thm:main}
 (a)~If $G(w){<}\alpha$, waiting until $r_e{+}w$ and then an SPRT meet $(\alpha,\beta)$. (b)~$\PP(\text{retry}\mid X{=}1)\ge(1{-}\beta)G(w)$.
-(c)~$\E_0[N]\ge d(1{-}\beta\,\|\,\alpha)/D_0$. (d)~$\PP(\dup){+}\PP(\loss)\ge\bar\pi\big(1{-}\sqrt{D_0\E_0[N]/2}\big)$.
+(c)~$\E_0[N]\ge d(1{-}\beta\,\|\,\alpha)/D_0$.\newline (d)~$\PP(\dup)+\PP(\loss)\ge\bar\pi\big(1{-}\sqrt{D_0\E_0[N]/2}\big)$.
 \end{theorem}
 
 None of these inequalities is new, and Appendix~\ref{app:proofs} states them in full. Part~(a) is Wald's bound~\cite{wald1945sprt} plus a union bound on
-the lag, and (b) is the noisy-read, finite-wait form of Li's waiting argument~\cite{li2026exactlyonce}. Part~(c) says a verification-only policy needs about $\log(1/\alpha)/D_0$ reads
+the lag, and (b) is the noisy-read, finite-wait form of Li's waiting argument~\cite{li2026exactlyonce}: the certified wait is the bound on in-flight time that verification needs. Part~(c) says a verification-only policy needs about $\log(1/\alpha)/D_0$ reads
 (Lemma~1 of~\cite{kaufmann2016complexity}, see also~\cite{tartakovsky2014sequential}). Part~(d) says a policy that never asks errs at least at the Bayes floor, by Le Cam's
 two-point method~\cite{tsybakov2009nonparametric}.
 
@@ -24,8 +24,7 @@ If $0<\epsilon_1<1$, or if $G(t)>0$ for every $t$, every verification-only polic
 for unbounded stopping times too. For $\alpha,\beta>0$ with $\alpha+\beta<1$, $(\alpha,\beta)$ is reachable by verification if and only if $D_0>0$.
 \end{corollary}
 
-Exactly-once by verification is a limit, not a point, so \sys exposes $(\alpha,\beta)$ as a knob. By~(b), asking or a lag-free family such as the app's
-Outbox is the only escape from the lag floor. Otherwise the lag share is paid in waiting time (Table~\ref{tab:lag}), and the planner asks when the certified wait exceeds a cap. By~(d), on a look-alike screen ($D_0\to0$) the error approaches the prior floor for any number of reads.
+Exactly-once by verification is a limit, so \sys exposes $(\alpha,\beta)$ as a knob. By~(b), only asking or a lag-free family such as the Outbox escapes the lag floor; otherwise the lag share is paid in waiting (Table~\ref{tab:lag}), capped by asking. By~(d), a look-alike screen ($D_0\to0$) leaves the prior floor for any number of reads.
 
 \subsection{Correlated reads: certify views, not reads}
 \label{sec:theory-corr}
@@ -68,15 +67,15 @@ A hidden nonce field is such a blind state, so certifying ``absent'' below its r
 \label{lem:calib}
 (i)~For a family of i.i.d.\ binary views, running the SPRT with $\tilde\epsilon_0\ge\epsilon_0$, $\tilde\epsilon_1\ge\epsilon_1$ ($\tilde\epsilon_0+\tilde\epsilon_1<1$) preserves the
 $(\alpha,\beta)$ guarantee.
-(ii)~One fault class gives an effect's decision $K$ bounds: verdict levels or regions, $q_h$, and the two waits. Suppose each is a one-sided $(1-\delta)$ Clopper-Pearson
+(ii)~One fault class gives an effect's decision $K$ bounds: verdict levels or regions ($q_h$ is the largest hop-1 ``absent'' level) and the two waits. Suppose each is a one-sided $(1-\delta)$ Clopper-Pearson
 bound~\cite{clopper1934use} from calibration effects that are i.i.d.\ draws from the population of interrupted deployment effects of the effect's observable fault
 class. Suppose also that an effect of unknown class uses the maximum over classes. Then with probability
 at least $1-Kn_{\mathrm{cls}}\delta$ all hold, where $n_{\mathrm{cls}}$ is the number of fault classes. Marginally, $\PP(\text{retry}\mid X{=}1)\le\alpha_{\mathrm{test}}+\alpha_{\mathrm{lag}}+Kn_{\mathrm{cls}}\delta$ and $\PP(\text{declare}\mid X{=}0)\le\beta_{\mathrm{test}}+Kn_{\mathrm{cls}}\delta$.
 \end{lemma}
 Part~(i) is a monotone coupling and (ii) a union bound. Keying by class makes the lab's fault mix irrelevant at the price of labels per class. The unknown-class fallback
-uses all classes' bounds, so the union runs over $Kn_{\mathrm{cls}}$ bounds. \sys sets $\delta=\min(\alpha,\beta)/(10\,K\,n_{\mathrm{cls}})$, with $n_{\mathrm{cls}}{=}4$ when bounds are keyed by class and $n_{\mathrm{cls}}{=}1$ when they are pooled.
+uses all classes' bounds, so the union runs over $Kn_{\mathrm{cls}}$ bounds. \sys sets $\delta=\min(\alpha,\beta)/(10\,K\,n_{\mathrm{cls}})$, with $n_{\mathrm{cls}}$ the number of fault classes when bounds are keyed by class (4 in the simulations, 3 in the held-out runs) and $n_{\mathrm{cls}}{=}1$ when they are pooled.
 Here $K{=}11$ for product certification (five ``absent'' and four ``committed'' verdict levels, two waits; the nonce's false-match bound is analytic), $K{=}8$ for source
-families and $K{=}5$ for joint certification. Then $Kn_{\mathrm{cls}}\delta=\min(\alpha,\beta)/10\le\min(\alpha_{\mathrm{cal}},\beta_{\mathrm{cal}})$, and the guarantee pays the union bound on both sides.
+families (4 history regions, 2 hop-1 levels, 2 waits) and $K{=}5$ for joint certification (2 regions, $q_h$, 2 waits). Then $Kn_{\mathrm{cls}}\delta=\min(\alpha,\beta)/10\le\min(\alpha_{\mathrm{cal}},\beta_{\mathrm{cal}})$, and the guarantee pays the union bound on both sides.
 The population assumption is the one that bites: labels from uninterrupted effects miss cached history after a kill, optimistic ``sending'' entries and blackout lags.
 Lemma~\ref{lem:drift} in the appendix bounds drift that is independent across families. Common-mode drift is what joint certification is for (\S\ref{sec:eval-pop}).
 
@@ -104,8 +103,8 @@ an Element entry before it is sent, and Element has no hop-1 family (\S\ref{sec:
 ($\Leftarrow$) is at-least-once delivery plus idempotent application~\cite{helland2012idempotence,birrell1984rpc,wang2021kafka}. What the agent gains is that hop~1 is
 observable on the device within seconds, so for an app with idempotent retries the late-commit regime of Theorem~\ref{thm:main}(b) becomes a local check. The planner therefore counts hop-1
 entries created after $t_0$ and hands a pending entry over to the end-to-end path before its age approaches $H_{\mathrm{dedup}}$ (\S\ref{sec:design-planner}). ``Retrying is safe'' thus means the app's own retry, on the same device, within $H_{\mathrm{dedup}}$.
-An agent that redoes the step through the GUI creates a new entry with a new id ($n_1{=}2$), which no server merges, and a re-login creates a new device. A failed entry is
+An agent that redoes the step through the GUI creates a new entry with a new id ($n_1{=}2$), which no server merges, and a re-login or a second client of the account is another device. A failed entry is
 ambiguous end to end, because the server may have applied it before the app gave up, so it goes to the end-to-end path. K-9~Mail enters this state by design after every lost
 SMTP reply (\S\ref{sec:measure-teaser}). Force-stop cancels scheduled work and violates H3, so a force-stopped app is treated as
-an app without idempotent retries until its entries reach a terminal state. Appendix~\ref{app:proofs} discusses dedup scopes per protocol. Per-step guarantees compose across a workflow by a union bound
+an app without idempotent retries until its entries reach a terminal state. This only removes the hop-1 shortcut. Element and DAVx5 still resolved force-stops, outside the theorem (Appendix~\ref{app:proofs}, with dedup scopes per protocol). Per-step guarantees compose across a workflow by a union bound
 (Proposition~\ref{prop:saga}).

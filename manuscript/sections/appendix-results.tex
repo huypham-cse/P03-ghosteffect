@@ -1,5 +1,6 @@
 \section{Additional results}
 \label{app:extra}
+Simulation tables use the notation of Appendix~\ref{app:labels}.
 Table~\ref{tab:position} positions recent recovery work, and Tables~\ref{tab:stress} and~\ref{tab:pop} give the stress and calibration-population results.
 Table~\ref{tab:seedvariance} reports variability across the \SimSeedCount{} fixed reporting seeds.
 Table~\ref{tab:lag} prices the lag share, Table~\ref{tab:corr} gives the correlated-read experiment, Table~\ref{tab:apps} lists testbed apps, and Table~\ref{tab:realcone}
@@ -9,6 +10,37 @@ and the strict thresholds over-deliver by up to \SprtSlackMax$\times$ (median \S
 Figure~\ref{fig:floor} checks Theorem~\ref{thm:main}(d) (\ImpViol of 54 policy-prior cells below the floor beyond Monte Carlo error). Table~\ref{tab:nonce} validates Lemma~\ref{lem:nonce},
 Table~\ref{tab:saga} details the saga allocation, and Table~\ref{tab:sens} varies the simulator's free app parameters.
 
+\subsection{Model-based recovery comparison}
+\label{sec:setup}
+The default model contains eight app profiles, persistent reader errors, correlated VLM errors and a fallible Monitor.
+Calibration uses whole effects; each policy sees the same \SimN{} interrupted workflows (Table~\ref{tab:planner}).
+Duplicate/loss rates include wrong user answers, while $P_{\mathrm v}$ counts committed effects the planner itself retried. The confidence $\delta$ follows \S\ref{sec:theory-cal}.
+
+\input{generated/tab_planner}
+
+Redo duplicates \SimRedoDup\% of simulated workflows.
+Always ask makes no planner-initiated retry, but wrong user answers cause \SimAskAllDup\% duplicates and \SimAskAllLoss\% losses.
+The theorem-only policy asks \SimGtwoAsk\% because it cannot clear effects outside apps with idempotent retries.
+Product certification retries \SimGhostPv\% of committed effects (CP upper \SimGhostPvHi\%) and asks \SimGhostAsk\% of workflows.
+Joint certification retries \SimJointPv\% and asks \SimJointAsk\%.
+The default world satisfies A2 by construction, favoring product certification.
+
+Same-evidence rules ask \SimRulesAsk\% but retry \SimRulesPv\% of committed effects (CP upper \SimRulesPvHi\%).
+Tuned rules can outperform certification in asking cost; the full comparison and adverse results remain in Appendix~\ref{app:extra}.
+Vetted rules given joint's passive records and lag tables ask \SimModelVettedAsk\% and retry \SimModelVettedPv\%, without a certificate. Table~\ref{tab:matched} repeats this with fault-injected inputs.
+
+In the stress and calibration-population tests, the product mode exceeds its CP budget in \StressNover{} stress rows, and rules exceed their observed retry budget in \StressRulesOver{} rows (Table~\ref{tab:stress}).
+An unlogged lag tail gives product $P_{\mathrm v}=\StressLag\%$; logging that tail raises its asking rate to \StressLagCalAsk\%.
+Under common-mode stale history that violates A2, product retries \PopCmCProd\% and joint \PopCmCJoint\% of committed effects.
+Fault-injected labels and larger label budgets therefore address different risks (Table~\ref{tab:pop}).
+
+Removing the nonce, hop-1 probe or digest raises product's asking rate to \SimNoNonceAsk\%, \SimNoHopAsk\% or \SimNoDigestAsk\% (ablations: Appendix~\ref{app:extra}).
+
+\tikzsetfigurename{fig-arch-}\input{figures/fig-arch}
+\input{generated/tab_realsim}
+\input{sections/tab-position}
+\input{generated/tab_cert_budget}
+\input{generated/tab_matched}
 \input{generated/tab_stress}
 \input{generated/tab_pop}
 \input{generated/tab_seed_variance}
@@ -18,11 +50,11 @@ The relatively large Element vetted-rule standard deviation is driven by one rep
 \input{sections/tab-apps}
 \input{generated/tab_realcone}
 \input{generated/tab_agent_arms}
-\input{generated/fig_sprt}
+\tikzsetfigurename{fig_sprt-}\input{generated/fig_sprt}
 \input{generated/tab_sprt}
 \input{generated/tab_calib}
 \input{generated/tab_nonce}
-\input{generated/fig_floor}
+\tikzsetfigurename{fig_floor-}\input{generated/fig_floor}
 \input{generated/tab_saga}
 \input{generated/tab_sens}
 
@@ -39,9 +71,9 @@ parameter~\cite{pan2024autonomous}). The user answers wrongly on 5\% of asks (10
 with $K{=}11$ (product), 8 (source families) or 5 (joint). Here $n_{\mathrm{cls}}$ counts calibrated fault classes (one when pooled). All policies see the same \SimN interrupted workflows (5 seeds $\times$ 2{,}400); we report Clopper-Pearson intervals and exact
 McNemar tests against the product planner with Holm correction.
 
-\para{Baselines.} We compare against Redo~\cite{tian2025agentprog}, checkpoint-resume~\cite{langgraph_durable,khan2026resume}, Atomix-style adapters with one
-read-back~\cite{mohammadi2026atomix}, verify-before-retry~\cite{mansoor2026verified}, ledger + key~\cite{li2026exactlyonce}, four baselines that may ask, and the re-read
-SPRT of our earlier design. The \emph{same-evidence rules} have \sys's ledger, hop~1 with the same fallible Monitor, the same families read once per view, a fixed 10\,s wait and
+\para{Baselines.} We compare against Redo (the agent repeats the step), checkpoint-resume~\cite{langgraph_durable,khan2026resume}, Atomix-style adapters with one
+read-back~\cite{mohammadi2026atomix}, verify-before-retry~\cite{mansoor2026verified}, ledger + key~\cite{li2026exactlyonce}, four baselines that may ask, and a re-read
+SPRT that rotates views with AR(1) shrinkage. The \emph{same-evidence rules} have \sys's ledger, hop~1 with the same fallible Monitor, the same families read once per view, a fixed 10\,s wait and
 asking. They treat an acknowledged entry or a nonce match as done, retry only if every available family reads absent, and otherwise ask. A lenient variant acts on the first
 unanimous family unless another contradicts it, and a rule family sweeps the wait (5, 10, 30, 60\,s) and the quorum (all families, all but the VLM, any two). The
 Theorem~\ref{thm:twohop}-only baseline classifies offline whether each app has idempotent retries and never retries: for such an app an acknowledged hop-1 entry means done, and everything else is asked. Element has no hop-1 family, so its entry is the timeline row: the first verified read that shows the row means done.
@@ -83,7 +115,7 @@ rules exceed the budget in \StressRulesOver{} of the stress rows (product exceed
 The K-9 fixed-wait rule results are simulations under an assumed queued-mail lag law; vetted rules with matched calibration instead ask on every interrupted send (Table~\ref{tab:matched}). Nominal i.i.d.\ bounds ask least but exceed the budget at every $\alpha\ge10^{-2}$.
 
 \input{generated/tab_planner_extended}
-\input{generated/fig_pareto}
+\tikzsetfigurename{fig_pareto-}\input{generated/fig_pareto}
 
 Asks differ by app class: local apps ask \ClassLocalAsk\%, apps with idempotent retries \ClassGtwoAsk\% and other apps with a hop-1 or digest family
 \ClassNonGtwoAsk\%. The VLM-only app asks \ClassVlmAsk\%; this follows from its calibrated bounds at the configured error rates, not from a theorem. Of interrupted effects, \WhyStruct\% ask because no verdict could certify, \WhyWait\% because the wait exceeds $W_{\max}$, \WhyContra\% on contradictions, and

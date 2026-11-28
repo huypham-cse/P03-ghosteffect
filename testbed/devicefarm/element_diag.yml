@@ -1,0 +1,22 @@
+# Device Farm Element run (b-log 24/11), mode diag: Synapse 1.164.2 pip-installed on the host, then campaign_element.sh diag.
+version: 0.1
+android_test_host: amazon_linux_2023
+phases:
+  install:
+    commands:
+      - devicefarm-cli use java 17
+      - devicefarm-cli use python 3.12
+      - python3 --version
+      - python3 -m pip install --target $HOME/synlib matrix-synapse==1.164.2 > $DEVICEFARM_LOG_DIR/pip_synapse.log 2>&1 || true
+      - PYTHONPATH=$HOME/synlib python3 -c "import synapse; print('synapse', synapse.__version__)"
+  pre_test:
+    commands:
+      - adb -s $DEVICEFARM_DEVICE_UDID wait-for-device
+  test:
+    commands:
+      - bash $DEVICEFARM_TEST_PACKAGE_PATH/testbed/devicefarm/campaign_element.sh diag || true
+  post_test:
+    commands:
+      - adb -s $DEVICEFARM_DEVICE_UDID reverse --remove-all || true
+artifacts:
+  - $DEVICEFARM_LOG_DIR

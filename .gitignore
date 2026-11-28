@@ -8,6 +8,9 @@
 *.fdb_latexmk
 *.synctex.gz
 *.toc
+# TikZ externalize bookkeeping (the prebuilt figures/ext/*.pdf and *.dpth are kept for Overleaf)
+*.figlist
+*.auxlock
 
 # Python / OS
 __pycache__/

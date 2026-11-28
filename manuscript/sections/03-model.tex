@@ -60,5 +60,5 @@ needs one of these three events, so a union bound gives
 \end{equation}
 A deployer who cares about end-to-end errors should read~\eqref{eq:composed}, not only the rate $P_{\mathrm v}$ at which the planner retries a committed effect by itself.
 A mode that asks more meets~\eqref{eq:guarantee} more easily but pays $q_1\epsilon_1$. Our simulator assumes that no app retransmits without dedup, so $r_1{=}r_0{=}0$.
-In measured-parameter simulation on Element, the duplicate bound is then \CertBoundElemProdDup\% for product and \CertBoundElemJointDup\% for joint (users erred on \CertBoundElemProdEpsOne\% and \CertBoundElemJointEpsOne\% of those asks: 5\%, or 10\% with a look-alike), and the loss bound is
-\CertBoundElemProdLoss\% and \CertBoundElemJointLoss\%. Joint asks about \CertBoundElemJointQone\% of committed effects there (Table~\ref{tab:cert-bound} also gives the default world).
+In measured-parameter simulation on Element, the duplicate bound is then \CertBoundElemProdDup\% for product and \CertBoundElemJointDup\% for joint, and the loss bound
+\CertBoundElemProdLoss\% and \CertBoundElemJointLoss\% (Table~\ref{tab:cert-bound}).

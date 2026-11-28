@@ -1,0 +1,4 @@
+android_release,build_display,bytes_per_effect,code,device,issue_max_ms,issue_p50_ms,issue_p95_ms,journal_mode,n,open_path,rep,sdk_int,sqlite_version,sync_requested,synchronous,synchronous_writer
+15,AP3A.241005.015,209,0,Google Pixel 9,4.440,0.294,0.722,wal,2000,OpenParams,1,35,3.44.3,FULL,2,2
+15,AP3A.241005.015,209,0,Google Pixel 9,2.409,0.441,0.850,wal,2000,OpenParams,2,35,3.44.3,FULL,2,2
+15,AP3A.241005.015,209,0,Google Pixel 9,3.060,0.075,0.296,wal,2000,OpenParams,1,35,3.44.3,NORMAL,1,1

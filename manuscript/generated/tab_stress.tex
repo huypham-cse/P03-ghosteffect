@@ -1,11 +1,10 @@
 \begin{table}[t]
 \centering
-\caption{Misspecification and stress (model-based simulation, \SimN{} paired workflows per row; the generative model departs from
-the planner's assumptions as listed). $P_{\mathrm{v}}$: \% of committed effects retried by the planner (budget 1\%; CP 95\% upper bound in
-parentheses); $L_{\mathrm{v}}$: \% of absent effects the planner declared done; ask: \% of workflows. Rules: the same-evidence rule baseline.}
+\caption{Misspecification and stress (model-based simulation, \SimN{} paired workflows per row; the generative model departs from the planner's assumptions as listed). CP upper bound in parentheses; $L_{\mathrm{v}}$: \% of absent effects declared done; rules: same-evidence baseline.}
 \label{tab:stress}
 \footnotesize
 \setlength{\tabcolsep}{2pt}
+\resizebox{\columnwidth}{!}{%
 \begin{tabular}{@{}l cc ccc@{}}
 \toprule
  & Re-read & Rules & \multicolumn{3}{c}{\alg (product)} \\
@@ -27,5 +26,5 @@ Monitor misreads 5\% of terminal states & 3.69 & 0.37 & 0.05 (0.12) & 0.00 & 25.
 user wrong on 20\% of asks & 3.69 & 0.52 & 0.05 (0.12) & 0.00 & 24.9 \\
 combined & 11.45 & 8.78 & 0.42 (0.58) & 0.00 & 47.9 \\
 \bottomrule
-\end{tabular}
+\end{tabular}}
 \end{table}

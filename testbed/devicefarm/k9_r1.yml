@@ -1,0 +1,21 @@
+# Device Farm K-9 run R1 (b-log 24/11): Table 1a, five trials of the p01 rig (GreenMail on the host, Java 17).
+version: 0.1
+android_test_host: amazon_linux_2023
+phases:
+  install:
+    commands:
+      - devicefarm-cli use java 17
+      - devicefarm-cli use python 3.12
+      - java -version 2>&1 | head -1
+      - python3 --version
+  pre_test:
+    commands:
+      - adb -s $DEVICEFARM_DEVICE_UDID wait-for-device
+  test:
+    commands:
+      - bash $DEVICEFARM_TEST_PACKAGE_PATH/testbed/devicefarm/campaign_k9.sh || true
+  post_test:
+    commands:
+      - adb -s $DEVICEFARM_DEVICE_UDID reverse --remove-all || true
+artifacts:
+  - $DEVICEFARM_LOG_DIR

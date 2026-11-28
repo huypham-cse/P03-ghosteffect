@@ -1,11 +1,10 @@
 \begin{table}[!htbp]
 \centering
-\caption{Testbed apps. The hop-2 dedup basis (CalDAV: the event URL with If-None-Match) comes from protocol specifications~\cite{matrix_spec,rfc4791,rfc9110,rfc5321}, and the candidate nonce field from the app's UI. Status:
-\emph{measured} rows have retry behavior, failed states and hop-1 visibility measured on our emulator testbed, not assumed (Table~\ref{tab:real}); \emph{planned} rows
-are not yet measured. K-9's nonce is the subject, which the recipient sees, so it is used only on test accounts that opted in.}
+\caption{Testbed apps. Dedup basis from protocol specifications~\cite{matrix_spec,rfc4791,rfc9110,rfc5321}, nonce field from the app's UI. \emph{Measured}: on our emulator testbed (Table~\ref{tab:real}); \emph{planned}: not yet measured. K-9's nonce is the visible subject, used only on opted-in test accounts.}
 \label{tab:apps}
 \footnotesize
 \setlength{\tabcolsep}{2pt}
+\resizebox{\columnwidth}{!}{%
 \begin{tabular}{@{}lll l l@{}}
 \toprule
 App & Backend & Hop-2 dedup basis & Nonce field & Status \\
@@ -20,5 +19,5 @@ MockBank-A / B & ours & request id / none & private note & planned \\
 Pro Expense & local & n/a & note & planned \\
 Markor & local & n/a & file & planned \\
 \bottomrule
-\end{tabular}
+\end{tabular}}
 \end{table}

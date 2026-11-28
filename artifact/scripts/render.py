@@ -178,10 +178,7 @@ for r in sp:
                              f2(r['exact_EN']), f2(r['mc_EN']), f2(r['lb_EN']), f2(r['ub_EN'])]) + r' \\')
 W('tab_sprt.tex', r'''\begin{table}[!htbp]
 \centering
-\caption{Implementation sanity check of Theorem~\ref{thm:main}(a,c) for an i.i.d.\ binary probe ($\epsilon_0{=}\epsilon_1{=}\epsilon$, $\beta{=}\alpha$), all 24 cells.
-Exact DTMC values; ``MC hi'': one-sided 95\% Clopper-Pearson upper bound on $P(\mathrm{dup}\mid X{=}1)$ from 40{,}000 committed-world episodes;
-$\bar N$: mean reads at $\pi{=}\tfrac12$, exact and MC; LB/UB: bounds~\eqref{eq:lb}/\eqref{eq:ub} averaged over the two outcomes.
-At $\alpha{=}10^{-4}$, 40{,}000 episodes cannot confirm the budget by MC (zero events give an upper bound of $9.2{\times}10^{-5}$); the exact column does.}
+\caption{Theorem~\ref{thm:main}(a,c) for an i.i.d.\ binary probe ($\epsilon_0{=}\epsilon_1{=}\epsilon$, $\beta{=}\alpha$), all 24 cells: exact DTMC values, ``MC hi'' (one-sided 95\% CP from 40{,}000 committed episodes), mean reads $\bar N$ (exact and MC) and bounds~\eqref{eq:lb}/\eqref{eq:ub}. At $\alpha{=}10^{-4}$ only the exact column can confirm the budget.}
 \label{tab:sprt}
 \footnotesize
 \setlength{\tabcolsep}{3pt}
@@ -240,9 +237,7 @@ for n in ['25', '50', '100', '200', '400']:
                                         for m in ['plugin', 'cp-upper', 'cp-strict']) + r' \\')
 W('tab_calib.tex', r'''\begin{table}[!htbp]
 \centering
-\caption{Calibration of an i.i.d.\ binary probe (Lemma~\ref{lem:calib}(i)): share of probe types (\%) whose exact $P(\mathrm{dup}\mid X{=}1)$ or
-$P(\mathrm{loss}\mid X{=}0)$ exceeds $\alpha{=}\beta{=}0.01$, and mean reads, over 200 probe types $\times$ 5 seeds, $\epsilon_0{\in}[0.06,0.26]$,
-$\epsilon_1{\in}[0.04,0.20]$. CP: one-sided Clopper-Pearson upper bounds at confidence $1{-}\delta$.}
+\caption{Calibration of an i.i.d.\ binary probe (Lemma~\ref{lem:calib}(i)): share of probe types (\%) whose exact $P(\mathrm{dup}\mid X{=}1)$ or $P(\mathrm{loss}\mid X{=}0)$ exceeds 0.01, and mean reads, over 200 probe types $\times$ 5 seeds. CP: one-sided upper bounds at $1{-}\delta$.}
 \label{tab:calib}
 \footnotesize
 \setlength{\tabcolsep}{3.5pt}
@@ -281,11 +276,7 @@ for rho in [0.0, 0.2, 0.6, 1.0]:
                  f"{100 * float(b['bound_all_wrong']):.1f}" + r' \\')
 W('tab_corr.tex', r'''\begin{table}[!htbp]
 \centering
-\caption{Correlated reads (model-based simulation; VLM family with 3 views, $\epsilon{=}0.10$, $\alpha{=}1\%$, 30{,}000 committed effects per cell):
-$P(\mathrm{dup}\mid X{=}1)$ in \%. \emph{Within-view}: re-reads of a view share one error with probability $\rho$.
-\emph{Cross-view}: views share a latent error rate with intraclass correlation $\rho$. naive: SPRT re-reading one view; re-read: our earlier design
-(re-reads of rotated views, AR(1) shrinkage); view: one read per view, SPRT over views (assumes independent views); certified: family verdict with calibrated bound (Prop.~\ref{prop:family}),
-asks (\%) in parentheses; bound: Lemma~\ref{lem:floor}, worst case of all 3 views wrong.}
+\caption{Correlated reads (model-based simulation; VLM family of 3 views, $\epsilon{=}0.10$, $\alpha{=}1\%$, 30{,}000 committed effects per cell): $P(\mathrm{dup}\mid X{=}1)$ in \%. Within-view: re-reads share one error with probability $\rho$. Cross-view: views share a latent rate with correlation $\rho$. naive: SPRT on one view; re-read: SPRT over rotated re-reads; view: one read per view; certified: family bound (Prop.~\ref{prop:family}), asks in parentheses; bound: Lemma~\ref{lem:floor}.}
 \label{tab:corr}
 \footnotesize
 \setlength{\tabcolsep}{2pt}
@@ -355,9 +346,7 @@ for t in tails:
                                                 for a in [1e-2, 1e-3]) + r' \\')
 W('tab_lag.tex', r'''\begin{table}[!htbp]
 \centering
-\caption{Wait needed so that the lag tail uses at most $\alpha_{\mathrm{lag}}$ of the duplicate budget (Theorem~\ref{thm:main}(a,b)):
-exact quantile $G^{-1}(\alpha_{\mathrm{lag}})$ and the wait certified from 20{,}000 logged commit-to-visibility times
-(one-sided CP, $\delta{=}10^{-4}$). Median and shape of $T$ given per row; ``--'': not certifiable with 20{,}000 samples ($\alpha_{\mathrm{lag}}{=}10^{-4}$ never is).}
+\caption{Wait for the lag tail to use at most $\alpha_{\mathrm{lag}}$ (Theorem~\ref{thm:main}(a,b)): exact quantile $G^{-1}(\alpha_{\mathrm{lag}})$ and the wait certified from 20{,}000 logged lags (one-sided CP, $\delta{=}10^{-4}$), with the median and shape of $T$ per row. A dash: not certifiable with 20{,}000 samples.}
 \label{tab:lag}
 \footnotesize
 \setlength{\tabcolsep}{3pt}
@@ -384,9 +373,7 @@ lines = [f"{r['k']} & {f1(r['obs_uni'])} & {f1(r['obs_opt'])} & {f2(r['saving_pc
          for r in sg]
 W('tab_saga.tex', r'''\begin{table}[!htbp]
 \centering
-\caption{Saga budget allocation (Proposition~\ref{prop:saga}), $\alpha{=}\beta{=}0.01$, 200 random i.i.d.-probe workflows per $k$ (exact DP).
-Mean reads under uniform and KKT splits, mean saving (\%) measured and predicted, share of workflows (\%) where KKT is \emph{worse} than uniform in
-exact cost, worst end-to-end $P(\mathrm{dup})$ (\%) with KKT, and with every step given the full $\alpha$.}
+\caption{Saga budget allocation (Proposition~\ref{prop:saga}; $\alpha{=}\beta{=}0.01$, 200 random workflows per $k$, exact DP): mean reads under uniform and KKT splits, saving measured and predicted, share of workflows where KKT is worse than uniform, and worst end-to-end $P(\mathrm{dup})$ with KKT and with the full $\alpha$ per step.}
 \label{tab:saga}
 \footnotesize
 \setlength{\tabcolsep}{2.6pt}
@@ -422,10 +409,7 @@ for r in nc:
                      f"{float(r['eps1_analytic']):.3f} ({float(r['eps1_mc']):.3f}) & {f2(r['D0'])} & {f1(r['EN'])}" + r' \\')
 W('tab_nonce.tex', r'''\begin{table}[!htbp]
 \centering
-\caption{Content-carried nonce (Lemma~\ref{lem:nonce}; simulated OCR with substitutions, insertions and deletions; edit-distance matching).
-OCR symbol error $e_c$; false-match bound $\epsilon_0$; miss rate $\epsilon_1$ analytic bound (MC, 40{,}000 screens), of which $\eta{=}1\%$
-is a \emph{persistent} hidden field; $\mathrm{KL}(p_0\|p_1)$; mean reads at $\alpha{=}\beta{=}10^{-3}$ \emph{if} re-reads were independent.
-With persistent misses no number of nonce reads certifies ``absent'' below $\eta$ (Lemma~\ref{lem:floor}).}
+\caption{Content-carried nonce (Lemma~\ref{lem:nonce}; simulated OCR, edit-distance matching): OCR symbol error $e_c$, false-match bound $\epsilon_0$, miss rate $\epsilon_1$ (analytic and MC over 40{,}000 screens, with an $\eta{=}1\%$ persistent hidden field), $\mathrm{KL}(p_0\|p_1)$, and mean reads at $\alpha{=}\beta{=}10^{-3}$ if re-reads were independent. Persistent misses keep ``absent'' above $\eta$ (Lemma~\ref{lem:floor}).}
 \label{tab:nonce}
 \footnotesize
 \setlength{\tabcolsep}{2.4pt}
@@ -495,9 +479,7 @@ if not _ev[-1] > 3 * _ev[-2]:
     raise ValueError('seed variance prose: Element vetted rules no longer have a single outlying seed')
 W('tab_seed_variance.tex', r'''\begin{table*}[t]
 \centering
-\caption{Across-seed asking-rate variability for the fixed Table~\ref{tab:planner} (model-based simulation) and Table~\ref{tab:realsim} (measured-parameter simulation) reporting cases.
-Each row reports the same \SimSeedCount{} original seeds. Element rows use 2{,}000 labels per class and outcome and 20{,}000 lag entries per class, so its vetted-rule row is not the matched-input case of Table~\ref{tab:matched}.
-Values are percentages: arithmetic mean $\pm$ sample standard deviation and range; standard deviation is not a confidence interval.}
+\caption{Across-seed variability of asking rates for Table~\ref{tab:planner} (model-based) and Table~\ref{tab:realsim} (measured-parameter) over \SimSeedCount{} seeds: mean $\pm$ sample standard deviation and range, in \%. Element rows use 2{,}000 labels per class and outcome and 20{,}000 lag entries, so the vetted-rule row is not the matched case of Table~\ref{tab:matched}.}
 \label{tab:seedvariance}
 \small
 \begin{tabular}{@{}llrr@{}}
@@ -516,7 +498,7 @@ names = {'redo': 'Redo (AgentProg-style)', 'ckpt': 'Checkpoint-resume', 'atomix'
          'atomix-durable': 'Atomix-style, durable log', 'verify': 'Verify-before-retry', 'key': 'Ledger + key',
          'key-ask': 'Ledger + key + ask (look-alike)', 'always-ask': 'Ledger + always ask', 'nonce-ask': 'Ledger + nonce + ask',
          'maj3-ask': 'Ledger + 3 VLM views + ask', 'rules': 'Same evidence, rules (all agree)',
-         'rules-lenient': 'Same evidence, rules (lenient)', 'rules-vetted': 'Vetted rules (matched inputs)', 'ghost-v1': 'Re-read SPRT (earlier design)',
+         'rules-lenient': 'Same evidence, rules (lenient)', 'rules-vetted': 'Vetted rules (matched inputs)', 'ghost-v1': 'Re-read SPRT (rotated views)',
          'ghost': r'\textbf{GhostEffect} (product, A2)', 'ghost-src': r'\textbf{GhostEffect} (source families)',
          'ghost-joint': r'\textbf{GhostEffect} (joint, no A2)',
          'ghost-nononce': '\\quad $-$ nonce', 'ghost-nohop1': '\\quad $-$ hop-1 probe',
@@ -536,11 +518,7 @@ hw = max(max(float(P[p]['dup_hi']) - float(P[p]['dup']), float(P[p]['dup']) - fl
 M('SimHalfWidth', f1(hw))
 _planner_full = (r"""\begin{table}[t]
 \centering
-\caption{Model-based simulation: \SimN{} paired interrupted workflows, $\alpha{=}\beta{=}1\%$ per workflow, default
-world (persistent nonce misses, within-view VLM correlation 0.6, cross-view 0.1, fallible Monitor, user wrong on 5\% of asks, 10\% with a look-alike), 2{,}000
-calibration effects per app and outcome. dup/loss: \% of workflows with a duplicate/loss from any cause, including wrong user answers; ask: \% of workflows in which the planner asked;
-$P_{\mathrm{v}}$: \% of committed effects retried by the planner's own decision (the guaranteed quantity, budget 1\%); s: blocking recovery
-seconds per workflow (60\,s per ask). All 95\% Clopper-Pearson half-widths $\le$""" + MACROS['SimHalfWidth'] + r""" points.}
+\caption{Model-based simulation, default world (persistent nonce misses, correlated VLM reads, fallible Monitor, user wrong on 5\% of asks): \SimN{} paired workflows, $\alpha{=}\beta{=}1\%$, 2{,}000 calibration effects per app and outcome; s: blocking seconds per workflow (60\,s per ask). 95\% CP half-widths $\le$""" + MACROS['SimHalfWidth'] + r""" points.}
 \label{tab:planner}
 \footnotesize
 \setlength{\tabcolsep}{2.2pt}
@@ -563,9 +541,7 @@ if _planner_full.count(_full_rows) != 1 or _planner_full.count('tab:planner}') !
 _planner_main = _planner_full.replace(_full_rows, _main_rows)
 _caption_start = _planner_main.index(r'\caption{')
 _caption_end = _planner_main.index(r'\label{', _caption_start)
-_planner_main = _planner_main[:_caption_start] + r"""\caption{Model-based simulation on the same \SimN{} interrupted workflows per policy.
-dup/loss include user errors; ask is the asking rate; $P_{\mathrm v}$ counts committed effects retried by the planner; s is blocking time.
-Rates are percentages. Full assumptions, baselines and ablations are in Appendix~\ref{app:extra}.}
+_planner_main = _planner_main[:_caption_start] + r"""\caption{Model-based simulation on the same \SimN{} interrupted workflows per policy; dup/loss include wrong user answers, s: blocking seconds per workflow. Assumptions, baselines and ablations: Appendix~\ref{app:extra}.}
 """ + _planner_main[_caption_end:]
 W('tab_planner.tex', _planner_main)
 
@@ -638,12 +614,11 @@ for s_, lab in scn:
     lines.append(f"{lab} & {f2(a['cdup'])} & {f2(rr['cdup'])} & {f2(b['cdup'])} ({f2(b['cdup_hi'])}) & {f2(b['closs'])} & {f1(b['ask'])}" + r' \\')
 W('tab_stress.tex', r"""\begin{table}[t]
 \centering
-\caption{Misspecification and stress (model-based simulation, \SimN{} paired workflows per row; the generative model departs from
-the planner's assumptions as listed). $P_{\mathrm{v}}$: \% of committed effects retried by the planner (budget 1\%; CP 95\% upper bound in
-parentheses); $L_{\mathrm{v}}$: \% of absent effects the planner declared done; ask: \% of workflows. Rules: the same-evidence rule baseline.}
+\caption{Misspecification and stress (model-based simulation, \SimN{} paired workflows per row; the generative model departs from the planner's assumptions as listed). CP upper bound in parentheses; $L_{\mathrm{v}}$: \% of absent effects declared done; rules: same-evidence baseline.}
 \label{tab:stress}
 \footnotesize
 \setlength{\tabcolsep}{2pt}
+\resizebox{\columnwidth}{!}{%
 \begin{tabular}{@{}l cc ccc@{}}
 \toprule
  & Re-read & Rules & \multicolumn{3}{c}{\alg (product)} \\
@@ -652,7 +627,7 @@ Generative model & $P_{\mathrm{v}}$ & $P_{\mathrm{v}}$ & $P_{\mathrm{v}}$ (hi) &
 \midrule
 """ + '\n'.join(lines) + r"""
 \bottomrule
-\end{tabular}
+\end{tabular}}
 \end{table}
 """)
 sv = lambda s_, p, k, fmt=f2: fmt(ST[(s_, p)][k])
@@ -702,19 +677,18 @@ for n_ in ncs:
                  ' & '.join(cell(NC[('ncal', str(n_), '', '', p)]) for p in ('ghost', 'ghost-src', 'ghost-joint')) + r' & -- \\')
 W('tab_pop.tex', r"""\begin{table}[t]
 \centering
-\caption{Calibration population, common mode and calibration size (model-based simulation, \SimN{} paired workflows per row). Cells: $P_{\mathrm{v}}$ (\%, budget 1\%) /
-asks (\%). Interrupted world: 2\% stale history after a restart, 3\% optimistic ``sending'' entries for tapped-but-uncommitted effects, 20\% heavy-tailed lags.
-Passive labels come from uninterrupted effects; fault-injected labels from the interrupted population. Rules: $P_{\mathrm{v}}$ of the same-evidence rule baseline.}
+\caption{Calibration population, common mode and size (model-based simulation, \SimN{} paired workflows per row). Cells: $P_{\mathrm{v}}$ / ask. Interrupted world: 2\% stale history after a restart, 3\% optimistic ``sending'' entries, 20\% heavy-tailed lags. Passive labels come from uninterrupted effects. Rules: $P_{\mathrm{v}}$ of the same-evidence baseline.}
 \label{tab:pop}
 \footnotesize
 \setlength{\tabcolsep}{2pt}
+\resizebox{\columnwidth}{!}{%
 \begin{tabular}{@{}l ccc c@{}}
 \toprule
  & product & source & joint & rules \\
 \midrule
 """ + '\n'.join(lines) + r"""
 \bottomrule
-\end{tabular}
+\end{tabular}}
 \end{table}
 """)
 M('PopRulesOver', str(sum(1 for s_, _ in pop[1:] if float(ST[(s_, 'rules')]['cdup']) > 1.0)))
@@ -755,11 +729,7 @@ for r in ss:
     lines.append(f"{alpha_tex(r['alpha'])} & {float(r['p']) * 100:.1f}\\% & {nn(r['prod_n'])} & {nn(r['prod_n0'])} & {nn(r['joint_n'])} & {nn(r['joint_n_q'])} & {nn(r['joint_n_k'])} & {nn(r['lag_n'])}" + r' \\')
 W('tab_nsize.tex', r"""\begin{table}[t]
 \centering
-\caption{Calibration sizes that make certification possible (exact one-sided Clopper-Pearson, $\delta{=}\min(\alpha,\beta)/(10K)$, $\alpha{=}\beta$), per stratum. Keying by the four
-observable fault classes multiplies every entry by \NsizeKeyLo{} to \NsizeKeyHi{} (each class needs its own labels and is certified at $\delta/4$, that is $n_{\mathrm{cls}}{=}4$ in \S\ref{sec:theory-cal}). Product (A2): effects so that two families, each with true wrong-verdict rate $p$, multiply to
-$\alpha_{\mathrm{test}}{=}\alpha/2$; \emph{med.}: observed at the expected count $\lceil pn\rceil$ (about half of such sets fail), \emph{0}: zero wrong verdicts (minimum for any $p$).
-Joint: whole effects for a jointly calibrated region to certify $\alpha_{\mathrm{test}}$ with zero events (\emph{0}), at a true region rate $\alpha_{\mathrm{test}}/4$ (\emph{med.}), and with zero events for one
-step of a 3-effect workflow. Lag: logged times for one wait at $0.2\alpha$ with zero exceedances.}
+\caption{Calibration sizes that make certification possible per stratum ($\delta{=}\min(\alpha,\beta)/(10K)$, $\alpha{=}\beta$); keying by four fault classes multiplies each entry by \NsizeKeyLo{} to \NsizeKeyHi. Product: effects for two families with wrong-verdict rate $p$ to reach $\alpha/2$ (\emph{med.}: at the expected count, \emph{0}: zero wrong). Joint: effects to certify $\alpha_{\mathrm{test}}$ (\emph{0}: zero events, \emph{med.}: true rate $\alpha_{\mathrm{test}}/4$). Lag: logged times for one wait at $0.2\alpha$.}
 \label{tab:nsize}
 \footnotesize
 \setlength{\tabcolsep}{2.2pt}
@@ -879,8 +849,7 @@ W('fig_pareto.tex', r"""\begin{figure}[t]
 \addplot[color=blue!70!black,mark=*,thick,mark size=1.6pt] coordinates {""" + gpts + r"""};
 \end{axis}
 \end{tikzpicture}
-\caption{Top: asking rate against the guaranteed quantity $P_{\mathrm{v}}$ as $\alpha{=}\beta$ sweeps over """ + ', '.join(alphas) + r""" (product points from bottom right to top left), against
-the same-evidence rule family (wait 5/10/30/60\,s $\times$ quorum all / all but VLM / any two; gray $\times$), which has no guarantee. Neither does a planner run at nominal $\alpha{=}0.1$. Bottom: total errors (including wrong user answers) against the asking rate; gray: baselines at their single operating point, blue: product sweep. Model-based simulation, default world.}
+\caption{Top: asking rate against $P_{\mathrm{v}}$ as $\alpha{=}\beta$ sweeps over """ + ', '.join(alphas) + r""" (product, bottom right to top left), against the same-evidence rules (gray $\times$, no guarantee). Bottom: total errors, wrong user answers included, against the asking rate. Model-based simulation, default world.}
 \label{fig:pareto}
 \end{figure}
 """)
@@ -927,13 +896,14 @@ asks (\%); last column: GhostEffect's $P_{\mathrm{v}}$ (\%, budget 1\%) with its
 \label{tab:sens}
 \footnotesize
 \setlength{\tabcolsep}{2.2pt}
+\resizebox{\columnwidth}{!}{%
 \begin{tabular}{@{}l cccc c@{}}
 \toprule
 Variant & key & nonce+ask & always ask & GhostEffect & $P_{\mathrm{v}}$ (hi) \\
 \midrule
 """ + '\n'.join(lines) + r"""
 \bottomrule
-\end{tabular}
+\end{tabular}}
 \end{table}
 """)
 M('SensPvMax', f2(max(float(SE[(v, 'ghost')]['cdup']) for v in vars_)))

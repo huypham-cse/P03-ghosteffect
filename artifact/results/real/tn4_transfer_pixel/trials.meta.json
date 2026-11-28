@@ -1,0 +1,11 @@
+{
+  "command": "python testbed/devicefarm/collect_df_pixel.py --k9 <r1> --tn4 <r3> <r4>",
+  "git_commit": "e534afc6fd603b15e726de4b4c3830fbd8bda4d3",
+  "python": "3.14.0",
+  "date_utc": "2026-11-24T18:11:32Z",
+  "host": "collector: NOOB",
+  "runs": "AWS Device Farm, Google Pixel 9 Pro XL, Android 17 (CP2A.260605.012)",
+  "store": "testbed/tn4/tn4_store.json (emulator calibration, alpha=beta=10%)",
+  "schedules": "testbed/devicefarm/tn4x_A.json, tn4x_B.json (seed 20261124)",
+  "runner": "testbed/devicefarm/diag_collect.py (element_planner.collect, unchanged module, screen reads recorded)"
+}

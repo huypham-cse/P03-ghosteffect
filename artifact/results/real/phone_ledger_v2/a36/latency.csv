@@ -1,0 +1,4 @@
+android_release,build_display,bytes_per_effect,code,device,issue_max_ms,issue_p50_ms,issue_p95_ms,journal_mode,n,open_path,rep,sdk_int,sqlite_version,sync_requested,synchronous,synchronous_writer
+15,AP3A.240905.015.A2.A366U1UEU1AYBB,225,0,samsung SM-A366U1,5.378,0.256,0.413,wal,2000,OpenParams,1,35,3.44.3,FULL,2,2
+15,AP3A.240905.015.A2.A366U1UEU1AYBB,225,0,samsung SM-A366U1,1.173,0.250,0.361,wal,2000,OpenParams,2,35,3.44.3,FULL,2,2
+15,AP3A.240905.015.A2.A366U1UEU1AYBB,225,0,samsung SM-A366U1,9.999,0.120,0.248,wal,2000,OpenParams,1,35,3.44.3,NORMAL,1,1

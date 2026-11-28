@@ -1,0 +1,6 @@
+ro.product.manufacturer=Google
+ro.product.model=Pixel 9 Pro XL
+ro.build.version.release=17
+ro.build.version.sdk=37
+ro.build.version.oneui=
+ro.build.display.id=CP2A.260605.012

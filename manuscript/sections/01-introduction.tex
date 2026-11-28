@@ -1,7 +1,7 @@
 \section{Introduction}
 \label{sec:intro}
 
-\input{figures/fig1}
+\tikzsetfigurename{fig1-}\input{figures/fig1}
 
 An agent taps Send in K-9~Mail and the server's reply is lost. The server has accepted the mail, but K-9 keeps it in its Outbox with a permanent error
 (Figure~\ref{fig:teaser}a). An agent that trusts the screen sends it again, and the recipient gets two copies.
@@ -11,8 +11,8 @@ Mobile GUI agents such as AutoDroid~\cite{wen2024autodroid}, AppAgent~\cite{zhan
 UI-TARS~\cite{qin2025uitars} and AgentProg~\cite{tian2025agentprog} complete multi-step tasks in unmodified apps, and
 AndroidWorld~\cite{rawles2025androidworld} rewards them for changing app state. Many of these changes are \emph{effects} (a message sent,
 an event created, a transfer made) that should happen exactly once. Phones are hostile to that: the low-memory killer reclaims processes, Doze defers jobs, and links
-drop~\cite{android_lmkd,android_doze,sentosa2025cellreplay}. AgentProg redoes the step~\cite{tian2025agentprog} and checkpoint-resume frameworks re-execute the
-interrupted node~\cite{khan2026resume,langgraph_durable}, so a committed ghost effect is duplicated while the agent reports success.
+drop~\cite{android_lmkd,android_doze}. An agent that redoes the step, or a checkpoint-resume framework that re-executes the
+interrupted node~\cite{khan2026resume,langgraph_durable}, duplicates a committed ghost effect while the agent reports success.
 
 Existing fixes for tool agents do not transfer to GUI effects.
 LIMBO~\cite{li2026exactlyonce} finds that idempotency keys cut duplicates from 28\% to 4\% and that frontier models duplicate in 56 to 74\% of episodes when a
@@ -35,28 +35,24 @@ optional Sent folder never shows it. A scripted agent that redoes the step dupli
 CalDAV events: these are measured ghost-effect duplicates. Element (Matrix) and DAVx5 (CalDAV) resolved the same fault exactly once by themselves (\RealElemRL/\RealElemRL{}
 and \RealCalN/\RealCalN). Their own retry is therefore safe, on the same device and within the server's dedup horizon (24\,h for Synapse); an agent's redo is not.
 Element's timeline row and room-list digest were never wrong together once the message was visible (0/\RealCoObs), and its post-restart visibility lag depends on the fault class
-(median from \RealLagNetMed{} to \RealLagFsMed\,s, first visibility seen in every trial). Run on Etar and DAVx5 at $\alpha{=}\beta{=}\RealPlanAlphaPct\%$, the planner itself certified and retried all
-\RealPlanRetryAbsent{} held-out absent events and asked about all \RealPlanCommittedN{} committed ones, whose acknowledgement no screen shows.
+(median from \RealLagNetMed{} to \RealLagLmkMed\,s, first visibility seen in every trial).
+Held out at $\alpha{=}\beta{=}\RealPlanAlphaPct\%$, the planner itself retried none of \RealElPlanCommittedN{} committed Element messages (CP upper bound \RealElPlanRetryHi\%) and all
+\RealElPlanRetryAbsent{} absent ones, and with that calibration on a rented Pixel it retried none of \PixTCom{} committed messages. On Etar and DAVx5, whose acknowledgement no screen shows, it certified only absence.
 
-We recommend product certification when independence across families has a structural basis and joint certification otherwise, using fault-injected labels keyed by fault class. With the measured parameters, joint certification retries no committed Element send (Clopper-Pearson upper bound
-\RsimFiveJointPvHi\%) while asking in \RsimFiveJointAsk\% of workflows with \RsimFiveLabelN{} labels and \CertLagBootN{} lag entries per class, and it asks on every interrupted K-9 send.
-Vetted rules, which keep only the families never wrong on the labels and wait for the longest logged lag, also ask on every simulated K-9 send when given the same calibration records and lag tables (Table~\ref{tab:matched}). On Element simpler mechanisms also hold in this simulation: Theorem~\ref{thm:twohop} alone never retries and asks in \RsimElemGtwoAsk\% of workflows.
-Passive labels break every certified mode on Element, and an unlogged lag tail breaks the product mode. In a model-based simulation of \SimN interrupted workflows, joint certification retries \SimJointPv\% of committed effects and asks in
-\SimJointAsk\% of workflows with 2{,}000 labels (\NcalFJointAsk\% with 5{,}000, Table~\ref{tab:pop}). In the same simulation the product mode, which assumes independence across families, asks in \SimGhostAsk\%, about
-as often as a rule cascade that retries \SimRulesPv\% of committed effects against its \SimGhostPv\%. Tuned rules match it when retrying about 0.1\% of committed effects, without a guarantee (Appendix~\ref{app:extra}). In the LLM-agent experiment on the emulator,
-AndroidWorld's M3A agent resent and duplicated \AgentDupN{} of \AgentValidN{} valid K-9 episodes after the lost reply; \sys asked in all \AgentGuardAskN{} valid guarded episodes and left \AgentGuardDupN{} duplicate,
-caused by the simulated user's wrong answer. The study covers two agents, one model and one app. Physical-phone evidence is reported in the Discussion, while broader agent and VLM coverage remains future work.
+We recommend product certification when independence across families has a structural basis and joint certification otherwise, using fault-injected labels keyed by fault class. With the measured parameters, joint certification retries no committed Element send (CP upper bound
+\RsimFiveJointPvHi\%) and asks in \RsimFiveJointAsk\% of workflows with \RsimFiveLabelN{} labels and \CertLagBootN{} lag entries per class (\CertTiedFiveJointAsk\% with one lag entry per label), and on every interrupted K-9 send.
+Theorem~\ref{thm:twohop} alone asks in \RsimElemGtwoAsk\% of Element workflows, and passive labels or an unlogged lag tail break the budget. In a model-based simulation of \SimN{} workflows,
+the product mode asks in \SimGhostAsk\%, about as often as a rule cascade that retries \SimRulesPv\% of committed effects against its \SimGhostPv\%, and joint asks in \SimJointAsk\% with 2{,}000 labels.
+In the LLM-agent experiment, AndroidWorld's M3A resent and duplicated \AgentDupN{} of \AgentValidN{} valid K-9 episodes, while \sys asked in all \AgentGuardAskN{} guarded episodes and left \AgentGuardDupN{} duplicate,
+after the simulated user's wrong answer. This study covers two agents, one model and one app.
 
 \para{Contributions.}
 \begin{itemize}[leftmargin=*,topsep=2pt,itemsep=1pt]
-\item A budgeted model of GUI-effect recovery with a lag share certified by waits and a fallible user, in which classical sequential-analysis results apply (\S\ref{sec:model} to \S\ref{sec:theory-main}).
-\item View-level certification calibrated on whole effects, in a product form (independence across families) and a joint form (none), with exact finite-sample bounds, and a persistent-error
-  floor that is tight for conditionally i.i.d.\ views (\S\ref{sec:theory-corr} to \S\ref{sec:theory-cal}).
-\item Two mobile reductions, the content-carried nonce and the two-hop decomposition with a dedup horizon and monitored hop-1 entries (\S\ref{sec:twohop}).
-\item \sys's ledger, fault-injected calibration pipeline and planner, and a model-based evaluation against a same-evidence rule cascade, with stress, calibration-population and
-  sample-size studies (\S\ref{sec:design} to \S\ref{sec:eval}).
-\item Emulator measurements of three apps with a screen-validating reader: per-app classification of idempotent retries and dedup horizon, a permanent misleading failed state, measured GUI-redo
-  duplicates, fault-class-conditioned visibility lags, family errors with no-observation separated, and a held-out test of the planner on Etar and DAVx5. A measured-parameter simulation reruns every planner mode against a
-  Theorem~\ref{thm:twohop}-only baseline (\S\ref{sec:eval-real}).
-\item An LLM-agent experiment on the emulator in which M3A duplicates committed K-9 mail after a lost reply, and \sys at the action boundary asks instead (\S\ref{sec:eval-agent}).
+\item A budgeted model of GUI-effect recovery with a certified lag share and a fallible user, where classical sequential-analysis results apply (\S\ref{sec:model} to \S\ref{sec:theory-main}).
+\item View-level certification calibrated on whole effects, in a product form (independence across families) and a joint form (none), with exact finite-sample bounds (\S\ref{sec:theory-corr}, \S\ref{sec:theory-cal}).
+\item The content-carried nonce and the two-hop decomposition with a dedup horizon (\S\ref{sec:twohop}).
+\item \sys's ledger, fault-injected calibration and planner, compared with a same-evidence rule cascade in simulation (\S\ref{sec:design} to \S\ref{sec:eval}).
+\item Emulator and phone measurements of three apps: idempotent retries and dedup horizon per app, a permanent misleading failed state, GUI-redo duplicates, per-class visibility lags, family errors,
+  and held-out tests of the planner on Element and on Etar and DAVx5 (\S\ref{sec:eval-real}).
+\item An LLM-agent experiment in which M3A duplicates committed K-9 mail after a lost reply and \sys asks instead (\S\ref{sec:eval-agent}).
 \end{itemize}

@@ -81,16 +81,7 @@ Policy & dup & loss & ask & $P_{\mathrm{v}}$ (hi) \\
 '''
 W('tab_realsim.tex', r'''\begin{table*}[t]
 \centering
-\caption{\emph{Measured-parameter simulation} (\RsimWorkflowN{} paired interrupted workflows per row; not an emulator run).
-Calibration and test draws follow the same fitted law. Element's measured late errors are
-\RsimFitLateWrong/\RsimFitLateObs{} observed reads in each family; pairwise late cofailures are \RsimFitCoWrong/\RsimFitCoN{} trials.
-This checks the certification machinery and asking cost under that law, rather than reader errors on real screens.
-Measured inputs (Table~\ref{tab:real}) include retry mechanisms and per-class lags; fault mix, absent-side errors, Monitor and user are modelled.
-K-9's queued-mail lag $U$(45\,s, 15\,min) is assumed. Element has no lag-free hop-1 family.
-The tail case places \RsimTail\% of committed effects beyond the measured maximum.
-Always ask: dup/loss \RsimElemAskAllDup/\RsimElemAskAllLoss{} (Element).
-dup, loss and ask are percentages of workflows; $P_{\mathrm v}$ is the percentage of committed effects retried by the policy
-(CP 95\% upper bound; budget 1\%).}
+\caption{\emph{Measured-parameter simulation}: \RsimWorkflowN{} paired workflows per row, calibration and test drawn from one law fitted to Table~\ref{tab:real}. K-9's queued-mail lag $U$(45\,s, 15\,min) is assumed. Tail: \RsimTail\% of committed effects beyond the measured maximum. Always ask on Element: dup/loss \RsimElemAskAllDup/\RsimElemAskAllLoss.}
 \label{tab:realsim}
 \scriptsize
 \setlength{\tabcolsep}{2.4pt}
@@ -162,9 +153,7 @@ for _tag, _prefix, _app_label in (
             _inttex(_ncal), _inttex(_nlag), _pv, _hi, f1(_r['ask'])]) + r' \\')
 W('tab_matched.tex', r'''\begin{table*}[t]
 \centering
-\caption{Matched-input, measured-parameter simulation. Joint and vetted rules use identical calibration records and lag tables for each seed.
-Labels are per outcome, and per fault class for keyed Element; lags are per class for Element and pooled for K-9.
-Zero observed errors do not certify vetted rules. $P_{\mathrm v}$, CP upper bound and ask are percentages.}
+\caption{Matched-input, measured-parameter simulation: joint certification and vetted rules use identical records and lag tables per seed (labels per outcome, and per class for Element; lags per class for Element, pooled for K-9). Zero observed errors do not certify vetted rules. Values in \%.}
 \label{tab:matched}
 \small
 \begin{tabular}{@{}llrrrrr@{}}

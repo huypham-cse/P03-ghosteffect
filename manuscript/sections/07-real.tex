@@ -1,46 +1,46 @@
 % Emulator measurements (input through generated/real_section.tex only when artifact/results/real/SUMMARY.md exists).
 % Every number is a macro written by artifact/scripts/render_real.py from artifact/results/real/ (campaign2/ for the body).
-\subsection{Emulator measurements}
+\subsection{Emulator and phone measurements}
 \label{sec:eval-real}
 Campaign~2 on the testbed of \S\ref{sec:impl} ran \RealElemN{} Element~1.6.62~\cite{element_android} trials against Synapse~1.164.2~\cite{synapse}
 (\RealElemNofaultN{} without fault, \RealElemRL{} with a lost reply, \RealElemAckedN{} acknowledged then killed), plus \RealTimeoutN{} with a withheld reply. It also ran K-9~Mail~24.0~\cite{k9mail}
 against GreenMail~2.1.2~\cite{greenmail} without and with an IMAP Sent folder (\RealKnineNosentN{} and \RealKnineSentN{} trials, with acknowledged and offline controls).
 CalDAV ran on Etar, DAVx5 and Radicale (\RealCalTrialN{} trials), and a Synapse transaction-id sequence completes the set (Table~\ref{tab:real}).
-Campaign~1 (\RealOneN{} trials, no screen check) agrees on which apps retry idempotently (Table~\ref{tab:realcone}, appendix). Eight Element attempts left no row: six failed before the send behind a system ANR dialog, and two committed with unknown lags. Four campaign-1 trials were discarded because Android had re-spawned
-Element. Outside Element $n$ is small (from 2 to 4 per K-9 cell), so these are characterizations. Lags are upper bounds:
+Campaign~1 (\RealOneN{} trials, no screen check) agrees on which apps retry idempotently (Table~\ref{tab:realcone}, appendix). Eight Element attempts that left no row and four discarded campaign-1 trials are listed in the artifact. Outside Element $n$ is small (from 2 to 4 per K-9 cell), so these are characterizations. Lags are upper bounds:
 one read is a uiautomator dump of \RealDumpLo{} to \RealDumpHi\,s. The host's load average was \RealHostLoadLo{} to \RealHostLoadHi{} on \RealHostCores{} cores.
 
 \input{generated/tab_real}
 
 \para{Idempotent retries per app, and measured redo duplicates.} Element resolved every lost reply exactly once (\RealElemRL/\RealElemRL). In \RealElemAckedFirst{} of them its own same-txnId retry, sent 20 to 100\,ms after the reset,
 was acknowledged before the fault (``retry, then fault''). In the other \RealElemFaultFirst, all in sticky cells, the fault came first. Element then re-sent the same txnId (\RealElemFaultResend)
-or, without re-sending, reconciled its local echo with the event \texttt{/sync} returned (\RealElemFaultSync). A withheld reply also stayed exactly once (\RealTimeoutOnce/\RealTimeoutN).
-In the \RealTimeoutClean{} trials not queued behind an earlier hung request, Element showed ``Sent'' via that echo and re-sent after a 70\,s timeout. Synapse deduplicated a retry from the same device, also after a re-login with the same device id
-or a restart. It did not deduplicate one from another device, nor one after we aged the row past 24\,h by shifting its timestamp. So its retries are idempotent within $H_{\mathrm{dedup}}{=}24$\,h on one device. DAVx5 re-sent to the same URL with \texttt{If-None-Match}, Radicale answered 412, and every event existed
+or, without re-sending, reconciled its local echo with the event \texttt{/sync} returned (\RealElemFaultSync). A withheld reply also stayed exactly once (\RealTimeoutOnce/\RealTimeoutN; Element showed ``Sent'' via the echo and re-sent after a 70\,s timeout). Synapse deduplicated retries from the same device id, also across a re-login or a restart, but not from another device or after we aged the row past 24\,h, so $H_{\mathrm{dedup}}{=}24$\,h per device. DAVx5 re-sent to the same URL with \texttt{If-None-Match}, Radicale answered 412, and every event existed
 once (\RealCalOnce/\RealCalN, \RealCalKill{} after \texttt{kill -9} or force-stop): idempotent by a client-chosen name. K-9 has no idempotent retry by design: once the final ``.'' is written, a failure is recorded as permanent and later send passes skip the
-message, which stays in the Outbox (campaign~1's ``gone after sync'' came from a field never recorded). A follow-up audit logged every tap (\RealAuditN{} valid of \RealAuditAttemptsN{} attempts, \RealAuditWindow\,s each, shorter than K-9's 15-min poll). It saw no new DATA after
+message, which stays in the Outbox. A follow-up audit logged every tap (\RealAuditN{} valid of \RealAuditAttemptsN{} attempts, \RealAuditWindow\,s each, shorter than K-9's 15-min poll). It saw no new DATA after
 ``Sync account'', ``Send messages'' or no action (\RealAuditSyncData/\RealAuditSyncN, \RealAuditSendmsgsData/\RealAuditSendmsgsN, \RealAuditNoneData/\RealAuditNoneN),
-while recomposing sent a second copy with a new Message-ID in \RealAuditRecomposeDup/\RealAuditRecomposeN. A Sent folder does not help: K-9 appends there only after a successful
+while recomposing sent a second copy with a new Message-ID in \RealAuditRecomposeDup/\RealAuditRecomposeN. In \RealKlongN{} longer runs of \RealKlongObsS\,s, more than two polls, K-9 sent no new DATA and kept the mail failed in its Outbox (\RealKlongError/\RealKlongN). On a rented Pixel~9 Pro XL (Android~\PixAndroid), the same rig reproduced the trap in \PixKRep/\PixKN{} trials,
+and the redo left two copies with two Message-IDs in \PixKDup/\PixKN. Its long runs sent no new DATA either (\PixKlongRep/\PixKlongN). A Sent folder does not help: K-9 appends there only after a successful
 send (from \RealKAppendLo{} to \RealKAppendHi\,s after ``Send''), so a committed mail whose reply was lost never appears (\RealKSentWrong/\RealKSentN). A scripted GUI redo duplicated every K-9 send it
 was run on (\RealKRecDup/\RealKRecN, distinct Message-IDs, so no receiver dedup applies) and \RealCalRecDup/\RealCalRecN{} CalDAV events: the ghost-effect duplicate of
 Figure~\ref{fig:teaser}a, measured with a scripted rather than an LLM agent.
 
 \para{Evidence families and lag.} Element's first read was $\bot$ in \RealFirstBot/\RealElemN{} trials, mostly because a force-stop relaunch lands off the room (\RealFsFirstBot/\RealFsN); first observed reads
 were wrong in \RealFirstWrong/\RealFirstObs, all lag-blind. Late reads were never wrong, so the two measured families, the timeline row and the room-list digest, were never wrong together (0 of the \RealCoObs{} trials with both read, CI from 0 to \RealCoHi\%). Campaign~1's five ``co-failures'' rendered
-no contradicting state (\RealOneCoContra/\RealOneCoN), the digest showed the nonce in \RealOneCoDigest/\RealOneCoN, and screen identity was not logged, so we re-score them as
-no-observation. They are not evidence against A2, which now rests on the model and on the common-mode study of~\cite{zheng2026vpcontrol}. Stale screens do occur. In \RealPilotStaleDigest{} of \RealPilotN{} pilot trials (not among the
-\RealElemN), the room-list digest on a verified screen showed an older message while the server held the copy. In campaign~1, AndroidWorld's accessibility forwarder
-returned a minutes-old tree after network toggles. Those runs were discarded and are not in the artifact. Element's send-state indicator appeared with its row in every trial and read ``Sent'' in all \RealElemSentPolls{} sightings: not a lag-free hop-1 view. Lag depends on the fault class
+no contradicting state (\RealOneCoContra/\RealOneCoN) and logged no screen identity, so we re-score them as
+no-observation. Stale screens do occur. In \RealPilotStaleDigest{} of \RealPilotN{} pilot trials (not among the
+\RealElemN), the room-list digest on a verified screen showed an older message while the server held the copy. In the held-out Element run below, the room list was stale in \RealElPlanStale{} of \RealElPlanStaleN{} committed no-fault trials, yet at the certified deadline the timeline row and the room-list line were never wrong together (0/\RealElPlanCoOne{} committed, 0/\RealElPlanCoZero{} absent). Lag depends on the fault class
 (Table~\ref{tab:real}b): a network cut adds nothing over the \RealLagNofaultMed\,s reader floor, \texttt{kill -9} gives a median of \RealLagKillMed\,s (at most \RealLagKillMax\,s), and force-stop \RealLagFsMed\,s,
 mostly navigation. No recorded trial was censored (\RealCensored/\RealElemN), but follow-up windows differed by trial, so the \RsimTail\% bound from zero of \RealElemN{} is only a reference
 for the lag-tail sensitivity rows, not a measured tail.
-\texttt{am kill} after HOME was a no-op for Element (\RealAmkillNoopElem/\RealAmkillNoopElem) but killed K-9 (\RealAmkillKnine/\RealAmkillKnine). Under a SIGKILL of the
+\texttt{am kill} after HOME was a no-op for Element (\RealAmkillNoopElem/\RealAmkillNoopElem) but killed K-9 (\RealAmkillKnine/\RealAmkillKnine). Memory pressure does reap it: in \RealElmkN{} later sticky trials \texttt{lmkd} killed Element (\texttt{oom\_score\_adj} \RealElmkAdj, after \RealElmkMbLo{} to \RealElmkMbHi\,MB of random tmpfs data). Element re-sent the same txnId after the relaunch and kept one copy (\RealElmkOnce/\RealElmkN), with a longer lag than after \texttt{kill -9} (Table~\ref{tab:real}b). Under a SIGKILL of the
 emulator's qemu process (the guest loses its page cache), the WAL ledger lost no acknowledged row with \texttt{synchronous=FULL} (\RealLedgerFullN{} trials). With \texttt{OFF} it lost
 from \RealLedgerOffLostMin{} to \RealLedgerOffLostMax{} rows in \RealLedgerOffViol/\RealLedgerOffN{} trials, and \texttt{NORMAL} lost none only because each test transaction ran in its own process.
 
-\para{The planner on a real app.} We also ran the GhostRecover planner itself on Etar, DAVx5 and Radicale, reading only Etar's screens: its search and agenda views form
-the hop-1 family. No screen shows DAVx5's acknowledgement, so the planner can certify only absence and must ask about committed events. Product calibration on \RealPlanCalN{}
-scripted fault-injected labels (\RealPlanCalOneN{} committed, \RealPlanCalZeroN{} absent, \RealPlanClassN{} fault classes, no read error) certified absence at
-$\alpha{=}\beta{=}\RealPlanAlphaPct\%$ in every class. On \RealPlanTestN{} held-out effects, scheduled before the test, it retried \RealPlanRetryCommitted{} of \RealPlanCommittedN{}
-committed events (one-sided 95\% CP upper bound \RealPlanRetryHi\%), retried all \RealPlanRetryAbsent{} absent ones on a certificate, asked about the committed ones, and left
+\para{The planner on real apps.} We also ran the \alg planner itself, in product mode at $\alpha{=}\beta{=}\RealPlanAlphaPct\%$, on held-out effects whose schedule was fixed before each test.
+On Element it reads only the timeline and the room list for the nonce (one family, two views, so this certificate needs no A2) after its class's certified wait from the relaunch. Calibration on \RealElPlanCalN{} scripted
+fault-injected labels (\RealElPlanCalOneN{} committed, \RealElPlanCalZeroN{} absent, \RealElPlanClassN{} fault classes) certified both sides in every class, with waits of \RealElPlanWaitNone,
+\RealElPlanWaitKill{} and \RealElPlanWaitFs\,s. On \RealElPlanTestN{} held-out messages (\RealElPlanInvalidN{} rig failures rerun) it retried
+\RealElPlanRetryCommitted{} of \RealElPlanCommittedN{} committed ones (one-sided 95\% CP upper bound \RealElPlanRetryHi\%), declared \RealElPlanDeclared{} done and asked about one whose timeline read was $\bot$,
+retried all \RealElPlanRetryAbsent{} absent ones on a certificate, and left \RealElPlanDupN{} duplicates. We then applied this emulator calibration unchanged on the Pixel, with fault classes none and force-stop (\texttt{kill -9} needs root).
+It retried \PixTRetryCom{} of \PixTCom{} committed messages (CP upper bound \PixTHi\%) and \PixTRetryAbs{} of \PixTAbs{} absent ones, asked about \PixTAsk, and left \PixTDup{} duplicates. On Etar, DAVx5 and Radicale it reads only Etar's search and agenda views (hop~1). No screen shows DAVx5's acknowledgement, so \RealPlanCalN{} labels (\RealPlanCalOneN{} committed, \RealPlanCalZeroN{} absent) certified only absence,
+and on \RealPlanTestN{} held-out events it retried \RealPlanRetryCommitted{} of \RealPlanCommittedN{} committed ones (CP upper bound \RealPlanRetryHi\%) and all \RealPlanRetryAbsent{} absent ones, asked about the committed ones and left
 \RealPlanDupN{} duplicates.

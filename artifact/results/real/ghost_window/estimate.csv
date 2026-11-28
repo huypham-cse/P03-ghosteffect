@@ -1,0 +1,13 @@
+window,median_window_s,interruptions_per_hour,ghost_per_1000_commits
+"K-9, tap to server commit",1.53,0.1,0.042
+"K-9, tap to server commit",1.53,1.0,0.424
+"K-9, tap to server commit",1.53,10.0,4.236
+"K-9, tap to on-screen success (Sent append)",5.20,0.1,0.144
+"K-9, tap to on-screen success (Sent append)",5.20,1.0,1.443
+"K-9, tap to on-screen success (Sent append)",5.20,10.0,14.341
+"Element, tap to Sent indicator (dump upper end)",2.51,0.1,0.070
+"Element, tap to Sent indicator (dump upper end)",2.51,1.0,0.697
+"Element, tap to Sent indicator (dump upper end)",2.51,10.0,6.948
+"Etar+DAVx5, save to server copy (hop 2)",37.45,0.1,1.040
+"Etar+DAVx5, save to server copy (hop 2)",37.45,1.0,10.350
+"Etar+DAVx5, save to server copy (hop 2)",37.45,10.0,98.812

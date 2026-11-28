@@ -1,0 +1,9 @@
+{
+  "command": "python testbed/devicefarm/collect_df_pixel.py --k9-long <k9l-1> <k9l-2> --doze <doze>",
+  "git_commit": "0da683edc210ded843afffb25997e0ccbbba6a5c",
+  "python": "3.14.0",
+  "date_utc": "2026-11-24T19:57:34Z",
+  "host": "collector: NOOB",
+  "runs": "AWS Device Farm, Google Pixel 9 Pro XL, Android 17 (CP2A.260605.012)",
+  "rig": "testbed/devicefarm/element_doze.py (sticky proxy as ELMK; doze_enter/doze_exit of the DAVx5 rig)"
+}
